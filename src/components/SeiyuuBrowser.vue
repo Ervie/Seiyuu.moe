@@ -1,0 +1,59 @@
+<template>
+  <v-layout>
+      <v-flex>
+        <v-form>
+          <v-text-field
+            prepend-icon="search"
+            name="searchIdBox"
+            label="Search..."
+            hint="Search by Seiyuu MAL Id"
+            single-line
+            v-model="searchedId"
+            :rules="[rules.required, rules.isPositiveInteger]"/>
+            <v-btn raised color="primary" v-on:click="searchById" :disabled="!isIdValid">Search</v-btn>
+        </v-form>
+     </v-flex>
+    </v-layout>
+</template>
+
+<script>
+import axios from 'axios'
+
+export default {
+  name: 'SeiyuuBrowser',
+  data () {
+    return {
+      searchedId: '',
+      rules: {
+        required: (value) => this.requiredIdValidation(value) || 'Cannot be empty.',
+        isPositiveInteger: (value) => this.isPositiveIntegerValidation(value) || 'Must be a positive number'
+      }
+    }
+  },
+  computed: {
+    isIdValid () {
+      return this.requiredIdValidation(this.searchedId) && this.isPositiveIntegerValidation(this.searchedId)
+    }
+  },
+  methods: {
+    requiredIdValidation (value) {
+      return !!value
+    },
+    isPositiveIntegerValidation (value) {
+      var parsed = Math.floor(Number(value))
+      return (parsed !== Infinity && String(parsed) === value && parsed >= 0)
+    },
+    searchById () {
+      console.log('https://api.jikan.me/person/' + this.searchedId)
+      axios.get('https://api.jikan.me/person/' + this.searchedId)
+        .then((response) => {
+          this.$emit('seiyuuReturned', response.data.name)
+        })
+        .catch((error) => {
+          console.log(error)
+          this.returnedData = ''
+        })
+    }
+  }
+}
+</script>

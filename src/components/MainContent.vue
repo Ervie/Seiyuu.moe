@@ -1,45 +1,28 @@
 <template>
   <v-container grid-list-md text-xs-center>
-    <v-layout>
-      <v-flex>
-       <v-text-field
-         prepend-icon="search"
-         name="searchIdBox"
-         label="Search..."
-         hint="Search by Seiyuu MAL Id"
-         single-line
-         v-model="searchedId"/>
-        <v-btn small color="primary" v-on:click="searchById">Search</v-btn>
-     </v-flex>
-    </v-layout>
+    <browser @seiyuuReturned="addSeiyuu" />
     <v-layout row wrap>
-      <v-text-field v-model="returnedData.name" disabled></v-text-field>
+      <v-text-field v-model="returnedData" disabled></v-text-field>
     </v-layout>
   </v-container>
 </template>
 
 <script>
-import axios from 'axios'
+import SeiyuuBrowser from '@/components/SeiyuuBrowser.vue'
 
 export default {
   name: 'MainContent',
+  components: {
+    'browser': SeiyuuBrowser
+  },
   data () {
     return {
-      searchedId: '',
       returnedData: []
     }
   },
   methods: {
-    searchById () {
-      console.log('https://api.jikan.me/person/' + this.searchedId)
-      axios.get('https://api.jikan.me/person/' + this.searchedId)
-        .then((response) => {
-          this.returnedData = response.data
-        })
-        .catch((error) => {
-          console.log(error)
-          this.returnedData = ''
-        })
+    addSeiyuu (seiyuuName) {
+      this.returnedData = seiyuuName
     }
   }
 }

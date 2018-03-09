@@ -21,11 +21,12 @@ npm run build --report
 
 * ~~Allow to search via API with Id~~
 * Save each founded seiyuu.
-* Validation.
+* ~~Validation~~
 * Parse
 * Create a graphical card for each seiyuu to compare.
 * Create a graphical juxtaposition of collaborate works (main goal).
-* Create a most popular seiyuu list to allow search by name.
+* Create a most popular seiyuu list to allow search by name...
+* ... with caching to ease the use (sure searching by name is more comfortable).
 * Enhance juxtaposition by emphasis on most frequent collaborations.
 * Deploy a demo.
 
