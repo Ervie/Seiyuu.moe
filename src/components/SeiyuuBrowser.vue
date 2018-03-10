@@ -21,6 +21,7 @@ import axios from 'axios'
 
 export default {
   name: 'SeiyuuBrowser',
+  props: ['searchedIdCache'],
   data () {
     return {
       searchedId: '',
@@ -44,15 +45,18 @@ export default {
       return (parsed !== Infinity && String(parsed) === value && parsed >= 0)
     },
     searchById () {
-      console.log('https://api.jikan.me/person/' + this.searchedId)
-      axios.get('https://api.jikan.me/person/' + this.searchedId)
-        .then((response) => {
-          this.$emit('seiyuuReturned', response.data)
-        })
-        .catch((error) => {
-          console.log(error)
-          this.returnedData = ''
-        })
+      if (this.searchedIdCache.indexOf(parseInt(this.searchedId)) > -1) {
+        this.$emit('alreadyOnTheList')
+      } else {
+        axios.get('https://api.jikan.me/person/' + this.searchedId)
+          .then((response) => {
+            this.$emit('seiyuuReturned', response.data)
+          })
+          .catch((error) => {
+            console.log(error)
+            this.returnedData = ''
+          })
+      }
     }
   }
 }

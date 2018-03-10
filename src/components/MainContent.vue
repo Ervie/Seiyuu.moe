@@ -1,12 +1,15 @@
 <template>
   <v-container grid-list-md text-xs-center>
-    <browser @seiyuuReturned="addSeiyuu" />
+    <browser @seiyuuReturned="addSeiyuu" @alreadyOnTheList="alreadyOnTheList = true" :searchedIdCache="searchedId"/>
     <v-alert dismissible color="error" v-model="tooMuchRecords">
       You can choose {{ maximumSeiyuuNumber }} seiyuu at max.
     </v-alert>
+    <v-alert dismissible color="error" v-model="alreadyOnTheList">
+      This seiyuu is already selected.
+    </v-alert>
     <v-layout row justify-space-around>
       <v-flex v-for="(seiyuu, index) in seiyuuToCompare" :key="seiyuu.mal_id" xs2>
-        <seiyuuCard :seiyuuName="seiyuu.name" :photoUrl="seiyuu.image_url" :seiyuuMalId="seiyuu.mal_id" :cardId="index"
+        <seiyuuCard :seiyuuData="seiyuu" :cardId="index"
          @seiyuuRemoved="removeSeiyuu"/>
       </v-flex>
     </v-layout>
@@ -27,7 +30,13 @@ export default {
     return {
       seiyuuToCompare: [],
       maximumSeiyuuNumber: 2,
-      tooMuchRecords: false
+      tooMuchRecords: false,
+      alreadyOnTheList: false
+    }
+  },
+  computed: {
+    searchedId () {
+      return this.seiyuuToCompare.map(seiyuu => seiyuu.mal_id)
     }
   },
   methods: {

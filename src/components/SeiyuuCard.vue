@@ -1,7 +1,7 @@
 <template>
   <v-card width="180px" class="seiyuuCard">
-    <v-card-text style="font-weight: bold"> {{ seiyuuName }}</v-card-text>
-    <v-card-media :src="photoUrl" height="280px"></v-card-media>
+    <v-card-text style="font-weight: bold"> {{ seiyuuData.name }}</v-card-text>
+    <v-card-media :src="pathToImage" height="280px"></v-card-media>
     <v-card-actions>
       <v-btn icon value="removeSeiyuu" color="red" v-on:click="removeSeiyuu()">
         <v-icon>delete</v-icon>
@@ -17,11 +17,19 @@
 <script>
 export default {
   name: 'SeiyuuCard',
-  props: ['seiyuuName', 'photoUrl', 'seiyuuMalId', 'cardId'],
+  props: ['seiyuuData', 'cardId'],
   methods: {
     removeSeiyuu: function () {
-      console.log('Removing seiyuu with id ' + this.seiyuuMalId)
       this.$emit('seiyuuRemoved', this.cardId)
+    }
+  },
+  computed: {
+    pathToImage () {
+      if (this.seiyuuData.image_url) {
+        return this.seiyuuData.image_url
+      } else {
+        return 'static/questionMark.png'
+      }
     }
   }
 }
