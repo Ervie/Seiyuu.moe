@@ -1,7 +1,7 @@
 <template>
-  <v-card width="180px" class="seiyuuCard">
+  <v-card class="seiyuuCard">
     <v-card-text style="font-weight: bold"> {{ seiyuuData.name }}</v-card-text>
-    <v-card-media :src="pathToImage" height="280px"></v-card-media>
+    <v-card-media :src="pathToImage" height="280px" v-on:click="showDialog = true"  ></v-card-media>
     <v-card-actions>
       <v-btn icon value="removeSeiyuu" color="red" v-on:click="removeSeiyuu()">
         <v-icon>delete</v-icon>

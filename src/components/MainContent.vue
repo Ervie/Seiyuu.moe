@@ -7,10 +7,17 @@
     <v-alert dismissible color="error" v-model="alreadyOnTheList">
       This seiyuu is already selected.
     </v-alert>
-    <v-layout row justify-space-around>
-      <v-flex v-for="(seiyuu, index) in seiyuuToCompare" :key="seiyuu.mal_id" xs2>
+    <v-layout row wrap>
+      <v-flex v-for="(seiyuu, index) in seiyuuToCompare" :key="seiyuu.mal_id" xs3>
         <seiyuuCard :seiyuuData="seiyuu" :cardId="index"
          @seiyuuRemoved="removeSeiyuu"/>
+      </v-flex>
+    </v-layout>
+    <v-layout>
+      <v-flex>
+        <div>
+          <v-btn depressed large color="success" :disabled="seiyuuToCompare.length < 2">Compare</v-btn>
+        </div>
       </v-flex>
     </v-layout>
   </v-container>
