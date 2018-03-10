@@ -22,11 +22,11 @@ npm run build --report
 * ~~Allow to search via API with Id.~~
 * ~~Save each founded seiyuu.~~
 * ~~Validation.~~
-* Enable removing searched seiyuus.
+* ~~Enable removing searched seiyuus.~~
 * Enable more than 2 seiyuus at the same time.
 * "More" section for searched seiyuus.
-* Parse
-* Create a graphical card for each seiyuu to compare.
+* Parse roles.
+* ~~Create a graphical card for each seiyuu to compare.~~
 * Create a graphical juxtaposition of collaborate works (main goal).
 * Create a most popular seiyuu list to allow search by name...
 * ... with caching to ease the use (sure searching by name is more comfortable).
@@ -35,4 +35,4 @@ npm run build --report
 
 ## Special mentions
 
-> Project uses Jikan API, an unofficial MyAnimeList API (courtesy of Nekomata). Project can be found under this [link](https://github.com/jikan-me/jikan/)
+Project uses Jikan API, an unofficial MyAnimeList API (courtesy of Nekomata). Project can be found under this [link](https://github.com/jikan-me/jikan/)

@@ -5,8 +5,9 @@
       You can choose {{ maximumSeiyuuNumber }} seiyuu at max.
     </v-alert>
     <v-layout row justify-space-around>
-      <v-flex v-for="seiyuu in seiyuuToCompare" :key="seiyuu.mal_id" xs2>
-        <seiyuuCard :seiyuuName="seiyuu.name" :photoUrl="seiyuu.image_url"></seiyuuCard>
+      <v-flex v-for="(seiyuu, index) in seiyuuToCompare" :key="seiyuu.mal_id" xs2>
+        <seiyuuCard :seiyuuName="seiyuu.name" :photoUrl="seiyuu.image_url" :seiyuuMalId="seiyuu.mal_id" :cardId="index"
+         @seiyuuRemoved="removeSeiyuu"/>
       </v-flex>
     </v-layout>
   </v-container>
@@ -34,8 +35,13 @@ export default {
       if (this.seiyuuToCompare.length >= this.maximumSeiyuuNumber) {
         this.tooMuchRecords = true
       } else {
+        this.tooMuchRecords = false
         this.seiyuuToCompare.push(seiyuuData)
       }
+    },
+    removeSeiyuu (seiyuuId) {
+      this.tooMuchRecords = false
+      this.seiyuuToCompare.splice(seiyuuId, 1)
     }
   }
 }
