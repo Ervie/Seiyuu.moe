@@ -19,9 +19,12 @@ npm run build --report
 ```
 ## To-Do List
 
-* ~~Allow to search via API with Id~~
-* Save each founded seiyuu.
-* ~~Validation~~
+* ~~Allow to search via API with Id.~~
+* ~~Save each founded seiyuu.~~
+* ~~Validation.~~
+* Enable removing searched seiyuus.
+* Enable more than 2 seiyuus at the same time.
+* "More" section for searched seiyuus.
 * Parse
 * Create a graphical card for each seiyuu to compare.
 * Create a graphical juxtaposition of collaborate works (main goal).

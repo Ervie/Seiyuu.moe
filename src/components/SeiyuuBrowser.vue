@@ -47,7 +47,7 @@ export default {
       console.log('https://api.jikan.me/person/' + this.searchedId)
       axios.get('https://api.jikan.me/person/' + this.searchedId)
         .then((response) => {
-          this.$emit('seiyuuReturned', response.data.name)
+          this.$emit('seiyuuReturned', response.data)
         })
         .catch((error) => {
           console.log(error)
