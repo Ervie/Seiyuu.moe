@@ -1,6 +1,6 @@
 <template>
   <v-container grid-list-md text-xs-center>
-    <browser @seiyuuReturned="addSeiyuu" @alreadyOnTheList="alreadyOnTheList = true" @resetList="seiyuuToCompare  = []" :searchedIdCache="searchedId"/>
+    <browser @seiyuuReturned="addSeiyuu" @alreadyOnTheList="alreadyOnTheList = true" @resetList="resetList" :searchedIdCache="searchedId"/>
     <v-alert dismissible color="error" v-model="tooMuchRecords">
       You can choose {{ maximumSeiyuuNumber }} seiyuu at max.
     </v-alert>
@@ -8,30 +8,26 @@
       This seiyuu is already selected.
     </v-alert>
     <v-layout row wrap>
-      <v-flex v-for="(seiyuu, index) in seiyuuToCompare" :key="seiyuu.mal_id" xs3>
+      <v-flex v-for="(seiyuu, index) in seiyuuToCompare" :key="seiyuu.mal_id" xs2>
         <seiyuuCard :seiyuuData="seiyuu" :cardId="index"
          @seiyuuRemoved="removeSeiyuu"/>
       </v-flex>
     </v-layout>
-    <v-layout>
-      <v-flex>
-        <div>
-          <v-btn depressed large color="success" :disabled="seiyuuToCompare.length < 2">Compare</v-btn>
-        </div>
-      </v-flex>
-    </v-layout>
+    <relationMatrix :inputData="seiyuuToCompare"/>
   </v-container>
 </template>
 
 <script>
 import SeiyuuBrowser from '@/components/SeiyuuBrowser.vue'
 import SeiyuuCard from '@/components/SeiyuuCard.vue'
+import RelationMatrix from '@/components/RelationMatrix.vue'
 
 export default {
   name: 'MainContent',
   components: {
     'browser': SeiyuuBrowser,
-    'seiyuuCard': SeiyuuCard
+    'seiyuuCard': SeiyuuCard,
+    'relationMatrix': RelationMatrix
   },
   data () {
     return {
@@ -58,6 +54,9 @@ export default {
     removeSeiyuu (seiyuuId) {
       this.tooMuchRecords = false
       this.seiyuuToCompare.splice(seiyuuId, 1)
+    },
+    resetList () {
+      this.seiyuuToCompare = []
     }
   }
 }
