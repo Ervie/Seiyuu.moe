@@ -24,7 +24,7 @@ npm run build --report
 * ~~Validation.~~
 * ~~Enable removing searched seiyuus.~~
 * Enable more than 2 seiyuus at the same time.
-* "More" section for searched seiyuus.
+* ~~"More" section for searched seiyuus.~~
 * Parse roles.
 * ~~Create a graphical card for each seiyuu to compare.~~
 * Create a graphical juxtaposition of collaborate works (main goal).

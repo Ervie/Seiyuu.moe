@@ -11,6 +11,7 @@
             v-model="searchedId"
             :rules="[rules.required, rules.isPositiveInteger]"/>
             <v-btn raised color="primary" v-on:click="searchById" :disabled="!isIdValid">Search</v-btn>
+            <v-btn raised color="error" v-on:click="clearList" :disabled="searchedIdCache.length < 1">Reset</v-btn>
         </v-form>
      </v-flex>
     </v-layout>
@@ -57,6 +58,9 @@ export default {
             this.returnedData = ''
           })
       }
+    },
+    clearList () {
+      this.$emit('resetList')
     }
   }
 }

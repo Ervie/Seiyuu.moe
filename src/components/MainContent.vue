@@ -1,6 +1,6 @@
 <template>
   <v-container grid-list-md text-xs-center>
-    <browser @seiyuuReturned="addSeiyuu" @alreadyOnTheList="alreadyOnTheList = true" :searchedIdCache="searchedId"/>
+    <browser @seiyuuReturned="addSeiyuu" @alreadyOnTheList="alreadyOnTheList = true" @resetList="seiyuuToCompare  = []" :searchedIdCache="searchedId"/>
     <v-alert dismissible color="error" v-model="tooMuchRecords">
       You can choose {{ maximumSeiyuuNumber }} seiyuu at max.
     </v-alert>
