@@ -12,28 +12,32 @@
             hide-actions
             class="elevation-1">
             <template slot="headerCell" slot-scope="props">
-                <v-container fluid grid-list-lg>
-                <v-layout v-if="props.header.value" row>
-                  <v-flex xs9 justify-center="">
+              <v-container fluid grid-list-lg>
+                <v-layout v-if="props.header.image" row>
+                  <v-flex xs9 align-content-center>
                     <v-card-text class="title">{{ props.header.text }}</v-card-text>
                   </v-flex>
                   <v-flex xs3>
                     <v-card-media
                       height="70px"
-                      :src="props.header.value"
+                      :src="props.header.image"
                       contain
                     ></v-card-media>
                   </v-flex>
                 </v-layout>
-                <v-card-text v-else class="display-1">{{props.header.text}}</v-card-text>
+                <v-layout v-else row>
+                  <v-flex md1 justify-center>
+                    <v-card-text class="display-1">{{props.header.text}}</v-card-text>
+                  </v-flex>
+                </v-layout>
               </v-container>
             </template>
             <template slot="items" slot-scope="props">
             <td>
-                <v-container fluid grid-list-lg>
+              <v-container fluid grid-list-lg>
                 <v-layout row>
-                  <v-flex xs9 justify-center="">
-                    <v-card-text>{{ props.item.anime }}</v-card-text>
+                  <v-flex xs9 justify-center>
+                    <v-card-text class="title">{{ props.item.anime }}</v-card-text>
                   </v-flex>
                   <v-flex xs3>
                     <v-card-media
@@ -46,10 +50,10 @@
               </v-container>
             </td>
             <td class="text-xs-right">
-                <v-container fluid grid-list-lg>
+              <v-container fluid grid-list-lg>
                 <v-layout row>
                   <v-flex xs9 align-content-center>
-                    <v-card-text>{{ props.item.firstSeiyuuCharacterName }}</v-card-text>
+                    <v-card-text class="title">{{ props.item.firstSeiyuuCharacterName }}</v-card-text>
                   </v-flex>
                   <v-flex xs3>
                     <v-card-media
@@ -62,10 +66,10 @@
               </v-container>
             </td>
             <td class="text-xs-right">
-                <v-container fluid grid-list-lg>
+              <v-container fluid grid-list-lg>
                 <v-layout row>
                   <v-flex xs9 align-content-center>
-                    <v-card-text>{{ props.item.secondSeiyuuCharacterName }}</v-card-text>
+                    <v-card-text class="title">{{ props.item.secondSeiyuuCharacterName }}</v-card-text>
                   </v-flex>
                   <v-flex xs3>
                     <v-card-media
@@ -124,11 +128,10 @@ export default {
       this.headers.push({
         text: 'Anime',
         align: 'left',
-        sortable: false,
-        value: ''
+        value: 'anime'
       })
-      this.headers.push({ text: this.inputData[0].name, value: this.inputData[0].image_url })
-      this.headers.push({ text: this.inputData[1].name, value: this.inputData[1].image_url })
+      this.headers.push({ text: this.inputData[0].name, value: 'firstSeiyuuCharacterName', image: this.inputData[0].image_url })
+      this.headers.push({ text: this.inputData[1].name, value: 'secondSeiyuuCharacterName', image: this.inputData[1].image_url })
       this.showTable = true
     },
     pathToImage (initialPath) {
@@ -136,6 +139,13 @@ export default {
         return initialPath
       } else {
         return 'static/questionMark.png'
+      }
+    }
+  },
+  watch: {
+    inputData: function (newVal, oldVal) {
+      if (this.inputData.length === 0) {
+        this.showTable = false
       }
     }
   }

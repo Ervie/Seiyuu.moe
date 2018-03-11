@@ -25,12 +25,13 @@ npm run build --report
 * ~~Enable removing searched seiyuus.~~
 * Enable more than 2 seiyuus at the same time.
 * ~~"More" section for searched seiyuus.~~
-* Parse roles.
+* ~~Parse roles.~~
 * ~~Create a graphical card for each seiyuu to compare.~~
 * Create a graphical juxtaposition of collaborate works (main goal).
 * Create a most popular seiyuu list to allow search by name...
 * ... with caching to ease the use (sure searching by name is more comfortable).
-* Enhance juxtaposition by emphasis on most frequent collaborations.
+* Enhance juxtaposition by emphasis on most frequent collaborations (more modes).
+* Add hyperlinks.
 * Deploy a demo.
 
 ## Special mentions

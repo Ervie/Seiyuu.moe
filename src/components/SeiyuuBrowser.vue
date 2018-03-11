@@ -1,20 +1,18 @@
 <template>
   <v-layout>
       <v-flex>
-        <v-form>
-          <v-text-field
-            prepend-icon="search"
-            name="searchIdBox"
-            label="Search..."
-            hint="Search by Seiyuu MAL Id"
-            single-line
-            v-model="searchedId"
-            :rules="[rules.required, rules.isPositiveInteger]"/>
-            <v-btn raised color="primary" v-on:click="searchById" :disabled="!isIdValid">Search</v-btn>
-            <v-btn raised color="error" v-on:click="clearList" :disabled="searchedIdCache.length < 1">Reset</v-btn>
-        </v-form>
-     </v-flex>
-    </v-layout>
+        <v-text-field
+          prepend-icon="search"
+          name="searchIdBox"
+          label="Search..."
+          hint="Search by Seiyuu MAL Id"
+          single-line
+          v-model="searchedId"
+          :rules="idSearchRules"/>
+          <v-btn raised color="primary" v-on:click="searchById" :disabled="!isIdValid">Search</v-btn>
+          <v-btn raised color="error" v-on:click="clearList" :disabled="searchedIdCache.length < 1">Reset</v-btn>
+      </v-flex>
+  </v-layout>
 </template>
 
 <script>
@@ -26,10 +24,11 @@ export default {
   data () {
     return {
       searchedId: '',
-      rules: {
-        required: (value) => this.requiredIdValidation(value) || 'Cannot be empty.',
-        isPositiveInteger: (value) => this.isPositiveIntegerValidation(value) || 'Must be a positive number'
-      }
+      idSearchRules:
+      [
+        v => !!v || 'Cannot be empty.',
+        v => this.isPositiveIntegerValidation(v) || 'Must be a positive number'
+      ]
     }
   },
   computed: {
