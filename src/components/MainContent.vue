@@ -32,7 +32,7 @@ export default {
   data () {
     return {
       seiyuuToCompare: [],
-      maximumSeiyuuNumber: 2,
+      maximumSeiyuuNumber: 6,
       tooMuchRecords: false,
       alreadyOnTheList: false
     }

@@ -5,7 +5,6 @@
           <v-btn depressed large color="success" v-on:click="showResults" :disabled="inputData.length < 2">Compare</v-btn>
         </div>
         <v-data-table
-            max-width="1300px "
             v-if="showTable"
             :headers="headers"
             :items="tableData"
@@ -49,32 +48,16 @@
                 </v-layout>
               </v-container>
             </td>
-            <td class="text-xs-right">
+            <td class="text-xs-right" v-for="character in props.item.roles" :key="character.mal_id">
               <v-container fluid grid-list-lg>
                 <v-layout row>
                   <v-flex xs9 align-content-center>
-                    <v-card-text class="title">{{ props.item.firstSeiyuuCharacterName }}</v-card-text>
+                    <v-card-text class="title">{{ character.character.name }}</v-card-text>
                   </v-flex>
                   <v-flex xs3>
                     <v-card-media
                       height="70px"
-                      :src="props.item.firstSeiyuuCharacterUrl"
-                      contain
-                    ></v-card-media>
-                  </v-flex>
-                </v-layout>
-              </v-container>
-            </td>
-            <td class="text-xs-right">
-              <v-container fluid grid-list-lg>
-                <v-layout row>
-                  <v-flex xs9 align-content-center>
-                    <v-card-text class="title">{{ props.item.secondSeiyuuCharacterName }}</v-card-text>
-                  </v-flex>
-                  <v-flex xs3>
-                    <v-card-media
-                      height="70px"
-                      :src="props.item.secondSeiyuuCharacterUrl"
+                      :src="character.character.image_url"
                       contain
                     ></v-card-media>
                   </v-flex>
@@ -103,35 +86,62 @@ export default {
       tableData: []
     }
   },
+  computed: {
+    seiyuuRoles () {
+      return this.inputData.map(x => x.voice_acting_role)
+    }
+  },
   methods: {
     showResults () {
-      var firstSeiyuuRoles = this.inputData[0].voice_acting_role
-      var secondSeiyuuRoles = this.inputData[1].voice_acting_role
-
       this.tableData = []
       this.headers = []
+      var intersectAnime = []
 
-      for (var i = 0; i < firstSeiyuuRoles.length; i++) {
-        for (var j = 0; j < secondSeiyuuRoles.length; j++) {
-          if (firstSeiyuuRoles[i].anime.mal_id === secondSeiyuuRoles[j].anime.mal_id) {
-            this.tableData.push({
-              anime: firstSeiyuuRoles[i].anime.name,
-              animeImg: firstSeiyuuRoles[i].anime.image_url,
-              firstSeiyuuCharacterName: firstSeiyuuRoles[i].character.name,
-              firstSeiyuuCharacterUrl: firstSeiyuuRoles[i].character.image_url,
-              secondSeiyuuCharacterName: secondSeiyuuRoles[j].character.name,
-              secondSeiyuuCharacterUrl: secondSeiyuuRoles[j].character.image_url
+      for (var k = 0; k < this.seiyuuRoles[0].length; k++) {
+        intersectAnime.push({
+          anime: this.seiyuuRoles[0][k].anime,
+          roles: [{
+            seiyuu: this.inputData[0].name,
+            character: this.seiyuuRoles[0][k].character
+          }]
+        })
+      }
+
+      for (var seiyuuIndex = 1; seiyuuIndex < this.seiyuuRoles.length; seiyuuIndex++) {
+        for (var animeIndex = 0; animeIndex < intersectAnime.length; animeIndex++) {
+          var roleIndex = this.seiyuuRoles[seiyuuIndex].map(x => x.anime.mal_id).indexOf(intersectAnime[animeIndex].anime.mal_id)
+          if (roleIndex === -1) {
+            intersectAnime.splice(animeIndex, 1)
+            animeIndex--
+          } else {
+            intersectAnime[animeIndex].roles.push({
+              seiyuu: this.inputData[seiyuuIndex].name,
+              character: this.seiyuuRoles[seiyuuIndex][roleIndex].character
             })
           }
         }
       }
+
+      for (var i = 0; i < intersectAnime.length; i++) {
+        this.tableData.push({
+          anime: intersectAnime[i].anime.name,
+          animeImg: intersectAnime[i].anime.image_url,
+          roles: intersectAnime[i].roles
+        })
+      }
+
       this.headers.push({
         text: 'Anime',
         align: 'left',
         value: 'anime'
       })
-      this.headers.push({ text: this.inputData[0].name, value: 'firstSeiyuuCharacterName', image: this.inputData[0].image_url })
-      this.headers.push({ text: this.inputData[1].name, value: 'secondSeiyuuCharacterName', image: this.inputData[1].image_url })
+      for (var headerIndex = 0; headerIndex < this.inputData.length; headerIndex++) {
+        this.headers.push({
+          text: this.inputData[headerIndex].name,
+          value: 'seiyuuCharacterName' + headerIndex,
+          image: this.inputData[headerIndex].image_url})
+      }
+
       this.showTable = true
     },
     pathToImage (initialPath) {
