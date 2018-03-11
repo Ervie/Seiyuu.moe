@@ -1,6 +1,8 @@
 <template>
   <v-layout>
       <v-flex>
+        <v-autocomplete :items="items" v-model="item" :get-label="getLabel" :component-item="suggestionTemplate" @change="updateItems">
+        </v-autocomplete>
         <v-text-field
           prepend-icon="search"
           name="searchIdBox"
@@ -17,6 +19,7 @@
 
 <script>
 import axios from 'axios'
+import Suggestion from './Suggestion.vue'
 
 export default {
   name: 'SeiyuuBrowser',
@@ -28,7 +31,33 @@ export default {
       [
         v => !!v || 'Cannot be empty.',
         v => this.isPositiveIntegerValidation(v) || 'Must be a positive number'
-      ]
+      ],
+      cachedSeiyuu:
+      [
+        {
+          mal_id: 90,
+          name: 'Maaya Sakamoto',
+          image_url: 'https://myanimelist.cdn-dena.com/images/voiceactors/2/44284.jpg'
+        },
+        {
+          mal_id: 99,
+          name: 'Miyuki Sawashiro',
+          image_url: 'https://myanimelist.cdn-dena.com/images/voiceactors/1/41394.jpg'
+        },
+        {
+          mal_id: 8,
+          name: 'Kugimiya Rie',
+          image_url: 'https://myanimelist.cdn-dena.com/images/voiceactors/3/44863.jpg'
+        },
+        {
+          mal_id: 8,
+          name: 'Takehito Koyasu',
+          image_url: 'https://myanimelist.cdn-dena.com/images/voiceactors/2/10264.jpg'
+        }
+      ],
+      items: [],
+      item: { name: '', mal_id: -1 },
+      suggestionTemplate: Suggestion
     }
   },
   computed: {
@@ -60,6 +89,15 @@ export default {
     },
     clearList () {
       this.$emit('resetList')
+    },
+    getLabel (item) {
+      return item.name
+    },
+    updateItems (text) {
+      console.log(text)
+      this.items = this.cachedSeiyuu.filter(function (seiyuu) {
+        return seiyuu.name.toLowerCase().indexOf(text.toLowerCase()) !== -1
+      })
     }
   }
 }

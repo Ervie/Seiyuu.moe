@@ -5,11 +5,15 @@ import App from './App'
 import router from './router'
 import Vuetify from 'vuetify'
 import Vuelidate from 'vuelidate'
+import Autocomplete from 'v-autocomplete'
+
+import 'v-autocomplete/dist/v-autocomplete.css'
 
 Vue.config.productionTip = false
 
 Vue.use(Vuetify)
 Vue.use(Vuelidate)
+Vue.use(Autocomplete)
 
 /* eslint-disable no-new */
 new Vue({
