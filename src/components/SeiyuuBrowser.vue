@@ -1,25 +1,48 @@
 <template>
-  <v-layout>
-      <v-flex>
-        <v-autocomplete :items="items" v-model="item" :get-label="getLabel" :component-item="suggestionTemplate" @change="updateItems">
-        </v-autocomplete>
+  <v-layout row wrap>
+      <v-flex xs6>
+        <v-select
+          :items="cachedSeiyuu"
+          v-model="selectModel"
+          label="Search by Seiyuu Name..."
+          item-text="name"
+          item-value="mal_id"
+          max-height="auto"
+          autocomplete
+          prepend-icon="search"
+        >
+          <template slot="item" slot-scope="data">
+            <template v-if="typeof data.item !== 'object'">
+              <v-list-tile-content v-text="data.item"></v-list-tile-content>
+            </template>
+            <template v-else>
+              <v-list-tile-avatar>
+                <img :src="data.item.image_url">
+              </v-list-tile-avatar>
+              <v-list-tile-content>
+                <v-list-tile-title v-html="data.item.name"></v-list-tile-title>
+              </v-list-tile-content>
+            </template>
+          </template>
+        </v-select>
+          <v-btn raised color="success" v-on:click="searchByName" :disabled="!selectModel">Add</v-btn>
+      </v-flex>
+      <v-flex xs6>
         <v-text-field
           prepend-icon="search"
           name="searchIdBox"
-          label="Search..."
+          label="Search by MAL Id..."
           hint="Search by Seiyuu MAL Id"
           single-line
           v-model="searchedId"
           :rules="idSearchRules"/>
           <v-btn raised color="primary" v-on:click="searchById" :disabled="!isIdValid">Search</v-btn>
-          <v-btn raised color="error" v-on:click="clearList" :disabled="searchedIdCache.length < 1">Reset</v-btn>
       </v-flex>
   </v-layout>
 </template>
 
 <script>
 import axios from 'axios'
-import Suggestion from './Suggestion.vue'
 
 export default {
   name: 'SeiyuuBrowser',
@@ -50,14 +73,12 @@ export default {
           image_url: 'https://myanimelist.cdn-dena.com/images/voiceactors/3/44863.jpg'
         },
         {
-          mal_id: 8,
+          mal_id: 160,
           name: 'Takehito Koyasu',
           image_url: 'https://myanimelist.cdn-dena.com/images/voiceactors/2/10264.jpg'
         }
       ],
-      items: [],
-      item: { name: '', mal_id: -1 },
-      suggestionTemplate: Suggestion
+      selectModel: null
     }
   },
   computed: {
@@ -83,21 +104,21 @@ export default {
           })
           .catch((error) => {
             console.log(error)
-            this.returnedData = ''
           })
       }
     },
-    clearList () {
-      this.$emit('resetList')
-    },
-    getLabel (item) {
-      return item.name
-    },
-    updateItems (text) {
-      console.log(text)
-      this.items = this.cachedSeiyuu.filter(function (seiyuu) {
-        return seiyuu.name.toLowerCase().indexOf(text.toLowerCase()) !== -1
-      })
+    searchByName () {
+      if (this.searchedIdCache.indexOf(parseInt(this.selectModel)) > -1) {
+        this.$emit('alreadyOnTheList')
+      } else {
+        axios.get('https://api.jikan.me/person/' + String(this.selectModel))
+          .then((response) => {
+            this.$emit('seiyuuReturned', response.data)
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      }
     }
   }
 }
