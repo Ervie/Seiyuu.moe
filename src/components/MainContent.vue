@@ -13,8 +13,7 @@
          @seiyuuRemoved="removeSeiyuu"/>
       </v-flex>
     </v-layout>
-    <v-btn raised large color="error" v-on:click="resetList" :disabled="seiyuuToCompare.length < 1">Reset</v-btn>
-    <relationMatrix :inputData="seiyuuToCompare"/>
+    <relationMatrix :inputData="seiyuuToCompare" @resetList="resetList"/>
   </v-container>
 </template>
 

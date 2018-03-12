@@ -2,6 +2,7 @@
     <v-layout>
       <v-flex>
         <div>
+          <v-btn raised large color="error" v-on:click="resetList" :disabled="inputData.length < 1">Reset</v-btn>
           <v-btn depressed large color="success" v-on:click="showResults" :disabled="inputData.length < 2">Compare</v-btn>
         </div>
         <v-data-table
@@ -150,6 +151,9 @@ export default {
       } else {
         return 'static/questionMark.png'
       }
+    },
+    resetList () {
+      this.$emit('resetList')
     }
   },
   watch: {
