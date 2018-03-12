@@ -25,7 +25,7 @@
             </template>
           </template>
         </v-select>
-          <v-btn raised color="success" v-on:click="searchByName" :disabled="!selectModel">Add</v-btn>
+          <v-btn raised color="success" v-on:click="searchByName" :disabled="!selectModel || loading" :loading="loading">Add</v-btn>
       </v-flex>
       <v-flex xs6>
         <v-text-field
@@ -36,7 +36,7 @@
           single-line
           v-model="searchedId"
           :rules="idSearchRules"/>
-          <v-btn raised color="primary" v-on:click="searchById" :disabled="!isIdValid">Search</v-btn>
+          <v-btn raised color="primary" v-on:click="searchById" :disabled="!isIdValid || loading" :loading="loading">Search</v-btn>
       </v-flex>
   </v-layout>
 </template>
@@ -50,6 +50,8 @@ export default {
   data () {
     return {
       searchedId: '',
+      loading: false,
+      loader: null,
       idSearchRules:
       [
         v => !!v || 'Cannot be empty.',
@@ -108,6 +110,7 @@ export default {
       }
     },
     searchByName () {
+      this.loader = 'loading'
       if (this.searchedIdCache.indexOf(parseInt(this.selectModel)) > -1) {
         this.$emit('alreadyOnTheList')
       } else {
@@ -119,6 +122,14 @@ export default {
             console.log(error)
           })
       }
+    }
+  },
+  watch: {
+    loader () {
+      const l = this.loader
+      this[l] = !this[l]
+      setTimeout(() => (this[l] = false), 1000)
+      this.loader = null
     }
   }
 }
