@@ -23,14 +23,18 @@ npm run build --report
 * ~~Save each founded seiyuu.~~
 * ~~Validation.~~
 * ~~Enable removing searched seiyuus.~~
-* Enable more than 2 seiyuus at the same time.
+* ~~Enable more than 2 seiyuus at the same time.~~
 * ~~"More" section for searched seiyuus.~~
 * ~~Parse roles.~~
 * ~~Create a graphical card for each seiyuu to compare.~~
-* Create a graphical juxtaposition of collaborate works (main goal).
-* Create a most popular seiyuu list to allow search by name...
-* ... with caching to ease the use (sure searching by name is more comfortable).
+* ~~Create a graphical juxtaposition of collaborate works (main goal).~~
+* ~~Create a most popular seiyuu list to allow search by name...~~
+* ~~... with caching to ease the use (sure searching by name is more comfortable).~~
+* Create minimal table desing for smaller resolutions.
 * Enhance juxtaposition by emphasis on most frequent collaborations (more modes).
+    * Group by character
+    * Group by series
+    * Combine two above?
 * Add hyperlinks.
 * Deploy a demo.
 

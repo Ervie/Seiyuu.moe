@@ -75,12 +75,14 @@ export default {
       return (parsed !== Infinity && String(parsed) === value && parsed >= 0)
     },
     searchById () {
+      this.loader = 'loading'
       if (this.searchedIdCache.indexOf(parseInt(this.searchedId)) > -1) {
         this.$emit('alreadyOnTheList')
       } else {
         axios.get('https://api.jikan.me/person/' + this.searchedId)
           .then((response) => {
             this.$emit('seiyuuReturned', response.data)
+            this.addSeiyuuToCache(response.data)
           })
           .catch((error) => {
             console.log(error)
@@ -100,6 +102,67 @@ export default {
             console.log(error)
           })
       }
+    },
+    addSeiyuuToCache (seiyuuData) {
+      this.cachedSeiyuu.push({
+        mal_id: seiyuuData.mal_id,
+        name: seiyuuData.name,
+        image_url: seiyuuData.image_url
+      })
+      // sort cachedSeiyuu
+      this.cachedSeiyuu.sort(function (a, b) { return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0) })
+      this.uploadToDropbox()
+    },
+    downloadFromDropbox () {
+      // Load data from dropbox file
+      var xhr = new XMLHttpRequest()
+      var self = this
+      var decodedAnser = ''
+      xhr.responseType = 'arraybuffer'
+
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          var decoder = new TextDecoder('utf-8')
+          decodedAnser = decoder.decode(xhr.response)
+          self.cachedSeiyuu = JSON.parse(decodedAnser)
+        } else {
+          console.log('error')
+        }
+      }
+
+      var args = {
+        path: '/cachedSeiyuu.json'
+      }
+
+      xhr.open('POST', 'https://content.dropboxapi.com/2/files/download')
+      xhr.setRequestHeader('Authorization', 'Bearer ' + '<tokenHere>')
+      xhr.setRequestHeader('Dropbox-API-Arg', JSON.stringify(args))
+      xhr.send()
+    },
+    uploadToDropbox () {
+      var xhr = new XMLHttpRequest()
+      // var encoder = new TextEncoder('utf-8')
+
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          console.log('updated')
+        } else {
+          console.log('error')
+        }
+      }
+
+      var args = {
+        path: '/cachedSeiyuu.json',
+        autorename: true,
+        mute: false,
+        mode: 'overwrite'
+      }
+
+      xhr.open('POST', 'https://content.dropboxapi.com/2/files/upload')
+      xhr.setRequestHeader('Authorization', 'Bearer ' + '<tokenHere>')
+      xhr.setRequestHeader('Content-Type', 'application/octet-stream')
+      xhr.setRequestHeader('Dropbox-API-Arg', JSON.stringify(args))
+      xhr.send(JSON.stringify(this.cachedSeiyuu))
     }
   },
   watch: {
@@ -111,32 +174,7 @@ export default {
     }
   },
   created () {
-    var xhr = new XMLHttpRequest()
-    var self = this
-    var decodedAnser = ''
-    xhr.responseType = 'arraybuffer'
-
-    xhr.onload = function () {
-      if (xhr.status === 200) {
-        console.log('success')
-        console.log(xhr.responseType)
-        var decoder = new TextDecoder('utf-8')
-        decodedAnser = decoder.decode(xhr.response)
-        console.log(decodedAnser)
-        self.cachedSeiyuu = JSON.parse(decodedAnser)
-      } else {
-        console.log('error')
-      }
-    }
-
-    var path = {
-      path: '/cachedSeiyuu.json'
-    }
-
-    xhr.open('POST', 'https://content.dropboxapi.com/2/files/download')
-    xhr.setRequestHeader('Authorization', 'Bearer ' + '<token_here>')
-    xhr.setRequestHeader('Dropbox-API-Arg', JSON.stringify(path))
-    xhr.send()
+    this.downloadFromDropbox()
   }
 }
 </script>
