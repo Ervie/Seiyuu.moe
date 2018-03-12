@@ -11,8 +11,9 @@
             :items="tableData"
             hide-actions
             class="elevation-1">
-            <template slot="headerCell" slot-scope="props">
-              <v-container fluid grid-list-lg>
+            <template slot="headerCell" slot-scope="props" >
+            <!-- Normal mode headers -->
+              <v-container fluid grid-list-lg v-if="!avatarMode">
                 <v-layout v-if="props.header.image" row>
                   <v-flex xs9 align-content-center>
                     <v-card-text class="title">{{ props.header.text }}</v-card-text>
@@ -23,6 +24,22 @@
                       :src="props.header.image"
                       contain
                     ></v-card-media>
+                  </v-flex>
+                </v-layout>
+                <v-layout v-else row>
+                  <v-flex md1 justify-center>
+                    <v-card-text class="display-1">{{props.header.text}}</v-card-text>
+                  </v-flex>
+                </v-layout>
+              </v-container>
+            <!-- Avatar mode headers -->
+              <v-container fluid grid-list-lg v-else>
+                <v-layout row v-if="props.header.image">
+                  <v-flex xs12 justify-center>
+                    <v-tooltip bottom>
+                    <img :src="props.header.image" slot="activator" width="45px" height="70px">
+                    <span>{{props.header.text}}</span>
+                    </v-tooltip>
                   </v-flex>
                 </v-layout>
                 <v-layout v-else row>
@@ -84,7 +101,9 @@ export default {
     return {
       showTable: false,
       headers: [],
-      tableData: []
+      tableData: [],
+      avatarMode: false,
+      windowWidth: 0
     }
   },
   computed: {
@@ -161,7 +180,23 @@ export default {
       if (this.inputData.length === 0) {
         this.showTable = false
       }
+    },
+    windowWidth: function (newHeight, oldHeight) {
+      console.log('resize')
+      if (newHeight / this.inputData.length < 350) {
+        this.avatarMode = true
+      } else {
+        this.avatarMode = false
+      }
     }
+  },
+  mounted () {
+    let that = this
+    this.$nextTick(function () {
+      window.addEventListener('resize', function (e) {
+        that.windowWidth = window.innerWidth
+      })
+    })
   }
 }
 </script>
