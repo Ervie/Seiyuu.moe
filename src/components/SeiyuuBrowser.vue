@@ -57,29 +57,7 @@ export default {
         v => !!v || 'Cannot be empty.',
         v => this.isPositiveIntegerValidation(v) || 'Must be a positive number'
       ],
-      cachedSeiyuu:
-      [
-        {
-          mal_id: 90,
-          name: 'Maaya Sakamoto',
-          image_url: 'https://myanimelist.cdn-dena.com/images/voiceactors/2/44284.jpg'
-        },
-        {
-          mal_id: 99,
-          name: 'Miyuki Sawashiro',
-          image_url: 'https://myanimelist.cdn-dena.com/images/voiceactors/1/41394.jpg'
-        },
-        {
-          mal_id: 8,
-          name: 'Kugimiya Rie',
-          image_url: 'https://myanimelist.cdn-dena.com/images/voiceactors/3/44863.jpg'
-        },
-        {
-          mal_id: 160,
-          name: 'Takehito Koyasu',
-          image_url: 'https://myanimelist.cdn-dena.com/images/voiceactors/2/10264.jpg'
-        }
-      ],
+      cachedSeiyuu: [],
       selectModel: null
     }
   },
@@ -131,6 +109,34 @@ export default {
       setTimeout(() => (this[l] = false), 1000)
       this.loader = null
     }
+  },
+  created () {
+    var xhr = new XMLHttpRequest()
+    var self = this
+    var decodedAnser = ''
+    xhr.responseType = 'arraybuffer'
+
+    xhr.onload = function () {
+      if (xhr.status === 200) {
+        console.log('success')
+        console.log(xhr.responseType)
+        var decoder = new TextDecoder('utf-8')
+        decodedAnser = decoder.decode(xhr.response)
+        console.log(decodedAnser)
+        self.cachedSeiyuu = JSON.parse(decodedAnser)
+      } else {
+        console.log('error')
+      }
+    }
+
+    var path = {
+      path: '/cachedSeiyuu.json'
+    }
+
+    xhr.open('POST', 'https://content.dropboxapi.com/2/files/download')
+    xhr.setRequestHeader('Authorization', 'Bearer ' + '<token_here>')
+    xhr.setRequestHeader('Dropbox-API-Arg', JSON.stringify(path))
+    xhr.send()
   }
 }
 </script>
