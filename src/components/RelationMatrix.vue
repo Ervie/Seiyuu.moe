@@ -15,10 +15,10 @@
             <!-- Normal mode headers -->
               <v-container fluid grid-list-lg v-if="!avatarMode">
                 <v-layout v-if="props.header.image" row>
-                  <v-flex xs9 align-content-center>
-                    <v-card-text class="title">{{ props.header.text }}</v-card-text>
+                  <v-flex xs8 align-content-center>
+                    <v-card-text class="subheading">{{ props.header.text }}</v-card-text>
                   </v-flex>
-                  <v-flex xs3>
+                  <v-flex xs4>
                     <v-card-media
                       height="70px"
                       :src="props.header.image"
@@ -37,7 +37,7 @@
                 <v-layout row v-if="props.header.image">
                   <v-flex xs12 justify-center>
                     <v-tooltip bottom>
-                    <img :src="props.header.image" slot="activator" width="45px" height="70px">
+                    <img :src="props.header.image" slot="activator" class="miniav">
                     <span>{{props.header.text}}</span>
                     </v-tooltip>
                   </v-flex>
@@ -54,10 +54,10 @@
               <!-- Normal mode anime records -->
               <v-container fluid grid-list-lg v-if="!avatarMode">
                 <v-layout row>
-                  <v-flex xs9 justify-center>
-                    <v-card-text class="title">{{ props.item.anime }}</v-card-text>
+                  <v-flex xs8 justify-center>
+                    <v-card-text class="subheading">{{ props.item.anime }}</v-card-text>
                   </v-flex>
-                  <v-flex xs3>
+                  <v-flex xs4>
                     <v-card-media
                       height="70px"
                       :src="props.item.animeImg"
@@ -68,15 +68,7 @@
               </v-container>
               <!-- Avatar mode anime records -->
                <v-container fluid grid-list-lg v-else>
-                <v-layout row v-if="props.item.animeImg">
-                  <v-flex xs12 justify-center>
-                    <v-tooltip bottom>
-                    <img :src="props.item.animeImg" slot="activator" width="45px" height="70px">
-                    <span>{{props.item.anime}}</span>
-                    </v-tooltip>
-                  </v-flex>
-                </v-layout>
-                <v-layout v-else row>
+                <v-layout class="subheading" row>
                   <v-flex md1 justify-center>
                     <v-card-text>{{props.item.anime}}</v-card-text>
                   </v-flex>
@@ -87,10 +79,10 @@
               <!-- Normal mode character records -->
               <v-container fluid grid-list-lg v-if="!avatarMode">
                 <v-layout row>
-                  <v-flex xs9 align-content-center>
-                    <v-card-text class="title">{{ character.character.name }}</v-card-text>
+                  <v-flex xs8 align-content-center>
+                    <v-card-text class="subheading">{{ character.character.name }}</v-card-text>
                   </v-flex>
-                  <v-flex xs3>
+                  <v-flex xs4>
                     <v-card-media
                       height="70px"
                       :src="character.character.image_url"
@@ -99,12 +91,12 @@
                   </v-flex>
                 </v-layout>
               </v-container>
-              <!-- Avatar mode anime records -->
+              <!-- Avatar mode character records -->
               <v-container fluid grid-list-lg v-else>
                 <v-layout row v-if="character.character.image_url">
                   <v-flex xs12 justify-center>
                     <v-tooltip bottom>
-                    <img :src="character.character.image_url" slot="activator" width="45px" height="70px">
+                    <img :src="character.character.image_url" slot="activator" class="miniav">
                     <span>{{character.character.name}}</span>
                     </v-tooltip>
                   </v-flex>
@@ -192,11 +184,12 @@ export default {
       for (var headerIndex = 0; headerIndex < this.inputData.length; headerIndex++) {
         this.headers.push({
           text: this.inputData[headerIndex].name,
-          value: 'seiyuuCharacterName' + headerIndex,
+          value: 'roles[' + headerIndex + '].character.name',
           image: this.inputData[headerIndex].image_url})
       }
 
       this.showTable = true
+      this.handleResize(this.windowWidth)
     },
     pathToImage (initialPath) {
       if (initialPath) {
@@ -207,6 +200,13 @@ export default {
     },
     resetList () {
       this.$emit('resetList')
+    },
+    handleResize (windowWidth) {
+      if (windowWidth / this.inputData.length < 500) {
+        this.avatarMode = true
+      } else {
+        this.avatarMode = false
+      }
     }
   },
   watch: {
@@ -215,13 +215,8 @@ export default {
         this.showTable = false
       }
     },
-    windowWidth: function (newHeight, oldHeight) {
-      console.log('resize')
-      if (newHeight / this.inputData.length < 350) {
-        this.avatarMode = true
-      } else {
-        this.avatarMode = false
-      }
+    windowWidth: function (newWidth, oldWidth) {
+      this.handleResize(newWidth)
     }
   },
   mounted () {
@@ -231,25 +226,16 @@ export default {
         that.windowWidth = window.innerWidth
       })
     })
+  },
+  beforeDestroy: function () {
+    window.removeEventListener('resize', this.handleResize)
   }
 }
 </script>
 
 <style>
-div.av {
-    height: 200px;
-    width: 200px;
-    overflow: hidden;
-}
-
-div.av img {
-    height: 350px;
-    width: 100%;
-    margin: -30px 0 0 0;
-}
-
-miniav {
-    height: 70px;
-    width: 45px
+img.miniav {
+    height: 98px;
+    width: 63px
 }
 </style>

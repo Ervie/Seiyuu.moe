@@ -24,17 +24,26 @@ npm run build --report
 * ~~Validation.~~
 * ~~Enable removing searched seiyuus.~~
 * ~~Enable more than 2 seiyuus at the same time.~~
-* ~~"More" section for searched seiyuus.~~
+* ~~"More" section for searched seiyuu.~~
 * ~~Parse roles.~~
 * ~~Create a graphical card for each seiyuu to compare.~~
 * ~~Create a graphical juxtaposition of collaborate works (main goal).~~
 * ~~Create a most popular seiyuu list to allow search by name...~~
 * ~~... with caching to ease the use (sure searching by name is more comfortable).~~
-* Create minimal table desing for smaller resolutions.
+    * Move it to database later (with simple API).
+* ~~Create minimal table desing for smaller resolutions.~~
+    * Some fixes for readability
+* Move search by Id to extend control.
+* Add outline for each seiyuu card (indicator for left places)
+* Dark theme
+* Attach loader to API request
 * Enhance juxtaposition by emphasis on most frequent collaborations (more modes).
     * Group by character
     * Group by series
     * Combine two above?
+    * Filtering by main roles.
+    * Partial results
+    * Charts?
 * Add hyperlinks.
 * Deploy a demo.
 
