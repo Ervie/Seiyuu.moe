@@ -51,7 +51,8 @@
             </template>
             <template slot="items" slot-scope="props">
             <td>
-              <v-container fluid grid-list-lg>
+              <!-- Normal mode anime records -->
+              <v-container fluid grid-list-lg v-if="!avatarMode">
                 <v-layout row>
                   <v-flex xs9 justify-center>
                     <v-card-text class="title">{{ props.item.anime }}</v-card-text>
@@ -65,9 +66,26 @@
                   </v-flex>
                 </v-layout>
               </v-container>
+              <!-- Avatar mode anime records -->
+               <v-container fluid grid-list-lg v-else>
+                <v-layout row v-if="props.item.animeImg">
+                  <v-flex xs12 justify-center>
+                    <v-tooltip bottom>
+                    <img :src="props.item.animeImg" slot="activator" width="45px" height="70px">
+                    <span>{{props.item.anime}}</span>
+                    </v-tooltip>
+                  </v-flex>
+                </v-layout>
+                <v-layout v-else row>
+                  <v-flex md1 justify-center>
+                    <v-card-text>{{props.item.anime}}</v-card-text>
+                  </v-flex>
+                </v-layout>
+              </v-container>
             </td>
             <td class="text-xs-right" v-for="character in props.item.roles" :key="character.mal_id">
-              <v-container fluid grid-list-lg>
+              <!-- Normal mode character records -->
+              <v-container fluid grid-list-lg v-if="!avatarMode">
                 <v-layout row>
                   <v-flex xs9 align-content-center>
                     <v-card-text class="title">{{ character.character.name }}</v-card-text>
@@ -78,6 +96,22 @@
                       :src="character.character.image_url"
                       contain
                     ></v-card-media>
+                  </v-flex>
+                </v-layout>
+              </v-container>
+              <!-- Avatar mode anime records -->
+              <v-container fluid grid-list-lg v-else>
+                <v-layout row v-if="character.character.image_url">
+                  <v-flex xs12 justify-center>
+                    <v-tooltip bottom>
+                    <img :src="character.character.image_url" slot="activator" width="45px" height="70px">
+                    <span>{{character.character.name}}</span>
+                    </v-tooltip>
+                  </v-flex>
+                </v-layout>
+                <v-layout v-else row>
+                  <v-flex md1 justify-center>
+                    <v-card-text>{{character.character.name}}</v-card-text>
                   </v-flex>
                 </v-layout>
               </v-container>
