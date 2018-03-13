@@ -1,13 +1,13 @@
 <template>
   <v-layout row wrap>
-      <v-flex xs6>
+      <v-flex xs9>
         <v-select
           :items="cachedSeiyuu"
           v-model="selectModel"
           label="Search by Seiyuu Name..."
           item-text="name"
           item-value="mal_id"
-          max-height="auto"
+          max-height="300"
           autocomplete
           prepend-icon="search"
         >
@@ -27,7 +27,7 @@
         </v-select>
           <v-btn raised color="success" v-on:click="searchByName" :disabled="!selectModel || loading" :loading="loading">Add</v-btn>
       </v-flex>
-      <v-flex xs6>
+      <v-flex xs3>
         <v-text-field
           prepend-icon="search"
           name="searchIdBox"
@@ -104,14 +104,16 @@ export default {
       }
     },
     addSeiyuuToCache (seiyuuData) {
-      this.cachedSeiyuu.push({
-        mal_id: seiyuuData.mal_id,
-        name: seiyuuData.name,
-        image_url: seiyuuData.image_url
-      })
-      // sort cachedSeiyuu
-      this.cachedSeiyuu.sort(function (a, b) { return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0) })
-      this.uploadToDropbox()
+      if (this.cachedSeiyuu.filter(x => (x.mal_id !== seiyuuData.mal_id))){
+        this.cachedSeiyuu.push({
+          mal_id: seiyuuData.mal_id,
+          name: seiyuuData.name,
+          image_url: seiyuuData.image_url
+        })
+        // sort cachedSeiyuu
+        this.cachedSeiyuu.sort(function (a, b) { return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0) })
+        this.uploadToDropbox()
+      }
     },
     downloadFromDropbox () {
       // Load data from dropbox file
