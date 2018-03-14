@@ -188,8 +188,8 @@ export default {
           image: this.inputData[headerIndex].image_url})
       }
 
-      this.showTable = true
       this.handleResize(this.windowWidth)
+      this.showTable = true
     },
     pathToImage (initialPath) {
       if (initialPath) {
@@ -202,7 +202,7 @@ export default {
       this.$emit('resetList')
     },
     handleResize (windowWidth) {
-      if (windowWidth / this.inputData.length < 500) {
+      if (windowWidth / this.inputData.length < 400) {
         this.avatarMode = true
       } else {
         this.avatarMode = false

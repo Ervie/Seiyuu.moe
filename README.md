@@ -33,9 +33,8 @@ npm run build --report
     * Move it to database later (with simple API).
 * ~~Create minimal table desing for smaller resolutions.~~
     * Some fixes for readability
-* Move search by Id to extend control.
 * Add outline for each seiyuu card (indicator for left places)
-* Dark theme
+* ~~Dark theme~~
 * Attach loader to API request
 * Enhance juxtaposition by emphasis on most frequent collaborations (more modes).
     * Group by character

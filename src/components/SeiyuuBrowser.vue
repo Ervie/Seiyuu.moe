@@ -104,7 +104,7 @@ export default {
       }
     },
     addSeiyuuToCache (seiyuuData) {
-      if (this.cachedSeiyuu.filter(x => (x.mal_id !== seiyuuData.mal_id))){
+      if (this.cachedSeiyuu.filter(x => (x.mal_id !== seiyuuData.mal_id))) {
         this.cachedSeiyuu.push({
           mal_id: seiyuuData.mal_id,
           name: seiyuuData.name,

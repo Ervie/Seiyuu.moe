@@ -3,12 +3,12 @@
     <v-card-text style="font-weight: bold"> {{ seiyuuData.name }}</v-card-text>
     <v-card-media :src="pathToImage" height="280px" v-on:click="showDialog = true"  ></v-card-media>
     <v-card-actions>
-      <v-btn icon value="removeSeiyuu" color="red" v-on:click="removeSeiyuu()">
-        <v-icon>delete</v-icon>
+      <v-btn icon value="removeSeiyuu" v-on:click="removeSeiyuu()">
+        <v-icon color="red">delete</v-icon>
       </v-btn>
       <v-spacer></v-spacer>
-      <v-btn icon value="showDetails" color="teal" v-on:click="showDialog = true">
-        <v-icon>info</v-icon>
+      <v-btn icon value="showDetails" v-on:click="showDialog = true">
+        <v-icon color="teal">info</v-icon>
       </v-btn>
     </v-card-actions>
     <!--Details card-->
