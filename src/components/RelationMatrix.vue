@@ -12,32 +12,12 @@
             hide-actions
             class="elevation-1">
             <template slot="headerCell" slot-scope="props" >
-            <!-- Normal mode headers -->
-              <v-container fluid grid-list-lg v-if="!avatarMode">
-                <v-layout v-if="props.header.image" row>
-                  <v-flex xs8 align-content-center>
-                    <v-card-text class="subheading">{{ props.header.text }}</v-card-text>
-                  </v-flex>
-                  <v-flex xs4>
-                    <v-card-media
-                      height="70px"
-                      :src="props.header.image"
-                      contain
-                    ></v-card-media>
-                  </v-flex>
-                </v-layout>
-                <v-layout v-else row>
-                  <v-flex md1 justify-center>
-                    <v-card-text class="display-1">{{props.header.text}}</v-card-text>
-                  </v-flex>
-                </v-layout>
-              </v-container>
             <!-- Avatar mode headers -->
-              <v-container fluid grid-list-lg v-else>
+              <v-container grid-list-xs fluid>
                 <v-layout row v-if="props.header.image">
-                  <v-flex xs12 justify-center>
+                  <v-flex xs6  offset-xs3 justify-center>
                     <v-tooltip bottom>
-                    <img :src="props.header.image" slot="activator" class="miniav">
+                    <img :src="props.header.image" slot="activator" class="av">
                     <span>{{props.header.text}}</span>
                     </v-tooltip>
                   </v-flex>
@@ -52,7 +32,7 @@
             <template slot="items" slot-scope="props">
             <td>
               <!-- Normal mode anime records -->
-              <v-container fluid grid-list-lg v-if="!avatarMode">
+              <v-container fluid grid-list-xs v-if="!avatarMode">
                 <v-layout row>
                   <v-flex xs8 justify-center>
                     <v-card-text class="subheading">{{ props.item.anime }}</v-card-text>
@@ -67,9 +47,9 @@
                 </v-layout>
               </v-container>
               <!-- Avatar mode anime records -->
-               <v-container fluid grid-list-lg v-else>
+               <v-container fluid grid-list-xs v-else>
                 <v-layout class="subheading" row>
-                  <v-flex md1 justify-center>
+                  <v-flex xs12 justify-center>
                     <v-card-text>{{props.item.anime}}</v-card-text>
                   </v-flex>
                 </v-layout>
@@ -77,7 +57,7 @@
             </td>
             <td class="text-xs-right" v-for="character in props.item.roles" :key="character.mal_id">
               <!-- Normal mode character records -->
-              <v-container fluid grid-list-lg v-if="!avatarMode">
+              <v-container fluid grid-list-xs v-if="!avatarMode">
                 <v-layout row>
                   <v-flex xs8 align-content-center>
                     <v-card-text class="subheading">{{ character.character.name }}</v-card-text>
@@ -92,7 +72,7 @@
                 </v-layout>
               </v-container>
               <!-- Avatar mode character records -->
-              <v-container fluid grid-list-lg v-else>
+              <v-container fluid grid-list-xs v-else>
                 <v-layout row v-if="character.character.image_url">
                   <v-flex xs12 justify-center>
                     <v-tooltip bottom>
@@ -236,6 +216,11 @@ export default {
 <style>
 img.miniav {
     height: 98px;
-    width: 63px
+    width: 63px;
+}
+
+img.av {
+    height: 140px;
+    width: 90px;
 }
 </style>

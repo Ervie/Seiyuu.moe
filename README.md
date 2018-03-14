@@ -32,7 +32,7 @@ npm run build --report
 * ~~... with caching to ease the use (sure searching by name is more comfortable).~~
     * Move it to database later (with simple API).
 * ~~Create minimal table desing for smaller resolutions.~~
-    * Some fixes for readability
+    * ~~Some fixes for readability~~
 * Add outline for each seiyuu card (indicator for left places)
 * ~~Dark theme~~
 * Attach loader to API request
