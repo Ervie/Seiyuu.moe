@@ -1,5 +1,5 @@
 <template>
-  <v-card class="seiyuuCard">
+  <v-card v-if="seiyuuData">
     <v-card-text style="font-weight: bold"> {{ seiyuuData.name }}</v-card-text>
     <v-card-media :src="pathToImage" height="280px" v-on:click="showDialog = true"  ></v-card-media>
     <v-card-actions>
@@ -79,9 +79,6 @@ export default {
 </script>
 
 <style>
-.seiyuuCard {
-    border: 1px solid rgb(20, 3, 95);
-}
 
 .white-space-pre {
     white-space: pre-wrap;

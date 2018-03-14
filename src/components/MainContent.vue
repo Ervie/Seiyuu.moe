@@ -7,10 +7,14 @@
     <v-alert dismissible color="error" v-model="alreadyOnTheList">
       This seiyuu is already selected.
     </v-alert>
-    <v-layout row wrap>
-      <v-flex v-for="(seiyuu, index) in seiyuuToCompare" :key="seiyuu.mal_id" xs2>
+    <v-layout row wrap v-show="seiyuuToCompare.length > 0">
+      <v-flex v-for="(seiyuu, index) in seiyuuToCompare" :key="seiyuu.mal_id" xs2 class="seiyuuCard" >
         <seiyuuCard :seiyuuData="seiyuu" :cardId="index"
          @seiyuuRemoved="removeSeiyuu"/>
+      </v-flex>
+      <!-- Dummy cards for seiyuu to be filled-->
+      <v-flex v-for="i in (maximumSeiyuuNumber - seiyuuToCompare.length)" :key="`empty${i}`" xs2 class="seiyuuCard" >
+        <seiyuuCard :cardId="i + seiyuuToCompare.length - 1"/>
       </v-flex>
     </v-layout>
     <relationMatrix :inputData="seiyuuToCompare" @resetList="resetList"/>
@@ -63,4 +67,9 @@ export default {
 </script>
 
 <style scoped>
+
+.seiyuuCard {
+    border: 1px dashed;
+    border-color:grey;
+}
 </style>
