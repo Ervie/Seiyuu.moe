@@ -51,7 +51,6 @@ export default {
     return {
       searchedId: '',
       loading: false,
-      loader: null,
       idSearchRules:
       [
         v => !!v || 'Cannot be empty.',
@@ -75,7 +74,7 @@ export default {
       return (parsed !== Infinity && String(parsed) === value && parsed >= 0)
     },
     searchById () {
-      this.loader = 'loading'
+      this.loading = true
       if (this.searchedIdCache.indexOf(parseInt(this.searchedId)) > -1) {
         this.$emit('alreadyOnTheList')
       } else {
@@ -83,23 +82,27 @@ export default {
           .then((response) => {
             this.$emit('seiyuuReturned', response.data)
             this.addSeiyuuToCache(response.data)
+            this.loading = false
           })
           .catch((error) => {
             console.log(error)
+            this.loading = false
           })
       }
     },
     searchByName () {
-      this.loader = 'loading'
+      this.loading = true
       if (this.searchedIdCache.indexOf(parseInt(this.selectModel)) > -1) {
         this.$emit('alreadyOnTheList')
       } else {
         axios.get('https://api.jikan.me/person/' + String(this.selectModel))
           .then((response) => {
             this.$emit('seiyuuReturned', response.data)
+            this.loading = false
           })
           .catch((error) => {
             console.log(error)
+            this.loading = false
           })
       }
     },
@@ -165,14 +168,6 @@ export default {
       xhr.setRequestHeader('Content-Type', 'application/octet-stream')
       xhr.setRequestHeader('Dropbox-API-Arg', JSON.stringify(args))
       xhr.send(JSON.stringify(this.cachedSeiyuu))
-    }
-  },
-  watch: {
-    loader () {
-      const l = this.loader
-      this[l] = !this[l]
-      setTimeout(() => (this[l] = false), 1000)
-      this.loader = null
     }
   },
   created () {

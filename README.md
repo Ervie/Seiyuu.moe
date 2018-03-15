@@ -35,7 +35,7 @@ npm run build --report
     * ~~Some fixes for readability~~
 * ~~Add outline for each seiyuu card (indicator for left places)~~
 * ~~Dark theme~~
-* Attach loader to API request
+* ~~Attach loader to API request~~
 * Enhance juxtaposition by emphasis on most frequent collaborations (more modes).
     * Group by character
     * Group by series

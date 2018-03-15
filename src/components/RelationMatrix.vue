@@ -167,8 +167,6 @@ export default {
           value: 'roles[' + headerIndex + '].character.name',
           image: this.inputData[headerIndex].image_url})
       }
-
-      this.handleResize(this.windowWidth)
       this.showTable = true
     },
     pathToImage (initialPath) {
@@ -204,6 +202,7 @@ export default {
     this.$nextTick(function () {
       window.addEventListener('resize', function (e) {
         that.windowWidth = window.innerWidth
+        that.handleResize(this.windowWidth)
       })
     })
   },
