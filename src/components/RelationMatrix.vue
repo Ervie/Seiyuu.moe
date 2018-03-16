@@ -12,7 +12,7 @@
             hide-actions
             class="elevation-1">
             <template slot="headerCell" slot-scope="props" >
-            <!-- Avatar mode headers -->
+            <!-- Headers -->
               <v-container grid-list-xs fluid>
                 <v-layout row v-if="props.header.image">
                   <v-flex xs6  offset-xs3 justify-center>
@@ -38,11 +38,13 @@
                     <v-card-text class="subheading">{{ props.item.anime }}</v-card-text>
                   </v-flex>
                   <v-flex xs4>
-                    <v-card-media
-                      height="70px"
-                      :src="props.item.animeImg"
-                      contain
-                    ></v-card-media>
+                    <a :href="props.item.animeUrl" target="_blank">
+                      <v-card-media
+                        height="70px"
+                        :src="props.item.animeImg"
+                        contain
+                      ></v-card-media>
+                    </a>
                   </v-flex>
                 </v-layout>
               </v-container>
@@ -63,11 +65,13 @@
                     <v-card-text class="subheading">{{ character.character.name }}</v-card-text>
                   </v-flex>
                   <v-flex xs4>
-                    <v-card-media
-                      height="70px"
-                      :src="character.character.image_url"
-                      contain
-                    ></v-card-media>
+                    <a :href="character.character.url" target="_blank">
+                      <v-card-media
+                        height="70px"
+                        :src="character.character.image_url"
+                        contain
+                      ></v-card-media>
+                    </a>
                   </v-flex>
                 </v-layout>
               </v-container>
@@ -75,10 +79,12 @@
               <v-container fluid grid-list-xs v-else>
                 <v-layout row v-if="character.character.image_url">
                   <v-flex xs12 justify-center>
-                    <v-tooltip bottom>
-                    <img :src="character.character.image_url" slot="activator" class="miniav">
-                    <span>{{character.character.name}}</span>
-                    </v-tooltip>
+                    <a :href="character.character.url" target="_blank">
+                      <v-tooltip bottom>
+                        <img :src="character.character.image_url" slot="activator" class="miniav">
+                        <span>{{character.character.name}}</span>
+                      </v-tooltip>
+                    </a>
                   </v-flex>
                 </v-layout>
                 <v-layout v-else row>
@@ -152,6 +158,7 @@ export default {
         this.tableData.push({
           anime: intersectAnime[i].anime.name,
           animeImg: intersectAnime[i].anime.image_url,
+          animeUrl: intersectAnime[i].anime.url,
           roles: intersectAnime[i].roles
         })
       }
