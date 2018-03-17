@@ -9,29 +9,29 @@
     </v-alert>
     <v-layout row wrap v-show="seiyuuToCompare.length > 0">
       <v-flex v-for="(seiyuu, index) in seiyuuToCompare" :key="seiyuu.mal_id" xs2 class="seiyuuCard" >
-        <seiyuuCard :seiyuuData="seiyuu" :cardId="index"
+        <seiyuu-card :seiyuuData="seiyuu" :cardId="index"
          @seiyuuRemoved="removeSeiyuu"/>
       </v-flex>
       <!-- Dummy cards for seiyuu to be filled-->
       <v-flex v-for="i in (maximumSeiyuuNumber - seiyuuToCompare.length)" :key="`empty${i}`" xs2 class="seiyuuCard" >
-        <seiyuuCard :cardId="i + seiyuuToCompare.length - 1"/>
+        <seiyuu-card :cardId="i + seiyuuToCompare.length - 1"/>
       </v-flex>
     </v-layout>
-    <relationMatrix :inputData="seiyuuToCompare" @resetList="resetList"/>
+    <result-area :inputData="seiyuuToCompare" @resetList="resetList"/>
   </v-container>
 </template>
 
 <script>
 import SeiyuuBrowser from '@/components/SeiyuuBrowser.vue'
 import SeiyuuCard from '@/components/SeiyuuCard.vue'
-import RelationMatrix from '@/components/RelationMatrix.vue'
+import ResultArea from '@/components/ResultArea.vue'
 
 export default {
   name: 'MainContent',
   components: {
     'browser': SeiyuuBrowser,
-    'seiyuuCard': SeiyuuCard,
-    'relationMatrix': RelationMatrix
+    'seiyuu-card': SeiyuuCard,
+    'result-area': ResultArea
   },
   data () {
     return {

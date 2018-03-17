@@ -43,7 +43,7 @@ npm run build --report
     * Filtering by main roles.
     * Partial results
     * Charts?
-* Add hyperlinks.
+* ~~Add hyperlinks.~~
 * Deploy a demo.
 
 ## Special mentions
