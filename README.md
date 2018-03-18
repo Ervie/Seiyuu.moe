@@ -30,7 +30,7 @@ npm run build --report
 * ~~Create a graphical juxtaposition of collaborate works (main goal).~~
 * ~~Create a most popular seiyuu list to allow search by name...~~
 * ~~... with caching to ease the use (sure searching by name is more comfortable).~~
-    * Move it to database later (with simple API).
+    * Move it to database at some point (with simple API).
 * ~~Create minimal table desing for smaller resolutions.~~
     * ~~Some fixes for readability~~
 * ~~Add outline for each seiyuu card (indicator for left places)~~
@@ -38,7 +38,7 @@ npm run build --report
 * ~~Attach loader to API request~~
 * Enhance juxtaposition by emphasis on most frequent collaborations (more modes).
     * Group by character
-    * Group by series
+    * ~~Group by series~~
     * Combine two above?
     * Filtering by main roles.
     * Partial results

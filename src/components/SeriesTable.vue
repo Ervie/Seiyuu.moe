@@ -50,10 +50,10 @@
             </v-layout>
             </v-container>
         </td>
-        <td class="text-xs-right" v-for="character in props.item.roles" :key="character.mal_id">
+        <td class="text-xs-right" v-for="role in props.item.roles" :key="role.seiyuu">
             <!-- Normal mode character records -->
-            <v-container fluid grid-list-xs v-if="!avatarMode">
-            <v-layout row>
+            <v-container fluid grid-list-xs>
+            <v-layout v-for="character in role.characters" :key="character.mal_id" row>
                 <v-flex xs8 align-content-center>
                 <v-card-text class="subheading">{{ character.character.name }}</v-card-text>
                 </v-flex>
@@ -65,24 +65,6 @@
                     contain
                     ></v-card-media>
                 </a>
-                </v-flex>
-            </v-layout>
-            </v-container>
-            <!-- Avatar mode character records -->
-            <v-container fluid grid-list-xs v-else>
-            <v-layout row v-if="character.character.image_url">
-                <v-flex xs12 justify-center>
-                <a :href="character.character.url" target="_blank">
-                    <v-tooltip bottom>
-                    <img :src="character.character.image_url" slot="activator" class="miniav">
-                    <span>{{character.character.name}}</span>
-                    </v-tooltip>
-                </a>
-                </v-flex>
-            </v-layout>
-            <v-layout v-else row>
-                <v-flex md1 justify-center>
-                <v-card-text>{{character.character.name}}</v-card-text>
                 </v-flex>
             </v-layout>
             </v-container>
@@ -98,7 +80,7 @@
 
 <script>
 export default {
-  name: 'SimpleTable',
+  name: 'SeriesTable',
   props: ['inputData', 'avatarMode', 'counter'],
   data () {
     return {
@@ -111,32 +93,67 @@ export default {
       this.tableData = []
       this.headers = []
       var intersectAnime = []
+      var foundAnimeIndex = -1
+      var foundSeiyuuIndex = -1
 
-      for (var k = 0; k < this.seiyuuRoles[0].length; k++) {
-        intersectAnime.push({
-          anime: this.seiyuuRoles[0][k].anime,
-          roles: [{
-            seiyuu: this.inputData[0].name,
-            character: this.seiyuuRoles[0][k].character
-          }]
-        })
-      }
-
-      for (var seiyuuIndex = 1; seiyuuIndex < this.seiyuuRoles.length; seiyuuIndex++) {
-        for (var animeIndex = 0; animeIndex < intersectAnime.length; animeIndex++) {
-          var roleIndex = this.seiyuuRoles[seiyuuIndex].map(x => x.anime.mal_id).indexOf(intersectAnime[animeIndex].anime.mal_id)
-          if (roleIndex === -1) {
-            intersectAnime.splice(animeIndex, 1)
-            animeIndex--
-          } else {
-            intersectAnime[animeIndex].roles.push({
-              seiyuu: this.inputData[seiyuuIndex].name,
-              character: this.seiyuuRoles[seiyuuIndex][roleIndex].character
+      for (var seiyuuIndex = 0; seiyuuIndex < this.seiyuuRoles.length; seiyuuIndex++) {
+        for (var animeIndex = 0; animeIndex < this.seiyuuRoles[seiyuuIndex].length; animeIndex++) {
+          foundAnimeIndex = intersectAnime.map(x => x.anime.mal_id).indexOf(this.seiyuuRoles[seiyuuIndex][animeIndex].anime.mal_id)
+          if (foundAnimeIndex === -1) {
+            intersectAnime.push({
+              anime: this.seiyuuRoles[seiyuuIndex][animeIndex].anime,
+              roles: [{
+                seiyuu: this.inputData[seiyuuIndex].name,
+                characters: [{
+                  character: this.seiyuuRoles[seiyuuIndex][animeIndex].character
+                }]
+              }]
             })
+          } else {
+            foundSeiyuuIndex = intersectAnime[foundAnimeIndex].roles.map(x => x.seiyuu).indexOf(this.inputData[seiyuuIndex].name)
+            if (foundSeiyuuIndex === -1) {
+              intersectAnime[foundAnimeIndex].roles.push({
+                seiyuu: this.inputData[seiyuuIndex].name,
+                characters: [{
+                  character: this.seiyuuRoles[seiyuuIndex][animeIndex].character
+                }]
+              })
+            } else {
+              intersectAnime[foundAnimeIndex].roles[foundSeiyuuIndex].characters.push({
+                character: this.seiyuuRoles[seiyuuIndex][animeIndex].character
+              })
+            }
           }
         }
       }
 
+      intersectAnime = intersectAnime.filter(x => x.roles.length === this.inputData.length)
+
+      console.log(intersectAnime)
+      // for (var seiyuuIndex = 1; seiyuuIndex < this.seiyuuRoles.length; seiyuuIndex++) {
+      //   for (var animeIndex = 0; animeIndex < intersectAnime.length; animeIndex++) {
+      //     var roleIndex = this.seiyuuRoles[seiyuuIndex].map(x => x.anime.mal_id).indexOf(intersectAnime[animeIndex].anime.mal_id)
+      //     if (roleIndex === -1) {
+      //       intersectAnime.splice(animeIndex, 1)
+      //       animeIndex--
+      //     } else {
+      //       helperIndex = intersectAnime[animeIndex].roles.map(x => x.seiyuu).indexOf(this.inputData[seiyuuIndex].name)
+      //       if (helperIndex === -1) {
+      //         intersectAnime[animeIndex].roles.push({
+      //           seiyuu: this.inputData[seiyuuIndex].name,
+      //           characters: [{
+      //             character: this.seiyuuRoles[seiyuuIndex][roleIndex].character
+      //           }]
+      //         })
+      //       } else {
+      //         console.log('Inserting ' + this.seiyuuRoles[seiyuuIndex][roleIndex].character.name)
+      //         intersectAnime[animeIndex].roles[helperIndex].characters.push({
+      //           character: this.seiyuuRoles[seiyuuIndex][roleIndex].character
+      //         })
+      //       }
+      //     }
+      //   }
+      // }
       for (var i = 0; i < intersectAnime.length; i++) {
         this.tableData.push({
           anime: intersectAnime[i].anime.name,
@@ -154,7 +171,7 @@ export default {
       for (var headerIndex = 0; headerIndex < this.inputData.length; headerIndex++) {
         this.headers.push({
           text: this.inputData[headerIndex].name,
-          value: 'roles[' + headerIndex + '].character.name',
+          value: 'roles[' + headerIndex + '].length',
           image: this.inputData[headerIndex].image_url})
       }
       this.showTables = true

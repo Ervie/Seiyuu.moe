@@ -17,7 +17,7 @@
             </template>
             <template v-else>
               <v-list-tile-avatar>
-                <img :src="data.item.image_url">
+                <img :src="pathToImage(data.item.image_url)">
               </v-list-tile-avatar>
               <v-list-tile-content>
                 <v-list-tile-title v-html="data.item.name"></v-list-tile-title>
@@ -140,7 +140,7 @@ export default {
       }
 
       xhr.open('POST', 'https://content.dropboxapi.com/2/files/download')
-      xhr.setRequestHeader('Authorization', 'Bearer ' + '<tokenHere>')
+      xhr.setRequestHeader('Authorization', 'Bearer ' + 'tokeHere')
       xhr.setRequestHeader('Dropbox-API-Arg', JSON.stringify(args))
       xhr.send()
     },
@@ -164,10 +164,17 @@ export default {
       }
 
       xhr.open('POST', 'https://content.dropboxapi.com/2/files/upload')
-      xhr.setRequestHeader('Authorization', 'Bearer ' + '<tokenHere>')
+      xhr.setRequestHeader('Authorization', 'Bearer ' + 'tokenHere')
       xhr.setRequestHeader('Content-Type', 'application/octet-stream')
       xhr.setRequestHeader('Dropbox-API-Arg', JSON.stringify(args))
       xhr.send(JSON.stringify(this.cachedSeiyuu))
+    },
+    pathToImage (initialPath) {
+      if (initialPath) {
+        return initialPath
+      } else {
+        return 'static/questionMark.png'
+      }
     }
   },
   created () {

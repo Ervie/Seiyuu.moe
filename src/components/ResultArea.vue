@@ -32,6 +32,7 @@
             <simple-table :inputData="inputData" :avatarMode="avatarMode" :recalculation="showTables" :counter="counter"></simple-table>
           </v-tab-item>
           <v-tab-item :id="`tab-series`">
+            <series-table :inputData="inputData" :avatarMode="avatarMode" :recalculation="showTables" :counter="counter"></series-table>
           </v-tab-item>
           <v-tab-item :id="`tab-character`">
           </v-tab-item>
@@ -42,11 +43,13 @@
 
 <script>
 import SimpleTable from '@/components/SimpleTable.vue'
+import SeriesTable from '@/components/SeriesTable.vue'
 
 export default {
   name: 'ResultArea',
   components: {
-    'simple-table': SimpleTable
+    'simple-table': SimpleTable,
+    'series-table': SeriesTable
   },
   props: ['inputData'],
   data () {
