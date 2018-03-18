@@ -52,7 +52,7 @@
         </td>
         <td class="text-xs-right" v-for="role in props.item.roles" :key="role.seiyuu">
             <!-- Normal mode character records -->
-            <v-container fluid grid-list-xs>
+            <v-container fluid grid-list-xs v-if="!avatarMode">
             <v-layout v-for="character in role.characters" :key="character.mal_id" row>
                 <v-flex xs8 align-content-center>
                 <v-card-text class="subheading">{{ character.character.name }}</v-card-text>
@@ -67,6 +67,21 @@
                 </a>
                 </v-flex>
             </v-layout>
+            </v-container>
+            <v-container fluid grid-list-xs v-else>
+              <v-layout v-for="character in role.characters" :key="character.mal_id" row>
+                  <v-flex xs12 justify-center v-if="character.character.image_url">
+                    <a :href="character.character.url" target="_blank">
+                        <v-tooltip bottom>
+                        <img :src="character.character.image_url" slot="activator" class="miniav">
+                        <span>{{character.character.name}}</span>
+                        </v-tooltip>
+                    </a>
+                  </v-flex>
+                  <v-flex md1 justify-center v-else>
+                    <v-card-text>{{character.character.name}}</v-card-text>
+                  </v-flex>
+              </v-layout>
             </v-container>
         </td>
         </template>
