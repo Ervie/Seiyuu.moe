@@ -39,11 +39,13 @@ npm run build --report
 * Enhance juxtaposition by emphasis on most frequent collaborations (more modes).
     * Group by character
     * ~~Group by series~~
+        * Fix sorting in this mode
     * Combine two above?
     * Filtering by main roles.
     * Partial results
     * Charts?
 * ~~Add hyperlinks.~~
+* Fix special characters
 * Deploy a demo.
 
 ## Special mentions

@@ -113,33 +113,41 @@ export default {
       this.tableData = []
       this.headers = []
       var intersectAnime = []
+      var partialResults = new Array(this.inputData.length)
 
-      for (var k = 0; k < this.seiyuuRoles[0].length; k++) {
-        intersectAnime.push({
-          anime: this.seiyuuRoles[0][k].anime,
+      for (var i = 0; i < this.inputData.length; i++) {
+        partialResults[i] = []
+      }
+
+      for (i = 0; i < this.seiyuuRoles[0].length; i++) {
+        partialResults[0].push({
+          anime: this.seiyuuRoles[0][i].anime,
           roles: [{
             seiyuu: this.inputData[0].name,
-            character: this.seiyuuRoles[0][k].character
+            character: this.seiyuuRoles[0][i].character
           }]
         })
       }
 
       for (var seiyuuIndex = 1; seiyuuIndex < this.seiyuuRoles.length; seiyuuIndex++) {
-        for (var animeIndex = 0; animeIndex < intersectAnime.length; animeIndex++) {
-          var roleIndex = this.seiyuuRoles[seiyuuIndex].map(x => x.anime.mal_id).indexOf(intersectAnime[animeIndex].anime.mal_id)
-          if (roleIndex === -1) {
-            intersectAnime.splice(animeIndex, 1)
-            animeIndex--
-          } else {
-            intersectAnime[animeIndex].roles.push({
-              seiyuu: this.inputData[seiyuuIndex].name,
-              character: this.seiyuuRoles[seiyuuIndex][roleIndex].character
-            })
+        for (i = 0; i < this.seiyuuRoles[seiyuuIndex].length; i++) {
+          for (var j = 0; j < partialResults[seiyuuIndex - 1].length; j++) {
+            if (partialResults[seiyuuIndex - 1][j].anime.mal_id === this.seiyuuRoles[seiyuuIndex][i].anime.mal_id) {
+              // Weird deep clone of object
+              var cloneObject = JSON.parse(JSON.stringify(partialResults[seiyuuIndex - 1][j]))
+              partialResults[seiyuuIndex].push(cloneObject)
+              partialResults[seiyuuIndex][partialResults[seiyuuIndex].length - 1].roles.push({
+                seiyuu: this.inputData[seiyuuIndex].name,
+                character: this.seiyuuRoles[seiyuuIndex][i].character
+              })
+            }
           }
         }
+        partialResults[seiyuuIndex] = partialResults[seiyuuIndex].filter(x => x.roles.length === (seiyuuIndex + 1))
       }
+      intersectAnime = partialResults[this.inputData.length - 1]
 
-      for (var i = 0; i < intersectAnime.length; i++) {
+      for (i = 0; i < intersectAnime.length; i++) {
         this.tableData.push({
           anime: decode(intersectAnime[i].anime.name),
           animeImg: intersectAnime[i].anime.image_url,
