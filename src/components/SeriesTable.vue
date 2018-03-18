@@ -79,6 +79,8 @@
 </template>
 
 <script>
+import decode from 'decode-html'
+
 export default {
   name: 'SeriesTable',
   props: ['inputData', 'avatarMode', 'counter'],
@@ -126,37 +128,12 @@ export default {
           }
         }
       }
-
+      // If number of seiyuu for anime is smaller then entry seiyuu count, remove anime from results
       intersectAnime = intersectAnime.filter(x => x.roles.length === this.inputData.length)
 
-      console.log(intersectAnime)
-      // for (var seiyuuIndex = 1; seiyuuIndex < this.seiyuuRoles.length; seiyuuIndex++) {
-      //   for (var animeIndex = 0; animeIndex < intersectAnime.length; animeIndex++) {
-      //     var roleIndex = this.seiyuuRoles[seiyuuIndex].map(x => x.anime.mal_id).indexOf(intersectAnime[animeIndex].anime.mal_id)
-      //     if (roleIndex === -1) {
-      //       intersectAnime.splice(animeIndex, 1)
-      //       animeIndex--
-      //     } else {
-      //       helperIndex = intersectAnime[animeIndex].roles.map(x => x.seiyuu).indexOf(this.inputData[seiyuuIndex].name)
-      //       if (helperIndex === -1) {
-      //         intersectAnime[animeIndex].roles.push({
-      //           seiyuu: this.inputData[seiyuuIndex].name,
-      //           characters: [{
-      //             character: this.seiyuuRoles[seiyuuIndex][roleIndex].character
-      //           }]
-      //         })
-      //       } else {
-      //         console.log('Inserting ' + this.seiyuuRoles[seiyuuIndex][roleIndex].character.name)
-      //         intersectAnime[animeIndex].roles[helperIndex].characters.push({
-      //           character: this.seiyuuRoles[seiyuuIndex][roleIndex].character
-      //         })
-      //       }
-      //     }
-      //   }
-      // }
       for (var i = 0; i < intersectAnime.length; i++) {
         this.tableData.push({
-          anime: intersectAnime[i].anime.name,
+          anime: decode(intersectAnime[i].anime.name),
           animeImg: intersectAnime[i].anime.image_url,
           animeUrl: intersectAnime[i].anime.url,
           roles: intersectAnime[i].roles

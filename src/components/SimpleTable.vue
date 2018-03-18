@@ -97,6 +97,8 @@
 </template>
 
 <script>
+import decode from 'decode-html'
+
 export default {
   name: 'SimpleTable',
   props: ['inputData', 'avatarMode', 'counter'],
@@ -139,7 +141,7 @@ export default {
 
       for (var i = 0; i < intersectAnime.length; i++) {
         this.tableData.push({
-          anime: intersectAnime[i].anime.name,
+          anime: decode(intersectAnime[i].anime.name),
           animeImg: intersectAnime[i].anime.image_url,
           animeUrl: intersectAnime[i].anime.url,
           roles: intersectAnime[i].roles
