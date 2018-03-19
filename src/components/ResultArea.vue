@@ -3,7 +3,7 @@
       <v-flex>
         <div>
           <v-btn raised large color="error" v-on:click="resetList" :disabled="inputData.length < 1">Reset</v-btn>
-          <v-btn depressed large color="success" v-on:click="recomputeResults" :disabled="inputData.length < 2">Compare</v-btn>
+          <v-btn depressed large color="success" v-on:click="computeResults" :disabled="inputData.length < 2">Compare</v-btn>
         </div>
         <v-tabs
           v-if="showTables"
@@ -29,10 +29,10 @@
         </v-tabs>
         <v-tabs-items v-model="tabs" v-if="showTables">
           <v-tab-item :id="`tab-simple`">
-            <simple-table :inputData="inputData" :avatarMode="avatarMode" :recalculation="showTables" :counter="counter"></simple-table>
+            <simple-table :inputData="outputData" :avatarMode="avatarMode" :counter="counter" :seiyuuData="inputData"></simple-table>
           </v-tab-item>
           <v-tab-item :id="`tab-series`">
-            <series-table :inputData="inputData" :avatarMode="avatarMode" :recalculation="showTables" :counter="counter"></series-table>
+            <series-table :inputData="outputData" :avatarMode="avatarMode" :counter="counter" :seiyuuData="inputData"></series-table>
           </v-tab-item>
           <v-tab-item :id="`tab-character`">
           </v-tab-item>
@@ -58,7 +58,8 @@ export default {
       avatarMode: false,
       windowWidth: 0,
       counter: 0,
-      tabs: 'tab-simple'
+      tabs: 'tab-simple',
+      outputData: []
     }
   },
   methods: {
@@ -72,9 +73,51 @@ export default {
         this.avatarMode = false
       }
     },
-    recomputeResults () {
-      this.showTables = true
+    computeResults () {
+      this.outputData = []
+      var intersectAnime = []
+      var partialResults = new Array(this.inputData.length)
+
+      for (var i = 0; i < this.inputData.length; i++) {
+        partialResults[i] = []
+      }
+
+      for (i = 0; i < this.seiyuuRoles[0].length; i++) {
+        partialResults[0].push({
+          anime: this.seiyuuRoles[0][i].anime,
+          roles: [{
+            seiyuu: this.inputData[0].name,
+            character: this.seiyuuRoles[0][i].character
+          }]
+        })
+      }
+
+      for (var seiyuuIndex = 1; seiyuuIndex < this.seiyuuRoles.length; seiyuuIndex++) {
+        for (i = 0; i < this.seiyuuRoles[seiyuuIndex].length; i++) {
+          for (var j = 0; j < partialResults[seiyuuIndex - 1].length; j++) {
+            if (partialResults[seiyuuIndex - 1][j].anime.mal_id === this.seiyuuRoles[seiyuuIndex][i].anime.mal_id) {
+              // Weird deep clone of object
+              var cloneObject = JSON.parse(JSON.stringify(partialResults[seiyuuIndex - 1][j]))
+              partialResults[seiyuuIndex].push(cloneObject)
+              partialResults[seiyuuIndex][partialResults[seiyuuIndex].length - 1].roles.push({
+                seiyuu: this.inputData[seiyuuIndex].name,
+                character: this.seiyuuRoles[seiyuuIndex][i].character
+              })
+            }
+          }
+        }
+        partialResults[seiyuuIndex] = partialResults[seiyuuIndex].filter(x => x.roles.length === (seiyuuIndex + 1))
+      }
+      intersectAnime = partialResults[this.inputData.length - 1]
+
+      this.outputData = intersectAnime
       this.counter++
+      this.showTables = true
+    }
+  },
+  computed: {
+    seiyuuRoles () {
+      return this.inputData.map(x => x.voice_acting_role)
     }
   },
   watch: {

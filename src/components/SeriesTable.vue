@@ -94,11 +94,9 @@
 </template>
 
 <script>
-import decode from 'decode-html'
-
 export default {
   name: 'SeriesTable',
-  props: ['inputData', 'avatarMode', 'counter'],
+  props: ['inputData', 'avatarMode', 'counter', 'seiyuuData'],
   data () {
     return {
       headers: [],
@@ -110,61 +108,50 @@ export default {
       this.tableData = []
       this.headers = []
       var intersectAnime = []
-      var foundAnimeIndex = -1
-      var foundSeiyuuIndex = -1
+      var animeIndex = -1
+      var roleIndex = -1
+      var seiyuuIndex = -1
 
-      for (var seiyuuIndex = 0; seiyuuIndex < this.seiyuuRoles.length; seiyuuIndex++) {
-        for (var animeIndex = 0; animeIndex < this.seiyuuRoles[seiyuuIndex].length; animeIndex++) {
-          foundAnimeIndex = intersectAnime.map(x => x.anime.mal_id).indexOf(this.seiyuuRoles[seiyuuIndex][animeIndex].anime.mal_id)
-          if (foundAnimeIndex === -1) {
-            intersectAnime.push({
-              anime: this.seiyuuRoles[seiyuuIndex][animeIndex].anime,
-              roles: [{
-                seiyuu: this.inputData[seiyuuIndex].name,
-                characters: [{
-                  character: this.seiyuuRoles[seiyuuIndex][animeIndex].character
-                }]
+      for (var i = 0; i < this.inputData.length; i++) {
+        if (intersectAnime.length > 0) {
+          animeIndex = intersectAnime.map(x => x.anime).indexOf(this.inputData[i].anime.name)
+        }
+        if (animeIndex === -1) {
+          intersectAnime.push({
+            anime: this.inputData[i].anime.name,
+            animeImg: this.inputData[i].anime.image_url,
+            animeUrl: this.inputData[i].anime.url,
+            roles: []
+          })
+          for (var j = 0; j < this.inputData[i].roles.length; j++) {
+            intersectAnime[intersectAnime.length - 1].roles.push({
+              seiyuu: this.inputData[i].roles[j].seiyuu,
+              characters: [{
+                character: this.inputData[i].roles[j].character
               }]
             })
-          } else {
-            foundSeiyuuIndex = intersectAnime[foundAnimeIndex].roles.map(x => x.seiyuu).indexOf(this.inputData[seiyuuIndex].name)
-            if (foundSeiyuuIndex === -1) {
-              intersectAnime[foundAnimeIndex].roles.push({
-                seiyuu: this.inputData[seiyuuIndex].name,
-                characters: [{
-                  character: this.seiyuuRoles[seiyuuIndex][animeIndex].character
-                }]
-              })
-            } else {
-              intersectAnime[foundAnimeIndex].roles[foundSeiyuuIndex].characters.push({
-                character: this.seiyuuRoles[seiyuuIndex][animeIndex].character
-              })
+          }
+        } else {
+          for (seiyuuIndex = 0; seiyuuIndex < this.seiyuuData.length; seiyuuIndex++) {
+            roleIndex = intersectAnime[animeIndex].roles[seiyuuIndex].characters.map(x => x.mal_id).indexOf(this.inputData[i].roles[seiyuuIndex].character.mal_id)
+            if (roleIndex === -1) {
+              intersectAnime[animeIndex].roles[seiyuuIndex].characters.push({ character: this.inputData[i].roles[seiyuuIndex].character})
             }
           }
         }
       }
-      // If number of seiyuu for anime is smaller then entry seiyuu count, remove anime from results
-      intersectAnime = intersectAnime.filter(x => x.roles.length === this.inputData.length)
-
-      for (var i = 0; i < intersectAnime.length; i++) {
-        this.tableData.push({
-          anime: decode(intersectAnime[i].anime.name),
-          animeImg: intersectAnime[i].anime.image_url,
-          animeUrl: intersectAnime[i].anime.url,
-          roles: intersectAnime[i].roles
-        })
-      }
-
+      console.log(intersectAnime)
+      this.tableData = intersectAnime
       this.headers.push({
         text: 'Anime',
         align: 'left',
         value: 'anime'
       })
-      for (var headerIndex = 0; headerIndex < this.inputData.length; headerIndex++) {
+      for (var headerIndex = 0; headerIndex < this.seiyuuData.length; headerIndex++) {
         this.headers.push({
-          text: this.inputData[headerIndex].name,
+          text: this.seiyuuData[headerIndex].name,
           value: 'roles[' + headerIndex + '].characters.length',
-          image: this.inputData[headerIndex].image_url})
+          image: this.seiyuuData[headerIndex].image_url})
       }
       this.showTables = true
     },
@@ -174,11 +161,6 @@ export default {
       } else {
         return 'static/questionMark.png'
       }
-    }
-  },
-  computed: {
-    seiyuuRoles () {
-      return this.inputData.map(x => x.voice_acting_role)
     }
   },
   watch: {
