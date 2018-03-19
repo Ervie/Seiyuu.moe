@@ -30,7 +30,6 @@ npm run build --report
 ## To-Do List
 
 * Move cached seiyuu to database at some point (with simple API).
-* Improve performance (remove reduntant operations).
 * Refactoring (move recurrent methods to separate Javascript file).
 * Enhance juxtaposition by emphasis on most frequent collaborations (more modes).
     * Group by character.

@@ -133,14 +133,14 @@ export default {
           }
         } else {
           for (seiyuuIndex = 0; seiyuuIndex < this.seiyuuData.length; seiyuuIndex++) {
-            roleIndex = intersectAnime[animeIndex].roles[seiyuuIndex].characters.map(x => x.mal_id).indexOf(this.inputData[i].roles[seiyuuIndex].character.mal_id)
+            roleIndex = intersectAnime[animeIndex].roles[seiyuuIndex].characters.map(x => x.character.mal_id).indexOf(this.inputData[i].roles[seiyuuIndex].character.mal_id)
             if (roleIndex === -1) {
-              intersectAnime[animeIndex].roles[seiyuuIndex].characters.push({ character: this.inputData[i].roles[seiyuuIndex].character})
+              intersectAnime[animeIndex].roles[seiyuuIndex].characters.push({ character: this.inputData[i].roles[seiyuuIndex].character })
             }
           }
         }
       }
-      console.log(intersectAnime)
+
       this.tableData = intersectAnime
       this.headers.push({
         text: 'Anime',
