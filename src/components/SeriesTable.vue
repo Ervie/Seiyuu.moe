@@ -163,7 +163,7 @@ export default {
       for (var headerIndex = 0; headerIndex < this.inputData.length; headerIndex++) {
         this.headers.push({
           text: this.inputData[headerIndex].name,
-          value: 'roles[' + headerIndex + '].length',
+          value: 'roles[' + headerIndex + '].characters.length',
           image: this.inputData[headerIndex].image_url})
       }
       this.showTables = true

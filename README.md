@@ -17,35 +17,29 @@ npm run build
 # build for production and view the bundle analyzer report
 npm run build --report
 ```
+
+## Features
+
+* Searching collaboration works between seiyuu (up to 6 at once).
+    * Mode for every combination.
+    * Mode for grouping by series.
+* Precached list for fast searching by seiyuu name.
+* Searching seiyuu by MAL id (if not on cached list).
+* Details cards for extra information.
+
 ## To-Do List
 
-* ~~Allow to search via API with Id.~~
-* ~~Save each founded seiyuu.~~
-* ~~Validation.~~
-* ~~Enable removing searched seiyuus.~~
-* ~~Enable more than 2 seiyuus at the same time.~~
-* ~~"More" section for searched seiyuu.~~
-* ~~Parse roles.~~
-* ~~Create a graphical card for each seiyuu to compare.~~
-* ~~Create a graphical juxtaposition of collaborate works (main goal).~~
-* ~~Create a most popular seiyuu list to allow search by name...~~
-* ~~... with caching to ease the use (sure searching by name is more comfortable).~~
-    * Move it to database at some point (with simple API).
-* ~~Create minimal table desing for smaller resolutions.~~
-    * ~~Some fixes for readability~~
-* ~~Add outline for each seiyuu card (indicator for left places)~~
-* ~~Dark theme~~
-* ~~Attach loader to API request~~
+* Move cached seiyuu to database at some point (with simple API).
+* Improve performance (remove reduntant operations).
+* Refactoring (move recurrent methods to separate Javascript file).
 * Enhance juxtaposition by emphasis on most frequent collaborations (more modes).
-    * Group by character
-    * ~~Group by series~~
-        * Fix sorting in this mode
-    * Combine two above?
+    * Group by character.
+    * Group by franchise (group by character + series).
     * Filtering by main roles.
-    * Partial results
+    * Partial results.
     * Charts?
-* ~~Add hyperlinks.~~
-* Fix special characters
+* Fix special chars in characters' names.
+* Export function (save and download a csv/json - formats to be decided)
 * Deploy a demo.
 
 ## Special mentions
