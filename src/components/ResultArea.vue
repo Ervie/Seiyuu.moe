@@ -42,8 +42,8 @@
 </template>
 
 <script>
-import SimpleTable from '@/components/SimpleTable.vue'
-import SeriesTable from '@/components/SeriesTable.vue'
+import SimpleTable from '@/components/tables/SimpleTable.vue'
+import SeriesTable from '@/components/tables/SeriesTable.vue'
 
 export default {
   name: 'ResultArea',
