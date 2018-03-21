@@ -154,22 +154,13 @@ export default {
           image: this.seiyuuData[headerIndex].image_url})
       }
       this.showTables = true
-    },
-    pathToImage (initialPath) {
-      if (initialPath) {
-        return initialPath
-      } else {
-        return 'static/questionMark.png'
-      }
     }
   },
   watch: {
-    counter (oldVal, newVal) {
-      this.computeResults()
+    counter: {
+      handler: 'computeResults',
+      immediate: true
     }
-  },
-  created () {
-    this.computeResults()
   }
 }
 </script>

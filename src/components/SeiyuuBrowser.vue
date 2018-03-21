@@ -82,10 +82,11 @@ export default {
           .then((response) => {
             this.$emit('seiyuuReturned', response.data)
             this.addSeiyuuToCache(response.data)
-            this.loading = false
           })
           .catch((error) => {
             console.log(error)
+          })
+          .finally(() => {
             this.loading = false
           })
       }
@@ -98,10 +99,11 @@ export default {
         axios.get('https://api.jikan.me/person/' + String(this.selectModel))
           .then((response) => {
             this.$emit('seiyuuReturned', response.data)
-            this.loading = false
           })
           .catch((error) => {
             console.log(error)
+          })
+          .finally(() => {
             this.loading = false
           })
       }
