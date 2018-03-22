@@ -35,6 +35,7 @@
             <series-table :inputData="outputData" :avatarMode="avatarMode" :counter="counter" :seiyuuData="inputData"></series-table>
           </v-tab-item>
           <v-tab-item :id="`tab-character`">
+            <character-table :inputData="outputData" :avatarMode="avatarMode" :counter="counter" :seiyuuData="inputData"></character-table>
           </v-tab-item>
         </v-tabs-items>
       </v-flex>
@@ -44,12 +45,14 @@
 <script>
 import SimpleTable from '@/components/tables/SimpleTable.vue'
 import SeriesTable from '@/components/tables/SeriesTable.vue'
+import CharactersTable from '@/components/tables/CharactersTable.vue'
 
 export default {
   name: 'ResultArea',
   components: {
     'simple-table': SimpleTable,
-    'series-table': SeriesTable
+    'series-table': SeriesTable,
+    'character-table': CharactersTable
   },
   props: ['inputData'],
   data () {

@@ -23,6 +23,7 @@ npm run build --report
 * Searching collaboration works between seiyuu (up to 6 at once).
     * Mode for every combination.
     * Mode for grouping by series.
+    * Mode for grouping by character.
 * Precached list for fast searching by seiyuu name.
 * Searching seiyuu by MAL id (if not on cached list).
 * Details cards for extra information.
@@ -31,7 +32,6 @@ npm run build --report
 
 * Move cached seiyuu to database at some point (with simple API).
 * Enhance juxtaposition by emphasis on most frequent collaborations (more modes).
-    * Group by character.
     * Group by franchise (group by character + series).
     * Filtering by main roles.
     * Partial results.
