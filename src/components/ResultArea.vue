@@ -26,6 +26,10 @@
             By character
             <v-icon large>fa-users</v-icon>
           </v-tab>
+          <v-tab :href="`#tab-franchise`">
+            By franchise
+            <v-icon large>fa-flag</v-icon>
+          </v-tab>
         </v-tabs>
         <v-tabs-items v-model="tabs" v-if="showTables">
           <v-tab-item :id="`tab-simple`">
@@ -37,6 +41,9 @@
           <v-tab-item :id="`tab-character`">
             <character-table :inputData="outputData" :avatarMode="avatarMode" :counter="counter" :seiyuuData="inputData"></character-table>
           </v-tab-item>
+          <v-tab-item :id="`tab-franchise`">
+            <franchise-table :inputData="outputData" :avatarMode="avatarMode" :counter="counter" :seiyuuData="inputData"></franchise-table>
+          </v-tab-item>
         </v-tabs-items>
       </v-flex>
     </v-layout>
@@ -46,13 +53,15 @@
 import SimpleTable from '@/components/tables/SimpleTable.vue'
 import SeriesTable from '@/components/tables/SeriesTable.vue'
 import CharactersTable from '@/components/tables/CharactersTable.vue'
+import FranchiseTable from '@/components/tables/FranchiseTable.vue'
 
 export default {
   name: 'ResultArea',
   components: {
     'simple-table': SimpleTable,
     'series-table': SeriesTable,
-    'character-table': CharactersTable
+    'character-table': CharactersTable,
+    'franchise-table': FranchiseTable
   },
   props: ['inputData'],
   data () {

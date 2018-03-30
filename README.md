@@ -24,6 +24,7 @@ npm run build --report
     * Mode for every combination.
     * Mode for grouping by series.
     * Mode for grouping by character.
+    * Mode for grouping by franchise (group by character + series).
 * Precached list for fast searching by seiyuu name.
 * Searching seiyuu by MAL id (if not on cached list).
 * Details cards for extra information.
@@ -32,11 +33,11 @@ npm run build --report
 
 * Move cached seiyuu to database at some point (with simple API).
 * Enhance juxtaposition by emphasis on most frequent collaborations (more modes).
-    * Group by franchise (group by character + series).
     * Filtering by main roles.
     * Partial results.
     * Charts?
 * Fix special chars in characters' names.
+* Fix sorting in by character and by franchise modes.
 * Export function (save and download a csv/json - formats to be decided)
 * Deploy a demo.
 

@@ -17,13 +17,12 @@
               :items="props.item.anime"
               />
           </td>
-          <td class="text-xs-right" v-for="character in props.item.roles" :key="character.mal_id">
-              <single-record-cell
-              :avatarMode="avatarMode"
-              :item="character.character"
-              :preferText="false"
-              />
-          </td>
+          <td class="text-xs-right" v-for="role in props.item.roles" :key="role.seiyuu">
+            <multi-record-cell
+            :avatarMode="avatarMode"
+            :items="role.characters"
+            />
+        </td>
         </template>
         <template slot="no-data">
           <v-alert :value="true" color="error" icon="warning">
@@ -40,7 +39,7 @@ import SingleRecordCell from './cells/SingleRecordCell'
 import MultiRecordCell from './cells/MultiRecordCell'
 
 export default {
-  name: 'CharactersTable',
+  name: 'FranchiseTable',
   components: {
     'table-header': TableHeader,
     'single-record-cell': SingleRecordCell,
@@ -57,34 +56,63 @@ export default {
     computeResults () {
       this.tableData = []
       this.headers = []
-      var combinationIndex = -1
-      var currentCombinationCode = -1
+      var animeIndex = -1
+      var charactersIndex = -1
+      var franchiseIndex = -1
 
       for (var i = 0; i < this.inputData.length; i++) {
-        currentCombinationCode = this.combinationCode(this.inputData[i].roles.map(x => x.character.mal_id))
+        animeIndex = -1
+        charactersIndex = -1
         if (this.tableData.length > 0) {
-          combinationIndex = this.tableData.map(x => x.combinationCode).indexOf(currentCombinationCode)
+          for (var j = 0; j < this.tableData.length && animeIndex === -1; j++) {
+            animeIndex = this.tableData[j].anime.map(x => x.entry.mal_id).indexOf(this.inputData[i].anime.mal_id)
+            franchiseIndex = j
+          }
+          if (animeIndex === -1) {
+            for (j = 0; j < this.tableData.length; j++) {
+              for (var k = 0; k < this.seiyuuData.length && charactersIndex === -1; k++) {
+                charactersIndex = this.tableData[j].roles[k].characters.map(x => x.entry.mal_id).indexOf(this.inputData[i].roles[k].character.mal_id)
+                franchiseIndex = j
+              }
+            }
+          }
         }
-        if (combinationIndex === -1) {
+        if (charactersIndex === -1 && animeIndex === -1) {
           this.tableData.push({
             anime: [{
               entry: {
                 name: decode(this.inputData[i].anime.name),
                 image_url: this.inputData[i].anime.image_url,
-                url: this.inputData[i].anime.url
+                url: this.inputData[i].anime.url,
+                mal_id: this.inputData[i].anime.mal_id
               }
             }],
-            roles: this.inputData[i].roles,
-            combinationCode: currentCombinationCode
+            roles: []
           })
-        } else {
-          this.tableData[combinationIndex].anime.push({
+          for (var l = 0; l < this.seiyuuData.length; l++) {
+            this.tableData[this.tableData.length - 1].roles.push({
+              seiyuu: this.inputData[i].roles[l].seiyuu,
+              characters: [{
+                entry: this.inputData[i].roles[l].character
+              }]
+            })
+          }
+        } else if (animeIndex === -1) {
+          this.tableData[franchiseIndex].anime.push({
             entry: {
               name: decode(this.inputData[i].anime.name),
               image_url: this.inputData[i].anime.image_url,
-              url: this.inputData[i].anime.url
+              url: this.inputData[i].anime.url,
+              mal_id: this.inputData[i].anime.mal_id
             }
           })
+        } else {
+          for (var seiyuuIndex = 0; seiyuuIndex < this.seiyuuData.length; seiyuuIndex++) {
+            var roleIndex = this.tableData[franchiseIndex].roles[seiyuuIndex].characters.map(x => x.entry.mal_id).indexOf(this.inputData[i].roles[seiyuuIndex].character.mal_id)
+            if (roleIndex === -1) {
+              this.tableData[franchiseIndex].roles[seiyuuIndex].characters.push({ entry: this.inputData[i].roles[seiyuuIndex].character })
+            }
+          }
         }
       }
 
