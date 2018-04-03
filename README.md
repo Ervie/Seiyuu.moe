@@ -36,7 +36,6 @@ npm run build --report
     * Filtering by main roles.
     * Partial results.
     * Charts?
-* Fix special chars in characters' names.
 * Fix sorting in by character and by franchise modes.
 * Export function (save and download a csv/json - formats to be decided)
 * Deploy a demo.
