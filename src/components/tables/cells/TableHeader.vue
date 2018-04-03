@@ -4,13 +4,13 @@
         <v-flex xs6  offset-xs3 justify-center>
             <v-tooltip bottom>
                 <img :src="imageUrl" slot="activator" class="av">
-                <span>{{htmlDecode(text)}}</span>
+                <span>{{decodeHtml(text)}}</span>
             </v-tooltip>
         </v-flex>
     </v-layout>
     <v-layout v-else row>
         <v-flex md1 justify-center>
-            <v-card-text class="display-1">{{htmlDecode(text)}}</v-card-text>
+            <v-card-text class="display-1">{{decodeHtml(text)}}</v-card-text>
         </v-flex>
     </v-layout>
 </v-container>

@@ -119,7 +119,7 @@ export default {
       this.headers.push({
         text: 'Anime',
         align: 'left',
-        value: 'anime[0].name',
+        value: 'anime[0].entry.name',
         image: ''
       })
       for (var headerIndex = 0; headerIndex < this.seiyuuData.length; headerIndex++) {
