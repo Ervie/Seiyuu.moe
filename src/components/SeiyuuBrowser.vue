@@ -117,38 +117,36 @@ export default {
         })
         // sort cachedSeiyuu
         this.cachedSeiyuu.sort(function (a, b) { return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0) })
+
+        axios.post(process.env.API_URL + '/api/Seiyuu', {
+          mal_id: seiyuuData.mal_id,
+          name: seiyuuData.name,
+          image_url: seiyuuData.image_url
+        })
+          .then((response) => {
+            console.log(response)
+          })
+          .catch((error) => {
+            console.log(error)
+            this.cachedSeiyuu = []
+          })
+
+        // Backup file
         this.uploadToDropbox()
       }
     },
-    downloadFromDropbox () {
-      // Load data from dropbox file
-      var xhr = new XMLHttpRequest()
-      var self = this
-      var decodedAnser = ''
-      xhr.responseType = 'arraybuffer'
-
-      xhr.onload = function () {
-        if (xhr.status === 200) {
-          var decoder = new TextDecoder('utf-8')
-          decodedAnser = decoder.decode(xhr.response)
-          self.cachedSeiyuu = JSON.parse(decodedAnser)
-        } else {
-          console.log('error')
-        }
-      }
-
-      var args = {
-        path: '/cachedSeiyuu.json'
-      }
-
-      xhr.open('POST', 'https://content.dropboxapi.com/2/files/download')
-      xhr.setRequestHeader('Authorization', 'Bearer ' + 'tokeHere')
-      xhr.setRequestHeader('Dropbox-API-Arg', JSON.stringify(args))
-      xhr.send()
+    loadCachedSeiyuu () {
+      axios.get(process.env.API_URL + '/api/Seiyuu')
+        .then((response) => {
+          this.cachedSeiyuu = response.data
+        })
+        .catch((error) => {
+          console.log(error)
+          this.cachedSeiyuu = []
+        })
     },
     uploadToDropbox () {
       var xhr = new XMLHttpRequest()
-      // var encoder = new TextEncoder('utf-8')
 
       xhr.onload = function () {
         if (xhr.status === 200) {
@@ -180,7 +178,7 @@ export default {
     }
   },
   created () {
-    this.downloadFromDropbox()
+    this.loadCachedSeiyuu()
   }
 }
 </script>

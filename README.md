@@ -29,14 +29,17 @@ npm run build --report
 * Searching seiyuu by MAL id (if not on cached list).
 * Details cards for extra information.
 
-## To-Do List
+## To-Do List / Further Ideas
 
-* Move cached seiyuu to database at some point (with simple API).
 * Enhance juxtaposition by emphasis on most frequent collaborations (more modes).
     * Filtering by main roles.
     * Partial results.
     * Charts?
 * Export function (save and download a csv/json - formats to be decided)
+* Graphical overhaul.
+* Adjust site to mobiles.
+* Reverse search - choose anime, find seiyuu which worked on selected works.
+* Searching for Visual Novels/Games.
 * Deploy a demo.
 
 ## Special mentions
