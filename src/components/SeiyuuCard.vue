@@ -1,7 +1,7 @@
 <template>
   <v-card v-if="seiyuuData">
     <v-card-text style="font-weight: bold"> {{ seiyuuData.name }}</v-card-text>
-    <v-card-media :src="pathToImage" height="280px" v-on:click="showDialog = true"  ></v-card-media>
+    <v-card-media :src="pathToImage" :height="avatarHeight" v-on:click="showDialog = true" hidden-sm-and-down></v-card-media>
     <v-card-actions>
       <v-btn icon value="removeSeiyuu" v-on:click="removeSeiyuu()">
         <v-icon color="red">delete</v-icon>
@@ -45,13 +45,13 @@
             </v-card>
           </v-flex>
     </v-dialog>
-    </v-card>
+  </v-card>
 </template>
 
 <script>
 export default {
   name: 'SeiyuuCard',
-  props: ['seiyuuData', 'cardId'],
+  props: ['seiyuuData', 'cardId', 'avatarHeight'],
   data () {
     return {
       showDialog: false
