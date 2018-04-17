@@ -130,9 +130,6 @@ export default {
             console.log(error)
             this.cachedSeiyuu = []
           })
-
-        // Backup file
-        this.uploadToDropbox()
       }
     },
     loadCachedSeiyuu () {
@@ -144,30 +141,6 @@ export default {
           console.log(error)
           this.cachedSeiyuu = []
         })
-    },
-    uploadToDropbox () {
-      var xhr = new XMLHttpRequest()
-
-      xhr.onload = function () {
-        if (xhr.status === 200) {
-          console.log('updated')
-        } else {
-          console.log('error')
-        }
-      }
-
-      var args = {
-        path: '/cachedSeiyuu.json',
-        autorename: true,
-        mute: false,
-        mode: 'overwrite'
-      }
-
-      xhr.open('POST', 'https://content.dropboxapi.com/2/files/upload')
-      xhr.setRequestHeader('Authorization', 'Bearer ' + 'tokenHere')
-      xhr.setRequestHeader('Content-Type', 'application/octet-stream')
-      xhr.setRequestHeader('Dropbox-API-Arg', JSON.stringify(args))
-      xhr.send(JSON.stringify(this.cachedSeiyuu))
     },
     pathToImage (initialPath) {
       if (initialPath) {

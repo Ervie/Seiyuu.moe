@@ -47,7 +47,6 @@ export default {
       }
     },
     removeSeiyuu (seiyuuId) {
-      console.log('Seiyuu to remove level 2: ' + seiyuuId)
       this.tooMuchRecords = false
       this.seiyuuToCompare.splice(seiyuuId, 1)
     },

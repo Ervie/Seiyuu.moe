@@ -39,7 +39,6 @@ export default {
   },
   methods: {
     removeSeiyuu: function (seiyuuId) {
-      console.log('Seiyuu to remove : ' + seiyuuId)
       this.$emit('seiyuuRemoved', seiyuuId)
     }
   }
