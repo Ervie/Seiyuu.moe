@@ -8,6 +8,7 @@
           <table-header
               :imageUrl="props.header.image"
               :text="props.header.text"
+                :avatarMode="avatarMode"
           />
         </template>
         <template slot="items" slot-scope="props">

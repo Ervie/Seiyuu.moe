@@ -3,7 +3,7 @@
       <v-flex>
         <div>
           <v-btn raised large color="error" v-on:click="resetList" :disabled="inputData.length < 1">Reset</v-btn>
-          <v-btn depressed large color="success" v-on:click="computeResults" :disabled="inputData.length < 2">Compare</v-btn>
+          <v-btn depressed large color="primary" v-on:click="computeResults" :disabled="inputData.length < 2">Compare</v-btn>
         </div>
         <v-tabs
           v-if="showTables"

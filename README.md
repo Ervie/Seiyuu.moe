@@ -37,7 +37,7 @@ npm run build --report
     * Charts?
 * Export function (save and download a csv/json - formats to be decided)
 * Graphical overhaul.
-* Adjust site to mobiles.
+* Adjust site to mobiles - overhaul of table.
 * Reverse search - choose anime, find seiyuu which worked on selected works.
 * Searching for Visual Novels/Games.
 * Deploy a demo.
