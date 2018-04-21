@@ -4,7 +4,7 @@
 
 ## Link
 
-Current version can be found under this [link](http://seiyuu.moe)
+Current version can be found under this [link](https://seiyuu.moe)
 
 ## Build Setup
 
@@ -45,7 +45,6 @@ npm run build --report
 * Reverse search - choose anime, find seiyuu which worked on selected works.
 * Searching for Visual Novels/Games.
 * Remove searching by MAL id (prefill the database).
-* Create https version of site.
 
 ## Special mentions
 

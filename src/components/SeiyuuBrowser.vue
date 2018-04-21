@@ -79,7 +79,7 @@ export default {
         this.$emit('alreadyOnTheList')
         this.loading = false
       } else {
-        axios.get('https://api.jikan.moe/person/' + this.searchedId)
+        axios.get(process.env.JIKAN_URL + this.searchedId)
           .then((response) => {
             this.$emit('seiyuuReturned', response.data)
             this.addSeiyuuToCache(response.data)
@@ -98,7 +98,7 @@ export default {
         this.$emit('alreadyOnTheList')
         this.loading = false
       } else {
-        axios.get('https://api.jikan.moe/person/' + String(this.selectModel))
+        axios.get(process.env.JIKAN_URL + String(this.selectModel))
           .then((response) => {
             this.$emit('seiyuuReturned', response.data)
           })
