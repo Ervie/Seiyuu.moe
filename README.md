@@ -1,4 +1,4 @@
-# SeiyuuInterlink
+# Seiyuu.moe
 
 > A webpage searching for collaborate works between seiyuu.
 

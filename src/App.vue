@@ -1,7 +1,7 @@
 <template>
   <v-app id="v-app" dark="">
     <v-toolbar class="toolbar" color="primary">
-      <v-toolbar-title>Seiyuu Interlink</v-toolbar-title>
+      <v-toolbar-title><h1>Seiyuu.Moe</h1></v-toolbar-title>
       <v-spacer></v-spacer>
     </v-toolbar>
     <router-view id="router-view" />
