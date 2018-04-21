@@ -12,7 +12,7 @@ Vue.config.productionTip = false
 
 Vue.use(Vuetify, {
   theme: {
-    primary: colors.orange.darken3,
+    primary: colors.orange.darken4,
     secondary: colors.lightBlue.lighten2,
     accent: colors.orange.accent2
   }

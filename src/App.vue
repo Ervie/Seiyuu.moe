@@ -1,16 +1,18 @@
 <template>
-  <v-app id="v-app" dark="">
-    <v-toolbar class="toolbar" color="primary">
-      <v-toolbar-title><h1>Seiyuu.Moe</h1></v-toolbar-title>
-      <v-spacer></v-spacer>
-    </v-toolbar>
+  <v-app id="v-app" dark>
+    <toolbar></toolbar>
     <router-view id="router-view" />
   </v-app>
 </template>
 
 <script>
+import Toolbar from '@/components/Toolbar.vue'
+
 export default {
-  name: 'App'
+  name: 'App',
+  components: {
+    'toolbar': Toolbar
+  }
 }
 </script>
 

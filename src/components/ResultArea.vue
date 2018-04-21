@@ -11,7 +11,8 @@
           icons-and-text
           slot="extension"
           v-model="tabs"
-          slider-color="blue darken-2"
+          color="primary"
+          slider-color="secondary"
           grow
         >
           <v-tab :href="`#tab-simple`">
@@ -31,7 +32,7 @@
             <v-icon large>fa-flag</v-icon>
           </v-tab>
         </v-tabs>
-        <v-tabs-items v-model="tabs" v-if="showTables" color="primary">
+        <v-tabs-items v-model="tabs" v-if="showTables">
           <v-tab-item :id="`tab-simple`">
             <simple-table :inputData="outputData" :avatarMode="avatarMode" :counter="counter" :seiyuuData="inputData"></simple-table>
           </v-tab-item>
