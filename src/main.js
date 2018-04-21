@@ -6,10 +6,17 @@ import router from './router'
 import Vuetify from 'vuetify'
 import Vuelidate from 'vuelidate'
 import 'font-awesome/css/font-awesome.css'
+import colors from 'vuetify/es5/util/colors'
 
 Vue.config.productionTip = false
 
-Vue.use(Vuetify)
+Vue.use(Vuetify, {
+  theme: {
+    primary: colors.orange.darken3,
+    secondary: colors.lightBlue.lighten2,
+    accent: colors.orange.accent2
+  }
+})
 Vue.use(Vuelidate)
 
 /* eslint-disable no-new */

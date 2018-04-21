@@ -25,7 +25,7 @@
             </template>
           </template>
         </v-select>
-          <v-btn raised color="success" v-on:click="searchByName" :disabled="!selectModel || loading" :loading="loading">Add</v-btn>
+          <v-btn raised color="secondary" v-on:click="searchByName" :disabled="!selectModel || loading" :loading="loading">Add</v-btn>
       </v-flex>
       <v-flex xs3>
         <v-text-field
@@ -36,7 +36,7 @@
           single-line
           v-model="searchedId"
           :rules="idSearchRules"/>
-          <v-btn raised color="primary" v-on:click="searchById" :disabled="!isIdValid || loading" :loading="loading">Search</v-btn>
+          <v-btn raised color="secondary" v-on:click="searchById" :disabled="!isIdValid || loading" :loading="loading">Search</v-btn>
       </v-flex>
   </v-layout>
 </template>

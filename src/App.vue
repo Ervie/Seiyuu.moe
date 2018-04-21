@@ -1,14 +1,8 @@
 <template>
-  <v-app id="v-app" :dark="darkMode">
-    <v-toolbar class="toolbar" dense>
+  <v-app id="v-app" dark="">
+    <v-toolbar class="toolbar" color="primary">
       <v-toolbar-title>Seiyuu Interlink</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-tooltip bottom>
-        <v-btn icon v-on:click="toggleDarkMode" slot="activator">
-          <v-icon color="blue darken-2">lightbulb_outline</v-icon>
-        </v-btn>
-        <span>Night mode</span>
-      </v-tooltip>
     </v-toolbar>
     <router-view id="router-view" />
   </v-app>
@@ -16,17 +10,7 @@
 
 <script>
 export default {
-  name: 'App',
-  data () {
-    return {
-      darkMode: false
-    }
-  },
-  methods: {
-    toggleDarkMode () {
-      this.darkMode = !this.darkMode
-    }
-  }
+  name: 'App'
 }
 </script>
 

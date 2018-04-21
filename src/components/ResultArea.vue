@@ -31,7 +31,7 @@
             <v-icon large>fa-flag</v-icon>
           </v-tab>
         </v-tabs>
-        <v-tabs-items v-model="tabs" v-if="showTables">
+        <v-tabs-items v-model="tabs" v-if="showTables" color="primary">
           <v-tab-item :id="`tab-simple`">
             <simple-table :inputData="outputData" :avatarMode="avatarMode" :counter="counter" :seiyuuData="inputData"></simple-table>
           </v-tab-item>

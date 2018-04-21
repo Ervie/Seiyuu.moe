@@ -2,6 +2,10 @@
 
 > A webpage searching for collaborate works between seiyuu.
 
+## Link
+
+Current version can be found under this [link](http://seiyuu.moe)
+
 ## Build Setup
 
 ``` bash
@@ -40,7 +44,8 @@ npm run build --report
 * Adjust site to mobiles - overhaul of table.
 * Reverse search - choose anime, find seiyuu which worked on selected works.
 * Searching for Visual Novels/Games.
-* Deploy a demo.
+* Remove searching by MAL id (prefill the database).
+* Create https version of site.
 
 ## Special mentions
 
