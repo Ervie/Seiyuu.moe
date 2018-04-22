@@ -22,7 +22,7 @@
         {
             "src": "mic256.png",
             "type": "/manifest/png",
-            "sizes": "256/256"
+            "sizes": "256x256"
         },
         {
             "src": "mic512.png",
@@ -30,7 +30,7 @@
             "sizes": "512x512"
         }
     ],
-    "display": "standalone",
+    "display": "fullscreen",
     "orientation": "portrait",
     "theme_color": "#4FC3F7",
     "background_color": "#FF6F00",
