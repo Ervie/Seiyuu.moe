@@ -1,0 +1,48 @@
+{
+    "short_name": "Seiyuu.Moe",
+    "name": "Seiyuu.Moe",
+    "description": "Seiyuu.Moe - Find Japanese voice actors joint works",
+    "lang": "en",
+    "icons": [
+        {
+            "src": "mic32.png",
+            "type": "/manifest/png",
+            "sizes": "32x32"
+        },
+        {
+            "src": "mic64.png",
+            "type": "/manifest/png",
+            "sizes": "64x64"
+        },
+        {
+            "src": "mic128.png",
+            "type": "/manifest/png",
+            "sizes": "128x128"
+        },
+        {
+            "src": "mic256.png",
+            "type": "/manifest/png",
+            "sizes": "256/256"
+        },
+        {
+            "src": "mic512.png",
+            "type": "/manifest/png",
+            "sizes": "512x512"
+        }
+    ],
+    "display": "standalone",
+    "orientation": "portrait",
+    "theme_color": "#4FC3F7",
+    "background_color": "#FF6F00",
+    "start_url": "/#/",
+    "screenshots": [{
+        "src": "/manifest/screen1.png",
+        "sizes": "1366x768",
+        "type": "image/png"
+      },
+      {
+        "src": "/manifest/screen2.png",
+        "sizes": "1366x768",
+        "type": "image/png"
+      }]
+}
