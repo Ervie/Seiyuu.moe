@@ -1,7 +1,8 @@
 <template>
   <v-navigation-drawer
-  temporary v-model="drawer"
-  overflow absolute fixed>
+  v-model="drawer"
+  app
+  fixed clipped>
     <v-list>
       <v-list-tile
       v-for="(tile, x) in tilesList"
@@ -24,7 +25,7 @@ export default {
   props: ['drawerOn'],
   data () {
     return {
-      drawer: false,
+      drawer: true,
       tilesList: [
         {icon: 'people', title: 'Search Seiyuu', link: '/#'},
         {icon: 'info_outline', title: 'About', link: '/About'}
@@ -33,7 +34,7 @@ export default {
   },
   methods: {
     toggleDrawer () {
-      this.drawer = true
+      this.drawer = this.drawerOn
     }
   },
   watch: {

@@ -2,7 +2,9 @@
   <v-app id="v-app" dark>
     <toolbar @toggledDrawer="toggleDrawer"></toolbar>
     <drawer :drawerOn="drawerOn"></drawer>
-    <router-view id="router-view" />
+    <v-content>
+      <router-view id="router-view" />
+    </v-content>
   </v-app>
 </template>
 

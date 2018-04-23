@@ -1,6 +1,6 @@
 <template>
 <div>
-    <v-toolbar class="toolbar" color="primary" >
+    <v-toolbar app fixed clipped-left class="toolbar" color="primary" >
       <v-toolbar-side-icon @click="$emit('toggledDrawer')"/>
       <v-toolbar-title><h1>Seiyuu.Moe</h1></v-toolbar-title>
       <v-spacer></v-spacer>
