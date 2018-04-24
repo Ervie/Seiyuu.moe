@@ -9,7 +9,7 @@
       v-bind:key="x"
       router :to="tile.link">
           <v-list-tile-action>
-            <v-icon>{{tile.icon}}</v-icon>
+            <v-icon medium>{{tile.icon}}</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>{{tile.title}}</v-list-tile-title>
@@ -27,8 +27,9 @@ export default {
     return {
       drawer: true,
       tilesList: [
-        {icon: 'people', title: 'Search Seiyuu', link: '/#'},
-        {icon: 'info_outline', title: 'About', link: '/About'}
+        {icon: 'fa-users', title: 'Search Seiyuu', link: '/'},
+        {icon: 'fa-info-circle', title: 'About', link: '/About'},
+        {icon: 'fa-github', title: 'Repository', link: 'https://github.com/Ervie/Seiyuu.Moe'}
       ]
     }
   },
@@ -47,7 +48,4 @@ export default {
 </script>
 
 <style>
-  #drawer a {
-    text-decoration: none;
-  }
 </style>

@@ -32,9 +32,9 @@
     ],
     "display": "fullscreen",
     "orientation": "portrait",
-    "theme_color": "#4FC3F7",
+    "theme_color": "#26A69A",
     "background_color": "#FF6F00",
-    "start_url": "/#/",
+    "start_url": "/",
     "screenshots": [{
         "src": "/manifest/screen1.png",
         "sizes": "1366x768",

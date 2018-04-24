@@ -1,54 +1,92 @@
 <template>
-  <v-container grid-list-lg text-xs-center fluid style="min-height: 0;">
-    <v-expansion-panel>
-      <v-expansion-panel-content>
-      <div slot="header" class="headline">Who is a seiyū?</div>
-            <v-layout row wrap
-            hidden-sm-and-down>
-              <v-flex x8>
-                <v-card color="primary" class="white--text">
-                  <v-container fluid grid-list-lg>
-                    <v-layout row>
-                      <v-flex xs8>
-                        <v-card-text>
-                          <div class="regular">
-                            <p>Seiyuu is a person acting as a narrator or as an actor in radio plays or as a character actor in anime and video games. It also involves performing voice-overs for non-Japanese movies and television programs. Because Japan's large animation industry produces 60% of the animated series in the world, voice acting in Japan has a far greater prominence than voice acting in most other countries.</p>
-                            <p>Initially, dubbing and doing voice-overs was a performance of actors who used only their voice, who were called "voice actors" (声の俳優 koe no haiyū). For convenience, the term was shortened to a new compound consisting of the first and last kanji to make seiyū (声優).</p>
-                          </div>
-                        </v-card-text>
-                      </v-flex>
-                      <v-flex xs5>
-                        <v-card-media
-                          src="/static/rie.jpg"
-                          alt="Seiyuu Kugimiya Rie during recording"
-                          height="300px"
-                          contain
-                        ></v-card-media>
-                      </v-flex>
-                    </v-layout>
-                  </v-container>
-                </v-card>
-              </v-flex>
-            </v-layout>
-            <v-layout row wrap
-            hidden-md-and-up>
-              <v-flex xs12>
-                <v-card color="primary" class="white--text">
-                      <v-card-media src="static/rie.jpg" height="250px" alt="Seiyuu Kugimiya Rie during recording"></v-card-media>
-                      <v-card-text>
-                            <p>Seiyuu is a person acting as a narrator or as an actor in radio plays or as a character actor in anime and video games. It also involves performing voice-overs for non-Japanese movies and television programs. Because Japan's large animation industry produces 60% of the animated series in the world, voice acting in Japan has a far greater prominence than voice acting in most other countries.</p>
-                            <p>Initially, dubbing and doing voice-overs was a performance of actors who used only their voice, who were called "voice actors" (声の俳優 koe no haiyū). For convenience, the term was shortened to a new compound consisting of the first and last kanji to make seiyū (声優).</p>
-                      </v-card-text>
-                </v-card>
-              </v-flex>
-            </v-layout>
-      </v-expansion-panel-content>
-    </v-expansion-panel>
+<div>
+  <v-container grid-list-xl text-xs-center style="min-height: 0;" hidden-sm-and-down>
+        <v-layout row wrap
+        >
+          <v-flex v-for="(item, i) in items" v-bind:key="i" xs4>
+            <v-card color="primary" class="white--text">
+                <v-card-media
+                  :src="item.imagePath"
+                  :alt="item.imageAltText"
+                  height="300px"/>
+                <v-card-actions>
+                <v-card-title primary-title class="display-1 styledHeader" v-html="item.header">>
+                </v-card-title>
+                <v-spacer></v-spacer>
+                <v-btn icon @click.native="item.expanded = !item.expanded">
+                  <v-icon>{{ item.expanded ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
+                </v-btn>
+              </v-card-actions>
+              <v-slide-y-transition>
+                <v-card-text v-show="item.expanded" class="subheading">
+                  <p v-for="(paragraph, j) in item.paragraphs" v-bind:key="j">
+                     {{ paragraph }}
+                  </p>
+              </v-card-text>
+              </v-slide-y-transition>
+            </v-card>
+          </v-flex>
+        </v-layout>
   </v-container>
+    <v-container grid-list-xl text-xs-center style="min-height: 0;" hidden-md-and-up>
+       <v-layout row wrap
+            >
+              <v-flex v-for="(item, i) in items" v-bind:key="i" xs12>
+                <v-card color="primary" class="white--text">
+                  <v-card-media :src="item.imagePath" height="250px" :alt="item.imageAltText"></v-card-media>
+                  <v-card-actions>
+                    <v-card-title primary-title class="headline styledHeader" v-html="item.header">>
+                    </v-card-title>
+                    <v-spacer></v-spacer>
+                    <v-btn icon @click.native="item.expanded = !item.expanded">
+                      <v-icon>{{ item.expanded ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
+                    </v-btn>
+                  </v-card-actions>
+                  <v-card-text v-show="item.expanded" class="subheading">
+                    <p v-for="(paragraph, j) in item.paragraphs" v-bind:key="j">
+                      {{ paragraph }}
+                    </p>
+                  </v-card-text>
+                </v-card>
+              </v-flex>
+            </v-layout>
+  </v-container>
+</div>
 </template>
 
 <script>
 export default {
-  name: 'About'
+  name: 'About',
+  data: () => ({
+    items: [
+      {
+        header: 'Who is a seiyuu?',
+        imagePath: '/static/rie.jpg',
+        imageAltText: 'Seiyuu Kugimiya Rie during recording',
+        expanded: false,
+        paragraphs: [
+          'Seiyuu (often also written as seiyū) is a person acting as a narrator or as an actor in radio plays or as a character actor in anime and video games. It also involves performing voice-overs for non-Japanese movies and television programs.',
+          'Because Japan\'s large animation industry produces 60% of the animated series in the world, voice acting in Japan has a far greater prominence than voice acting in most other countries.'
+        ]
+      },
+      {
+        header: 'About project',
+        imagePath: '/static/lain.jpg',
+        imageAltText: 'About Seiyuu.Moe project',
+        expanded: false,
+        paragraphs: [
+          'Hello, I am developer from Silesia region, Poland. This website is a result of connecting my hobbies (anime and programming), non-profit project for general use.',
+          'Source code can be found in link on the sidebar. Have in mind, that website is in its alpha stage and still under development. Suggestion or bugs can be issued via Github.'
+        ]
+      }
+    ]
+  })
 }
 </script>
+
+<style>
+p, card__text {
+  text-align: justify;
+  text-justify: inter-word;
+}
+</style>

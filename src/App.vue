@@ -20,7 +20,7 @@ export default {
   },
   data () {
     return {
-      drawerOn: false
+      drawerOn: true
     }
   },
   methods: {
@@ -33,10 +33,14 @@ export default {
 
 <style>
 #v-app {
-  font-family: "OpenSans", Helvetica, Arial, sans-serif;
+  font-family: 'Lato', Helvetica, Arial, sans-serif;
   text-align: center;
   color: #5a5a5a;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.styledHeader {
+  font-family: 'Merienda', cursive;
 }
 </style>

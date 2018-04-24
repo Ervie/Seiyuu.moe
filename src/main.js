@@ -12,9 +12,9 @@ Vue.config.productionTip = false
 
 Vue.use(Vuetify, {
   theme: {
-    primary: colors.amber.darken4,
+    primary: colors.teal.lighten1,
     secondary: colors.lightBlue.lighten2,
-    accent: colors.amber.accent2
+    accent: colors.teal.lighten4
   }
 })
 Vue.use(Vuelidate)
