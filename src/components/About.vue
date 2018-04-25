@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-container grid-list-xl text-xs-center style="min-height: 0;" hidden-sm-and-down>
+    <v-container grid-list-xl text-xs-center style="min-height: 0;" >
       <v-carousel style="height: 100%" >
         <v-carousel-item v-for="(slide, i) in slides" :src="slide.imageSrc" :key="i">
           <v-jumbotron dark>
@@ -11,7 +11,7 @@
                     <router-link
                       :to="slide.link"
                       tag="span"
-                      class="display-3"
+                      class="display-2"
                       style="cursor: pointer"
                       >
                       {{ slide.title }}
@@ -105,7 +105,7 @@ export default {
     ],
     slides: [
       {
-        imageSrc: '/static/questionMark.png',
+        imageSrc: '/static/carousel.jpg',
         title: 'Get Started',
         text: 'Select and compare seiyuu.',
         link: '/'
