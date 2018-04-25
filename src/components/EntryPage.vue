@@ -3,25 +3,25 @@
     <v-container grid-list-xl text-xs-center style="min-height: 0;" >
       <v-carousel style="height: 100%" >
         <v-carousel-item v-for="(slide, i) in slides" :src="slide.imageSrc" :key="i">
-          <v-jumbotron dark>
-            <v-container fill-height>
-              <v-layout align-center>
-                <v-flex>
-                  <h3>
-                    <router-link
-                      :to="slide.link"
-                      tag="span"
-                      class="display-2"
-                      style="cursor: pointer"
-                      >
-                      {{ slide.title }}
-                    </router-link>
-                  </h3>
-                  <span class="subheading">{{ slide.text }}</span>
-                </v-flex>
-              </v-layout>
-            </v-container>
-          </v-jumbotron>
+          <router-link
+          :to="slide.link"
+          tag="span"
+          class="display-2"
+          style="cursor: pointer"
+          >
+            <v-jumbotron dark>
+              <v-container fill-height>
+                <v-layout align-center>
+                  <v-flex>
+                    <h3>
+                        {{ slide.title }}
+                    </h3>
+                    <span class="subheading">{{ slide.text }}</span>
+                  </v-flex>
+                </v-layout>
+              </v-container>
+            </v-jumbotron>
+          </router-link>
         </v-carousel-item>
       </v-carousel>
     </v-container>
@@ -79,7 +79,7 @@
 
 <script>
 export default {
-  name: 'About',
+  name: 'EntryPage',
   data: () => ({
     cardItems: [
       {
@@ -108,7 +108,7 @@ export default {
         imageSrc: '/static/carousel.jpg',
         title: 'Get Started',
         text: 'Select and compare seiyuu.',
-        link: '/'
+        link: '/Seiyuu'
       }
     ]
   })

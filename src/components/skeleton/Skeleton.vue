@@ -33,9 +33,8 @@ export default {
     return {
       drawer: false,
       tilesList: [
-        {icon: 'fa-users', title: 'Search Seiyuu', link: '/'},
-        {icon: 'fa-info-circle', title: 'About', link: '/About'},
-        {icon: 'fa-github', title: 'Repository', link: 'https://github.com/Ervie/Seiyuu.Moe'}
+        {icon: 'fa-users', title: 'Search Seiyuu', link: '/Seiyuu'},
+        {icon: 'fa-info-circle', title: 'About', link: '/'}
       ]
     }
   }

@@ -18,7 +18,7 @@ import SeiyuuCardList from '@/components/SeiyuuCardList.vue'
 import ResultArea from '@/components/ResultArea.vue'
 
 export default {
-  name: 'MainContent',
+  name: 'SeiyuuArea',
   components: {
     'browser': SeiyuuBrowser,
     'seiyuu-card-list': SeiyuuCardList,
