@@ -1,6 +1,6 @@
 {
   "name": "seiyuu-moe",
-  "version": "0.9.2",
+  "version": "0.9.3",
   "description": "A webpage searching for collaborate works between seiyuu.",
   "author": "Ervin <bbuchala93@gmail.com>",
   "private": true,
@@ -17,7 +17,7 @@
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
     "vuelidate": "^0.6.2",
-    "vuetify": "^1.0.5"
+    "vuetify": "^1.0.17"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
