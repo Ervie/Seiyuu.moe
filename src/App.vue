@@ -1,7 +1,6 @@
 <template>
   <v-app id="v-app" dark>
-    <toolbar @toggledDrawer="toggleDrawer"></toolbar>
-    <drawer :drawerOn="drawerOn"></drawer>
+    <skeleton></skeleton>
     <v-content>
       <router-view id="router-view" />
     </v-content>
@@ -9,24 +8,12 @@
 </template>
 
 <script>
-import Toolbar from '@/components/skeleton/Toolbar.vue'
-import Drawer from '@/components/skeleton/Drawer.vue'
+import Skeleton from '@/components/skeleton/Skeleton.vue'
 
 export default {
   name: 'App',
   components: {
-    'toolbar': Toolbar,
-    'drawer': Drawer
-  },
-  data () {
-    return {
-      drawerOn: true
-    }
-  },
-  methods: {
-    toggleDrawer: function () {
-      this.drawerOn = !this.drawerOn
-    }
+    'skeleton': Skeleton
   }
 }
 </script>
