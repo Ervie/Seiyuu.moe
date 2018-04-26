@@ -1,11 +1,14 @@
 <template>
   <v-container grid-list-md text-xs-center>
-    <browser @seiyuuReturned="addSeiyuu" @alreadyOnTheList="alreadyOnTheList = true" @resetList="resetList" :searchedIdCache="searchedId"/>
+    <browser @seiyuuReturned="addSeiyuu" @alreadyOnTheList="alreadyOnTheList = true" @reloadNeeded="reloadNeeded = true" @resetList="resetList" :searchedIdCache="searchedId"/>
     <v-alert dismissible color="error" v-model="tooMuchRecords">
       You can choose {{ maximumSeiyuuNumber }} seiyuu at max.
     </v-alert>
     <v-alert dismissible color="error" v-model="alreadyOnTheList">
       This seiyuu is already selected.
+    </v-alert>
+    <v-alert dismissible color="error" v-model="reloadNeeded">
+      Network error occured during loading seiyuu list. Please refresh the page.
     </v-alert>
     <seiyuu-card-list :seiyuuToCompare="seiyuuToCompare" :maximumSeiyuuNumber="maximumSeiyuuNumber" @seiyuuRemoved="removeSeiyuu"/>
     <result-area :inputData="seiyuuToCompare" @resetList="resetList"/>
@@ -29,7 +32,8 @@ export default {
       seiyuuToCompare: [],
       maximumSeiyuuNumber: 6,
       tooMuchRecords: false,
-      alreadyOnTheList: false
+      alreadyOnTheList: false,
+      reloadNeeded: false
     }
   },
   computed: {
