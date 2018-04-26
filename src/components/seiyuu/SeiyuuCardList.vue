@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import SeiyuuCard from '@/components/SeiyuuCard.vue'
+import SeiyuuCard from '@/components/seiyuu/SeiyuuCard.vue'
 
 export default {
   name: 'SeiyuuCardList',

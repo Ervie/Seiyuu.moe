@@ -1,6 +1,29 @@
 <template>
     <v-layout>
       <v-flex>
+        <v-expansion-panel popout>
+          <v-expansion-panel-content>
+            <div slot="header" class="title">Compare Options</div>
+            <v-card>
+              <v-layout row wrap hidden-sm-and-down>
+                <v-flex xs4>
+                  <v-checkbox label="Group by series" v-model="searchOption.groupBySeries" color="secondary" value="secondary"></v-checkbox>
+                </v-flex>
+                <v-flex xs4>
+                  <v-checkbox label="Group by character" v-model="searchOption.groupByCharacter" color="secondary" value="secondary"></v-checkbox>
+                </v-flex>
+              </v-layout>
+              <v-layout row wrap hidden-md-and-up>
+                <v-flex xs12>
+                  <v-checkbox label="Group by series" v-model="searchOption.groupBySeries" color="secondary" value="secondary"></v-checkbox>
+                </v-flex>
+                <v-flex xs12>
+                  <v-checkbox label="Group by character" v-model="searchOption.groupByCharacter" color="secondary" value="secondary"></v-checkbox>
+                </v-flex>
+              </v-layout>
+            </v-card>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
         <div>
           <v-btn raised large color="error" v-on:click="resetList" :disabled="inputData.length < 1">Reset</v-btn>
           <v-btn depressed large color="primary" v-on:click="computeResults" :disabled="inputData.length < 2">Compare</v-btn>
@@ -15,35 +38,17 @@
           slider-color="secondary"
           grow
         >
-          <v-tab :href="`#tab-simple`">
-            Simple table
-            <v-icon large>fa-list</v-icon>
-          </v-tab>
-          <v-tab :href="`#tab-series`">
-            By series
+          <v-tab :href="`#tab-anime`">
+            Anime
             <v-icon large>fa-tv</v-icon>
-          </v-tab>
-          <v-tab :href="`#tab-character`">
-            By character
-            <v-icon large>fa-users</v-icon>
-          </v-tab>
-          <v-tab :href="`#tab-franchise`">
-            By franchise
-            <v-icon large>fa-flag</v-icon>
           </v-tab>
         </v-tabs>
         <v-tabs-items v-model="tabs" v-if="showTables">
-          <v-tab-item :id="`tab-simple`">
-            <simple-table :inputData="outputData" :avatarMode="avatarMode" :counter="counter" :seiyuuData="inputData"></simple-table>
-          </v-tab-item>
-          <v-tab-item :id="`tab-series`">
-            <series-table :inputData="outputData" :avatarMode="avatarMode" :counter="counter" :seiyuuData="inputData"></series-table>
-          </v-tab-item>
-          <v-tab-item :id="`tab-character`">
-            <character-table :inputData="outputData" :avatarMode="avatarMode" :counter="counter" :seiyuuData="inputData"></character-table>
-          </v-tab-item>
-          <v-tab-item :id="`tab-franchise`">
-            <franchise-table :inputData="outputData" :avatarMode="avatarMode" :counter="counter" :seiyuuData="inputData"></franchise-table>
+          <v-tab-item :id="`tab-anime`" >
+            <simple-table :inputData="outputData" :avatarMode="avatarMode" :counter="counter" :seiyuuData="inputData" v-if="selectedTable === 1"></simple-table>
+            <series-table :inputData="outputData" :avatarMode="avatarMode" :counter="counter" :seiyuuData="inputData" v-if="selectedTable === 2"></series-table>
+            <character-table :inputData="outputData" :avatarMode="avatarMode" :counter="counter" :seiyuuData="inputData" v-if="selectedTable === 3"></character-table>
+            <franchise-table :inputData="outputData" :avatarMode="avatarMode" :counter="counter" :seiyuuData="inputData" v-if="selectedTable === 4"></franchise-table>
           </v-tab-item>
         </v-tabs-items>
       </v-flex>
@@ -71,8 +76,12 @@ export default {
       avatarMode: false,
       windowWidth: 0,
       counter: 0,
-      tabs: 'tab-simple',
-      outputData: []
+      tabs: 'tab-anime',
+      outputData: [],
+      searchOption: {
+        groupBySeries: false,
+        groupByCharacter: false
+      }
     }
   },
   methods: {
@@ -131,6 +140,21 @@ export default {
   computed: {
     seiyuuRoles () {
       return this.inputData.map(x => x.voice_acting_role)
+    },
+    selectedTable () {
+      if (this.searchOption.groupBySeries) {
+        if (this.searchOption.groupByCharacter) {
+          return 4
+        } else {
+          return 2
+        }
+      } else {
+        if (this.searchOption.groupByCharacter) {
+          return 3
+        } else {
+          return 1
+        }
+      }
     }
   },
   watch: {

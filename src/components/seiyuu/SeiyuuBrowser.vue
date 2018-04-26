@@ -135,14 +135,21 @@ export default {
       }
     },
     loadCachedSeiyuu () {
-      axios.get(process.env.API_URL + '/api/Seiyuu')
+      axios.get(process.env.API_URL2 + '/api/Seiyuu')
         .then((response) => {
           this.cachedSeiyuu = response.data
         })
         .catch((error) => {
           console.log(error)
-          this.$emit('reloadNeeded')
-          this.cachedSeiyuu = []
+          axios.get(process.env.API_URL2 + '/api/Seiyuu')
+            .then((response) => {
+              this.cachedSeiyuu = response.data
+            })
+            .catch((error) => {
+              console.log(error)
+              this.$emit('reloadNeeded')
+              this.cachedSeiyuu = []
+            })
         })
     },
     pathToImage (initialPath) {
@@ -151,10 +158,21 @@ export default {
       } else {
         return 'static/questionMark.png'
       }
+    },
+    sendDataFetchedEvent () {
+      if (typeof this.cachedSeiyuu !== 'undefined' && this.cachedSeiyuu.length > 0) {
+        this.$emit('dataFetched')
+      }
     }
   },
   created () {
     this.loadCachedSeiyuu()
+  },
+  watch: {
+    cachedSeiyuu: {
+      handler: 'sendDataFetchedEvent',
+      immediate: true
+    }
   }
 }
 </script>
