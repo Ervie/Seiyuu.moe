@@ -99,7 +99,7 @@ export default {
         expanded: false,
         paragraphs: [
           'Hello, I am developer from Silesia region, Poland. This website is a result of connecting my hobbies (anime and programming), non-profit project for general use.',
-          'Source code can be found in link on the sidebar. Have in mind, that website is in its alpha stage and still under development. Suggestion or bugs can be issued via Github.'
+          'Source code can be found in link on the footer (desktop version only). Have in mind, that website is in its alpha stage and still under development. Suggestion or bugs can be issued via Github.'
         ]
       }
     ],

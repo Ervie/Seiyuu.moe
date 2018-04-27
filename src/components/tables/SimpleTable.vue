@@ -13,19 +13,16 @@
             />
         </template>
         <template slot="items" slot-scope="props">
-        <td>
-            <single-record-cell
-            :avatarMode="avatarMode"
-            :item="props.item.anime"
-            :preferText="true"
-            />
+          <td class="text-xs-right">
+              <multi-record-cell
+              :avatarMode="avatarMode"
+              :items="props.item.anime"
+              />
         </td>
-        <td class="text-xs-right" v-for="character in props.item.roles" :key="character.mal_id">
-            <!-- Normal mode character records -->
-            <single-record-cell
+          <td class="text-xs-right" v-for="role in props.item.roles" :key="role.seiyuu">
+            <multi-record-cell
             :avatarMode="avatarMode"
-            :item="character.character"
-            :preferText="false"
+            :items="role.characters"
             />
         </td>
         </template>
@@ -41,12 +38,14 @@
 import decode from 'decode-html'
 import TableHeader from './cells/TableHeader'
 import SingleRecordCell from './cells/SingleRecordCell'
+import MultiRecordCell from './cells/MultiRecordCell'
 
 export default {
   name: 'SimpleTable',
   components: {
     'table-header': TableHeader,
-    'single-record-cell': SingleRecordCell
+    'single-record-cell': SingleRecordCell,
+    'multi-record-cell': MultiRecordCell
   },
   props: ['inputData', 'avatarMode', 'counter', 'seiyuuData'],
   data () {
@@ -62,25 +61,35 @@ export default {
 
       for (var i = 0; i < this.inputData.length; i++) {
         this.tableData.push({
-          anime: {
-            name: decode(this.inputData[i].anime.name),
-            image_url: this.inputData[i].anime.image_url,
-            url: this.inputData[i].anime.url
-          },
-          roles: this.inputData[i].roles
+          anime: [{
+            entry: {
+              name: decode(this.inputData[i].anime.name),
+              image_url: this.inputData[i].anime.image_url,
+              url: this.inputData[i].anime.url
+            }
+          }],
+          roles: []
         })
+        for (var l = 0; l < this.seiyuuData.length; l++) {
+          this.tableData[this.tableData.length - 1].roles.push({
+            seiyuu: this.inputData[i].roles[l].seiyuu,
+            characters: [{
+              entry: this.inputData[i].roles[l].character
+            }]
+          })
+        }
       }
 
       this.headers.push({
         text: 'Anime',
         align: 'left',
-        value: 'anime.name',
+        value: 'anime[0].entry.name',
         image: ''
       })
       for (var headerIndex = 0; headerIndex < this.seiyuuData.length; headerIndex++) {
         this.headers.push({
           text: this.seiyuuData[headerIndex].name,
-          value: 'roles[' + headerIndex + '].character.name',
+          value: 'roles[' + headerIndex + '].characters[0].entry.name',
           image: this.seiyuuData[headerIndex].image_url})
       }
       this.showTables = true

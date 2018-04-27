@@ -18,11 +18,10 @@
               :items="props.item.anime"
               />
           </td>
-          <td class="text-xs-right" v-for="character in props.item.roles" :key="character.mal_id">
-              <single-record-cell
+          <td class="text-xs-right" v-for="role in props.item.roles" :key="role.seiyuu">
+              <multi-record-cell
               :avatarMode="avatarMode"
-              :item="character.character"
-              :preferText="false"
+              :items="role.characters"
               />
           </td>
         </template>
@@ -75,9 +74,17 @@ export default {
                 url: this.inputData[i].anime.url
               }
             }],
-            roles: this.inputData[i].roles,
+            roles: [],
             combinationCode: currentCombinationCode
           })
+          for (var l = 0; l < this.seiyuuData.length; l++) {
+            this.tableData[this.tableData.length - 1].roles.push({
+              seiyuu: this.inputData[i].roles[l].seiyuu,
+              characters: [{
+                entry: this.inputData[i].roles[l].character
+              }]
+            })
+          }
         } else {
           this.tableData[combinationIndex].anime.push({
             entry: {
@@ -98,7 +105,7 @@ export default {
       for (var headerIndex = 0; headerIndex < this.seiyuuData.length; headerIndex++) {
         this.headers.push({
           text: this.seiyuuData[headerIndex].name,
-          value: 'roles[' + headerIndex + '].character.name',
+          value: 'roles[' + headerIndex + '].characters[0].entry.name',
           image: this.seiyuuData[headerIndex].image_url})
       }
       this.showTables = true

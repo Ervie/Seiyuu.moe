@@ -14,11 +14,10 @@
         </template>
         <template slot="items" slot-scope="props">
         <td>
-            <single-record-cell
-            :avatarMode="avatarMode"
-            :item="props.item.anime"
-            :preferText="true"
-            />
+          <multi-record-cell
+          :avatarMode="avatarMode"
+          :items="props.item.anime"
+          />
         </td>
         <td class="text-xs-right" v-for="role in props.item.roles" :key="role.seiyuu">
             <multi-record-cell
@@ -66,15 +65,17 @@ export default {
 
       for (var i = 0; i < this.inputData.length; i++) {
         if (intersectAnime.length > 0) {
-          animeIndex = intersectAnime.map(x => x.anime.name).indexOf(this.inputData[i].anime.name)
+          animeIndex = intersectAnime.map(x => x.anime[0].entry.name).indexOf(this.inputData[i].anime.name)
         }
         if (animeIndex === -1) {
           intersectAnime.push({
-            anime: {
-              name: decode(this.inputData[i].anime.name),
-              image_url: this.inputData[i].anime.image_url,
-              url: this.inputData[i].anime.url
-            },
+            anime: [{
+              entry: {
+                name: decode(this.inputData[i].anime.name),
+                image_url: this.inputData[i].anime.image_url,
+                url: this.inputData[i].anime.url
+              }
+            }],
             roles: []
           })
           for (var j = 0; j < this.inputData[i].roles.length; j++) {
@@ -99,7 +100,7 @@ export default {
       this.headers.push({
         text: 'Anime',
         align: 'left',
-        value: 'anime.name'
+        value: 'anime[0].entry.name'
       })
       for (var headerIndex = 0; headerIndex < this.seiyuuData.length; headerIndex++) {
         this.headers.push({
