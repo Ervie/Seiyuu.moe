@@ -1,0 +1,60 @@
+<template>
+<v-layout row>
+  <v-flex>
+    <v-card>
+      <v-container fluid grid-list-lg>
+        <v-layout class="primary" row v-for="(anime, j) in item.anime" v-bind:key="'j' + j">
+          <v-flex xs9>
+            <span>
+              <p class="subheading"> {{ decodeHtml(anime.entry.name) }}</p>
+            </span>
+          </v-flex>
+          <v-flex xs3>
+            <a :href="anime.entry.url">
+              <v-card-media :src="anime.entry.image_url" height="64px" contain></v-card-media>
+            </a>
+          </v-flex>
+        </v-layout>
+        <v-layout :class="{accent : k % 2 == 0}" row v-for="(role, k) in item.roles" v-bind:key="'k' + k">
+          <v-flex xs6>
+            <span>
+              <p class="subheading"> {{ decodeHtml(role.seiyuu) }}</p>
+            </span>
+          </v-flex>
+          <v-flex xs6>
+            <span v-for="(character, l) in role.characters" v-bind:key="'l' + l">
+              <a :href="character.entry.url">
+                <p class="subheading"> {{ decodeHtml(character.entry.name) }}</p>
+              </a>
+            </span>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-card>
+  </v-flex>
+</v-layout>
+
+</template>
+
+<script>
+import decode from 'decode-html'
+
+export default {
+  name: 'CardCell',
+  props: ['item'],
+  methods: {
+    decodeHtml (inputValue) {
+      inputValue = inputValue.replace('&#039;', '\'')
+      return decode(inputValue)
+    }
+  }
+}
+</script>
+
+<style>
+
+.accent {
+    color: black;
+}
+
+</style>

@@ -1,36 +1,29 @@
 <template>
-    <v-data-table
-        :headers="headers"
-        :items="tableData"
-        hide-actions
-        class="elevation-1">
-        <template slot="headerCell" slot-scope="props" >
-          <table-header
-              :imageUrl="props.header.image"
-              :text="props.header.text"
-                :avatarMode="avatarMode"
-          />
+  <div>
+    <v-container hidden-sm-and-down>
+      <v-data-table :headers="headers" :items="tableData" hide-actions class="elevation-1">
+        <template slot="headerCell" slot-scope="props">
+          <table-header :imageUrl="props.header.image" :text="props.header.text" :avatarMode="avatarMode" />
         </template>
         <template slot="items" slot-scope="props">
           <td class="text-xs-right">
-              <multi-record-cell
-              :avatarMode="avatarMode"
-              :items="props.item.anime"
-              />
+            <multi-record-cell :avatarMode="avatarMode" :items="props.item.anime" />
           </td>
           <td class="text-xs-right" v-for="role in props.item.roles" :key="role.seiyuu">
-              <multi-record-cell
-              :avatarMode="avatarMode"
-              :items="role.characters"
-              />
+            <multi-record-cell :avatarMode="avatarMode" :items="role.characters" />
           </td>
         </template>
         <template slot="no-data">
           <v-alert :value="true" color="error" icon="warning">
-              Sorry, nothing to display here :(
+            Sorry, nothing to display here :(
           </v-alert>
         </template>
-    </v-data-table>
+      </v-data-table>
+    </v-container>
+     <v-container hidden-md-and-up>
+       <card-cell v-for="(item, i) in tableData" v-bind:key="i" :item="item"/>
+    </v-container>
+  </div>
 </template>
 
 <script>
@@ -38,13 +31,15 @@ import decode from 'decode-html'
 import TableHeader from '@/components/tables/TableHeader'
 import SingleRecordCell from '@/components/tables/SingleRecordCell'
 import MultiRecordCell from '@/components/tables/MultiRecordCell'
+import CardCell from '@/components/tables/CardCell'
 
 export default {
   name: 'SeiyuuTable',
   components: {
     'table-header': TableHeader,
     'single-record-cell': SingleRecordCell,
-    'multi-record-cell': MultiRecordCell
+    'multi-record-cell': MultiRecordCell,
+    'card-cell': CardCell
   },
   props: ['inputData', 'avatarMode', 'counter', 'seiyuuData', 'groupingMode'],
   data () {
@@ -325,3 +320,7 @@ export default {
   }
 }
 </script>
+
+<style>
+
+</style>

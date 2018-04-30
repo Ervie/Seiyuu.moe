@@ -14,7 +14,7 @@ Vue.use(Vuetify, {
   theme: {
     primary: colors.teal.lighten1,
     secondary: colors.lightBlue.lighten2,
-    accent: colors.teal.lighten4
+    accent: colors.teal.lighten5
   }
 })
 Vue.use(Vuelidate)
