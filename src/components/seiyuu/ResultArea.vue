@@ -45,10 +45,7 @@
         </v-tabs>
         <v-tabs-items v-model="tabs" v-if="showTables">
           <v-tab-item :id="`tab-anime`" >
-            <simple-table :inputData="outputData" :avatarMode="avatarMode" :counter="counter" :seiyuuData="inputData" v-if="selectedTable === 1"></simple-table>
-            <series-table :inputData="outputData" :avatarMode="avatarMode" :counter="counter" :seiyuuData="inputData" v-if="selectedTable === 2"></series-table>
-            <character-table :inputData="outputData" :avatarMode="avatarMode" :counter="counter" :seiyuuData="inputData" v-if="selectedTable === 3"></character-table>
-            <franchise-table :inputData="outputData" :avatarMode="avatarMode" :counter="counter" :seiyuuData="inputData" v-if="selectedTable === 4"></franchise-table>
+            <seiyuu-table :inputData="outputData" :avatarMode="avatarMode" :counter="counter" :seiyuuData="inputData" :groupingMode="selectedTable"></seiyuu-table>
           </v-tab-item>
         </v-tabs-items>
       </v-flex>
@@ -56,18 +53,12 @@
 </template>
 
 <script>
-import SimpleTable from '@/components/tables/SimpleTable.vue'
-import SeriesTable from '@/components/tables/SeriesTable.vue'
-import CharactersTable from '@/components/tables/CharactersTable.vue'
-import FranchiseTable from '@/components/tables/FranchiseTable.vue'
+import SeiyuuTable from '@/components/seiyuu/SeiyuuTable.vue'
 
 export default {
   name: 'ResultArea',
   components: {
-    'simple-table': SimpleTable,
-    'series-table': SeriesTable,
-    'character-table': CharactersTable,
-    'franchise-table': FranchiseTable
+    'seiyuu-table': SeiyuuTable
   },
   props: ['inputData'],
   data () {
@@ -144,15 +135,15 @@ export default {
     selectedTable () {
       if (this.searchOption.groupBySeries) {
         if (this.searchOption.groupByCharacter) {
-          return 4
+          return 'SeriesCharacters'
         } else {
-          return 2
+          return 'Series'
         }
       } else {
         if (this.searchOption.groupByCharacter) {
-          return 3
+          return 'Characters'
         } else {
-          return 1
+          return 'None'
         }
       }
     }
