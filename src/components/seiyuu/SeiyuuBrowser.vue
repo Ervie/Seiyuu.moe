@@ -135,6 +135,7 @@ export default {
       }
     },
     loadCachedSeiyuu () {
+      this.loadPopularList()
       axios.get(process.env.API_URL2 + '/api/Seiyuu')
         .then((response) => {
           this.cachedSeiyuu = response.data
@@ -163,6 +164,25 @@ export default {
       if (typeof this.cachedSeiyuu !== 'undefined' && this.cachedSeiyuu.length > 0) {
         this.$emit('dataFetched')
       }
+    },
+    loadPopularList (callback) {
+      var xhr = new XMLHttpRequest()
+      var self = this
+      var decodedAnser = ''
+      xhr.responseType = 'arraybuffer'
+
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          var decoder = new TextDecoder('utf-8')
+          decodedAnser = decoder.decode(xhr.response)
+          self.cachedSeiyuu = JSON.parse(decodedAnser)
+        } else {
+          console.log('error')
+        }
+      }
+      xhr.open('GET', '/static/quickSeiyuuList.json', true)
+
+      xhr.send()
     }
   },
   created () {
