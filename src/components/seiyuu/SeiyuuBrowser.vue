@@ -1,6 +1,6 @@
 <template>
   <v-layout row wrap>
-      <v-flex xs9>
+      <v-flex xs12>
         <v-select
           :items="cachedSeiyuu"
           v-model="selectModel"
@@ -26,17 +26,6 @@
           </template>
         </v-select>
           <v-btn raised color="secondary" v-on:click="searchByName" :disabled="!selectModel || loading" :loading="loading">Add</v-btn>
-      </v-flex>
-      <v-flex xs3>
-        <v-text-field
-          prepend-icon="search"
-          name="searchIdBox"
-          label="Search by MAL Id..."
-          hint="Search by Seiyuu MAL Id"
-          single-line
-          v-model="searchedId"
-          :rules="idSearchRules"/>
-          <v-btn raised color="secondary" v-on:click="searchById" :disabled="!isIdValid || loading" :loading="loading">Search</v-btn>
       </v-flex>
   </v-layout>
 </template>
@@ -73,25 +62,6 @@ export default {
       var parsed = Math.floor(Number(value))
       return (parsed !== Infinity && String(parsed) === value && parsed >= 0)
     },
-    searchById () {
-      this.loading = true
-      if (this.searchedIdCache.indexOf(parseInt(this.searchedId)) > -1) {
-        this.$emit('alreadyOnTheList')
-        this.loading = false
-      } else {
-        axios.get(process.env.JIKAN_URL + 'person/' + this.searchedId)
-          .then((response) => {
-            this.$emit('seiyuuReturned', response.data)
-            this.addSeiyuuToCache(response.data)
-          })
-          .catch((error) => {
-            console.log(error)
-          })
-          .finally(() => {
-            this.loading = false
-          })
-      }
-    },
     searchByName () {
       this.loading = true
       if (this.searchedIdCache.indexOf(parseInt(this.selectModel)) > -1) {
@@ -107,30 +77,6 @@ export default {
           })
           .finally(() => {
             this.loading = false
-          })
-      }
-    },
-    addSeiyuuToCache (seiyuuData) {
-      if (this.cachedSeiyuu.filter(x => (x.mal_id !== seiyuuData.mal_id))) {
-        this.cachedSeiyuu.push({
-          mal_id: seiyuuData.mal_id,
-          name: seiyuuData.name,
-          image_url: seiyuuData.image_url
-        })
-        // sort cachedSeiyuu
-        this.cachedSeiyuu.sort(function (a, b) { return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0) })
-
-        axios.post(process.env.API_URL + '/api/Seiyuu', {
-          mal_id: seiyuuData.mal_id,
-          name: seiyuuData.name,
-          image_url: seiyuuData.image_url
-        })
-          .then((response) => {
-            console.log(response)
-          })
-          .catch((error) => {
-            console.log(error)
-            this.cachedSeiyuu = []
           })
       }
     },

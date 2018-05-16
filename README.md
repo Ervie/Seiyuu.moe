@@ -30,7 +30,6 @@ npm run build --report
     * Mode for grouping by character.
     * Mode for grouping by franchise (group by character + series).
 * Precached list for fast searching by seiyuu name.
-* Searching seiyuu by MAL id (if not on cached list).
 * Details cards for extra information.
 
 ## To-Do List / Further Ideas
@@ -42,7 +41,6 @@ npm run build --report
 * Export function (save and download a csv/json - formats to be decided)
 * Reverse search - choose anime, find seiyuu which worked on selected works.
 * Searching for Visual Novels/Games.
-* Remove searching by MAL id (prefill the database).
 
 ## Special mentions
 
