@@ -7,18 +7,18 @@
             <v-card>
               <v-layout row wrap hidden-sm-and-down>
                 <v-flex xs4>
-                  <v-checkbox label="Group by series" v-model="searchOption.groupBySeries" color="secondary" value="secondary"></v-checkbox>
+                  <v-checkbox label="Group by series" v-model="searchOption.groupBySeries" color="secondary"></v-checkbox>
                 </v-flex>
                 <v-flex xs4>
-                  <v-checkbox label="Group by character" v-model="searchOption.groupByCharacter" color="secondary" value="secondary"></v-checkbox>
+                  <v-checkbox label="Group by character" v-model="searchOption.groupByCharacter" color="secondary"></v-checkbox>
                 </v-flex>
               </v-layout>
               <v-layout row wrap hidden-md-and-up>
                 <v-flex xs12>
-                  <v-checkbox label="Group by series" v-model="searchOption.groupBySeries" color="secondary" value="secondary"></v-checkbox>
+                  <v-checkbox label="Group by series" v-model="searchOption.groupBySeries" color="secondary"></v-checkbox>
                 </v-flex>
                 <v-flex xs12>
-                  <v-checkbox label="Group by character" v-model="searchOption.groupByCharacter" color="secondary" value="secondary"></v-checkbox>
+                  <v-checkbox label="Group by character" v-model="searchOption.groupByCharacter" color="secondary"></v-checkbox>
                 </v-flex>
               </v-layout>
             </v-card>
@@ -70,8 +70,8 @@ export default {
       tabs: 'tab-anime',
       outputData: [],
       searchOption: {
-        groupBySeries: false,
-        groupByCharacter: false
+        groupBySeries: true,
+        groupByCharacter: true
       }
     }
   },

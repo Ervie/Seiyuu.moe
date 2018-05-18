@@ -107,7 +107,7 @@ export default {
       }
     },
     sendDataFetchedEvent () {
-      if (typeof this.cachedSeiyuu !== 'undefined' && this.cachedSeiyuu.length > 0) {
+      if (typeof this.cachedSeiyuu !== 'undefined' && this.cachedSeiyuu.length > 200) {
         this.$emit('dataFetched')
       }
     },

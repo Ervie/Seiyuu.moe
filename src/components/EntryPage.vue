@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-container grid-list-xl text-xs-center style="min-height: 0;" >
-      <v-carousel style="height: 100%" >
+      <v-carousel name="router-carousel" style="height: 100%" >
         <v-carousel-item v-for="(slide, i) in slides" :src="slide.imageSrc" :key="i">
           <router-link
           :to="slide.link"
@@ -93,8 +93,18 @@ export default {
         ]
       },
       {
+        header: 'What\'s new?',
+        imageSrc: '/static/namikawa.png',
+        imageAltText: 'About Seiyuu.Moe project',
+        expanded: false,
+        paragraphs: [
+          '18th May 2018 - first version is up.',
+          '18th May 2018 - added "What\'s new?" card.'
+        ]
+      },
+      {
         header: 'About project',
-        imageSrc: '/static/lain.jpg',
+        imageSrc: '/static/microBig.jpg',
         imageAltText: 'About Seiyuu.Moe project',
         expanded: false,
         paragraphs: [

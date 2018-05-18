@@ -1,12 +1,12 @@
 <template>
   <v-container grid-list-md text-xs-center>
-    <v-alert type="info" :value="!seiyuuDataFetched">
-      The data is loading, please be patient...
+    <v-alert type="info" :value="!seiyuuExtraDataFetched">
+      The extra data is loading, please be patient...
     </v-alert>
     <v-alert dismissible color="error" v-model="reloadNeeded">
-      Network error occured during loading seiyuu list. Please consider refresh the page.
+      Network error occured during loading additional seiyuu list. Please consider refreshing the page.
     </v-alert>
-    <browser @seiyuuReturned="addSeiyuu" @alreadyOnTheList="alreadyOnTheList = true" @reloadNeeded="reloadNeeded = true" @resetList="resetList" @dataFetched="seiyuuDataFetched = true" :searchedIdCache="searchedId"/>
+    <browser @seiyuuReturned="addSeiyuu" @alreadyOnTheList="alreadyOnTheList = true" @reloadNeeded="reloadNeeded = true" @resetList="resetList" @dataFetched="seiyuuExtraDataFetched = true" :searchedIdCache="searchedId"/>
     <v-alert dismissible color="error" v-model="tooMuchRecords">
       You can choose {{ maximumSeiyuuNumber }} seiyuu at max.
     </v-alert>
@@ -37,7 +37,7 @@ export default {
       tooMuchRecords: false,
       alreadyOnTheList: false,
       reloadNeeded: false,
-      seiyuuDataFetched: false
+      seiyuuExtraDataFetched: false
     }
   },
   computed: {
