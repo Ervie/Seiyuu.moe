@@ -142,3 +142,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+ .avatar img {
+   object-fit: cover;
+   object-position: 100% 30%;
+ }
+</style>
