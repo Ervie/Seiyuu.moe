@@ -62,6 +62,7 @@ export default {
       drawer: false,
       tilesList: [
         {icon: 'fa-users', title: 'Compare Seiyuu', link: '/Seiyuu'},
+        {icon: 'fa-tv', title: 'Compare Anime', link: '/Anime'},
         {icon: 'fa-info-circle', title: 'About', link: '/'}
       ],
       rows: [
