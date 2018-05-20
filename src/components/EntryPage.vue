@@ -98,6 +98,7 @@ export default {
         imageAltText: 'About Seiyuu.Moe project',
         expanded: false,
         paragraphs: [
+          '20th May 2018 - added filtering by main roles.',
           '18th May 2018 - first version is up.',
           '18th May 2018 - added "What\'s new?" card.'
         ]
