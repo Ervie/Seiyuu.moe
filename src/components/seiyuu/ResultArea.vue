@@ -12,6 +12,9 @@
                 <v-flex xs4>
                   <v-checkbox label="Group by character" v-model="searchOption.groupByCharacter" color="secondary"></v-checkbox>
                 </v-flex>
+                <v-flex xs4>
+                  <v-checkbox label="Main roles only" v-model="searchOption.mainRolesOnly" color="secondary"></v-checkbox>
+                </v-flex>
               </v-layout>
               <v-layout row wrap hidden-md-and-up>
                 <v-flex xs12>
@@ -19,6 +22,9 @@
                 </v-flex>
                 <v-flex xs12>
                   <v-checkbox label="Group by character" v-model="searchOption.groupByCharacter" color="secondary"></v-checkbox>
+                </v-flex>
+                <v-flex xs12>
+                  <v-checkbox label="Main roles only" v-model="searchOption.mainRolesOnly" color="secondary"></v-checkbox>
                 </v-flex>
               </v-layout>
             </v-card>
@@ -71,7 +77,8 @@ export default {
       outputData: [],
       searchOption: {
         groupBySeries: true,
-        groupByCharacter: true
+        groupByCharacter: true,
+        mainRolesOnly: false
       }
     }
   },
@@ -89,32 +96,44 @@ export default {
     computeResults () {
       this.outputData = []
       var intersectAnime = []
+      var filteredData = new Array(this.inputData.length)
       var partialResults = new Array(this.inputData.length)
 
       for (var i = 0; i < this.inputData.length; i++) {
         partialResults[i] = []
+        filteredData[i] = []
       }
 
-      for (i = 0; i < this.seiyuuRoles[0].length; i++) {
+      if (this.searchOption.mainRolesOnly) {
+        for (i = 0; i < this.inputData.length; i++) {
+          filteredData[i] = this.seiyuuRoles[i].filter(x => x.character.role === 'Main')
+        }
+      } else {
+        for (i = 0; i < this.inputData.length; i++) {
+          filteredData[i] = this.seiyuuRoles[i]
+        }
+      }
+
+      for (i = 0; i < filteredData[0].length; i++) {
         partialResults[0].push({
-          anime: this.seiyuuRoles[0][i].anime,
+          anime: filteredData[0][i].anime,
           roles: [{
             seiyuu: this.inputData[0].name,
-            character: this.seiyuuRoles[0][i].character
+            character: filteredData[0][i].character
           }]
         })
       }
 
-      for (var seiyuuIndex = 1; seiyuuIndex < this.seiyuuRoles.length; seiyuuIndex++) {
-        for (i = 0; i < this.seiyuuRoles[seiyuuIndex].length; i++) {
+      for (var seiyuuIndex = 1; seiyuuIndex < filteredData.length; seiyuuIndex++) {
+        for (i = 0; i < filteredData[seiyuuIndex].length; i++) {
           for (var j = 0; j < partialResults[seiyuuIndex - 1].length; j++) {
-            if (partialResults[seiyuuIndex - 1][j].anime.mal_id === this.seiyuuRoles[seiyuuIndex][i].anime.mal_id) {
+            if (partialResults[seiyuuIndex - 1][j].anime.mal_id === filteredData[seiyuuIndex][i].anime.mal_id) {
               // Weird deep clone of object
               var cloneObject = JSON.parse(JSON.stringify(partialResults[seiyuuIndex - 1][j]))
               partialResults[seiyuuIndex].push(cloneObject)
               partialResults[seiyuuIndex][partialResults[seiyuuIndex].length - 1].roles.push({
                 seiyuu: this.inputData[seiyuuIndex].name,
-                character: this.seiyuuRoles[seiyuuIndex][i].character
+                character: filteredData[seiyuuIndex][i].character
               })
             }
           }

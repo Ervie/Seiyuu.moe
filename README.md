@@ -29,13 +29,13 @@ npm run build --report
     * Mode for grouping by series.
     * Mode for grouping by character.
     * Mode for grouping by franchise (group by character + series).
+    * Main roles only filter.
 * Precached list for fast searching most popular seiyuu.
 * Details cards for extra information.
 
 ## To-Do List / Further Ideas
 
 * Enhance juxtaposition by emphasis on most frequent collaborations (more modes).
-    * Filtering by main roles.
     * Partial results.
     * Charts?
 * Export function (save and download a csv/json - formats to be decided).
