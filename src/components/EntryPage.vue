@@ -120,6 +120,12 @@ export default {
         title: 'Get Started',
         text: 'Select and compare seiyuu.',
         link: '/Seiyuu'
+      },
+      {
+        imageSrc: '/static/carousel.jpg',
+        title: 'Get Started',
+        text: 'Select and compare anime.',
+        link: '/Anime'
       }
     ]
   })
