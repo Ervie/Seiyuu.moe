@@ -7,6 +7,7 @@
           label="Search title"
           hint="Search anime by title"
           single-line
+          v-on:keyup.enter="search"
           v-model="searchQuery"/>
           <v-btn raised color="secondary" v-on:click="search" :disabled="loadingSearch" :loading="loadingSearch">Search</v-btn>
       </v-flex>
@@ -32,6 +33,7 @@ export default {
   },
   methods: {
     search () {
+      this.loadingSearch = true
       axios.get(process.env.JIKAN_URL + 'search/anime/' + String(this.searchQuery))
         .then((response) => {
           this.searchResults = response.data.result
@@ -40,7 +42,7 @@ export default {
           console.log(error)
         })
         .finally(() => {
-          this.loading = false
+          this.loadingSearch = false
         })
     }
   }
