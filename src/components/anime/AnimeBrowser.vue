@@ -47,6 +47,7 @@ export default {
         })
         .finally(() => {
           this.loadingSearch = false
+          this.searchQuery = ''
         })
     },
     sendAnimeRequest (malId) {
