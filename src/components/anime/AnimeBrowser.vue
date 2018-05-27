@@ -36,7 +36,24 @@ export default {
       this.loadingSearch = true
       axios.get(process.env.JIKAN_URL + 'search/anime/' + String(this.searchQuery))
         .then((response) => {
-          this.searchResults = response.data.result
+          if (response.data.result[0].title.toLowerCase() === this.searchQuery.toLowerCase()) {
+            this.sendAnimeRequest(response.data.result[0].mal_id)
+          } else {
+            this.searchResults = response.data.result
+          }
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+        .finally(() => {
+          this.loadingSearch = false
+        })
+    },
+    sendAnimeRequest (malId) {
+      this.loadingSearch = true
+      axios.get(process.env.JIKAN_URL + 'anime/' + String(malId))
+        .then((response) => {
+          this.$emit('animeReturned', response.data)
         })
         .catch((error) => {
           console.log(error)
