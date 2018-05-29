@@ -98,6 +98,7 @@ export default {
         imageAltText: 'About Seiyuu.Moe project',
         expanded: false,
         paragraphs: [
+          '28th May 2018 - MAL is currently under maintenance :( The functionalities of Seiyuu.moe will be down until MAL will be back (the website will not be offline thought).',
           '20th May 2018 - added filtering by main roles.',
           '18th May 2018 - first version is up.',
           '18th May 2018 - added "What\'s new?" card.'
