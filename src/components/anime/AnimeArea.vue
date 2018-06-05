@@ -8,18 +8,21 @@
       This anime is already selected.
     </v-alert>
     <anime-card-list :animeToCompare="animeToCompare" :maximumAnimeNumber="maximumAnimeNumber" @animeRemoved="removeAnime"/>
+    <result-area :inputData="animeToCompare" @resetList="resetList"/>
   </v-container>
 </template>
 
 <script>
 import AnimeBrowser from '@/components/anime/AnimeBrowser.vue'
 import AnimeCardList from '@/components/anime/AnimeCardList.vue'
+import ResultArea from '@/components/anime/ResultArea.vue'
 
 export default {
   name: 'AnimeArea',
   components: {
     'browser': AnimeBrowser,
-    'anime-card-list': AnimeCardList
+    'anime-card-list': AnimeCardList,
+    'result-area': ResultArea
   },
   data () {
     return {
