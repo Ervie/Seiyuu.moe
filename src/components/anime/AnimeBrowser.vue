@@ -39,7 +39,11 @@ export default {
           if (response.data.result[0].title.toLowerCase() === this.searchQuery.toLowerCase()) {
             this.sendAnimeRequest(response.data.result[0].mal_id)
           } else {
-            this.searchResults = response.data.result
+            if (response.data.result[0].title.toLowerCase().includes(this.searchQuery.toLowerCase()) && !response.data.result[1].title.toLowerCase().includes(this.searchQuery.toLowerCase())) {
+              this.sendAnimeRequest(response.data.result[0].mal_id)
+            } else {
+              this.searchResults = response.data.result
+            }
           }
         })
         .catch((error) => {

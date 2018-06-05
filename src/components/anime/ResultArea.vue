@@ -69,7 +69,6 @@ export default {
               // Weird deep clone of object
               var cloneObject = JSON.parse(JSON.stringify(partialResults[animeIndex - 1][j]))
               partialResults[animeIndex].push(cloneObject)
-              console.log(partialResults)
               partialResults[animeIndex][partialResults[animeIndex].length - 1].roles.push({
                 character: filteredData[animeIndex][i].roles[0].character
               })
