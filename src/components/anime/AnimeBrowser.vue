@@ -34,7 +34,7 @@ export default {
   methods: {
     search () {
       this.loadingSearch = true
-      axios.get(process.env.JIKAN_URL + 'search/anime/' + String(this.searchQuery))
+      axios.get(process.env.JIKAN_URL + 'search/anime/' + String(this.searchQuery.replace('/', ' ')))
         .then((response) => {
           if (response.data.result[0].title.toLowerCase() === this.searchQuery.toLowerCase()) {
             this.sendAnimeRequest(response.data.result[0].mal_id)

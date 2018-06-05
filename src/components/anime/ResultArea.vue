@@ -32,7 +32,6 @@ export default {
     },
     computeResults () {
       this.outputData = []
-      var intersectSeiyuu = []
       var filteredData = new Array(this.inputData.length)
       var partialResults = new Array(this.inputData.length)
 
@@ -59,9 +58,6 @@ export default {
 
       partialResults[0] = filteredData[0]
 
-      console.log(filteredData)
-      console.log(partialResults)
-
       for (var animeIndex = 1; animeIndex < filteredData.length; animeIndex++) {
         for (i = 0; i < filteredData[animeIndex].length; i++) {
           for (j = 0; j < partialResults[animeIndex - 1].length; j++) {
@@ -77,9 +73,8 @@ export default {
         }
         partialResults[animeIndex] = partialResults[animeIndex].filter(x => x.roles.length === (animeIndex + 1))
       }
-      intersectSeiyuu = partialResults[this.inputData.length - 1]
-
-      this.outputData = intersectSeiyuu
+      this.outputData = partialResults[this.inputData.length - 1]
+      console.log(this.outputData)
       this.counter++
       this.showTables = true
     }
