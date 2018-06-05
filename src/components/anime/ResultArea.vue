@@ -5,17 +5,18 @@
           <v-btn raised large color="error" v-on:click="resetList" :disabled="inputData.length < 1">Reset</v-btn>
           <v-btn depressed large color="primary" v-on:click="computeResults" :disabled="inputData.length < 2">Compare</v-btn>
         </div>
+        <anime-table :inputData="outputData" :avatarMode="avatarMode" :counter="counter" :animeData="inputData"></anime-table>
       </v-flex>
     </v-layout>
 </template>
 
 <script>
-import SeiyuuTable from '@/components/seiyuu/SeiyuuTable.vue'
+import AnimeTable from '@/components/anime/AnimeTable.vue'
 
 export default {
   name: 'ResultArea',
   components: {
-    'seiyuu-table': SeiyuuTable
+    'anime-table': AnimeTable
   },
   props: ['inputData'],
   data () {
