@@ -7,16 +7,19 @@
     <v-alert dismissible color="error" v-model="alreadyOnTheList">
       This anime is already selected.
     </v-alert>
+    <anime-card-list :animeToCompare="animeToCompare" :maximumAnimeNumber="maximumAnimeNumber" @animeRemoved="removeAnime"/>
   </v-container>
 </template>
 
 <script>
 import AnimeBrowser from '@/components/anime/AnimeBrowser.vue'
+import AnimeCardList from '@/components/anime/AnimeCardList.vue'
 
 export default {
   name: 'AnimeArea',
   components: {
-    'browser': AnimeBrowser
+    'browser': AnimeBrowser,
+    'anime-card-list': AnimeCardList
   },
   data () {
     return {
@@ -42,6 +45,13 @@ export default {
         this.alreadyOnTheList = false
         this.animeToCompare.push(animeData)
       }
+    },
+    removeAnime (animeId) {
+      this.tooMuchRecords = false
+      this.animeToCompare.splice(animeId, 1)
+    },
+    resetList () {
+      this.animeToCompare = []
     }
   }
 }
