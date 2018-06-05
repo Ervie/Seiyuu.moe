@@ -52,7 +52,7 @@ export default {
     },
     sendAnimeRequest (malId) {
       this.loadingSearch = true
-      axios.get(process.env.JIKAN_URL + 'anime/' + String(malId))
+      axios.get(process.env.JIKAN_URL + 'anime/' + String(malId) + '/characters_staff')
         .then((response) => {
           this.$emit('animeReturned', response.data)
         })

@@ -32,7 +32,7 @@ export default {
     },
     computeResults () {
       this.outputData = []
-      var intersectAnime = []
+      var intersectSeiyuu = []
       var filteredData = new Array(this.inputData.length)
       var partialResults = new Array(this.inputData.length)
 
@@ -41,52 +41,53 @@ export default {
         filteredData[i] = []
       }
 
-      if (this.searchOption.mainRolesOnly) {
-        for (i = 0; i < this.inputData.length; i++) {
-          filteredData[i] = this.seiyuuRoles[i].filter(x => x.character.role === 'Main')
-        }
-      } else {
-        for (i = 0; i < this.inputData.length; i++) {
-          filteredData[i] = this.seiyuuRoles[i]
-        }
-      }
-
-      for (i = 0; i < filteredData[0].length; i++) {
-        partialResults[0].push({
-          anime: filteredData[0][i].anime,
-          roles: [{
-            seiyuu: this.inputData[0].name,
-            character: filteredData[0][i].character
-          }]
-        })
-      }
-
-      for (var seiyuuIndex = 1; seiyuuIndex < filteredData.length; seiyuuIndex++) {
-        for (i = 0; i < filteredData[seiyuuIndex].length; i++) {
-          for (var j = 0; j < partialResults[seiyuuIndex - 1].length; j++) {
-            if (partialResults[seiyuuIndex - 1][j].anime.mal_id === filteredData[seiyuuIndex][i].anime.mal_id) {
-              // Weird deep clone of object
-              var cloneObject = JSON.parse(JSON.stringify(partialResults[seiyuuIndex - 1][j]))
-              partialResults[seiyuuIndex].push(cloneObject)
-              partialResults[seiyuuIndex][partialResults[seiyuuIndex].length - 1].roles.push({
-                seiyuu: this.inputData[seiyuuIndex].name,
-                character: filteredData[seiyuuIndex][i].character
+      for (var k = 0; k < this.inputData.length; k++) {
+        // filteredData[i] = this.animeCharacters[i]
+        for (i = 0; i < this.animeCharacters[k].length; i++) {
+          for (var j = 0; j < this.animeCharacters[k][i].voice_actor.length; j++) {
+            if (this.animeCharacters[k][i].voice_actor[j].language === 'Japanese') {
+              filteredData[k].push({
+                seiyuu: this.animeCharacters[k][i].voice_actor[j],
+                roles: [{
+                  character: this.animeCharacters[k][i]
+                }]
               })
             }
           }
         }
-        partialResults[seiyuuIndex] = partialResults[seiyuuIndex].filter(x => x.roles.length === (seiyuuIndex + 1))
       }
-      intersectAnime = partialResults[this.inputData.length - 1]
 
-      this.outputData = intersectAnime
+      partialResults[0] = filteredData[0]
+
+      console.log(filteredData)
+      console.log(partialResults)
+
+      for (var animeIndex = 1; animeIndex < filteredData.length; animeIndex++) {
+        for (i = 0; i < filteredData[animeIndex].length; i++) {
+          for (j = 0; j < partialResults[animeIndex - 1].length; j++) {
+            if (partialResults[animeIndex - 1][j].seiyuu.mal_id === filteredData[animeIndex][i].seiyuu.mal_id) {
+              // Weird deep clone of object
+              var cloneObject = JSON.parse(JSON.stringify(partialResults[animeIndex - 1][j]))
+              partialResults[animeIndex].push(cloneObject)
+              console.log(partialResults)
+              partialResults[animeIndex][partialResults[animeIndex].length - 1].roles.push({
+                character: filteredData[animeIndex][i].roles[0].character
+              })
+            }
+          }
+        }
+        partialResults[animeIndex] = partialResults[animeIndex].filter(x => x.roles.length === (animeIndex + 1))
+      }
+      intersectSeiyuu = partialResults[this.inputData.length - 1]
+
+      this.outputData = intersectSeiyuu
       this.counter++
       this.showTables = true
     }
   },
   computed: {
     animeCharacters () {
-      return this.inputData.map(x => x.characters)
+      return this.inputData.map(x => x.character)
     }
   },
   watch: {
