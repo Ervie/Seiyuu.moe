@@ -5,7 +5,9 @@
           <v-btn raised large color="error" v-on:click="resetList" :disabled="inputData.length < 1">Reset</v-btn>
           <v-btn depressed large color="primary" v-on:click="computeResults" :disabled="inputData.length < 2">Compare</v-btn>
         </div>
-        <anime-table :inputData="outputData" :avatarMode="avatarMode" :counter="counter" :animeData="inputData"></anime-table>
+        <div>
+          <anime-table v-if="showTables" :inputData="outputData" :avatarMode="avatarMode" :counter="counter" :animeData="inputData"></anime-table>
+        </div>
       </v-flex>
     </v-layout>
 </template>

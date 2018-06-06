@@ -7,9 +7,9 @@
         </template>
         <template slot="items" slot-scope="props">
           <td class="text-xs-right">
-            <multi-record-cell :avatarMode="avatarMode" :items="props.item.anime" />
+            <multi-record-cell :avatarMode="avatarMode" :items="props.item.seiyuu" />
           </td>
-          <td class="text-xs-right" v-for="role in props.item.roles" :key="role.seiyuu">
+          <td class="text-xs-right" v-for="role in props.item.roles" :key="role.anime">
             <multi-record-cell :avatarMode="avatarMode" :items="role.characters" />
           </td>
         </template>
@@ -20,9 +20,9 @@
         </template>
       </v-data-table>
     </v-container>
-     <v-container hidden-md-and-up>
+     <!-- <v-container hidden-md-and-up>
        <card-cell v-for="(item, i) in tableData" v-bind:key="i" :item="item"/>
-    </v-container>
+    </v-container> -->
   </div>
 </template>
 
@@ -61,16 +61,16 @@ export default {
               url: this.inputData[i].seiyuu.url
             }
           }],
-          roles: this.inputData[i].roles
+          roles: []
         })
-        // for (var l = 0; l < this.animeData.length; l++) {
-        //   this.tableData[this.tableData.length - 1].roles.push({
-        //     seiyuu: this.inputData[i].roles[l].seiyuu,
-        //     characters: [{
-        //       entry: this.inputData[i].roles[l].character
-        //     }]
-        //   })
-        // }
+        for (var l = 0; l < this.animeData.length; l++) {
+          this.tableData[this.tableData.length - 1].roles.push({
+            anime: this.animeData[l].title,
+            characters: [{
+              entry: this.inputData[i].roles[l].character
+            }]
+          })
+        }
       }
 
       console.log(this.tableData)
@@ -83,8 +83,8 @@ export default {
       })
       for (var headerIndex = 0; headerIndex < this.animeData.length; headerIndex++) {
         this.headers.push({
-          text: this.animeData[headerIndex].name,
-          value: 'roles[' + headerIndex + '].characters[0].entry.name',
+          text: this.animeData[headerIndex].title,
+          value: this.animeData[headerIndex].title,
           image: this.animeData[headerIndex].image_url})
       }
       this.showTables = true
