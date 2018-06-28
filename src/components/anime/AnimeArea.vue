@@ -1,12 +1,15 @@
 <template>
   <v-container grid-list-md text-xs-center>
-    <browser @animeReturned="addAnime" />
+    <browser @animeReturned="addAnime" @noResultFound="noResultsFoundToggle" />
     <v-alert dismissible color="error" v-model="tooMuchRecords">
       You can choose {{ maximumAnimeNumber }} anime at max.
     </v-alert>
     <v-alert dismissible color="error" v-model="alreadyOnTheList">
       This anime is already selected.
     </v-alert>
+      <v-alert dismissible color="error" v-model="noResultsFound">
+        No results found!
+      </v-alert>
     <anime-card-list :animeToCompare="animeToCompare" :maximumAnimeNumber="maximumAnimeNumber" @animeRemoved="removeAnime"/>
     <result-area :inputData="animeToCompare" @resetList="resetList"/>
   </v-container>
@@ -29,6 +32,7 @@ export default {
       animeToCompare: [],
       maximumAnimeNumber: 6,
       tooMuchRecords: false,
+      noResultsFound: false,
       alreadyOnTheList: false
     }
   },
@@ -55,6 +59,9 @@ export default {
     },
     resetList () {
       this.animeToCompare = []
+    },
+    noResultsFoundToggle (status) {
+      this.noResultsFound = status
     }
   }
 }

@@ -12,6 +12,9 @@
           <v-btn raised color="secondary" v-on:click="search" :disabled="loadingSearch || searchQuery === ''" :loading="loadingSearch">Search</v-btn>
       </v-flex>
       <v-dialog v-model="showChoiceDialog" max-width="700">
+        <v-card>
+          <h1 class="white--text">Disambiguation encountered. Select entry:</h1>
+        </v-card>
         <v-layout row wrap v-show="searchResults.length > 0" hidden-sm-and-down>
           <v-flex  v-for="(result) in searchResults" :key="result.mal_id" xs3>
             <v-card max-width="200">
@@ -21,9 +24,6 @@
             </v-flex>
         </v-layout>
       </v-dialog>
-      <v-alert dismissible color="error" v-model="noResultfound">
-        No result found!
-      </v-alert>
   </v-layout>
 </template>
 
@@ -38,7 +38,6 @@ export default {
       searchResults: [],
       loadingSearch: false,
       showChoiceDialog: false,
-      noResultfound: false,
       longStringTreshold: 25
     }
   },
@@ -48,7 +47,7 @@ export default {
       axios.get(process.env.JIKAN_URL + 'search/anime/' + String(this.searchQuery.replace('/', ' ')))
         .then((response) => {
           if (response.data.result === null || response.data.result.length < 1 || response.data.result[0] === null) {
-            this.noResultfound = true
+            this.$emit('noResultFound', true)
           } else {
             this.selectEntryFromSearchResults(response.data.result)
           }
@@ -94,9 +93,9 @@ export default {
         if (displayedResults.length > 0) {
           this.searchResults = displayedResults
           this.showChoiceDialog = true
-          this.noResultfound = false
+          this.$emit('noResultFound', false)
         } else {
-          this.noResultfound = true
+          this.$emit('noResultFound', true)
         }
       }
     },
