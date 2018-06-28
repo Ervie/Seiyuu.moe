@@ -13,10 +13,12 @@
       </v-flex>
       <v-dialog v-model="showChoiceDialog" max-width="700">
         <v-layout row wrap v-show="searchResults.length > 0" hidden-sm-and-down>
-            <v-card v-for="(result) in searchResults" :key="result.mal_id" xs4 max-width="200">
-              <v-card-text style="font-weight: bold" v-on:click="selectSearchResult(result.mal_id)"> {{ result.title }}</v-card-text>
-              <v-card-media :src="pathToImage(result.image_url)" :height="140" v-on:click="selectSearchResult(result.mal_id)" hidden-sm-and-down></v-card-media>
+          <v-flex  v-for="(result) in searchResults" :key="result.mal_id" xs3>
+            <v-card max-width="200">
+              <v-card-text style="font-weight: bold" v-on:click="selectSearchResult(result.mal_id)"> {{ truncateLongString(result.title) }}</v-card-text>
+              <v-card-media :src="pathToImage(result.image_url)" :height="175" v-on:click="selectSearchResult(result.mal_id)" hidden-sm-and-down></v-card-media>
             </v-card>
+            </v-flex>
         </v-layout>
       </v-dialog>
   </v-layout>
@@ -32,7 +34,8 @@ export default {
       searchQuery: '',
       searchResults: [],
       loadingSearch: false,
-      showChoiceDialog: false
+      showChoiceDialog: false,
+      longStringTreshold: 25
     }
   },
   methods: {
@@ -82,6 +85,13 @@ export default {
         return path
       } else {
         return 'static/questionMark.png'
+      }
+    },
+    truncateLongString (inputString) {
+      if (inputString.length > this.longStringTreshold) {
+        return inputString.substring(0, this.longStringTreshold) + '...'
+      } else {
+        return inputString
       }
     }
   }
