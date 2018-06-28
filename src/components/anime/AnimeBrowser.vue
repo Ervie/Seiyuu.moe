@@ -11,11 +11,14 @@
           v-model="searchQuery"/>
           <v-btn raised color="secondary" v-on:click="search" :disabled="loadingSearch || searchQuery === ''" :loading="loadingSearch">Search</v-btn>
       </v-flex>
-      <ul>
-      <li class="accent" v-for="(searchResult,i) in searchResults" v-bind:key="'Result' + i">
-          {{ searchResult.title }}
-      </li>
-      </ul>
+      <v-dialog v-model="showChoiceDialog" max-width="700">
+        <v-layout row wrap v-show="searchResults.length > 0" hidden-sm-and-down>
+            <v-card v-for="(result) in searchResults" :key="result.mal_id" xs4 max-width="200">
+              <v-card-text style="font-weight: bold" v-on:click="selectSearchResult(result.mal_id)"> {{ result.title }}</v-card-text>
+              <v-card-media :src="pathToImage(result.image_url)" :height="140" v-on:click="selectSearchResult(result.mal_id)" hidden-sm-and-down></v-card-media>
+            </v-card>
+        </v-layout>
+      </v-dialog>
   </v-layout>
 </template>
 
@@ -28,7 +31,8 @@ export default {
     return {
       searchQuery: '',
       searchResults: [],
-      loadingSearch: false
+      loadingSearch: false,
+      showChoiceDialog: false
     }
   },
   methods: {
@@ -36,13 +40,7 @@ export default {
       this.loadingSearch = true
       axios.get(process.env.JIKAN_URL + 'search/anime/' + String(this.searchQuery.replace('/', ' ')))
         .then((response) => {
-          if (response.data.result.length === 1 ||
-          response.data.result[0].title.toLowerCase() === this.searchQuery.toLowerCase() ||
-          (response.data.result[0].title.toLowerCase().includes(this.searchQuery.toLowerCase()) && !response.data.result[1].title.toLowerCase().includes(this.searchQuery.toLowerCase()))) {
-            this.sendAnimeRequest(response.data.result[0].mal_id)
-          } else {
-            this.searchResults = response.data.result
-          }
+          this.selectEntryFromSearchResults(response.data.result)
         })
         .catch((error) => {
           console.log(error)
@@ -64,6 +62,27 @@ export default {
         .finally(() => {
           this.loadingSearch = false
         })
+    },
+    selectEntryFromSearchResults (results) {
+      if (results.length === 1 ||
+      results[0].title.toLowerCase() === this.searchQuery.toLowerCase() ||
+      (results[0].title.toLowerCase().includes(this.searchQuery.toLowerCase()) && !results[1].title.toLowerCase().includes(this.searchQuery.toLowerCase()))) {
+        this.sendAnimeRequest(results[0].mal_id)
+      } else {
+        this.searchResults = results
+        this.showChoiceDialog = true
+      }
+    },
+    selectSearchResult (key) {
+      this.sendAnimeRequest(key)
+      this.showChoiceDialog = false
+    },
+    pathToImage (path) {
+      if (path) {
+        return path
+      } else {
+        return 'static/questionMark.png'
+      }
     }
   }
 }
