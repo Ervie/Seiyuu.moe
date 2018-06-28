@@ -9,7 +9,7 @@
           single-line
           v-on:keyup.enter="search"
           v-model="searchQuery"/>
-          <v-btn raised color="secondary" v-on:click="search" :disabled="loadingSearch" :loading="loadingSearch">Search</v-btn>
+          <v-btn raised color="secondary" v-on:click="search" :disabled="loadingSearch || searchQuery === ''" :loading="loadingSearch">Search</v-btn>
       </v-flex>
       <ul>
       <li class="accent" v-for="(searchResult,i) in searchResults" v-bind:key="'Result' + i">
