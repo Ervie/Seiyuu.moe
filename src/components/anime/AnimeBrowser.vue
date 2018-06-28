@@ -4,7 +4,7 @@
         <v-text-field
           prepend-icon="search"
           name="searchIdBox"
-          label="Search title"
+          label="Search anime by Title..."
           hint="Search anime by title"
           single-line
           v-on:keyup.enter="search"
@@ -21,6 +21,9 @@
             </v-flex>
         </v-layout>
       </v-dialog>
+      <v-alert dismissible color="error" v-model="noResultfound">
+        No result found!
+      </v-alert>
   </v-layout>
 </template>
 
@@ -35,6 +38,7 @@ export default {
       searchResults: [],
       loadingSearch: false,
       showChoiceDialog: false,
+      noResultfound: false,
       longStringTreshold: 25
     }
   },
@@ -43,7 +47,11 @@ export default {
       this.loadingSearch = true
       axios.get(process.env.JIKAN_URL + 'search/anime/' + String(this.searchQuery.replace('/', ' ')))
         .then((response) => {
-          this.selectEntryFromSearchResults(response.data.result)
+          if (response.data.result === null || response.data.result.length < 1 || response.data.result[0] === null) {
+            this.noResultfound = true
+          } else {
+            this.selectEntryFromSearchResults(response.data.result)
+          }
         })
         .catch((error) => {
           console.log(error)
@@ -67,13 +75,29 @@ export default {
         })
     },
     selectEntryFromSearchResults (results) {
+      var lowerCaseQuery = this.searchQuery.toLowerCase()
+      console.log(results)
       if (results.length === 1 ||
-      results[0].title.toLowerCase() === this.searchQuery.toLowerCase() ||
-      (results[0].title.toLowerCase().includes(this.searchQuery.toLowerCase()) && !results[1].title.toLowerCase().includes(this.searchQuery.toLowerCase()))) {
+      results[0].title.toLowerCase() === lowerCaseQuery ||
+      (results[0].title.toLowerCase().includes(lowerCaseQuery) && !results[1].title.toLowerCase().includes(lowerCaseQuery))) {
         this.sendAnimeRequest(results[0].mal_id)
       } else {
-        this.searchResults = results
-        this.showChoiceDialog = true
+        var displayedResults = []
+        for (let i = 0; i < results.length; i++) {
+          if (results[i].title.toLowerCase().includes(lowerCaseQuery)) {
+            displayedResults.push(results[i])
+          } else {
+            break
+          }
+        }
+
+        if (displayedResults.length > 0) {
+          this.searchResults = displayedResults
+          this.showChoiceDialog = true
+          this.noResultfound = false
+        } else {
+          this.noResultfound = true
+        }
       }
     },
     selectSearchResult (key) {
