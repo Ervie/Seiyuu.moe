@@ -6,6 +6,7 @@ import router from './router'
 import Vuetify from 'vuetify'
 import Vuelidate from 'vuelidate'
 import 'font-awesome/css/font-awesome.css'
+import 'vuetify/dist/vuetify.min.css'
 import colors from 'vuetify/es5/util/colors'
 
 Vue.config.productionTip = false
