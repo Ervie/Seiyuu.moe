@@ -31,7 +31,7 @@ import decode from 'decode-html'
 import TableHeader from '@/components/tables/TableHeader'
 import SingleRecordCell from '@/components/tables/SingleRecordCell'
 import MultiRecordCell from '@/components/tables/MultiRecordCell'
-import CardCell from '@/components/tables/CardCell'
+import CardCell from '@/components/tables/seiyuu/CardCell'
 
 export default {
   name: 'SeiyuuTable',

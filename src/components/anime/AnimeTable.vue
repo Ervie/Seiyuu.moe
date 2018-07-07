@@ -20,9 +20,9 @@
         </template>
       </v-data-table>
     </v-container>
-     <!-- <v-container hidden-md-and-up>
+    <v-container hidden-md-and-up>
        <card-cell v-for="(item, i) in tableData" v-bind:key="i" :item="item"/>
-    </v-container> -->
+    </v-container>
   </div>
 </template>
 
@@ -30,7 +30,7 @@
 import TableHeader from '@/components/tables/TableHeader'
 import SingleRecordCell from '@/components/tables/SingleRecordCell'
 import MultiRecordCell from '@/components/tables/MultiRecordCell'
-import CardCell from '@/components/tables/CardCell'
+import CardCell from '@/components/tables/anime/CardCell'
 
 export default {
   name: 'AnimeTable',

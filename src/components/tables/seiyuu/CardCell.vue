@@ -4,15 +4,10 @@
     <v-card>
       <v-container fluid grid-list-lg>
         <v-layout class="primary" row v-for="(anime, j) in item.anime" v-bind:key="'j' + j">
-          <v-flex xs9>
+          <v-flex xs12>
             <span>
               <p class="subheading"> {{ decodeHtml(anime.entry.name) }}</p>
             </span>
-          </v-flex>
-          <v-flex xs3>
-            <a :href="anime.entry.url">
-              <v-card-media :src="anime.entry.image_url" height="64px" contain></v-card-media>
-            </a>
           </v-flex>
         </v-layout>
         <v-layout :class="{accent : k % 2 == 0}" row v-for="(role, k) in item.roles" v-bind:key="'k' + k">

@@ -77,7 +77,6 @@ export default {
         partialResults[animeIndex] = partialResults[animeIndex].filter(x => x.roles.length === (animeIndex + 1))
       }
       this.outputData = partialResults[this.inputData.length - 1]
-      console.log(this.outputData)
       this.counter++
       this.showTables = true
     }
