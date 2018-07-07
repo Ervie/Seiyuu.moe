@@ -6,10 +6,10 @@
           <table-header :imageUrl="props.header.image" :text="props.header.text" :avatarMode="avatarMode" />
         </template>
         <template slot="items" slot-scope="props">
-          <td class="text-xs-right">
+          <td>
             <multi-record-cell :avatarMode="avatarMode" :items="props.item.seiyuu" />
           </td>
-          <td class="text-xs-right" v-for="role in props.item.roles" :key="role.anime">
+          <td v-for="role in props.item.roles" :key="role.anime">
             <multi-record-cell :avatarMode="avatarMode" :items="role.characters" />
           </td>
         </template>
