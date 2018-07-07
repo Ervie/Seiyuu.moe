@@ -6,7 +6,7 @@
         <v-layout class="primary" row v-for="(anime, j) in item.anime" v-bind:key="'j' + j">
           <v-flex xs12>
             <span>
-              <p class="subheading"> {{ decodeHtml(anime.entry.name) }}</p>
+              <p class="subheading text-xs-center"> {{ decodeHtml(anime.entry.name) }}</p>
             </span>
           </v-flex>
         </v-layout>

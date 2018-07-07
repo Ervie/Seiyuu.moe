@@ -6,7 +6,7 @@
         <v-layout class="primary" row v-for="(seiyuu, j) in item.seiyuu" v-bind:key="'j' + j">
           <v-flex xs12>
             <span>
-              <p class="subheading"> {{ decodeHtml(seiyuu.entry.name) }}</p>
+              <p class="subheading text-xs-center"> {{ decodeHtml(seiyuu.entry.name) }}</p>
             </span>
           </v-flex>
         </v-layout>
