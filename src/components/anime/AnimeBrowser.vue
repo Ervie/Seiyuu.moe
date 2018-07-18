@@ -12,13 +12,13 @@
       <v-layout row wrap v-show="searchResults.length > 0">
         <v-flex v-for="(result) in searchResults" :key="result.mal_id" xs12 class="result-card" hidden-sm-and-down>
           <v-card>
-            <v-container fluid grid-list-lg>
+            <v-container fluid grid-list-lg v-on:click="selectSearchResult(result.mal_id)">
               <v-layout row>
                 <v-flex xs4 align-center>
-                  <v-card-media :height="140" :src="result.image_url" v-on:click="selectSearchResult(result.mal_id)" contain />
+                  <v-card-media :height="140" :src="result.image_url" contain />
                 </v-flex>
                 <v-flex xs8 align-center>
-                  <v-card-text v-on:click="selectSearchResult(result.mal_id)" class="headline">{{ result.title }}</v-card-text>
+                  <v-card-text  class="headline">{{ result.title }}</v-card-text>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -26,8 +26,8 @@
         </v-flex>
         <v-flex v-for="(result) in searchResults" :key="'mobile' + result.mal_id" xs12 class="result-card" hidden-md-and-up>
           <v-card>
-            <v-flex xs12 align-center>
-              <v-card-text v-on:click="selectSearchResult(result.mal_id)" class="subheading">{{ result.title }}</v-card-text>
+            <v-flex xs12 align-center v-on:click="selectSearchResult(result.mal_id)">
+              <v-card-text class="subheading">{{ result.title }}</v-card-text>
             </v-flex>
           </v-card>
         </v-flex>
@@ -84,7 +84,6 @@ export default {
     },
     selectEntryFromSearchResults (results) {
       var lowerCaseQuery = this.searchQuery.toLowerCase()
-      console.log(results)
       if (results.length === 1 ||
       results[0].title.toLowerCase() === lowerCaseQuery ||
       (results[0].title.toLowerCase().includes(lowerCaseQuery) && !results[1].title.toLowerCase().includes(lowerCaseQuery))) {
