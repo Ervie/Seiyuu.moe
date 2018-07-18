@@ -1,29 +1,31 @@
 <template>
   <v-layout row wrap>
-      <v-flex xs12>
-        <v-text-field
-          prepend-icon="search"
-          name="searchIdBox"
-          label="Search anime by Title..."
-          hint="Search anime by title"
-          single-line
-          v-on:keyup.enter="search"
-          v-model="searchQuery"/>
-          <v-btn raised color="secondary" v-on:click="search" :disabled="loadingSearch || searchQuery === ''" :loading="loadingSearch">Search</v-btn>
-      </v-flex>
-      <v-dialog v-model="showChoiceDialog" max-width="700">
-        <v-card>
-          <h1 class="white--text">Disambiguation encountered. Select entry:</h1>
-        </v-card>
-        <v-layout row wrap v-show="searchResults.length > 0" hidden-sm-and-down>
-          <v-flex  v-for="(result) in searchResults" :key="result.mal_id" xs3>
-            <v-card max-width="200">
-              <v-card-text style="font-weight: bold" v-on:click="selectSearchResult(result.mal_id)"> {{ truncateLongString(result.title) }}</v-card-text>
-              <v-card-media :src="pathToImage(result.image_url)" :height="175" v-on:click="selectSearchResult(result.mal_id)" hidden-sm-and-down></v-card-media>
-            </v-card>
-            </v-flex>
-        </v-layout>
-      </v-dialog>
+    <v-flex xs12>
+      <v-text-field prepend-icon="search" name="searchIdBox" label="Search anime by Title..." hint="Search anime by title" single-line
+        v-on:keyup.enter="search" v-model="searchQuery" />
+      <v-btn raised color="secondary" v-on:click="search" :disabled="loadingSearch || searchQuery === ''" :loading="loadingSearch">Search</v-btn>
+    </v-flex>
+    <v-dialog v-model="showChoiceDialog" max-width="700">
+      <v-card>
+        <h1 class="white--text">Select entry:</h1>
+      </v-card>
+      <v-layout row wrap v-show="searchResults.length > 0">
+        <v-flex v-for="(result) in searchResults" :key="result.mal_id" xs12 class="result-card">
+          <v-card>
+            <v-container fluid grid-list-lg>
+              <v-layout row>
+                <v-flex xs4 align-center>
+                  <v-card-media :height="140" :src="result.image_url" v-on:click="selectSearchResult(result.mal_id)" contain />
+                </v-flex>
+                <v-flex xs8 align-center>
+                  <v-card-text v-on:click="selectSearchResult(result.mal_id)" class="headline">{{ result.title }}</v-card-text>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-dialog>
   </v-layout>
 </template>
 
@@ -109,13 +111,6 @@ export default {
       } else {
         return 'static/questionMark.png'
       }
-    },
-    truncateLongString (inputString) {
-      if (inputString.length > this.longStringTreshold) {
-        return inputString.substring(0, this.longStringTreshold) + '...'
-      } else {
-        return inputString
-      }
     }
   }
 }
@@ -123,4 +118,13 @@ export default {
 
 <style>
 
+.result-card {
+  margin: 1px;
+}
+
+.result-card:hover {
+  border: 3px;
+  border-color: #26a69a;
+  border-style: solid;
+}
 </style>
