@@ -10,7 +10,7 @@
         <h1 class="white--text">Select entry:</h1>
       </v-card>
       <v-layout row wrap v-show="searchResults.length > 0">
-        <v-flex v-for="(result) in searchResults" :key="result.mal_id" xs12 class="result-card">
+        <v-flex v-for="(result) in searchResults" :key="result.mal_id" xs12 class="result-card" hidden-sm-and-down>
           <v-card>
             <v-container fluid grid-list-lg>
               <v-layout row>
@@ -22,6 +22,13 @@
                 </v-flex>
               </v-layout>
             </v-container>
+          </v-card>
+        </v-flex>
+        <v-flex v-for="(result) in searchResults" :key="'mobile' + result.mal_id" xs12 class="result-card" hidden-md-and-up>
+          <v-card>
+            <v-flex xs12 align-center>
+              <v-card-text v-on:click="selectSearchResult(result.mal_id)" class="subheading">{{ result.title }}</v-card-text>
+            </v-flex>
           </v-card>
         </v-flex>
       </v-layout>
