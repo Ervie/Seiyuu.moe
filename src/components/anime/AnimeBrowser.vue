@@ -103,6 +103,10 @@ export default {
           this.searchResults = displayedResults
           this.showChoiceDialog = true
           this.$emit('noResultFound', false)
+        } else if (results.length > 0) {
+          this.searchResults = results
+          this.showChoiceDialog = true
+          this.$emit('noResultFound', false)
         } else {
           this.$emit('noResultFound', true)
         }
