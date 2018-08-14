@@ -71,6 +71,7 @@ export default {
               filteredData[k].push({
                 seiyuu: this.animeCharacters[k][i].voice_actor[j],
                 roles: [{
+                  anime: this.inputData[k].title,
                   character: this.animeCharacters[k][i]
                 }]
               })
@@ -89,6 +90,7 @@ export default {
               var cloneObject = JSON.parse(JSON.stringify(partialResults[animeIndex - 1][j]))
               partialResults[animeIndex].push(cloneObject)
               partialResults[animeIndex][partialResults[animeIndex].length - 1].roles.push({
+                anime: this.inputData[animeIndex].title,
                 character: filteredData[animeIndex][i].roles[0].character
               })
             }

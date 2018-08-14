@@ -72,6 +72,7 @@ export default {
         })
         for (var l = 0; l < this.animeData.length; l++) {
           this.tableData[this.tableData.length - 1].roles.push({
+            anime: this.animeData[l].title,
             characters: [{
               entry: this.inputData[i].roles[l].character
             }]
@@ -117,6 +118,7 @@ export default {
           })
           for (var j = 0; j < this.inputData[i].roles.length; j++) {
             intersectSeiyuu[intersectSeiyuu.length - 1].roles.push({
+              anime: this.inputData[i].roles[j].anime,
               characters: [{
                 entry: this.inputData[i].roles[j].character
               }]

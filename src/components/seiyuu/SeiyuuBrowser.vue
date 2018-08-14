@@ -126,7 +126,7 @@ export default {
           decodedAnser = decoder.decode(xhr.response)
           self.cachedSeiyuu = JSON.parse(decodedAnser)
         } else {
-          console.log('Could not quick list')
+          console.log('Could not load quick list')
         }
       }
       xhr.open('GET', '/static/quickSeiyuuList.json', true)
