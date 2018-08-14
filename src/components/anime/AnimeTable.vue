@@ -88,7 +88,7 @@ export default {
       for (var headerIndex = 0; headerIndex < this.animeData.length; headerIndex++) {
         this.headers.push({
           text: this.animeData[headerIndex].title,
-          value: this.animeData[headerIndex].title,
+          value: 'roles[' + headerIndex + '].characters[0].entry.name',
           image: this.animeData[headerIndex].image_url})
       }
       this.showTables = true
@@ -144,7 +144,7 @@ export default {
       for (var headerIndex = 0; headerIndex < this.animeData.length; headerIndex++) {
         this.headers.push({
           text: this.animeData[headerIndex].title,
-          value: this.animeData[headerIndex].title,
+          value: 'roles[' + headerIndex + '].characters.length',
           image: this.animeData[headerIndex].image_url})
       }
       this.showTables = true
