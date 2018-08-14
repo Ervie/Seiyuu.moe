@@ -40,7 +40,7 @@ export default {
     'multi-record-cell': MultiRecordCell,
     'card-cell': CardCell
   },
-  props: ['inputData', 'avatarMode', 'counter', 'animeData'],
+  props: ['inputData', 'avatarMode', 'counter', 'animeData', 'groupBySeiyuu'],
   data () {
     return {
       headers: [],
@@ -48,7 +48,14 @@ export default {
     }
   },
   methods: {
-    computeResults () {
+    selectComputeMethod () {
+      if (!this.groupBySeiyuu) {
+        this.computeResultsSimple()
+      } else {
+        this.computeResultsSeiyuu()
+      }
+    },
+    computeResultsSimple () {
       this.tableData = []
       this.headers = []
 
@@ -65,7 +72,6 @@ export default {
         })
         for (var l = 0; l < this.animeData.length; l++) {
           this.tableData[this.tableData.length - 1].roles.push({
-            anime: this.animeData[l].title,
             characters: [{
               entry: this.inputData[i].roles[l].character
             }]
@@ -73,12 +79,66 @@ export default {
         }
       }
 
-      console.log(this.tableData)
-
       this.headers.push({
         text: 'Seiyuu',
         align: 'left',
-        value: 'seiyuu.name',
+        value: 'seiyuu[0].entry.name',
+        image: ''
+      })
+      for (var headerIndex = 0; headerIndex < this.animeData.length; headerIndex++) {
+        this.headers.push({
+          text: this.animeData[headerIndex].title,
+          value: this.animeData[headerIndex].title,
+          image: this.animeData[headerIndex].image_url})
+      }
+      this.showTables = true
+    },
+    computeResultsSeiyuu () {
+      this.tableData = []
+      this.headers = []
+      var intersectSeiyuu = []
+      var characterIndex = -1
+      var seiyuuIndex = -1
+
+      for (var i = 0; i < this.inputData.length; i++) {
+        if (intersectSeiyuu.length > 0) {
+          seiyuuIndex = intersectSeiyuu.map(x => x.seiyuu[0].entry.name).indexOf(this.inputData[i].seiyuu.name)
+        }
+        if (seiyuuIndex === -1) {
+          intersectSeiyuu.push({
+            seiyuu: [{
+              entry: {
+                name: this.inputData[i].seiyuu.name,
+                image_url: this.inputData[i].seiyuu.image_url,
+                url: this.inputData[i].seiyuu.url
+              }
+            }],
+            roles: []
+          })
+          for (var j = 0; j < this.inputData[i].roles.length; j++) {
+            intersectSeiyuu[intersectSeiyuu.length - 1].roles.push({
+              characters: [{
+                entry: this.inputData[i].roles[j].character
+              }]
+            })
+          }
+        } else {
+          for (var l = 0; l < this.animeData.length; l++) {
+            characterIndex = intersectSeiyuu[seiyuuIndex].roles[l].characters.map(x => x.entry.mal_id).indexOf(this.inputData[i].roles[l].character.mal_id)
+            if (characterIndex === -1) {
+              intersectSeiyuu[seiyuuIndex].roles[l].characters.push({
+                entry: this.inputData[i].roles[l].character
+              })
+            }
+          }
+        }
+      }
+
+      this.tableData = intersectSeiyuu
+      this.headers.push({
+        text: 'Seiyuu',
+        align: 'left',
+        value: 'seiyuu[0].entry.name',
         image: ''
       })
       for (var headerIndex = 0; headerIndex < this.animeData.length; headerIndex++) {
@@ -92,8 +152,12 @@ export default {
   },
   watch: {
     counter: {
-      handler: 'computeResults',
+      handler: 'selectComputeMethod',
       immediate: true
+    },
+    groupBySeiyuu: {
+      handler: 'selectComputeMethod',
+      immediate: false
     }
   }
 }

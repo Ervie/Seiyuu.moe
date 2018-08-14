@@ -13,7 +13,7 @@
         <v-layout :class="{accent : k % 2 == 0}" row v-for="(role, k) in item.roles" v-bind:key="'k' + k">
           <v-flex xs6>
             <span>
-              <p class="body-2"> {{ decodeHtml(role.anime) }}</p>
+              <p class="body-2"> {{ role.anime }}</p>
             </span>
           </v-flex>
           <v-flex xs6>
