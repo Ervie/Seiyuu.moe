@@ -128,7 +128,7 @@ export default {
           console.log('Could not load quick list')
         }
       }
-      xhr.open('GET', 'static/quickSeiyuuList.json', true)
+      xhr.open('GET', 'quickSeiyuuList.json', true)
 
       xhr.send()
     }

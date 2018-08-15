@@ -16,6 +16,7 @@
     "@nuxtjs/axios": "^5.0.0",
     "@nuxtjs/font-awesome": "^1.0.3",
     "@nuxtjs/google-analytics": "^2.0.2",
+    "decode-html": "^2.0.0",
     "nuxt": "^1.4.2",
     "vuelidate": "^0.6.2",
     "vuetify": "^1.1.12"

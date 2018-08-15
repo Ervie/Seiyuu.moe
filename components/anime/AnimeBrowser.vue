@@ -119,7 +119,7 @@ export default {
       if (path) {
         return path
       } else {
-        return 'static/questionMark.png'
+        return 'questionMark.png'
       }
     }
   }
