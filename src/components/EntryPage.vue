@@ -98,9 +98,9 @@ export default {
         imageAltText: 'About Seiyuu.Moe project',
         expanded: false,
         paragraphs: [
+          '15th August 2018 - Anime search is up! Select anime, find seiyuu which collaborated on selected works.',
           '5th July 2018 - Website is fully functional now.',
-          '1st July 2018 - MAL is coming back, site functionality is expected to work in one week.',
-          '28th May 2018 - MAL is currently under maintenance :( The functionalities of Seiyuu.moe will be down until MAL will be back (the website will not be offline thought).'
+          '1st July 2018 - MAL is coming back, site functionality is expected to work in one week.'
         ]
       },
       {
@@ -117,16 +117,16 @@ export default {
     slides: [
       {
         imageSrc: '/static/carousel.jpg',
-        title: 'Get Started',
-        text: 'Select and compare seiyuu.',
+        title: 'Compare seiyuu',
+        text: 'Get started - select and compare seiyuu.',
         link: '/Seiyuu'
+      },
+      {
+        imageSrc: '/static/carousel.jpg',
+        title: 'Compare anime',
+        text: 'Get started - select and compare anime.',
+        link: '/Anime'
       }
-      // {
-      //   imageSrc: '/static/carousel.jpg',
-      //   title: 'Get Started',
-      //   text: 'Select and compare anime.',
-      //   link: '/Anime'
-      // }
     ]
   })
 }
