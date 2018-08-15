@@ -6,5 +6,5 @@ module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
   API_URL: '"https://seiyuu.moe:5000"',
   API_URL2: '"https://seiyuuinterlinkapi.azurewebsites.net/"',
-  JIKAN_URL: "'http://api.jikan.moe/'"
+  JIKAN_URL: "'https://api.jikan.moe/'"
 })

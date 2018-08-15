@@ -1,12 +1,29 @@
 <template>
     <v-layout>
       <v-flex>
+        <v-expansion-panel popout>
+          <v-expansion-panel-content>
+            <div slot="header" class="title">Compare Options</div>
+            <v-card>
+              <v-layout row wrap hidden-sm-and-down>
+                <v-flex xs4>
+                  <v-checkbox label="Group by seiyuu" v-model="searchOption.groupBySeiyuu" color="secondary"></v-checkbox>
+                </v-flex>
+              </v-layout>
+              <v-layout row wrap hidden-md-and-up>
+                <v-flex xs12>
+                  <v-checkbox label="Group by seiyuu" v-model="searchOption.groupBySeiyuu" color="secondary"></v-checkbox>
+                </v-flex>
+              </v-layout>
+            </v-card>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
         <div>
           <v-btn raised large color="error" v-on:click="resetList" :disabled="inputData.length < 1">Reset</v-btn>
           <v-btn depressed large color="primary" v-on:click="computeResults" :disabled="inputData.length < 2">Compare</v-btn>
         </div>
         <div>
-          <anime-table v-if="showTables" :inputData="outputData" :avatarMode="avatarMode" :counter="counter" :animeData="inputData"></anime-table>
+          <anime-table v-if="showTables" :inputData="outputData" :avatarMode="avatarMode" :counter="counter" :animeData="inputData" :groupBySeiyuu="searchOption.groupBySeiyuu"></anime-table>
         </div>
       </v-flex>
     </v-layout>
@@ -26,7 +43,10 @@ export default {
       showTables: false,
       avatarMode: false,
       counter: 0,
-      outputData: []
+      outputData: [],
+      searchOption: {
+        groupBySeiyuu: true
+      }
     }
   },
   methods: {
@@ -51,6 +71,7 @@ export default {
               filteredData[k].push({
                 seiyuu: this.animeCharacters[k][i].voice_actor[j],
                 roles: [{
+                  anime: this.inputData[k].title,
                   character: this.animeCharacters[k][i]
                 }]
               })
@@ -69,6 +90,7 @@ export default {
               var cloneObject = JSON.parse(JSON.stringify(partialResults[animeIndex - 1][j]))
               partialResults[animeIndex].push(cloneObject)
               partialResults[animeIndex][partialResults[animeIndex].length - 1].roles.push({
+                anime: this.inputData[animeIndex].title,
                 character: filteredData[animeIndex][i].roles[0].character
               })
             }
@@ -77,7 +99,6 @@ export default {
         partialResults[animeIndex] = partialResults[animeIndex].filter(x => x.roles.length === (animeIndex + 1))
       }
       this.outputData = partialResults[this.inputData.length - 1]
-      console.log(this.outputData)
       this.counter++
       this.showTables = true
     }

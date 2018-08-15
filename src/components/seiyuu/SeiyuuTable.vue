@@ -6,10 +6,10 @@
           <table-header :imageUrl="props.header.image" :text="props.header.text" :avatarMode="avatarMode" />
         </template>
         <template slot="items" slot-scope="props">
-          <td class="text-xs-right">
+          <td>
             <multi-record-cell :avatarMode="avatarMode" :items="props.item.anime" />
           </td>
-          <td class="text-xs-right" v-for="role in props.item.roles" :key="role.seiyuu">
+          <td v-for="role in props.item.roles" :key="role.seiyuu">
             <multi-record-cell :avatarMode="avatarMode" :items="role.characters" />
           </td>
         </template>
@@ -31,7 +31,7 @@ import decode from 'decode-html'
 import TableHeader from '@/components/tables/TableHeader'
 import SingleRecordCell from '@/components/tables/SingleRecordCell'
 import MultiRecordCell from '@/components/tables/MultiRecordCell'
-import CardCell from '@/components/tables/CardCell'
+import CardCell from '@/components/tables/seiyuu/CardCell'
 
 export default {
   name: 'SeiyuuTable',
