@@ -10,13 +10,13 @@
             </span>
           </v-flex>
         </v-layout>
-        <v-layout :class="{accent : k % 2 == 0}" row v-for="(role, k) in item.roles" v-bind:key="'k' + k">
+        <v-layout row v-for="(role, k) in item.roles" v-bind:key="'k' + k">
           <v-flex xs6>
             <span>
               <p class="body-2"> {{ role.anime }}</p>
             </span>
           </v-flex>
-          <v-flex xs6>
+          <v-flex xs6 class="accent">
             <span v-for="(character, l) in role.characters" v-bind:key="'l' + l">
               <a :href="character.entry.url">
                 <p class="body-2"> {{ decodeHtml(character.entry.name) }}</p>
