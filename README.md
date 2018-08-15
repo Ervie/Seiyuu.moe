@@ -25,20 +25,22 @@ npm run build --report
 ## Features
 
 * Searching collaboration works between seiyuu (up to 6 at once).
-    * Mode for every combination.
     * Mode for grouping by series.
     * Mode for grouping by character.
     * Mode for grouping by franchise (group by character + series).
     * Main roles only filter.
-* Precached list for fast searching most popular seiyuu.
-* Details cards for extra information.
+    * Precached list for fast searching most popular seiyuu.
+    * Details cards for extra information.
+* Searching common seiyuu between anime (up to 6 titles at once).
+    * Mode for grouping by seiyuu.
+    * Details cards for extra information.
 
 ## To-Do List / Further Ideas
 
 * Enhance juxtaposition by emphasis on most frequent collaborations (more modes).
     * Partial results.
     * Charts?
-* Export function (save and download a csv/json - formats to be decided).
+* Share links (after search).
 * Character search - find if seiyuu of selected characters worked together on other works.
 * Searching for Visual Novels/Games.
 * Remove API in seiyuu search.
