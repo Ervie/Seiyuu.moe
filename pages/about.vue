@@ -74,12 +74,21 @@
           </v-flex>
         </v-layout>
     </v-container>
+    <v-container>
+      <link-footer />
+    </v-container>
+    
   </div>
 </template>
 
 <script>
+import Footer from '@/components/about/Footer'
+
 export default {
   name: 'EntryPage',
+  components: {
+    'link-footer': Footer
+  },
   data: () => ({
     cardItems: [
       {
