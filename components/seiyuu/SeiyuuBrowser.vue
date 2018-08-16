@@ -31,8 +31,6 @@
 </template>
 
 <script>
-import axios from 'axios'
-
 export default {
   name: 'SeiyuuBrowser',
   props: ['searchedIdCache'],
@@ -64,7 +62,7 @@ export default {
         this.$emit('alreadyOnTheList')
         this.loading = false
       } else {
-        axios.get(process.env.JIKAN_URL + 'person/' + String(this.selectModel))
+        this.$axios.get(process.env.JIKAN_URL + 'person/' + String(this.selectModel))
           .then((response) => {
             this.$emit('seiyuuReturned', response.data)
           })
@@ -81,13 +79,13 @@ export default {
     },
     loadCachedSeiyuu () {
       this.loadPopularList()
-      axios.get(process.env.API_URL2 + '/api/Seiyuu')
+      this.$axios.get(process.env.API_URL2 + '/api/Seiyuu')
         .then((response) => {
           this.cachedSeiyuu = response.data
         })
         .catch((error) => {
           console.log(error)
-          axios.get(process.env.API_URL2 + '/api/Seiyuu')
+          this.$axios.get(process.env.API_URL2 + '/api/Seiyuu')
             .then((response) => {
               this.cachedSeiyuu = response.data
             })

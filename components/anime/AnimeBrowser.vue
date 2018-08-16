@@ -37,8 +37,6 @@
 </template>
 
 <script>
-import axios from 'axios'
-
 export default {
   name: 'AnimeBrowser',
   data () {
@@ -53,7 +51,7 @@ export default {
   methods: {
     search () {
       this.loadingSearch = true
-      axios.get(process.env.JIKAN_URL + 'search/anime/' + String(this.searchQuery.replace('/', ' ')))
+      this.$axios.get(process.env.JIKAN_URL + 'search/anime/' + String(this.searchQuery.replace('/', ' ')))
         .then((response) => {
           if (response.data.result === null || response.data.result.length < 1 || response.data.result[0] === null) {
             this.$emit('noResultFound', true)
@@ -71,7 +69,7 @@ export default {
     },
     sendAnimeRequest (malId) {
       this.loadingSearch = true
-      axios.get(process.env.JIKAN_URL + 'anime/' + String(malId) + '/characters_staff')
+      this.$axios.get(process.env.JIKAN_URL + 'anime/' + String(malId) + '/characters_staff')
         .then((response) => {
           this.$emit('animeReturned', response.data)
         })

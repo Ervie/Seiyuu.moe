@@ -67,13 +67,6 @@
         miniVariant: true,
         title: 'Seiyuu.Moe',
       }
-    },
-    mounted: function() {
-      window.dataLayer = window.dataLayer || [];  
-      function gtag(){dataLayer.push(arguments);}  
-      gtag('js', new Date());  
-
-      gtag('config', 'UA-114739960-4');  
     }
   }
 </script>
