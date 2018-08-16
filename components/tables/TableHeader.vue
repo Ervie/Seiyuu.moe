@@ -34,17 +34,9 @@
 </template>
 
 <script>
-import decode from 'decode-html'
-
 export default {
   name: 'TableHeader',
-  props: ['imageUrl', 'text', 'avatarMode'],
-  methods: {
-    decodeHtml (inputValue) {
-      inputValue = inputValue.replace('&#039;', '\'')
-      return decode(inputValue)
-    }
-  }
+  props: ['imageUrl', 'text', 'avatarMode']
 }
 </script>
 

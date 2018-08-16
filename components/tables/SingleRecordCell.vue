@@ -44,16 +44,8 @@
 </template>
 
 <script>
-import decode from 'decode-html'
-
 export default {
   Name: 'SingleRecordCell',
-  props: ['avatarMode', 'item', 'preferText'],
-  methods: {
-    decodeHtml (inputValue) {
-      inputValue = inputValue.replace('&#039;', '\'')
-      return decode(inputValue)
-    }
-  }
+  props: ['avatarMode', 'item', 'preferText']
 }
 </script>

@@ -47,7 +47,8 @@ module.exports = {
   */
   plugins: [
     '@/plugins/vuetify',
-    '@/plugins/vuelidate'
+    '@/plugins/vuelidate',
+    '@/plugins/mixinCommonMethods'
   ],
 
   /*

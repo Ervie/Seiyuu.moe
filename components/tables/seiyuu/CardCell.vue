@@ -32,17 +32,9 @@
 </template>
 
 <script>
-import decode from 'decode-html'
-
 export default {
   name: 'CardCell',
-  props: ['item'],
-  methods: {
-    decodeHtml (inputValue) {
-      inputValue = inputValue.replace('&#039;', '\'')
-      return decode(inputValue)
-    }
-  }
+  props: ['item']
 }
 </script>
 

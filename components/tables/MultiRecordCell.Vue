@@ -33,16 +33,8 @@
 </template>
 
 <script>
-import decode from 'decode-html'
-
 export default {
   Name: 'MultiRecordCell',
-  props: ['avatarMode', 'items'],
-  methods: {
-    decodeHtml (inputValue) {
-      inputValue = inputValue.replace('&#039;', '\'')
-      return decode(inputValue)
-    }
-  }
+  props: ['avatarMode', 'items']
 }
 </script>
