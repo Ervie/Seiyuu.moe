@@ -62,7 +62,7 @@
         items: [
           { icon: 'fa-users', title: 'Compare Seiyuu', to: '/Seiyuu' },
           { icon: 'fa-tv', title: 'Compare Anime', to: '/Anime' },
-          { icon: 'fa-info-circle', title: 'About', to: '/about' }
+          { icon: 'fa-info-circle', title: 'About', to: '/' }
         ],
         miniVariant: true,
         title: 'Seiyuu.Moe',
