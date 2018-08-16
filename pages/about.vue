@@ -62,7 +62,7 @@
                 </v-card-title>
                 <v-spacer></v-spacer>
                 <v-btn icon @click.native="item.expanded = !item.expanded">
-                  <v-icon>{{ item.expanded ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
+                  <v-icon>{{ item.expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</v-icon>
                 </v-btn>
               </v-card-actions>
               <v-card-text v-show="item.expanded" class="subheading">
@@ -74,7 +74,7 @@
           </v-flex>
         </v-layout>
     </v-container>
-    <v-container>
+    <v-container hidden-sm-and-down>
       <link-footer />
     </v-container>
     

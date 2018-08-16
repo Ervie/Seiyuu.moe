@@ -7,9 +7,9 @@
     <v-alert dismissible color="error" v-model="alreadyOnTheList">
       This anime is already selected.
     </v-alert>
-      <v-alert dismissible color="error" v-model="noResultsFound">
-        No results found!
-      </v-alert>
+    <v-alert dismissible color="error" v-model="noResultsFound">
+      No results found!
+    </v-alert>
     <anime-card-list :animeToCompare="animeToCompare" :maximumAnimeNumber="maximumAnimeNumber" @animeRemoved="removeAnime"/>
     <result-area :inputData="animeToCompare" @resetList="resetList"/>
   </v-container>
