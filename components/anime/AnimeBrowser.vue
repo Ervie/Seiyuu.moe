@@ -9,7 +9,6 @@
           v-model="model"
           hide-no-data
           no-filter
-          clearable
           label="Search anime by title..."
           item-text="title"
           item-value="mal_id"
@@ -30,7 +29,7 @@
             </template>
           </template>
         </v-autocomplete>
-      <v-btn raised color="secondary" v-on:click="sendAnimeRequest" :disabled="loadingSearch || !model" :loading="loadingSearch">Add</v-btn>
+      <v-btn raised color="secondary" v-on:click="sendAnimeRequest" v-if="loadingSearch" :disabled="loadingSearch || !model" :loading="loadingSearch">Add</v-btn>
     </v-flex>
   </v-layout>
 </template>
@@ -75,11 +74,11 @@ export default {
   watch: {
     search (val) {
         
-        // if (val !== this.modelTitle && !this.modelTitle === '') {
-        //   this.model = null
-        // }
+        if (val !== this.modelTitle && !this.modelTitle === '') {
+          this.model = null
+        }
         console.log(this.search)
-        if (this.model !== null || val === '' || val === null || val.length < 3) {
+        if (this.model != null || val === '' || val === null || val.length < 3) {
           this.entries = []
           return
         }
@@ -98,7 +97,8 @@ export default {
           .finally(() => (this.isLoading = false))
     },
     model (val) {
-      this.modelTitle = this.search
+      if (val !== null)
+        this.sendAnimeRequest()
     }
   }
 }

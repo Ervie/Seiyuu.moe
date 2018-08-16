@@ -38,11 +38,6 @@ export default {
     return {
       searchedId: '',
       loading: false,
-      idSearchRules:
-      [
-        v => !!v || 'Cannot be empty.',
-        v => this.isPositiveIntegerValidation(v) || 'Must be a positive number'
-      ],
       cachedSeiyuu: [],
       selectModel: null
     }
@@ -79,7 +74,7 @@ export default {
     },
     loadCachedSeiyuu () {
       this.loadPopularList()
-      this.$axios.get(process.env.API_URL2 + '/api/Seiyuu')
+      this.$axios.get(process.env.API_URL + '/api/Seiyuu')
         .then((response) => {
           this.cachedSeiyuu = response.data
         })
