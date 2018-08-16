@@ -44,7 +44,7 @@
                           <b>Score:</b> {{ animeData.score }}
                         </p>
                         <p class="text-sm-left white-space-pre">
-                          <b>Synopsis:</b> {{ moreDetails }}
+                          <b>Synopsis:</b> {{ decodeHtml(moreDetails) }}
                         </p>
                       </v-card-text>
                     </div>

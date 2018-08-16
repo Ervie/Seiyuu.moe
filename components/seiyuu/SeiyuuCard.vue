@@ -35,7 +35,7 @@
                           <b>Birthday:</b> {{ seiyuuData.birthday }}
                         </p>
                         <p class="text-sm-left white-space-pre">
-                          <b>More:</b> {{ moreDetails }}
+                          <b>More:</b> {{ decodeHtml(moreDetails) }}
                         </p>
                       </v-card-text>
                     </div>
