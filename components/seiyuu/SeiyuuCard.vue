@@ -1,7 +1,7 @@
 <template>
   <v-card v-if="seiyuuData">
     <v-card-text style="font-weight: bold"> {{ seiyuuData.name }}</v-card-text>
-    <v-card-media :src="pathToImage" :height="avatarHeight" v-on:click="showDialog = true" hidden-sm-and-down></v-card-media>
+    <v-card-media :src="pathToImage(this.seiyuuData.image_url)" :height="avatarHeight" v-on:click="showDialog = true" hidden-sm-and-down></v-card-media>
     <v-card-actions>
       <v-btn icon value="removeSeiyuu" v-on:click="removeSeiyuu()">
         <v-icon color="red">delete</v-icon>
@@ -19,7 +19,7 @@
                 <v-layout row>
                   <v-flex xs4>
                     <v-card-media
-                      :src="pathToImage"
+                      :src="pathToImage(this.seiyuuData.image_url)"
                       height="350px"
                       contain
                     ></v-card-media>
@@ -63,13 +63,6 @@ export default {
     }
   },
   computed: {
-    pathToImage () {
-      if (this.seiyuuData.image_url) {
-        return this.seiyuuData.image_url
-      } else {
-        return 'static/questionMark.png'
-      }
-    },
     moreDetails () {
       var detailsToEncode = String(this.seiyuuData.more).replace(/\\n/g, '\n')
       return detailsToEncode.replace(/\\n/g, '<br/>')

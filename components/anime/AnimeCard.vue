@@ -1,7 +1,7 @@
 <template>
   <v-card v-if="animeData">
     <v-card-text style="font-weight: bold"> {{ animeData.title }}</v-card-text>
-    <v-card-media :src="pathToImage" :height="avatarHeight" v-on:click="showDialog = true" hidden-sm-and-down></v-card-media>
+    <v-card-media :src="pathToImage(this.animeData.image_url)" :height="avatarHeight" v-on:click="showDialog = true" hidden-sm-and-down></v-card-media>
     <v-card-actions>
       <v-btn icon value="removeAnime" v-on:click="removeAnime()">
         <v-icon color="red">delete</v-icon>
@@ -19,7 +19,7 @@
                 <v-layout row>
                   <v-flex xs4>
                     <v-card-media
-                      :src="pathToImage"
+                      :src="pathToImage(this.animeData.image_url)"
                       height="350px"
                       contain
                     ></v-card-media>
@@ -72,13 +72,6 @@ export default {
     }
   },
   computed: {
-    pathToImage () {
-      if (this.animeData.image_url) {
-        return this.animeData.image_url
-      } else {
-        return 'static/questionMark.png'
-      }
-    },
     moreDetails () {
       var detailsToEncode = String(this.animeData.synopsis).replace(/\\n/g, '\n')
       return detailsToEncode.replace(/\\n/g, '<br/>')

@@ -96,13 +96,6 @@ export default {
             })
         })
     },
-    pathToImage (initialPath) {
-      if (initialPath) {
-        return initialPath
-      } else {
-        return 'questionMark.png'
-      }
-    },
     sendDataFetchedEvent () {
       if (typeof this.cachedSeiyuu !== 'undefined' && this.cachedSeiyuu.length > 200) {
         this.$emit('dataFetched')

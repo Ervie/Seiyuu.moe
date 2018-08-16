@@ -16,6 +16,13 @@ Vue.mixin({
       } else {  
         return parts[1] + ' ' + parts[0];
       }
+    },
+    pathToImage (path) {
+      if (path) {
+        return path
+      } else {
+        return 'questionMark.png'
+      }
     }
   }
 })

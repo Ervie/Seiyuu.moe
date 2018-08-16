@@ -112,13 +112,6 @@ export default {
     selectSearchResult (key) {
       this.sendAnimeRequest(key)
       this.showChoiceDialog = false
-    },
-    pathToImage (path) {
-      if (path) {
-        return path
-      } else {
-        return 'questionMark.png'
-      }
     }
   }
 }
