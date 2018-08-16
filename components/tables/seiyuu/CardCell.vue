@@ -13,13 +13,13 @@
         <v-layout row v-for="(role, k) in item.roles" v-bind:key="'k' + k">
           <v-flex xs6>
             <span>
-              <p class="body-2"> {{ decodeHtml(role.seiyuu) }}</p>
+              <p class="body-2"> {{ swapNameSurname(decodeHtml(role.seiyuu)) }}</p>
             </span>
           </v-flex>
           <v-flex xs6 class="accent">
             <span v-for="(character, l) in role.characters" v-bind:key="'l' + l">
               <a :href="character.entry.url">
-                <p class="body-2"> {{ decodeHtml(character.entry.name) }}</p>
+                <p class="body-2"> {{ swapNameSurname(decodeHtml(character.entry.name)) }}</p>
               </a>
             </span>
           </v-flex>

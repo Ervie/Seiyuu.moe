@@ -2,7 +2,7 @@
 <v-container fluid grid-list-xs v-if="!avatarMode">
 <v-layout v-for="entry in items" :key="entry.mal_id" row>
     <v-flex xs8 align-content-center>
-    <v-card-text class="subheading">{{ decodeHtml(entry.entry.name) }}</v-card-text>
+    <v-card-text class="subheading">{{ swapNameSurname(decodeHtml(entry.entry.name)) }}</v-card-text>
     </v-flex>
     <v-flex xs4>
     <a :href="entry.entry.url" target="_blank">
@@ -21,12 +21,12 @@
         <a :href="entry.entry.url" target="_blank">
             <v-tooltip bottom>
             <img :src="entry.entry.image_url" slot="activator" class="miniav">
-            <span>{{decodeHtml(entry.entry.name)}}</span>
+            <span>{{swapNameSurname(decodeHtml(entry.entry.name))}}</span>
             </v-tooltip>
         </a>
         </v-flex>
         <v-flex md1 justify-center v-else>
-        <v-card-text>{{decodeHtml(entry.entry.name)}}</v-card-text>
+        <v-card-text>{{swapNameSurname(decodeHtml(entry.entry.name))}}</v-card-text>
         </v-flex>
     </v-layout>
 </v-container>
