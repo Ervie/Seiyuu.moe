@@ -3,6 +3,7 @@
       <v-flex xs12>
         <v-autocomplete
           :items="cachedSeiyuu"
+          :filter="customFilter"
           v-model="selectModel"
           label="Search by Seiyuu Name..."
           item-text="name"
@@ -48,18 +49,14 @@ export default {
       selectModel: null
     }
   },
-  computed: {
-    isIdValid () {
-      return this.requiredIdValidation(this.searchedId) && this.isPositiveIntegerValidation(this.searchedId)
-    }
-  },
   methods: {
-    requiredIdValidation (value) {
-      return !!value
-    },
-    isPositiveIntegerValidation (value) {
-      var parsed = Math.floor(Number(value))
-      return (parsed !== Infinity && String(parsed) === value && parsed >= 0)
+    customFilter (item, queryText, itemText) {
+        const nameSurname = item.name.toLowerCase()
+        const surnameName = this.swapNameSurname(item.name.toLowerCase(), " ")
+        const searchText = queryText.toLowerCase()
+
+        return nameSurname.indexOf(searchText) > -1 ||
+          surnameName.indexOf(searchText) > -1
     },
     searchByName () {
       this.loading = true

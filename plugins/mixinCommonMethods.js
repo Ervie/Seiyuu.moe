@@ -8,8 +8,8 @@ Vue.mixin({
       txt.innerHTML = inputValue;
       return txt.value;
     },
-    swapNameSurname(inputString) {
-      var parts = inputString.split(", ");
+    swapNameSurname(inputString, delimiter = ", ") {
+      var parts = inputString.split(delimiter);
       
       if (parts.length < 2) {
         return inputString
