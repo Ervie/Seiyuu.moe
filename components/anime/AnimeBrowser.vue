@@ -1,8 +1,6 @@
 <template>
   <v-layout row wrap>
     <v-flex xs12>
-      <!-- <v-text-field prepend-icon="search" name="searchIdBox" label="Search anime by Title..." hint="Search anime by title" single-line
-        v-on:keyup.enter="search" v-model="searchQuery" /> -->
          <v-autocomplete
           :items="items"
           :search-input.sync="search"
@@ -41,10 +39,11 @@ export default {
     return {
       entries: [],
       model: null,
-      modelTitle: "",
       search: null,
       searchResults: [],
-      loadingSearch: false
+      loadingSearch: false,
+      timeout: null,
+      timeoutLimit: 500
     }
   },
   computed: {
@@ -73,28 +72,27 @@ export default {
   },
   watch: {
     search (val) {
-        
-        if (val !== this.modelTitle && !this.modelTitle === '') {
-          this.model = null
-        }
-        console.log(this.search)
-        if (this.model != null || val === '' || val === null || val.length < 3) {
-          this.entries = []
-          return
-        }
+        clearTimeout(this.timeout)
+        var self = this
+        this.timeout = setTimeout(function() {
+          self.isLoading = true
 
-        this.isLoading = true
+          if (self.model != null || val === '' || val === null || val.length < 3) {
+            self.entries = []
+            return
+          }
 
-        this.$axios.get(process.env.JIKAN_URL + 'search/anime/' +  String(val.replace('/', ' ')))
-          .then(res => {
-            if (res.data.result.length > 0) {
-              this.entries = res.data.result
-            }
-          })
-          .catch(err => {
-            console.log(err)
-          })
-          .finally(() => (this.isLoading = false))
+          self.$axios.get(process.env.JIKAN_URL + 'search/anime/' +  String(val.replace('/', ' ')))
+            .then(res => {
+              if (res.data.result.length > 0) {
+                self.entries = res.data.result
+              }
+            })
+            .catch(err => {
+              console.log(err)
+            })
+            .finally(() => (self.isLoading = false))
+        }, this.timeoutLimit)
     },
     model (val) {
       if (val !== null)
