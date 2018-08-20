@@ -104,7 +104,7 @@ export default {
       {
         header: 'What\'s new?',
         imageSrc: '/namikawa.png',
-        imageAltText: 'About Seiyuu.Moe project',
+        imageAltText: 'Seiyuu Namikawa Daisuke during recording',
         expanded: false,
         paragraphs: [
           '15th August 2018 - Anime search is up! Select anime, find seiyuu which collaborated on selected works.',

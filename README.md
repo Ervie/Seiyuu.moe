@@ -37,14 +37,14 @@ npm run build --report
 
 ## To-Do List / Further Ideas
 
-* Enhance juxtaposition by emphasis on most frequent collaborations (more modes).
+* Enhance juxtaposition by emphasis on most important collaborations.
     * Partial results.
-    * Charts?
+    * Displaying additional information - main or supporting role?
 * Share links (after search).
+* Franchise search - similar to anime search, loading data from entire anime franchise rather than single anime.
 * Character search - find if seiyuu of selected characters worked together on other works.
 * Searching for Visual Novels/Games.
-* Remove API in seiyuu search.
-
+  
 ## Special mentions
 
 Project uses Jikan API, an unofficial MyAnimeList API, courtesy of Nekomata (Irfan Dahir). Project can be found under this [link](https://github.com/jikan-me/jikan/).
