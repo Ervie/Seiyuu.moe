@@ -100,10 +100,27 @@ export default {
     },
     loadPopularList (callback) {
       this.cachedSeiyuu = seiyuu
+    },
+    loadDataFromLink (shareLinkData) {
+      if (shareLinkData.seiyuuIds !== '') {
+        var seiyuuToLoad = shareLinkData.seiyuuIds.split(';')
+        if (seiyuuToLoad.length > 0 && seiyuuToLoad.length < 6) {
+          seiyuuToLoad.forEach(element => {
+            console.log(element)
+            this.selectModel = element
+            this.searchByName()
+          })
+        }
+      }
     }
   },
   created () {
     this.loadCachedSeiyuu()
+  },
+  mounted () {
+    if (this.$route.query !== null) {
+      this.loadDataFromLink(this.$route.query)
+    }
   },
   watch: {
     cachedSeiyuu: {

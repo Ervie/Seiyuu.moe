@@ -59,9 +59,7 @@
       <v-snackbar
         v-model="snackbar"
         color="secondary"
-        :multi-line="mode === 'multi-line'"
         :timeout="3000"
-        :vertical="mode === 'vertical'"
         right top
       >
         Sharelink has been copied to the clipboard.
@@ -121,7 +119,7 @@ export default {
       seiyuuIds = seiyuuIds.slice(0, -1)
       seiyuuIds = this.encodeURL(seiyuuIds)
 
-      var shareLink = process.env.baseUrl + $nuxt.$route.path + '/?seiyuuIds=' + seiyuuIds
+      var shareLink = process.env.baseUrl + $nuxt.$route.path + '?seiyuuIds=' + seiyuuIds
 
       this.$copyText(shareLink)
       this.snackbar = true
