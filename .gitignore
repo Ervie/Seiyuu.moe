@@ -12,3 +12,6 @@ dist
 
 # IDE
 .idea
+
+# Suggested by @nuxtjs/pwa module
+sw.*

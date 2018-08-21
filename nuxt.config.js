@@ -3,7 +3,7 @@ const pkg = require('./package')
 const nodeExternals = require('webpack-node-externals')
 
 module.exports = {
-  mode: 'spa',
+  mode: 'universal',
 
   /*
   ** Headers of the page
@@ -24,7 +24,7 @@ module.exports = {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/mic.ico' },
-      { rel: 'manifest', href: '/assets/manifest.json' },
+      { rel: 'manifest', href: '/manifest/manifest.json' },
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' },
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Lato|Merienda' }
     ],
@@ -61,7 +61,8 @@ module.exports = {
     '@nuxtjs/font-awesome',
     ['@nuxtjs/google-analytics', {
       id: 'UA-114739960-4'
-    }]
+    }],
+    '@nuxtjs/pwa'
   ],
   /*
   ** Axios module configuration
