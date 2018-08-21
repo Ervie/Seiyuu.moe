@@ -33,6 +33,7 @@
         <div>
           <v-btn raised large color="error" v-on:click="resetList" :disabled="inputData.length < 1">Reset</v-btn>
           <v-btn depressed large color="primary" v-on:click="computeResults" :disabled="inputData.length < 2">Compare</v-btn>
+          <v-btn depressed large color="secondary" v-on:click="generateShareLink" :disabled="!showTables">Generate Link</v-btn>
         </div>
         <v-tabs
           v-if="showTables"
@@ -55,6 +56,23 @@
           </v-tab-item>
         </v-tabs-items>
       </v-flex>
+      <v-snackbar
+        v-model="snackbar"
+        color="secondary"
+        :multi-line="mode === 'multi-line'"
+        :timeout="3000"
+        :vertical="mode === 'vertical'"
+        right top
+      >
+        Sharelink has been copied to the clipboard.
+        <v-btn
+          dark
+          flat
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </v-snackbar>
     </v-layout>
 </template>
 
@@ -79,7 +97,8 @@ export default {
         groupBySeries: true,
         groupByCharacter: true,
         mainRolesOnly: false
-      }
+      },
+      snackbar: false
     }
   },
   methods: {
@@ -92,6 +111,20 @@ export default {
       } else {
         this.avatarMode = false
       }
+    },
+    generateShareLink () {
+      var seiyuuIds = ''
+      this.inputData.forEach(element => {
+        seiyuuIds += element.mal_id + ';'
+      });
+      
+      seiyuuIds = seiyuuIds.slice(0, -1)
+      seiyuuIds = this.encodeURL(seiyuuIds)
+
+      var shareLink = process.env.baseUrl + $nuxt.$route.path + '/?seiyuuIds=' + seiyuuIds
+
+      this.$copyText(shareLink)
+      this.snackbar = true
     },
     computeResults () {
       this.outputData = []

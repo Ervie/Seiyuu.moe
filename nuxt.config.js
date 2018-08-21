@@ -30,6 +30,10 @@ module.exports = {
     ],
   },
 
+  env: {
+    baseUrl: process.env.BASE_URL || 'http://localhost:3000'
+  },
+
   /*
   ** Customize the progress-bar color
   */
@@ -57,6 +61,7 @@ module.exports = {
   modules: [
     // Doc: https://github.com/nuxt-community/axios-module#usage
     '@nuxtjs/axios',
+    'nuxt-clipboard2',
     '@nuxtjs/dotenv',
     '@nuxtjs/font-awesome',
     ['@nuxtjs/google-analytics', {

@@ -23,6 +23,9 @@ Vue.mixin({
       } else {
         return 'questionMark.png'
       }
+    },
+    encodeURL (inputURL) {
+      return encodeURIComponent(inputURL)
     }
   }
 })

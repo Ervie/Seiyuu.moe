@@ -63,6 +63,9 @@ export default {
     noResultsFoundToggle (status) {
       this.noResultsFound = status
     }
+  },
+  async asyncData(allParams) {
+    console.log(allParams.route);
   }
 }
 </script>
