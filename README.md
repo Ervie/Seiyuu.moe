@@ -4,7 +4,7 @@
 
 ## Link
 
-Current version can be found under this [link](https://seiyuu.moe)
+Current version can be found under this [link](https://seiyuu.moe).
 
 ## Build Setup
 
@@ -12,17 +12,22 @@ Current version can be found under this [link](https://seiyuu.moe)
 # install dependencies
 npm install
 
-# serve with hot reload at localhost:9000
+# serve with hot reload at localhost:3000
 npm run dev
 
 # build for production with minification
-npm run build
+npm run generate
 
-# build for production and view the bundle analyzer report
-npm run build --report
+# build and start with SSR at port 3000
+npm run build
+npm run start
 ```
 
+Requier npm, vue and nuct installed.
+
 ## Features
+
+### Version 1.1 - 15th August 2018
 
 * Searching collaboration works between seiyuu (up to 6 at once).
     * Mode for grouping by series.
@@ -35,12 +40,22 @@ npm run build --report
     * Mode for grouping by seiyuu.
     * Details cards for extra information.
 
-## To-Do List / Further Ideas
+## Roadmap
+
+### Version 1.2 - September/October 2018
+
+* Share links (after search).
+* New entry page.
+* Current entry page as separate (about) page.
+* Improvements within compare algorithm.
+* Displaying additional information - main or supporting role.
+* Small changes in table appearance.
+
+### Future
 
 * Enhance juxtaposition by emphasis on most important collaborations.
     * Partial results.
-    * Displaying additional information - main or supporting role?
-* Share links (after search).
+    * Statistics for most selected comparisons.
 * Franchise search - similar to anime search, loading data from entire anime franchise rather than single anime.
 * Character search - find if seiyuu of selected characters worked together on other works.
 * Searching for Visual Novels/Games.
