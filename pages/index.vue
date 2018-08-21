@@ -2,7 +2,7 @@
   <div>
     <v-container grid-list-xl text-xs-center style="min-height: 0;" >
       <v-carousel name="router-carousel" style="height: 100%" >
-        <v-carousel-item v-for="(slide, i) in slides" :src="slide.imageSrc" :key="i">
+        <v-carousel-item v-for="(slide, i) in slides" :src="slide.imageSrc" :alt="slide.altText" :key="i">
           <router-link
           :to="slide.link"
           tag="span"
@@ -37,7 +37,7 @@
             <v-card-title primary-title class="styledHeader" v-html="item.header">>
             </v-card-title>
             <v-spacer></v-spacer>
-            <v-btn icon @click.native="item.expanded = !item.expanded">
+            <v-btn icon @click.native="item.expanded = !item.expanded" :aria-label="item.expanded ? 'Hide text' : 'Show text'">
               <v-icon>{{ item.expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</v-icon>
             </v-btn>
           </v-card-actions>
@@ -61,7 +61,7 @@
                 <v-card-title class="styledHeader" v-html="item.header">>
                 </v-card-title>
                 <v-spacer></v-spacer>
-                <v-btn icon @click.native="item.expanded = !item.expanded">
+                <v-btn icon @click.native="item.expanded = !item.expanded" :aria-label="item.expanded ? 'Hide text' : 'Show text'">
                   <v-icon>{{ item.expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</v-icon>
                 </v-btn>
               </v-card-actions>
@@ -128,12 +128,14 @@ export default {
         imageSrc: '/carousel.jpg',
         title: 'Compare seiyuu',
         text: 'Get started - select and compare seiyuu.',
+        altText: 'Select and compare seiyuu.',
         link: '/Seiyuu'
       },
       {
         imageSrc: '/carousel.jpg',
         title: 'Compare anime',
         text: 'Get started - select and compare anime.',
+        altText: 'Select and compare anime.',
         link: '/Anime'
       }
     ]

@@ -24,10 +24,11 @@
       </v-list>
     </v-navigation-drawer>
     <v-toolbar fixed app clipped-left color="primary">
-      <v-toolbar-side-icon @click="drawer = !drawer"></v-toolbar-side-icon>
+      <v-toolbar-side-icon @click="drawer = !drawer" :aria-label="drawer ? 'Hide drawer' : 'Show drawer'"></v-toolbar-side-icon>
       <v-btn
         icon
         @click.stop="miniVariant = !miniVariant"
+        :aria-label="miniVariant ? 'Show text' : 'Hide text'"
       >
         <v-icon v-html="miniVariant ? 'chevron_right' : 'chevron_left'"></v-icon>
       </v-btn>
