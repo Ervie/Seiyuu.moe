@@ -13,6 +13,7 @@
     "precommit": "npm run lint"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "@nuxtjs/axios": "^5.0.0",
     "nuxt-clipboard2": "^0.2.0",
     "@nuxtjs/font-awesome": "^1.0.3",

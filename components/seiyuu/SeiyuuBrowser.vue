@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import seiyuu from 'static/quickSeiyuulist.json'
 
 export default {
@@ -59,7 +60,7 @@ export default {
         this.$emit('alreadyOnTheList')
         this.loading = false
       } else {
-        this.$axios.get(process.env.JIKAN_URL + 'person/' + String(this.selectModel))
+        axios.get(process.env.JIKAN_URL + 'person/' + String(this.selectModel))
           .then((response) => {
             this.$emit('seiyuuReturned', response.data)
             this.loading = false
