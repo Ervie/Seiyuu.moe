@@ -59,16 +59,18 @@ export default {
       this.$axios.get(process.env.JIKAN_URL + 'anime/' + String(this.model) + '/characters_staff')
         .then((response) => {
           this.$emit('animeReturned', response.data)
+          this.resetSearch()
         })
         .catch((error) => {
           console.log(error)
-        })
-        .finally(() => {
-          this.loadingSearch = false
-          this.model = null
-          this.search = ''
+          this.resetSearch()
         })
     },
+    resetSearch() {
+      this.loadingSearch = false
+      this.model = null
+      this.search = ''
+    }
   },
   watch: {
     search (val) {
@@ -87,11 +89,12 @@ export default {
               if (res.data.result.length > 0) {
                 self.entries = res.data.result
               }
+              self.isLoading = false
             })
             .catch(err => {
               console.log(err)
+              self.isLoading = false
             })
-            .finally(() => (self.isLoading = false))
         }, this.timeoutLimit)
     },
     model (val) {

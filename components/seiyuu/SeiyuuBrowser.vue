@@ -62,14 +62,13 @@ export default {
         this.$axios.get(process.env.JIKAN_URL + 'person/' + String(this.selectModel))
           .then((response) => {
             this.$emit('seiyuuReturned', response.data)
+            this.loading = false
           })
           .catch((error) => {
             console.log(error)
             if (error.response.status === 404) {
               this.$emit('apiIsDown')
             }
-          })
-          .finally(() => {
             this.loading = false
           })
       }
@@ -102,7 +101,8 @@ export default {
       this.cachedSeiyuu = seiyuu
     },
     loadDataFromLink (shareLinkData) {
-      if (shareLinkData.seiyuuIds !== '') {
+      // Check empty object
+      if (!Object.keys(shareLinkData).length === 0 || !shareLinkData.constructor === Object) {
         var seiyuuToLoad = shareLinkData.seiyuuIds.split(';')
         if (seiyuuToLoad.length > 0 && seiyuuToLoad.length < 6) {
           seiyuuToLoad.forEach(element => {
