@@ -31,6 +31,8 @@
 </template>
 
 <script>
+import seiyuu from 'static/quickSeiyuulist.json'
+
 export default {
   name: 'SeiyuuBrowser',
   props: ['searchedIdCache'],
@@ -97,23 +99,7 @@ export default {
       }
     },
     loadPopularList (callback) {
-      var xhr = new XMLHttpRequest()
-      var self = this
-      var decodedAnser = ''
-      xhr.responseType = 'arraybuffer'
-
-      xhr.onload = function () {
-        if (xhr.status === 200) {
-          var decoder = new TextDecoder('utf-8')
-          decodedAnser = decoder.decode(xhr.response)
-          self.cachedSeiyuu = JSON.parse(decodedAnser)
-        } else {
-          console.log('Could not load quick list')
-        }
-      }
-      xhr.open('GET', 'quickSeiyuuList.json', true)
-
-      xhr.send()
+      this.cachedSeiyuu = seiyuu
     }
   },
   created () {

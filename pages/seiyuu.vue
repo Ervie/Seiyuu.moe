@@ -71,6 +71,9 @@ export default {
     resetList () {
       this.seiyuuToCompare = []
     }
+  },
+  async asyncData(allParams) {
+    console.log(allParams.route);
   }
 }
 </script>
