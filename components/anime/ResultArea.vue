@@ -21,11 +21,27 @@
         <div>
           <v-btn raised large color="error" class="optionButton" v-on:click="resetList" :disabled="inputData.length < 1">Reset</v-btn>
           <v-btn depressed large color="primary" class="optionButton" v-on:click="computeResults" :disabled="inputData.length < 2">Compare</v-btn>
+          <v-btn depressed large color="secondary" class="optionButton" v-on:click="generateShareLink" :disabled="!showTables || inputData.length < 2">Share Link</v-btn>
         </div>
         <div>
           <anime-table v-if="showTables" :inputData="outputData" :avatarMode="avatarMode" :counter="counter" :animeData="inputData" :groupBySeiyuu="searchOption.groupBySeiyuu"></anime-table>
         </div>
       </v-flex>
+      <v-snackbar
+        v-model="snackbar"
+        color="secondary"
+        :timeout="3000"
+        right top
+      >
+        Sharelink has been copied to the clipboard.
+        <v-btn
+          dark
+          flat
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </v-snackbar>
     </v-layout>
 </template>
 
@@ -37,7 +53,7 @@ export default {
   components: {
     'anime-table': AnimeTable
   },
-  props: ['inputData'],
+  props: ['inputData', 'runImmediately'],
   data () {
     return {
       showTables: false,
@@ -46,7 +62,8 @@ export default {
       outputData: [],
       searchOption: {
         groupBySeiyuu: true
-      }
+      },
+      snackbar: false
     }
   },
   methods: {
@@ -62,7 +79,8 @@ export default {
         partialResults[i] = []
         filteredData[i] = []
       }
-
+      console.log(this.animeCharacters)
+      console.log(this.inputData)
       for (var k = 0; k < this.inputData.length; k++) {
         // filteredData[i] = this.animeCharacters[i]
         for (i = 0; i < this.animeCharacters[k].length; i++) {
@@ -101,6 +119,20 @@ export default {
       this.outputData = partialResults[this.inputData.length - 1]
       this.counter++
       this.showTables = true
+    },
+    generateShareLink () {
+      var animeIds = ''
+      this.inputData.forEach(element => {
+        animeIds += element.mal_id + ';'
+      });
+      
+      animeIds = animeIds.slice(0, -1)
+      animeIds = this.encodeURL(animeIds)
+
+      var shareLink = process.env.baseUrl + $nuxt.$route.path + '?animeIds=' + animeIds
+
+      this.$copyText(shareLink)
+      this.snackbar = true
     }
   },
   computed: {
@@ -112,6 +144,11 @@ export default {
     inputData: function (newVal, oldVal) {
       if (this.inputData.length === 0) {
         this.showTables = false
+      }
+    },
+    runImmediately: function (val) {
+      if (val === true) {
+        this.computeResults()
       }
     }
   }

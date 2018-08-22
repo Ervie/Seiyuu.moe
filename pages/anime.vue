@@ -1,6 +1,8 @@
 <template>
   <v-container grid-list-md text-xs-center>
-    <browser @animeReturned="addAnime" @noResultFound="noResultsFoundToggle" />
+    <browser @animeReturned="addAnime" @noResultFound="noResultsFoundToggle"
+             :searchedIdCache="searchedId" 
+             @runImmediately="runImmediately = true" />
     <v-alert dismissible color="error" v-model="tooMuchRecords">
       You can choose {{ maximumAnimeNumber }} anime at max.
     </v-alert>
@@ -11,7 +13,7 @@
       No results found!
     </v-alert>
     <anime-card-list :animeToCompare="animeToCompare" :maximumAnimeNumber="maximumAnimeNumber" @animeRemoved="removeAnime"/>
-    <result-area :inputData="animeToCompare" @resetList="resetList"/>
+    <result-area :inputData="animeToCompare" @resetList="resetList" :runImmediately="runImmediately"/>
   </v-container>
 </template>
 
@@ -33,7 +35,8 @@ export default {
       maximumAnimeNumber: 6,
       tooMuchRecords: false,
       noResultsFound: false,
-      alreadyOnTheList: false
+      alreadyOnTheList: false,
+      runImmediately: false
     }
   },
   computed: {

@@ -123,7 +123,7 @@ export default {
       }
       
     },
-    emitEunImmediately () {
+    emitRunImmediately () {
       if (this.searchedIdCache != null && this.shareLinkData != null) {
         if (this.searchedIdCache.length === this.shareLinkData.length) {
           this.$emit('runImmediately')
@@ -148,7 +148,7 @@ export default {
       immediate: true
     },
     searchedIdCache: {
-      handler: 'emitEunImmediately',
+      handler: 'emitRunImmediately',
       immediate: true
     }
   }

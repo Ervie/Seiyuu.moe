@@ -37,6 +37,7 @@ import axios from 'axios'
 
 export default {
   name: 'AnimeBrowser',
+  props: ['searchedIdCache'],
   data () {
     return {
       entries: [],
@@ -72,6 +73,34 @@ export default {
       this.loadingSearch = false
       this.model = null
       this.search = ''
+    },
+    loadDataFromLink () {
+      if (this.shareLinkData.length > 1 && this.shareLinkData.length < 6) {
+        this.shareLinkData.forEach(element => {
+          if (this.searchedIdCache.indexOf(element) === -1  && Number.parseInt(element) !== 'NaN' && Number.parseInt(element) > 0) {
+            axios.get(process.env.JIKAN_URL + 'anime/' + String(element) + '/characters_staff')
+              .then((response) => {
+                this.$emit('animeReturned', response.data)
+                this.loading = false
+              })
+              .catch((error) => {
+                console.log(error)
+                if (error.response.status === 404) {
+                  this.$emit('apiIsDown')
+                }
+                this.loading = false
+              })
+          }
+        })
+      }
+      
+    },
+    emitRunImmediately () {
+      if (this.searchedIdCache != null && this.shareLinkData != null) {
+        if (this.searchedIdCache.length === this.shareLinkData.length) {
+          this.$emit('runImmediately')
+        }
+      }
     }
   },
   watch: {
@@ -102,7 +131,19 @@ export default {
     model (val) {
       if (val !== null)
         this.sendAnimeRequest()
+    },
+    searchedIdCache: {
+      handler: 'emitRunImmediately',
+      immediate: true
     }
-  }
+  },
+  mounted () {
+    if (this.$route.query !== null && !this.isEmpty(this.$route.query)) {
+      if (this.$route.query.animeIds != null) {
+        this.shareLinkData = this.$route.query.animeIds.split(';')
+        this.loadDataFromLink()
+      }
+    }
+  },
 }
 </script>
