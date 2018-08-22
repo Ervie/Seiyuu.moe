@@ -103,20 +103,22 @@ export default {
       this.cachedSeiyuu = seiyuu
     },
     loadDataFromLink () {
-      if (this.shareLinkData.length > 0 && this.shareLinkData.length < 6) {
+      if (this.shareLinkData.length > 1 && this.shareLinkData.length < 6) {
         this.shareLinkData.forEach(element => {
-          axios.get(process.env.JIKAN_URL + 'person/' + String(element))
-            .then((response) => {
-              this.$emit('seiyuuReturned', response.data)
-              this.loading = false
-            })
-            .catch((error) => {
-              console.log(error)
-              if (error.response.status === 404) {
-                this.$emit('apiIsDown')
-              }
-              this.loading = false
-            })
+          if (this.searchedIdCache.indexOf(element) === -1  && Number.parseInt(element) !== 'NaN' && Number.parseInt(element) > 0) {
+            axios.get(process.env.JIKAN_URL + 'person/' + String(element))
+              .then((response) => {
+                this.$emit('seiyuuReturned', response.data)
+                this.loading = false
+              })
+              .catch((error) => {
+                console.log(error)
+                if (error.response.status === 404) {
+                  this.$emit('apiIsDown')
+                }
+                this.loading = false
+              })
+          }
         })
       }
       
@@ -134,8 +136,10 @@ export default {
   },
   mounted () {
     if (this.$route.query !== null && !this.isEmpty(this.$route.query)) {
-      this.shareLinkData = this.$route.query.seiyuuIds.split(';')
-      this.loadDataFromLink()
+      if (this.$route.query.seiyuuIds != null) {
+        this.shareLinkData = this.$route.query.seiyuuIds.split(';')
+        this.loadDataFromLink()
+      }
     }
   },
   watch: {
