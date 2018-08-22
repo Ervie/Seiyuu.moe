@@ -7,9 +7,10 @@
       Network error occured during loading additional seiyuu list. Please consider refreshing the page.
     </v-alert>
     <browser @seiyuuReturned="addSeiyuu"
+             @resetList="resetList"
+             @runImmediately="runImmediately = true"
              @alreadyOnTheList="alreadyOnTheList = true"
              @reloadNeeded="reloadNeeded = true"
-             @resetList="resetList"
              @dataFetched="seiyuuExtraDataFetched = true"
              @apiIsDown="dataUnobtainable = true"
              :searchedIdCache="searchedId"/>
@@ -23,7 +24,7 @@
       This data is currently not obtainable :(
     </v-alert>
     <seiyuu-card-list :seiyuuToCompare="seiyuuToCompare" :maximumSeiyuuNumber="maximumSeiyuuNumber" @seiyuuRemoved="removeSeiyuu"/>
-    <result-area :inputData="seiyuuToCompare" @resetList="resetList"/>
+    <result-area :inputData="seiyuuToCompare" @resetList="resetList" :runImmediately="runImmediately" />
   </v-container>
 </template>
 
@@ -47,7 +48,8 @@ export default {
       alreadyOnTheList: false,
       reloadNeeded: false,
       dataUnobtainable: false,
-      seiyuuExtraDataFetched: false
+      seiyuuExtraDataFetched: false,
+      runImmediately: false
     }
   },
   computed: {

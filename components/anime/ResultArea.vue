@@ -19,8 +19,8 @@
           </v-expansion-panel-content>
         </v-expansion-panel>
         <div>
-          <v-btn raised large color="error" v-on:click="resetList" :disabled="inputData.length < 1">Reset</v-btn>
-          <v-btn depressed large color="primary" v-on:click="computeResults" :disabled="inputData.length < 2">Compare</v-btn>
+          <v-btn raised large color="error" class="optionButton" v-on:click="resetList" :disabled="inputData.length < 1">Reset</v-btn>
+          <v-btn depressed large color="primary" class="optionButton" v-on:click="computeResults" :disabled="inputData.length < 2">Compare</v-btn>
         </div>
         <div>
           <anime-table v-if="showTables" :inputData="outputData" :avatarMode="avatarMode" :counter="counter" :animeData="inputData" :groupBySeiyuu="searchOption.groupBySeiyuu"></anime-table>

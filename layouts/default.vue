@@ -84,4 +84,8 @@
   text-align: center;
 }
 
+.optionButton {
+  width: 100px;
+}
+
 </style>

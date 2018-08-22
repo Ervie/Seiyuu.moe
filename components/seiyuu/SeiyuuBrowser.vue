@@ -42,7 +42,8 @@ export default {
       searchedId: '',
       loading: false,
       cachedSeiyuu: [],
-      selectModel: null
+      selectModel: null,
+      shareLinkData: null
     }
   },
   methods: {
@@ -101,16 +102,29 @@ export default {
     loadPopularList (callback) {
       this.cachedSeiyuu = seiyuu
     },
-    loadDataFromLink (shareLinkData) {
-      // Check empty object
-      if (!Object.keys(shareLinkData).length === 0 || !shareLinkData.constructor === Object) {
-        var seiyuuToLoad = shareLinkData.seiyuuIds.split(';')
-        if (seiyuuToLoad.length > 0 && seiyuuToLoad.length < 6) {
-          seiyuuToLoad.forEach(element => {
-            console.log(element)
-            this.selectModel = element
-            this.searchByName()
-          })
+    loadDataFromLink () {
+      if (this.shareLinkData.length > 0 && this.shareLinkData.length < 6) {
+        this.shareLinkData.forEach(element => {
+          axios.get(process.env.JIKAN_URL + 'person/' + String(element))
+            .then((response) => {
+              this.$emit('seiyuuReturned', response.data)
+              this.loading = false
+            })
+            .catch((error) => {
+              console.log(error)
+              if (error.response.status === 404) {
+                this.$emit('apiIsDown')
+              }
+              this.loading = false
+            })
+        })
+      }
+      
+    },
+    emitEunImmediately () {
+      if (this.searchedIdCache != null && this.shareLinkData != null) {
+        if (this.searchedIdCache.length === this.shareLinkData.length) {
+          this.$emit('runImmediately')
         }
       }
     }
@@ -119,13 +133,18 @@ export default {
     this.loadCachedSeiyuu()
   },
   mounted () {
-    if (this.$route.query !== null) {
-      this.loadDataFromLink(this.$route.query)
+    if (this.$route.query !== null && !this.isEmpty(this.$route.query)) {
+      this.shareLinkData = this.$route.query.seiyuuIds.split(';')
+      this.loadDataFromLink()
     }
   },
   watch: {
     cachedSeiyuu: {
       handler: 'sendDataFetchedEvent',
+      immediate: true
+    },
+    searchedIdCache: {
+      handler: 'emitEunImmediately',
       immediate: true
     }
   }

@@ -31,9 +31,9 @@
           </v-expansion-panel-content>
         </v-expansion-panel>
         <div>
-          <v-btn raised large color="error" v-on:click="resetList" :disabled="inputData.length < 1">Reset</v-btn>
-          <v-btn depressed large color="primary" v-on:click="computeResults" :disabled="inputData.length < 2">Compare</v-btn>
-          <v-btn depressed large color="secondary" v-on:click="generateShareLink" :disabled="!showTables">Generate Link</v-btn>
+          <v-btn raised large color="error" class="optionButton" v-on:click="resetList" :disabled="inputData.length < 1">Reset</v-btn>
+          <v-btn depressed large color="primary" class="optionButton" v-on:click="computeResults" :disabled="inputData.length < 2">Compare</v-btn>
+          <v-btn depressed large color="secondary" class="optionButton" v-on:click="generateShareLink" :disabled="!showTables">Share Link</v-btn>
         </div>
         <v-tabs
           v-if="showTables"
@@ -82,7 +82,7 @@ export default {
   components: {
     'seiyuu-table': SeiyuuTable
   },
-  props: ['inputData'],
+  props: ['inputData', 'runImmediately'],
   data () {
     return {
       showTables: false,
@@ -206,6 +206,11 @@ export default {
     },
     windowWidth: function (newWidth, oldWidth) {
       this.handleResize(newWidth)
+    },
+    runImmediately: function (val) {
+      if (val === true) {
+        this.computeResults()
+      }
     }
   },
   mounted () {
@@ -233,4 +238,5 @@ img.av {
     height: 140px;
     width: 90px;
 }
+
 </style>
