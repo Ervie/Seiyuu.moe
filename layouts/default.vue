@@ -75,8 +75,8 @@
 <style>
 
 .styledHeader {
-  font-family: 'Merienda', cursive;
-  font-size: 34px;
+  font-family: 'Merienda', Georgia, 'Times New Roman', Times, cursive, serif;
+  font-size: 28px;
 }
 
 .styledFooter {
