@@ -88,4 +88,8 @@
   width: 100px;
 }
 
+ .dropdownAvatar {
+   object-fit: cover;
+   object-position: 100% 20%;
+ }
 </style>

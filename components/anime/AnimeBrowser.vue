@@ -19,7 +19,7 @@
             </template>
             <template v-else>
               <v-list-tile-avatar>
-                <img :src="pathToImage(data.item.image_url)">
+                <img class="dropdownAvatar" :src="pathToImage(data.item.image_url)">
               </v-list-tile-avatar>
               <v-list-tile-content>
                 <v-list-tile-title v-html="data.item.title"></v-list-tile-title>
