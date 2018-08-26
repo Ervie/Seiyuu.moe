@@ -13,25 +13,27 @@
     "precommit": "npm run lint"
   },
   "dependencies": {
-    "axios": "^0.18.0",
     "@nuxtjs/axios": "^5.0.0",
-    "nuxt-clipboard2": "^0.2.0",
     "@nuxtjs/font-awesome": "^1.0.3",
     "@nuxtjs/google-analytics": "^2.0.2",
+    "axios": "^0.18.0",
     "decode-html": "^2.0.0",
+    "npm": "^6.4.0",
     "nuxt": "^1.4.2",
+    "nuxt-clipboard2": "^0.2.0",
     "vuelidate": "^0.6.2",
     "vuetify": "^1.1.12"
   },
   "devDependencies": {
     "@nuxtjs/dotenv": "^1.1.1",
     "@nuxtjs/pwa": "^2.0.8",
-    "cross-env": "^5.0.1",
     "babel-eslint": "^8.2.1",
+    "cross-env": "^5.0.1",
     "eslint": "^5.0.1",
     "eslint-loader": "^2.0.0",
     "eslint-plugin-vue": "^4.0.0",
     "stylus": "^0.54.5",
-    "stylus-loader": "^3.0.1"
+    "stylus-loader": "^3.0.1",
+    "vue-particles": "^1.0.9"
   }
 }
