@@ -1,10 +1,8 @@
 <template>
-  <div id="mainContainer">
-    <vue-particles color="#dedede" :particleOpacity="0.7" :particlesNumber="80" shapeType="circle" :particleSize="4" linesColor="#dedede"
-      :linesWidth="1" :lineLinked="true" :lineOpacity="0.4" :linesDistance="150" :moveSpeed="3" :hoverEffect="true" hoverMode="grab"
-      :clickEffect="true" clickMode="push">
+    <vue-particles color="#dedede" :particleOpacity="0.7" :particlesNumber="80" shapeType="circle" :particleSize="5" linesColor="#dedede"
+      :linesWidth="1" :lineLinked="true" :lineOpacity="0.4" :linesDistance="150" :moveSpeed="4" :hoverEffect="true" hoverMode="repulse"
+      :clickEffect="false" clickMode="push">
     </vue-particles>
-  </div>
 </template>
 
 <script>
@@ -13,10 +11,12 @@ export default {
 }
 </script>
 
-<style>
-#mainContainer {
+<style scoped>
+#particles-js {
     background-image: url("/static/poly.jpg");
     background-size: cover;
+    background-repeat: no-repeat;
+    overflow: hidden;
     width: 100%;
     height: 100%;
     position: absolute;
