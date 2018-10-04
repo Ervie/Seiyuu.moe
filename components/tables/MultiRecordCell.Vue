@@ -8,7 +8,7 @@
     <a :href="entry.entry.url" target="_blank">
         <v-card-media
         height="70px"
-        :src="entry.entry.image_url"
+        :src="changeUrlToOriginalSize(entry.entry.image_url)"
         contain
         ></v-card-media>
     </a>
@@ -20,7 +20,7 @@
         <v-flex xs12 justify-center v-if="entry.entry.image_url">
         <a :href="entry.entry.url" target="_blank">
             <v-tooltip bottom>
-            <img :src="entry.entry.image_url" slot="activator" class="miniav">
+            <img :src="changeUrlToOriginalSize(entry.entry.image_url)" slot="activator" class="miniav">
             <span>{{swapNameSurname(decodeHtml(entry.entry.name))}}</span>
             </v-tooltip>
         </a>
@@ -35,6 +35,11 @@
 <script>
 export default {
   Name: 'MultiRecordCell',
-  props: ['avatarMode', 'items']
+  props: ['avatarMode', 'items'],
+  methods: {
+    changeUrlToOriginalSize (inputString) {
+      return inputString.replace('/r/23x32','')
+    }
+  }
 }
 </script>
