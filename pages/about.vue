@@ -1,30 +1,5 @@
 <template>
   <div>
-    <v-container grid-list-xl text-xs-center style="min-height: 0;" >
-      <v-carousel name="router-carousel" style="height: 100%" >
-        <v-carousel-item v-for="(slide, i) in slides" :src="slide.imageSrc" :alt="slide.altText" :key="i">
-          <router-link
-          :to="slide.link"
-          tag="span"
-          class="display-2"
-          style="cursor: pointer"
-          >
-            <v-jumbotron dark>
-              <v-container fill-height>
-                <v-layout align-center>
-                  <v-flex>
-                    <div class="slideTitle">
-                        {{ slide.title }}
-                    </div>
-                    <span class="subheading">{{ slide.text }}</span>
-                  </v-flex>
-                </v-layout>
-              </v-container>
-            </v-jumbotron>
-          </router-link>
-        </v-carousel-item>
-      </v-carousel>
-    </v-container>
     <v-container grid-list-xl text-xs-center style="min-height: 0;" hidden-sm-and-down>
     <v-layout row wrap>
       <v-flex v-for="(item, i) in cardItems" v-bind:key="i" xs4>
@@ -120,22 +95,6 @@ export default {
           'Hello, I am developer from Silesia region, Poland. This website is a result of connecting my hobbies (anime and programming), non-profit project for general use.',
           'Source code can be found in link on the footer (desktop version only). Have in mind, that website is in its alpha stage and still under development. Suggestion or bugs can be issued via Github.'
         ]
-      }
-    ],
-    slides: [
-      {
-        imageSrc: '/carousel.jpg',
-        title: 'Compare seiyuu',
-        text: 'Get started - select and compare seiyuu.',
-        altText: 'Select and compare seiyuu.',
-        link: '/Seiyuu'
-      },
-      {
-        imageSrc: '/carousel.jpg',
-        title: 'Compare anime',
-        text: 'Get started - select and compare anime.',
-        altText: 'Select and compare anime.',
-        link: '/Anime'
       }
     ]
   })

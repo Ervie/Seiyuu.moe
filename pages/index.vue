@@ -5,10 +5,15 @@
       :clickEffect="false" clickMode="push">
     </vue-particles>
     <v-card width="500px">
+        <v-card-text primary-title>
+            <h3 class="mb-0 styledHeader">
+            <p class="text-xs-center" > {{ headerText }} </p>
+            </h3>
+        </v-card-text>
         <v-card-media src="microBig.jpg" height="300px" />
         <v-card-text>
-            <h3 class="headline mb-0">
-            <p class="text-xs-center"> {{ text }} </p>
+            <h3 class="subheading mb-0">
+            <p align="justify"> {{ text }} </p>
             </h3>
         </v-card-text>
         <v-card-actions>
@@ -34,7 +39,8 @@ export default {
     layout: 'empty',
     data () {
         return {
-          text: 'Lorem ipsum dolor sit amet, alienum intellegebat ad qui, at mea vero bonorum delicata. An his mucius voluptatibus. Et mei meis mucius comprehensam, vel ei suas definiebas. Altera corrumpit an eos. Nec dolore ponderum et. Eum epicurei disputando ei, nostrud feugait cu per.'
+          headerText: 'What is Seiyuu.moe?',
+          text: 'Did you ever wonder if those two seiyū worked together? This website allows you to select them from the list and find joint works between Japanese voice actors.'
         }
     }
 }
@@ -60,6 +66,11 @@ export default {
 
 a {
     text-decoration: none;
+}
+
+.styledHeader {
+  font-family: 'Merienda', Georgia, 'Times New Roman', Times, cursive, serif;
+  font-size: 28px;
 }
 
 </style>
