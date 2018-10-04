@@ -23,7 +23,7 @@ npm run build
 npm run start
 ```
 
-Requier npm, vue and nuct installed.
+Require npm, vue and nuct installed.
 
 ## Features
 
@@ -42,7 +42,7 @@ Requier npm, vue and nuct installed.
 
 ## Roadmap
 
-### Version 1.2 - September/October 2018
+### Version 1.2 - October/November 2018
 
 * Share links (after search).
 * New entry page.
@@ -50,6 +50,8 @@ Requier npm, vue and nuct installed.
 * Improvements within compare algorithm.
 * Displaying additional information - main or supporting role.
 * Small changes in table appearance.
+
+* To fix - seiyuu avatars for anime search
 
 ### Future
 

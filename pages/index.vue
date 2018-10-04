@@ -40,7 +40,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 #particles-js {
     background-image: url("/static/poly.jpg");
     background-size: cover;
