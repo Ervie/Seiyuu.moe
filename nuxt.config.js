@@ -52,8 +52,7 @@ module.exports = {
   plugins: [
     '@/plugins/vuetify',
     '@/plugins/vuelidate',
-    '@/plugins/mixinCommonMethods',
-    { src: '@/plugins/particles', ssr: false }
+    '@/plugins/mixinCommonMethods'
   ],
 
   /*

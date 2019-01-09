@@ -45,7 +45,7 @@
         crossorigin="anonymous">
        <v-card flat tile class="flex primary" height="40px">
         <span class="primary justify-center ">
-          &copy;2018 —
+          &copy;2018 — 2019 -
           <strong>Seiyuu.Moe</strong>
         </span>
       </v-card>
@@ -61,10 +61,9 @@
         drawer: true,
         fixed: false,
         items: [
-          { icon: 'fa-home', title: 'Home', to: '/' },
           { icon: 'fa-users', title: 'Compare Seiyuu', to: '/Seiyuu' },
           { icon: 'fa-tv', title: 'Compare Anime', to: '/Anime' },
-          { icon: 'fa-info-circle', title: 'About', to: '/About' }
+          { icon: 'fa-info-circle', title: 'About', to: '/' }
         ],
         miniVariant: true,
         title: 'Seiyuu.Moe',
@@ -77,7 +76,7 @@
 
 .styledHeader {
   font-family: 'Merienda', Georgia, 'Times New Roman', Times, cursive, serif;
-  font-size: 28px;
+  font-size: 34px;
 }
 
 .styledFooter {

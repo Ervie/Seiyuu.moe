@@ -18,7 +18,7 @@
     "@nuxtjs/google-analytics": "^2.0.2",
     "axios": "^0.18.0",
     "decode-html": "^2.0.0",
-    "npm": "^6.4.0",
+    "npm": "^6.5.0",
     "nuxt": "^1.4.2",
     "nuxt-clipboard2": "^0.2.0",
     "vuelidate": "^0.6.2",
@@ -33,7 +33,6 @@
     "eslint-loader": "^2.0.0",
     "eslint-plugin-vue": "^4.0.0",
     "stylus": "^0.54.5",
-    "stylus-loader": "^3.0.1",
-    "vue-particles": "^1.0.9"
+    "stylus-loader": "^3.0.1"
   }
 }
