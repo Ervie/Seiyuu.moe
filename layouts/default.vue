@@ -3,6 +3,7 @@
     <v-toolbar fixed app clipped-left color="primary">
       <v-toolbar-side-icon @click="drawer = !drawer" :aria-label="drawer ? 'Hide drawer' : 'Show drawer'"></v-toolbar-side-icon>
       <v-btn
+        v-if="drawer"
         icon
         @click.stop="miniVariant = !miniVariant"
         :aria-label="miniVariant ? 'Show text' : 'Hide text'"
@@ -58,14 +59,14 @@
     data() {
       return {
         clipped: false,
-        drawer: true,
+        drawer: false,
         fixed: false,
         items: [
           { icon: 'fa-users', title: 'Compare Seiyuu', to: '/Seiyuu' },
           { icon: 'fa-tv', title: 'Compare Anime', to: '/Anime' },
           { icon: 'fa-info-circle', title: 'About', to: '/' }
         ],
-        miniVariant: true,
+        miniVariant: false,
         title: 'Seiyuu.Moe',
       }
     }
