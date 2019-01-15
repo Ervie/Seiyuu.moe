@@ -62,8 +62,8 @@
         drawer: false,
         fixed: false,
         items: [
-          { icon: 'fa-users', title: 'Compare Seiyuu', to: '/Seiyuu' },
-          { icon: 'fa-tv', title: 'Compare Anime', to: '/Anime' },
+          { icon: 'fa-users', title: 'Compare Seiyuu', to: '/seiyuu' },
+          { icon: 'fa-tv', title: 'Compare Anime', to: '/anime' },
           { icon: 'fa-info-circle', title: 'About', to: '/' }
         ],
         miniVariant: false,
