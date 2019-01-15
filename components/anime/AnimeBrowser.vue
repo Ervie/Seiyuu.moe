@@ -59,14 +59,31 @@ export default {
   methods: {
     sendAnimeRequest () {
       this.loadingSearch = true
-      axios.get(process.env.JIKAN_URL + 'anime/' + String(this.model) + '/characters_staff')
+      axios.get(process.env.JIKAN_URL + 'anime/' + String(this.model))
         .then((response) => {
-          this.$emit('animeReturned', response.data)
-          this.resetSearch()
+            this.sendAnimeCharactersRequest(response.data)
+            this.resetSearch()
+        .catch((error) => {
+            this.resetErrorSearch(error)
+          })
         })
         .catch((error) => {
-          console.log(error)
-          this.resetSearch()
+          if (error.response.status === 404) {
+            this.$emit('apiIsDown')
+          }
+          this.resetErrorSearch(error)
+        })
+    },
+    sendAnimeCharactersRequest (animeModel) {
+      axios.get(process.env.JIKAN_URL + 'anime/' + String(animeModel.mal_id) + '/characters_staff')
+        .then((response) => {
+            this.$emit('animeReturned', { anime: animeModel, characters: response.data.characters})
+        .catch((error) => {
+            this.resetErrorSearch(error)
+          })
+        })
+        .catch((error) => {
+          this.resetErrorSearch(error)
         })
     },
     resetSearch() {
@@ -74,19 +91,26 @@ export default {
       this.model = null
       this.search = ''
     },
+    resetErrorSearch(errorMessage) {
+      console.log(errorMessage)
+      this.loadingSearch = false
+      this.model = null
+      this.search = ''
+    },
     loadDataFromLink () {
       if (this.shareLinkData.length > 1 && this.shareLinkData.length < 6) {
+        this.loading = true
         this.shareLinkData.forEach(element => {
           if (this.searchedIdCache.indexOf(element) === -1  && Number.parseInt(element) !== 'NaN' && Number.parseInt(element) > 0) {
-            axios.get(process.env.JIKAN_URL + 'anime/' + String(element) + '/characters_staff')
+            axios.get(process.env.JIKAN_URL + 'anime/' + String(element))
               .then((response) => {
-                this.$emit('animeReturned', response.data)
+                this.sendAnimeCharactersRequest(response.data)
                 this.loading = false
               })
               .catch((error) => {
                 console.log(error)
-                if (error.response.status === 404) {
-                  this.$emit('apiIsDown')
+                if (error.response.error.startsWith('429')) {
+                  this.$emit('tooManyRequests')
                 }
                 this.loading = false
               })
@@ -115,10 +139,10 @@ export default {
             return
           }
 
-          axios.get(process.env.JIKAN_URL + 'search/anime/' +  String(val.replace('/', ' ')))
+          axios.get(process.env.API_URL + '/api/anime/' +  String(val.replace('/', ' ')))
             .then(res => {
-              if (res.data.result.length > 0) {
-                self.entries = res.data.result
+              if (res.data.length > 0) {
+                self.entries = res.data
               }
               self.isLoading = false
             })

@@ -137,7 +137,7 @@ export default {
 
       if (this.searchOption.mainRolesOnly) {
         for (i = 0; i < this.inputData.length; i++) {
-          filteredData[i] = this.seiyuuRoles[i].filter(x => x.character.role === 'Main')
+          filteredData[i] = this.seiyuuRoles[i].filter(x => x.role === 'Main')
         }
       } else {
         for (i = 0; i < this.inputData.length; i++) {
@@ -180,7 +180,7 @@ export default {
   },
   computed: {
     seiyuuRoles () {
-      return this.inputData.map(x => x.voice_acting_role)
+      return this.inputData.map(x => x.voice_acting_roles)
     },
     selectedTable () {
       if (this.searchOption.groupBySeries) {

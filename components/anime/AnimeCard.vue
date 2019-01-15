@@ -32,7 +32,7 @@
                           <b>Original title:</b> {{ animeData.title_japanese }}
                         </p>
                         <p class="text-sm-left">
-                          <b>Aired:</b> {{ animeData.aired_string }}
+                          <b>Aired:</b> {{ animeData.aired.string }}
                         </p>
                         <p class="text-sm-left">
                           <b>Type:</b> {{ animeData.type }}

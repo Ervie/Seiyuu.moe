@@ -23,11 +23,9 @@ npm run build
 npm run start
 ```
 
-Require npm, vue and nuct installed.
+Require npm, vue and nuxt installed.
 
 ## Features
-
-### Version 1.1 - 15th August 2018
 
 * Searching collaboration works between seiyuu (up to 6 at once).
     * Mode for grouping by series.
@@ -40,21 +38,24 @@ Require npm, vue and nuct installed.
     * Mode for grouping by seiyuu.
     * Details cards for extra information.
 
-## Roadmap
+## Changelog
 
-### Version 1.2 - October/November 2018
+### Version 1.2 - 15th January 2019
 
 * Share links (after search).
+* Fixed seiyuu photo positioning in search list.
+* Massive speed boost for anime searching.
+* Adjusted application to work under Jikan REST API v3.
+
+**[Read More](https://github.com/Ervie/Seiyuu.moe/blob/master/Changelog.md)**
+
+### Roadmap
+
 * New entry page.
 * Current entry page as separate (about) page.
 * Improvements within compare algorithm.
 * Displaying additional information - main or supporting role.
-* Small changes in table appearance.
-
-* To fix - seiyuu avatars for anime search
-
-### Future
-
+* Small changes in table appearance (fill blank space).
 * Enhance juxtaposition by emphasis on most important collaborations.
     * Partial results.
     * Statistics for most selected comparisons.

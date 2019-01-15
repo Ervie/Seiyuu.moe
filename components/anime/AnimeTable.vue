@@ -40,7 +40,7 @@ export default {
     'multi-record-cell': MultiRecordCell,
     'card-cell': CardCell
   },
-  props: ['inputData', 'avatarMode', 'counter', 'animeData', 'groupBySeiyuu'],
+  props: ['charactersData', 'avatarMode', 'counter', 'groupBySeiyuu', 'animeData'],
   data () {
     return {
       headers: [],
@@ -59,22 +59,22 @@ export default {
       this.tableData = []
       this.headers = []
 
-      for (var i = 0; i < this.inputData.length; i++) {
+      for (var i = 0; i < this.charactersData.length; i++) {
         this.tableData.push({
           seiyuu: [{
             entry: {
-              name: this.inputData[i].seiyuu.name,
-              image_url: this.inputData[i].seiyuu.image_url,
-              url: this.inputData[i].seiyuu.url
+              name: this.charactersData[i].seiyuu.name,
+              image_url: this.charactersData[i].seiyuu.image_url,
+              url: this.charactersData[i].seiyuu.url
             }
           }],
           roles: []
         })
-        for (var l = 0; l < this.animeData.length; l++) {
+        for (var l = 0; l < this.charactersData.length; l++) {
           this.tableData[this.tableData.length - 1].roles.push({
-            anime: this.animeData[l].title,
+            anime: this.charactersData[l].title,
             characters: [{
-              entry: this.inputData[i].roles[l].character
+              entry: this.charactersData[i].roles[l].character
             }]
           })
         }
@@ -101,35 +101,37 @@ export default {
       var characterIndex = -1
       var seiyuuIndex = -1
 
-      for (var i = 0; i < this.inputData.length; i++) {
+      for (var i = 0; i < this.charactersData.length; i++) {
         if (intersectSeiyuu.length > 0) {
-          seiyuuIndex = intersectSeiyuu.map(x => x.seiyuu[0].entry.name).indexOf(this.inputData[i].seiyuu.name)
+          seiyuuIndex = intersectSeiyuu.map(x => x.seiyuu[0].entry.name).indexOf(this.charactersData[i].seiyuu.name)
         }
         if (seiyuuIndex === -1) {
           intersectSeiyuu.push({
             seiyuu: [{
               entry: {
-                name: this.inputData[i].seiyuu.name,
-                image_url: this.inputData[i].seiyuu.image_url,
-                url: this.inputData[i].seiyuu.url
+                name: this.charactersData[i].seiyuu.name,
+                image_url: this.charactersData[i].seiyuu.image_url,
+                url: this.charactersData[i].seiyuu.url
               }
             }],
             roles: []
           })
-          for (var j = 0; j < this.inputData[i].roles.length; j++) {
+          for (var j = 0; j < this.charactersData[i].roles.length; j++) {
             intersectSeiyuu[intersectSeiyuu.length - 1].roles.push({
-              anime: this.inputData[i].roles[j].anime,
+              anime: this.charactersData[i].roles[j].anime,
               characters: [{
-                entry: this.inputData[i].roles[j].character
+                entry: this.charactersData[i].roles[j].character
               }]
             })
           }
         } else {
           for (var l = 0; l < this.animeData.length; l++) {
-            characterIndex = intersectSeiyuu[seiyuuIndex].roles[l].characters.map(x => x.entry.mal_id).indexOf(this.inputData[i].roles[l].character.mal_id)
+            console.log(intersectSeiyuu[seiyuuIndex])
+            console.log(l)
+            characterIndex = intersectSeiyuu[seiyuuIndex].roles[l].characters.map(x => x.entry.mal_id).indexOf(this.charactersData[i].roles[l].character.mal_id)
             if (characterIndex === -1) {
               intersectSeiyuu[seiyuuIndex].roles[l].characters.push({
-                entry: this.inputData[i].roles[l].character
+                entry: this.charactersData[i].roles[l].character
               })
             }
           }

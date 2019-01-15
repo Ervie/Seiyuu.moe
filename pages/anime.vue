@@ -1,7 +1,8 @@
 <template>
   <v-container grid-list-md text-xs-center>
     <browser @animeReturned="addAnime" @noResultFound="noResultsFoundToggle"
-             :searchedIdCache="searchedId" 
+             @tooManyRequests="tooManyRequests"
+             :searchedIdCache="searchedId"
              @runImmediately="runImmediately = true" />
     <v-alert dismissible color="error" v-model="tooMuchRecords">
       You can choose {{ maximumAnimeNumber }} anime at max.
@@ -9,11 +10,14 @@
     <v-alert dismissible color="error" v-model="alreadyOnTheList">
       This anime is already selected.
     </v-alert>
+    <v-alert dismissible color="error" v-model="tooManyRequests">
+      The Jikan API has too many requests to send. Wait a little and try again.
+    </v-alert>
     <v-alert dismissible color="error" v-model="noResultsFound">
       No results found!
     </v-alert>
-    <anime-card-list :animeToCompare="animeToCompare" :maximumAnimeNumber="maximumAnimeNumber" @animeRemoved="removeAnime"/>
-    <result-area :inputData="animeToCompare" @resetList="resetList" :runImmediately="runImmediately"/>
+    <anime-card-list :animeToCompare="animeModels" :maximumAnimeNumber="maximumAnimeNumber" @animeRemoved="removeAnime"/>
+    <result-area :charactersData="charactersRosters" :animeData="animeModels" @resetList="resetList" :runImmediately="runImmediately"/>
   </v-container>
 </template>
 
@@ -34,6 +38,7 @@ export default {
       animeToCompare: [],
       maximumAnimeNumber: 6,
       tooMuchRecords: false,
+      tooManyRequests: false,
       noResultsFound: false,
       alreadyOnTheList: false,
       runImmediately: false
@@ -41,7 +46,17 @@ export default {
   },
   computed: {
     searchedId () {
-      return this.animeToCompare.map(anime => anime.mal_id)
+      if (this.animeToCompare.length > 0) {
+        return this.animeToCompare.map(animeEntry => animeEntry.anime.mal_id)
+      } else {
+        return [];
+      }
+    },
+    animeModels () {
+      return this.animeToCompare.map(animeEntry => animeEntry.anime)
+    },
+    charactersRosters () {
+      return this.animeToCompare.map(animeEntry => animeEntry.characters)
     }
   },
   methods: {

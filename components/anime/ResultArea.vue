@@ -19,12 +19,12 @@
           </v-expansion-panel-content>
         </v-expansion-panel>
         <div>
-          <v-btn raised large color="error" class="optionButton" v-on:click="resetList" :disabled="inputData.length < 1">Reset</v-btn>
-          <v-btn depressed large color="primary" class="optionButton" v-on:click="computeResults" :disabled="inputData.length < 2">Compare</v-btn>
-          <v-btn depressed large color="secondary" class="optionButton" v-on:click="generateShareLink" :disabled="!showTables || inputData.length < 2">Share Link</v-btn>
+          <v-btn raised large color="error" class="optionButton" v-on:click="resetList" :disabled="charactersData.length < 1">Reset</v-btn>
+          <v-btn depressed large color="primary" class="optionButton" v-on:click="computeResults" :disabled="charactersData.length < 2">Compare</v-btn>
+          <v-btn depressed large color="secondary" class="optionButton" v-on:click="generateShareLink" :disabled="!showTables || charactersData.length < 2">Share Link</v-btn>
         </div>
         <div>
-          <anime-table v-if="showTables" :inputData="outputData" :avatarMode="avatarMode" :counter="counter" :animeData="inputData" :groupBySeiyuu="searchOption.groupBySeiyuu"></anime-table>
+          <anime-table v-if="showTables" :charactersData="outputData" :avatarMode="avatarMode" :counter="counter" :animeData="animeData" :groupBySeiyuu="searchOption.groupBySeiyuu"></anime-table>
         </div>
       </v-flex>
       <v-snackbar
@@ -53,7 +53,7 @@ export default {
   components: {
     'anime-table': AnimeTable
   },
-  props: ['inputData', 'runImmediately'],
+  props: ['charactersData', 'animeData', 'runImmediately'],
   data () {
     return {
       showTables: false,
@@ -72,25 +72,24 @@ export default {
     },
     computeResults () {
       this.outputData = []
-      var filteredData = new Array(this.inputData.length)
-      var partialResults = new Array(this.inputData.length)
+      var filteredData = new Array(this.charactersData.length)
+      var partialResults = new Array(this.charactersData.length)
 
-      for (var i = 0; i < this.inputData.length; i++) {
+      for (var i = 0; i < this.charactersData.length; i++) {
         partialResults[i] = []
         filteredData[i] = []
       }
-      console.log(this.animeCharacters)
-      console.log(this.inputData)
-      for (var k = 0; k < this.inputData.length; k++) {
+
+      for (var k = 0; k < this.charactersData.length; k++) {
         // filteredData[i] = this.animeCharacters[i]
-        for (i = 0; i < this.animeCharacters[k].length; i++) {
-          for (var j = 0; j < this.animeCharacters[k][i].voice_actor.length; j++) {
-            if (this.animeCharacters[k][i].voice_actor[j].language === 'Japanese') {
+        for (i = 0; i < this.charactersData[k].length; i++) {
+          for (var j = 0; j < this.charactersData[k][i].voice_actors.length; j++) {
+            if (this.charactersData[k][i].voice_actors[j].language === 'Japanese') {
               filteredData[k].push({
-                seiyuu: this.animeCharacters[k][i].voice_actor[j],
+                seiyuu: this.charactersData[k][i].voice_actors[j],
                 roles: [{
-                  anime: this.inputData[k].title,
-                  character: this.animeCharacters[k][i]
+                  anime: this.charactersData[k].title,
+                  character: this.charactersData[k][i]
                 }]
               })
             }
@@ -108,7 +107,7 @@ export default {
               var cloneObject = JSON.parse(JSON.stringify(partialResults[animeIndex - 1][j]))
               partialResults[animeIndex].push(cloneObject)
               partialResults[animeIndex][partialResults[animeIndex].length - 1].roles.push({
-                anime: this.inputData[animeIndex].title,
+                anime: this.charactersData[animeIndex].title,
                 character: filteredData[animeIndex][i].roles[0].character
               })
             }
@@ -116,13 +115,13 @@ export default {
         }
         partialResults[animeIndex] = partialResults[animeIndex].filter(x => x.roles.length === (animeIndex + 1))
       }
-      this.outputData = partialResults[this.inputData.length - 1]
+      this.outputData = partialResults[this.charactersData.length - 1]
       this.counter++
       this.showTables = true
     },
     generateShareLink () {
       var animeIds = ''
-      this.inputData.forEach(element => {
+      this.animeData.forEach(element => {
         animeIds += element.mal_id + ';'
       });
       
@@ -137,12 +136,12 @@ export default {
   },
   computed: {
     animeCharacters () {
-      return this.inputData.map(x => x.character)
+      return this.charactersData.map(x => x.character)
     }
   },
   watch: {
-    inputData: function (newVal, oldVal) {
-      if (this.inputData.length === 0) {
+    charactersData: function (newVal, oldVal) {
+      if (this.charactersData.length === 0) {
         this.showTables = false
       }
     },
