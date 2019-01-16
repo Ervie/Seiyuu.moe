@@ -6,11 +6,11 @@
         </v-flex>
         <v-flex xs4>
         <a :href="item.url" target="_blank">
-            <v-card-media
+            <v-img
             height="70px"
             :src="item.image_url"
             contain
-            ></v-card-media>
+            ></v-img>
         </a>
         </v-flex>
     </v-layout>

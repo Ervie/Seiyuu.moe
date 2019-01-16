@@ -1,9 +1,11 @@
 <template>
   <v-container grid-list-md text-xs-center>
-    <browser @animeReturned="addAnime" @noResultFound="noResultsFoundToggle"
-             @tooManyRequests="tooManyRequests"
-             :searchedIdCache="searchedId"
-             @runImmediately="runImmediately = true" />
+    <browser 
+      @animeReturned="addAnime" 
+      @noResultFound="noResultsFoundToggle"
+      @tooManyRequests="tooManyRequests = true"
+      :searchedIdCache="searchedId"
+      @runImmediately="runImmediately = true" />
     <v-alert dismissible color="error" v-model="tooMuchRecords">
       You can choose {{ maximumAnimeNumber }} anime at max.
     </v-alert>
@@ -16,8 +18,15 @@
     <v-alert dismissible color="error" v-model="noResultsFound">
       No results found!
     </v-alert>
-    <anime-card-list :animeToCompare="animeModels" :maximumAnimeNumber="maximumAnimeNumber" @animeRemoved="removeAnime"/>
-    <result-area :charactersData="charactersRosters" :animeData="animeModels" @resetList="resetList" :runImmediately="runImmediately"/>
+    <anime-card-list 
+      :animeToCompare="animeModels" 
+      :maximumAnimeNumber="maximumAnimeNumber" 
+      @animeRemoved="removeAnime"/>
+    <result-area 
+      :charactersData="charactersRosters" 
+      :animeData="animeModels" 
+      @resetList="resetList" 
+      :runImmediately="runImmediately"/>
   </v-container>
 </template>
 
@@ -67,6 +76,7 @@ export default {
         this.alreadyOnTheList = true
       } else {
         this.tooMuchRecords = false
+        this.tooManyRequests = false;
         this.alreadyOnTheList = false
         this.animeToCompare.push(animeData)
       }

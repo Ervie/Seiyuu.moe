@@ -51,8 +51,14 @@
           </v-tab>
         </v-tabs>
         <v-tabs-items v-model="tabs" v-if="showTables">
-          <v-tab-item :id="`tab-anime`" >
-            <seiyuu-table :inputData="outputData" :avatarMode="avatarMode" :counter="counter" :seiyuuData="inputData" :groupingMode="selectedTable"></seiyuu-table>
+          <v-tab-item :value="`tab-anime`" >
+            <seiyuu-table 
+              :inputData="outputData" 
+              :avatarMode="avatarMode" 
+              :counter="counter" 
+              :seiyuuData="inputData" 
+              :groupingMode="selectedTable"
+            />
           </v-tab-item>
         </v-tabs-items>
       </v-flex>

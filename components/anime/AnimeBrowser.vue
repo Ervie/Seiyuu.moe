@@ -10,7 +10,7 @@
           label="Search anime by title..."
           item-text="title"
           item-value="mal_id"
-          max-height="300"
+          :menu-props="{maxHeight:'300'}"
           prepend-icon="search"
         >
           <template slot="item" slot-scope="data">
@@ -19,7 +19,7 @@
             </template>
             <template v-else>
               <v-list-tile-avatar>
-                <img class="dropdownAvatar" :src="pathToImage(data.item.image_url)">
+                <v-img class="dropdownAvatar" :src="pathToImage(data.item.image_url)" />
               </v-list-tile-avatar>
               <v-list-tile-content>
                 <v-list-tile-title v-html="data.item.title"></v-list-tile-title>

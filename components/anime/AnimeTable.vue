@@ -28,7 +28,6 @@
 
 <script>
 import TableHeader from '@/components/tables/TableHeader'
-import SingleRecordCell from '@/components/tables/SingleRecordCell'
 import MultiRecordCell from '@/components/tables/MultiRecordCell'
 import CardCell from '@/components/tables/anime/CardCell'
 
@@ -36,7 +35,6 @@ export default {
   name: 'AnimeTable',
   components: {
     'table-header': TableHeader,
-    'single-record-cell': SingleRecordCell,
     'multi-record-cell': MultiRecordCell,
     'card-cell': CardCell
   },
@@ -126,8 +124,6 @@ export default {
           }
         } else {
           for (var l = 0; l < this.animeData.length; l++) {
-            console.log(intersectSeiyuu[seiyuuIndex])
-            console.log(l)
             characterIndex = intersectSeiyuu[seiyuuIndex].roles[l].characters.map(x => x.entry.mal_id).indexOf(this.charactersData[i].roles[l].character.mal_id)
             if (characterIndex === -1) {
               intersectSeiyuu[seiyuuIndex].roles[l].characters.push({

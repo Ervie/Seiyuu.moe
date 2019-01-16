@@ -1,7 +1,7 @@
 <template>
   <v-card v-if="animeData">
     <v-card-text style="font-weight: bold"> {{ animeData.title }}</v-card-text>
-    <v-card-media :src="pathToImage(this.animeData.image_url)" :height="avatarHeight" v-on:click="showDialog = true" hidden-sm-and-down></v-card-media>
+    <v-img :src="pathToImage(this.animeData.image_url)" :height="avatarHeight" v-on:click="showDialog = true" hidden-sm-and-down></v-img>
     <v-card-actions>
       <v-btn icon value="removeAnime" v-on:click="removeAnime()">
         <v-icon color="red">delete</v-icon>
@@ -18,11 +18,11 @@
               <v-container fluid grid-list-lg>
                 <v-layout row>
                   <v-flex xs4>
-                    <v-card-media
+                    <v-img
                       :src="pathToImage(this.animeData.image_url)"
                       height="350px"
                       contain
-                    ></v-card-media>
+                    ></v-img>
                   </v-flex>
                   <v-flex xs8>
                     <div>

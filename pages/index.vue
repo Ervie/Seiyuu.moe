@@ -9,18 +9,16 @@
           class="display-2"	
           style="cursor: pointer"	
           >	
-            <v-jumbotron dark>	
-              <v-container fill-height>	
-                <v-layout align-center>	
-                  <v-flex>	
-                    <div class="slideTitle">	
-                        {{ slide.title }}	
-                    </div>	
-                    <span class="subheading">{{ slide.text }}</span>	
-                  </v-flex>	
-                </v-layout>	
-              </v-container>	
-            </v-jumbotron>	
+            <v-container fill-height>	
+              <v-layout align-center>	
+                <v-flex>	
+                  <div class="slideTitle">	
+                      {{ slide.title }}	
+                  </div>	
+                  <span class="subheading">{{ slide.text }}</span>	
+                </v-flex>	
+              </v-layout>	
+            </v-container>	
           </router-link>	
         </v-carousel-item>	
       </v-carousel>	
@@ -29,7 +27,7 @@
     <v-layout row wrap>
       <v-flex v-for="(item, i) in cardItems" v-bind:key="i" xs4>
         <v-card color="primary" class="white--text">
-            <v-card-media
+            <v-img
               :src="item.imageSrc"
               :alt="item.imageAltText"
               height="300px"/>
@@ -56,7 +54,7 @@
         <v-layout row wrap>
           <v-flex v-for="(item, i) in cardItems" v-bind:key="i" xs12>
             <v-card color="primary" class="white--text">
-              <v-card-media :src="item.imageSrc" height="250px" :alt="item.imageAltText"></v-card-media>
+              <v-img :src="item.imageSrc" height="250px" :alt="item.imageAltText"></v-img>
               <v-card-actions>
                 <v-card-title class="styledHeader" v-html="item.header">>
                 </v-card-title>

@@ -24,7 +24,13 @@
           <v-btn depressed large color="secondary" class="optionButton" v-on:click="generateShareLink" :disabled="!showTables || charactersData.length < 2">Share Link</v-btn>
         </div>
         <div>
-          <anime-table v-if="showTables" :charactersData="outputData" :avatarMode="avatarMode" :counter="counter" :animeData="animeData" :groupBySeiyuu="searchOption.groupBySeiyuu"></anime-table>
+          <anime-table 
+            v-if="showTables" 
+            :charactersData="outputData" 
+            :avatarMode="avatarMode" 
+            :counter="counter" 
+            :animeData="animeData" 
+            :groupBySeiyuu="searchOption.groupBySeiyuu"/>
         </div>
       </v-flex>
       <v-snackbar

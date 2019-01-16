@@ -1,7 +1,7 @@
 <template>
   <v-card v-if="seiyuuData">
     <v-card-text style="font-weight: bold"> {{ seiyuuData.name }}</v-card-text>
-    <v-card-media :src="pathToImage(this.seiyuuData.image_url)" :height="avatarHeight" v-on:click="showDialog = true" hidden-sm-and-down></v-card-media>
+    <v-img :src="pathToImage(this.seiyuuData.image_url)" :height="avatarHeight" v-on:click="showDialog = true" hidden-sm-and-down></v-img>
     <v-card-actions>
       <v-btn icon value="removeSeiyuu" v-on:click="removeSeiyuu()">
         <v-icon color="red">delete</v-icon>
@@ -18,11 +18,11 @@
               <v-container fluid grid-list-lg>
                 <v-layout row>
                   <v-flex xs4>
-                    <v-card-media
+                    <v-img
                       :src="pathToImage(this.seiyuuData.image_url)"
                       height="350px"
                       contain
-                    ></v-card-media>
+                    ></v-img>
                   </v-flex>
                   <v-flex xs8>
                     <div>
@@ -32,7 +32,7 @@
                           <b>Given name:</b> {{ seiyuuData.given_name }}
                         </p>
                         <p class="text-sm-left">
-                          <b>Birthday:</b> {{ seiyuuData.birthday }}
+                          <b>Birthday:</b> {{ seiyuuData.birthday.slice(0,10) }}
                         </p>
                         <p class="text-sm-left white-space-pre">
                           <b>More:</b> {{ decodeHtml(moreDetails) }}
@@ -64,8 +64,8 @@ export default {
   },
   computed: {
     moreDetails () {
-      var detailsToEncode = String(this.seiyuuData.more).replace(/\\n/g, '\n')
-      return detailsToEncode.replace(/\\n/g, '<br/>')
+      var detailsToEncode = String(this.seiyuuData.about).replace(/\\n/g, '')
+      return detailsToEncode
     }
   }
 }

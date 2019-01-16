@@ -29,7 +29,6 @@
 <script>
 import decode from 'decode-html'
 import TableHeader from '@/components/tables/TableHeader'
-import SingleRecordCell from '@/components/tables/SingleRecordCell'
 import MultiRecordCell from '@/components/tables/MultiRecordCell'
 import CardCell from '@/components/tables/seiyuu/CardCell'
 
@@ -37,7 +36,6 @@ export default {
   name: 'SeiyuuTable',
   components: {
     'table-header': TableHeader,
-    'single-record-cell': SingleRecordCell,
     'multi-record-cell': MultiRecordCell,
     'card-cell': CardCell
   },
