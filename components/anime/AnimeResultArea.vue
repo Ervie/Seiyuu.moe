@@ -33,31 +33,21 @@
             :groupBySeiyuu="searchOption.groupBySeiyuu"/>
         </div>
       </v-flex>
-      <v-snackbar
-        v-model="snackbar"
-        color="secondary"
-        :timeout="3000"
-        right top
-      >
-        Sharelink has been copied to the clipboard.
-        <v-btn
-          dark
-          flat
-          @click="snackbar = false"
-        >
-          Close
-        </v-btn>
-      </v-snackbar>
+      <share-link-snackbar
+        :showSnackbar="snackbar"
+        @snackbarClicked="snackbar = false"/>
     </v-layout>
 </template>
 
 <script>
 import AnimeTable from '@/components/anime/AnimeTable.vue'
+import ShareLinkSnackbar from '@/components/shared/ui-components/ShareLinkSnackbar.vue';
 
 export default {
   name: 'ResultArea',
   components: {
-    'anime-table': AnimeTable
+    'anime-table': AnimeTable,
+    'share-link-snackbar': ShareLinkSnackbar
   },
   props: ['charactersData', 'animeData', 'runImmediately'],
   data () {

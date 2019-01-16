@@ -31,9 +31,15 @@
           </v-expansion-panel-content>
         </v-expansion-panel>
         <div>
-          <v-btn raised large color="error" class="optionButton" v-on:click="resetList" :disabled="inputData.length < 1">Reset</v-btn>
-          <v-btn depressed large color="primary" class="optionButton" v-on:click="computeResults" :disabled="inputData.length < 2">Compare</v-btn>
-          <v-btn depressed large color="secondary" class="optionButton" v-on:click="generateShareLink" :disabled="!showTables || inputData.length < 2">Share Link</v-btn>
+          <v-btn raised large color="error" class="optionButton" 
+            @click="resetList" 
+            :disabled="inputData.length < 1">Reset</v-btn>
+          <v-btn depressed large color="primary" class="optionButton" 
+            @click="computeResults" 
+            :disabled="inputData.length < 2">Compare</v-btn>
+          <v-btn depressed large color="secondary" class="optionButton" 
+            @click="generateShareLink" 
+            :disabled="!showTables || inputData.length < 2">Share Link</v-btn>
         </div>
         <v-tabs
           v-if="showTables"
@@ -62,31 +68,21 @@
           </v-tab-item>
         </v-tabs-items>
       </v-flex>
-      <v-snackbar
-        v-model="snackbar"
-        color="secondary"
-        :timeout="3000"
-        right top
-      >
-        Sharelink has been copied to the clipboard.
-        <v-btn
-          dark
-          flat
-          @click="snackbar = false"
-        >
-          Close
-        </v-btn>
-      </v-snackbar>
+      <share-link-snackbar
+        :showSnackbar="snackbar"
+        @snackbarClicked="snackbar = false"/>
     </v-layout>
 </template>
 
 <script>
 import SeiyuuTable from '@/components/seiyuu/SeiyuuTable.vue'
+import ShareLinkSnackbar from '@/components/shared/ui-components/ShareLinkSnackbar.vue';
 
 export default {
   name: 'ResultArea',
   components: {
-    'seiyuu-table': SeiyuuTable
+    'seiyuu-table': SeiyuuTable,
+    'share-link-snackbar': ShareLinkSnackbar
   },
   props: ['inputData', 'runImmediately'],
   data () {

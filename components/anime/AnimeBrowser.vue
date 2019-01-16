@@ -61,11 +61,8 @@ export default {
       this.loadingSearch = true
       axios.get(process.env.JIKAN_URL + 'anime/' + String(this.model))
         .then((response) => {
-            this.sendAnimeCharactersRequest(response.data)
-            this.resetSearch()
-        .catch((error) => {
-            this.resetErrorSearch(error)
-          })
+          this.sendAnimeCharactersRequest(response.data)
+          this.resetSearch()
         })
         .catch((error) => {
           if (error.error != undefined && error.error.startsWith('429')) {
@@ -146,8 +143,8 @@ export default {
               }
               self.isLoading = false
             })
-            .catch(err => {
-              console.log(err)
+            .catch(error => {
+              console.log(error)
               self.isLoading = false
             })
         }, this.timeoutLimit)
