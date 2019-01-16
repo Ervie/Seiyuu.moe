@@ -28,9 +28,9 @@
 
 <script>
 import decode from 'decode-html'
-import TableHeader from '@/components/tables/TableHeader'
-import MultiRecordCell from '@/components/tables/MultiRecordCell'
-import CardCell from '@/components/tables/seiyuu/CardCell'
+import TableHeader from '@/components/shared/tables/TableHeader'
+import MultiRecordCell from '@/components/shared/tables/MultiRecordCell'
+import CardCell from '@/components/shared/tables/seiyuu/CardCell'
 
 export default {
   name: 'SeiyuuTable',

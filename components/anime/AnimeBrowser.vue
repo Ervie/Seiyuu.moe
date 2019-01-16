@@ -68,8 +68,8 @@ export default {
           })
         })
         .catch((error) => {
-          if (error.response.status === 404) {
-            this.$emit('apiIsDown')
+          if (error.error != undefined && error.error.startsWith('429')) {
+            this.$emit('tooManyRequests')
           }
           this.resetErrorSearch(error)
         })
@@ -109,7 +109,7 @@ export default {
               })
               .catch((error) => {
                 console.log(error)
-                if (error.response.error.startsWith('429')) {
+                if (error.error != undefined && error.error.startsWith('429')) {
                   this.$emit('tooManyRequests')
                 }
                 this.loading = false

@@ -32,7 +32,7 @@
       :seiyuuToCompare="seiyuuToCompare" 
       :maximumSeiyuuNumber="maximumSeiyuuNumber" 
       @seiyuuRemoved="removeSeiyuu"/>
-    <result-area 
+    <seiyuu-result-area 
       :inputData="seiyuuToCompare" 
       @resetList="resetList" 
       :runImmediately="runImmediately"/>
@@ -42,14 +42,14 @@
 <script>
 import SeiyuuBrowser from '@/components/seiyuu/SeiyuuBrowser.vue'
 import SeiyuuCardList from '@/components/seiyuu/SeiyuuCardList.vue'
-import ResultArea from '@/components/seiyuu/ResultArea.vue'
+import SeiyuuResultArea from '@/components/seiyuu/SeiyuuResultArea.vue'
 
 export default {
   name: 'SeiyuuArea',
   components: {
     'browser': SeiyuuBrowser,
     'seiyuu-card-list': SeiyuuCardList,
-    'result-area': ResultArea
+    'seiyuu-result-area': SeiyuuResultArea
   },
   data () {
     return {

@@ -22,25 +22,25 @@
       :animeToCompare="animeModels" 
       :maximumAnimeNumber="maximumAnimeNumber" 
       @animeRemoved="removeAnime"/>
-    <result-area 
+    <anime-result-area 
       :charactersData="charactersRosters" 
-      :animeData="animeModels" 
-      @resetList="resetList" 
-      :runImmediately="runImmediately"/>
+      :animeData="animeModels"
+      :runImmediately="runImmediately"
+      @resetList="resetList"/>
   </v-container>
 </template>
 
 <script>
 import AnimeBrowser from '@/components/anime/AnimeBrowser.vue'
 import AnimeCardList from '@/components/anime/AnimeCardList.vue'
-import ResultArea from '@/components/anime/ResultArea.vue'
+import AnimeResultArea from '@/components/anime/AnimeResultArea.vue'
 
 export default {
   name: 'AnimeArea',
   components: {
     'browser': AnimeBrowser,
     'anime-card-list': AnimeCardList,
-    'result-area': ResultArea
+    'anime-result-area': AnimeResultArea
   },
   data () {
     return {

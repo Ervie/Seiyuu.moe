@@ -27,9 +27,9 @@
 </template>
 
 <script>
-import TableHeader from '@/components/tables/TableHeader'
-import MultiRecordCell from '@/components/tables/MultiRecordCell'
-import CardCell from '@/components/tables/anime/CardCell'
+import TableHeader from '@/components/shared/tables/TableHeader'
+import MultiRecordCell from '@/components/shared/tables/MultiRecordCell'
+import CardCell from '@/components/shared/tables/anime/CardCell'
 
 export default {
   name: 'AnimeTable',
