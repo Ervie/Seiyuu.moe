@@ -39,7 +39,28 @@ export default {
     'multi-record-cell': MultiRecordCell,
     'card-cell': CardCell
   },
-  props: ['inputData', 'avatarMode', 'counter', 'seiyuuData', 'groupingMode'],
+  props: {
+    inputData: {
+      type: Array,
+      required: false
+    },
+    avatarMode: {
+      type: Boolean,
+      required: true
+    },
+    counter: {
+      type: Number,
+      required: true
+    },
+    groupingMode: {
+      type: String,
+      required: true
+    },
+    seiyuuData: {
+      type: Array,
+      required: false
+    }
+  },
   data () {
     return {
       headers: [],

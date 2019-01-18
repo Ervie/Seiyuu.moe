@@ -37,7 +37,12 @@ import axios from 'axios'
 
 export default {
   name: 'AnimeBrowser',
-  props: ['searchedIdCache'],
+  props: {
+    searchedIdCache: {
+      type: Array,
+      required: false
+    }
+  },
   data () {
     return {
       entries: [],

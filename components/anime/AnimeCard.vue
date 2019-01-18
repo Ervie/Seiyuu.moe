@@ -60,7 +60,20 @@
 <script>
 export default {
   name: 'AnimeCard',
-  props: ['animeData', 'cardId', 'avatarHeight'],
+  props: {
+    animeData: {
+      type: Object,
+      required: false
+    },
+    cardId: {
+      type: Number,
+      required: true
+    },
+    avatarHeight : {
+      type: Number,
+      required: false
+    }
+  },
   data () {
     return {
       showDialog: false

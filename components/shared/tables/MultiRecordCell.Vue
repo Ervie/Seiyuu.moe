@@ -35,7 +35,16 @@
 <script>
 export default {
   Name: 'MultiRecordCell',
-  props: ['avatarMode', 'items'],
+  props: {
+    avatarMode: {
+      type: Boolean,
+      required: true
+    },
+    items: {
+      type: Array,
+      required: true
+    }
+  },
   methods: {
     changeUrlToOriginalSize (inputString) {
       return inputString.replace('/r/23x32','')

@@ -51,7 +51,20 @@
 <script>
 export default {
   name: 'SeiyuuCard',
-  props: ['seiyuuData', 'cardId', 'avatarHeight'],
+  props: {
+    seiyuuData: {
+      type: Object,
+      required: false
+    },
+    cardId: {
+      type: Number,
+      required: true
+    },
+    avatarHeight : {
+      type: Number,
+      required: false
+    }
+  },
   data () {
     return {
       showDialog: false

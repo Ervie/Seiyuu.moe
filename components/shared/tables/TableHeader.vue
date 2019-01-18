@@ -36,7 +36,20 @@
 <script>
 export default {
   name: 'TableHeader',
-  props: ['imageUrl', 'text', 'avatarMode']
+  props: {
+    imageUrl: {
+        type: String,
+        required: false
+    },
+    text: {
+        type: String,
+        required: true
+    },
+    avatarMode: {
+        type: Boolean,
+        required: true
+    }
+  }
 }
 </script>
 

@@ -1,6 +1,6 @@
 <template>
   <v-container grid-list-md text-xs-center>
-    <browser 
+    <anime-browser 
       @animeReturned="addAnime" 
       @noResultFound="noResultsFoundToggle"
       @tooManyRequests="tooManyRequests = true"
@@ -38,7 +38,7 @@ import AnimeResultArea from '@/components/anime/AnimeResultArea.vue'
 export default {
   name: 'AnimeArea',
   components: {
-    'browser': AnimeBrowser,
+    'anime-browser': AnimeBrowser,
     'anime-card-list': AnimeCardList,
     'anime-result-area': AnimeResultArea
   },

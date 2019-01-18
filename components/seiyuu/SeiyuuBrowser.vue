@@ -36,7 +36,12 @@ import seiyuu from 'static/quickSeiyuulist.json'
 
 export default {
   name: 'SeiyuuBrowser',
-  props: ['searchedIdCache'],
+  props: {
+    searchedIdCache: {
+      type: Array,
+      required: false
+    }
+  },
   data () {
     return {
       searchedId: '',

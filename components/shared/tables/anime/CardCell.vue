@@ -34,7 +34,12 @@
 <script>
 export default {
   name: 'CardCell',
-  props: ['item']
+  props: {
+    item: {
+      type: Object,
+      required: true
+    }
+  }
 }
 </script>
 

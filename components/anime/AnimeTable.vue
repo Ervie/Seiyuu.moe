@@ -38,7 +38,28 @@ export default {
     'multi-record-cell': MultiRecordCell,
     'card-cell': CardCell
   },
-  props: ['charactersData', 'avatarMode', 'counter', 'groupBySeiyuu', 'animeData'],
+  props: {
+    charactersData: {
+      type: Array,
+      required: false
+    },
+    avatarMode: {
+      type: Boolean,
+      required: true
+    },
+    counter: {
+      type: Number,
+      required: true
+    },
+    groupBySeiyuu: {
+      type: Boolean,
+      required: true
+    },
+    animeData: {
+      type: Array,
+      required: false
+    }
+  },
   data () {
     return {
       headers: [],

@@ -46,6 +46,19 @@
 <script>
 export default {
   Name: 'SingleRecordCell',
-  props: ['avatarMode', 'item', 'preferText']
+  props: {
+    avatarMode: {
+      type: Boolean,
+      required: true
+    },
+    item: {
+      type: Object,
+      required: true
+    },
+    preferText: {
+      type: Boolean,
+      required: true
+    }
+  }
 }
 </script>

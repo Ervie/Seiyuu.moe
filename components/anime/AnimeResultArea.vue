@@ -44,12 +44,25 @@ import AnimeTable from '@/components/anime/AnimeTable.vue'
 import ShareLinkSnackbar from '@/components/shared/ui-components/ShareLinkSnackbar.vue';
 
 export default {
-  name: 'ResultArea',
+  name: 'AnimeResultArea',
   components: {
     'anime-table': AnimeTable,
     'share-link-snackbar': ShareLinkSnackbar
   },
-  props: ['charactersData', 'animeData', 'runImmediately'],
+  props: {
+    charactersData: {
+      type: Array,
+      required: false
+    },
+    animeData: {
+      type: Array,
+      required: false
+    },
+    runImmediately: {
+      type: Boolean,
+      required: true
+    }
+  },
   data () {
     return {
       showTables: false,
@@ -77,7 +90,6 @@ export default {
       }
 
       for (var k = 0; k < this.charactersData.length; k++) {
-        // filteredData[i] = this.animeCharacters[i]
         for (i = 0; i < this.charactersData[k].length; i++) {
           for (var j = 0; j < this.charactersData[k][i].voice_actors.length; j++) {
             if (this.charactersData[k][i].voice_actors[j].language === 'Japanese') {
@@ -128,11 +140,6 @@ export default {
 
       this.$copyText(shareLink)
       this.snackbar = true
-    }
-  },
-  computed: {
-    animeCharacters () {
-      return this.charactersData.map(x => x.character)
     }
   },
   watch: {

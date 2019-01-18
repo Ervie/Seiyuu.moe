@@ -79,12 +79,21 @@ import SeiyuuTable from '@/components/seiyuu/SeiyuuTable.vue'
 import ShareLinkSnackbar from '@/components/shared/ui-components/ShareLinkSnackbar.vue';
 
 export default {
-  name: 'ResultArea',
+  name: 'SeiyuuResultArea',
   components: {
     'seiyuu-table': SeiyuuTable,
     'share-link-snackbar': ShareLinkSnackbar
   },
-  props: ['inputData', 'runImmediately'],
+  props: {
+    inputData: {
+      type: Array,
+      required: false
+    },
+    runImmediately: {
+      type: Boolean,
+      required: true
+    }
+  },
   data () {
     return {
       showTables: false,

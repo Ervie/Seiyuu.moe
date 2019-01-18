@@ -28,7 +28,16 @@ import SeiyuuCard from '@/components/seiyuu/SeiyuuCard.vue'
 
 export default {
   name: 'SeiyuuCardList',
-  props: ['seiyuuToCompare', 'maximumSeiyuuNumber'],
+  props: {
+    seiyuuToCompare: {
+      type: Array,
+      required: false
+    },
+    maximumSeiyuuNumber: {
+      type: Number,
+      required: true
+    }
+  },
   components: {
     'seiyuu-card': SeiyuuCard
   },

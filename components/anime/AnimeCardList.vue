@@ -20,7 +20,16 @@ import AnimeCard from '@/components/anime/AnimeCard.vue'
 
 export default {
   name: 'AnimeCardList',
-  props: ['animeToCompare', 'maximumAnimeNumber'],
+  props: {
+    animeToCompare: {
+      type: Array,
+      required: false
+    },
+    maximumAnimeNumber: {
+      type: Number,
+      required: true
+    }
+  },
   components: {
     'anime-card': AnimeCard
   },
