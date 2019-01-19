@@ -32,7 +32,7 @@
                           <b>Given name:</b> {{ seiyuuData.given_name }}
                         </p>
                         <p class="text-sm-left">
-                          <b>Birthday:</b> {{ seiyuuData.birthday.slice(0,10) }}
+                          <b>Birthday:</b> {{ dateOnlyBirthday }}
                         </p>
                         <p class="text-sm-left white-space-pre">
                           <b>More:</b> {{ decodeHtml(moreDetails) }}
@@ -79,6 +79,13 @@ export default {
     moreDetails () {
       var detailsToEncode = String(this.seiyuuData.about).replace(/\\n/g, '')
       return detailsToEncode
+    },
+    dateOnlyBirthday () {
+      if (this.seiyuuData.birthday !== null) {
+        return this.seiyuuData.birthday.slice(0,10)
+      } else {
+        return 'unknown.'
+      }
     }
   }
 }

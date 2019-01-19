@@ -1,23 +1,9 @@
 <template>
   <v-container grid-list-md text-xs-center>
     <anime-browser 
-      @animeReturned="addAnime" 
-      @noResultFound="noResultsFoundToggle"
-      @tooManyRequests="tooManyRequests = true"
-      :searchedIdCache="searchedId"
+      @animeReturned="addAnime"
+      :searchedId="searchedId"
       @runImmediately="runImmediately = true" />
-    <v-alert dismissible color="error" v-model="tooMuchRecords">
-      You can choose {{ maximumAnimeNumber }} anime at max.
-    </v-alert>
-    <v-alert dismissible color="error" v-model="alreadyOnTheList">
-      This anime is already selected.
-    </v-alert>
-    <v-alert dismissible color="error" v-model="tooManyRequests">
-      The Jikan API has too many requests to send. Wait a little and try again.
-    </v-alert>
-    <v-alert dismissible color="error" v-model="noResultsFound">
-      No results found!
-    </v-alert>
     <anime-card-list 
       :animeToCompare="animeModels" 
       :maximumAnimeNumber="maximumAnimeNumber" 
@@ -46,10 +32,6 @@ export default {
     return {
       animeToCompare: [],
       maximumAnimeNumber: 6,
-      tooMuchRecords: false,
-      tooManyRequests: false,
-      noResultsFound: false,
-      alreadyOnTheList: false,
       runImmediately: false
     }
   },
@@ -70,26 +52,13 @@ export default {
   },
   methods: {
     addAnime (animeData) {
-      if (this.animeToCompare.length >= this.maximumAnimeNumber) {
-        this.tooMuchRecords = true
-      } else if (this.searchedId.indexOf(parseInt(animeData.mal_id)) !== -1) {
-        this.alreadyOnTheList = true
-      } else {
-        this.tooMuchRecords = false
-        this.tooManyRequests = false;
-        this.alreadyOnTheList = false
         this.animeToCompare.push(animeData)
-      }
-    },
-    removeAnime (animeId) {
-      this.tooMuchRecords = false
-      this.animeToCompare.splice(animeId, 1)
     },
     resetList () {
       this.animeToCompare = []
     },
-    noResultsFoundToggle (status) {
-      this.noResultsFound = status
+    removeAnime (animeId) {
+      this.animeToCompare.splice(animeId, 1)
     }
   }
 }

@@ -27,9 +27,16 @@ export default {
   },
   methods: {
     snackbarClicked: function () {
-      this.$emit('snackbarClicked')
+      this.$emit('hideSnackBar')
     }
   },
+  watch: {
+    showSnackbar: function (newVal, oldVal) {
+      if (this.showSnackbar === false) {
+        this.$emit('hideSnackBar')
+      }
+    }
+  }
 }
 </script>
 

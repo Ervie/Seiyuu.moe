@@ -3,31 +3,11 @@
     <v-alert type="info" :value="!seiyuuExtraDataFetched">
       The extra data is loading, please be patient...
     </v-alert>
-    <v-alert dismissible color="error" v-model="reloadNeeded">
-      Network error occured during loading additional seiyuu list. Please consider refreshing the page.
-    </v-alert>
     <browser 
       @seiyuuReturned="addSeiyuu"
-      @resetList="resetList"
       @runImmediately="runImmediately = true"
-      @alreadyOnTheList="alreadyOnTheList = true"
-      @reloadNeeded="reloadNeeded = true"
       @dataFetched="seiyuuExtraDataFetched = true"
-      @apiIsDown="dataUnobtainable = true"
-      @tooManyRequests="tooManyRequests = true"
-      :searchedIdCache="searchedId"/>
-    <v-alert dismissible color="error" v-model="tooMuchRecords">
-      You can choose {{ maximumSeiyuuNumber }} seiyuu at max.
-    </v-alert>
-    <v-alert dismissible color="error" v-model="alreadyOnTheList">
-      This seiyuu is already selected.
-    </v-alert>
-    <v-alert dismissible color="error" v-model="tooManyRequests">
-      The Jikan API has too many requests to send. Wait a little and try again.
-    </v-alert>
-    <v-alert dismissible color="error" v-model="dataUnobtainable">
-      This data is currently not obtainable :(
-    </v-alert>
+      :searchedId="searchedId"/>
     <seiyuu-card-list 
       :seiyuuToCompare="seiyuuToCompare" 
       :maximumSeiyuuNumber="maximumSeiyuuNumber" 
@@ -55,32 +35,24 @@ export default {
     return {
       seiyuuToCompare: [],
       maximumSeiyuuNumber: 6,
-      tooMuchRecords: false,
-      tooManyRequests: false,
-      alreadyOnTheList: false,
-      reloadNeeded: false,
-      dataUnobtainable: false,
       seiyuuExtraDataFetched: false,
       runImmediately: false
     }
   },
   computed: {
     searchedId () {
-      return this.seiyuuToCompare.map(seiyuu => seiyuu.mal_id)
+      if (this.seiyuuToCompare.length > 0) {
+        return this.seiyuuToCompare.map(seiyuu => seiyuu.mal_id)
+      } else {
+        return []
+      }
     }
   },
   methods: {
     addSeiyuu (seiyuuData) {
-      if (this.seiyuuToCompare.length >= this.maximumSeiyuuNumber) {
-        this.tooMuchRecords = true
-      } else {
-        this.tooMuchRecords = false
-        this.tooManyRequests = false
-        this.seiyuuToCompare.push(seiyuuData)
-      }
+      this.seiyuuToCompare.push(seiyuuData)
     },
     removeSeiyuu (seiyuuId) {
-      this.tooMuchRecords = false
       this.seiyuuToCompare.splice(seiyuuId, 1)
     },
     resetList () {

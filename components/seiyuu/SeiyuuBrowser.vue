@@ -17,7 +17,9 @@
             </template>
             <template v-else>
               <v-list-tile-avatar>
-                <v-img class="dropdownAvatar" :src="pathToImage(data.item.image_url)" />
+                <v-img 
+                  class="dropdownAvatar" 
+                  :src="pathToImage(data.item.image_url)" />
               </v-list-tile-avatar>
               <v-list-tile-content>
                 <v-list-tile-title v-html="data.item.name"></v-list-tile-title>
@@ -25,7 +27,12 @@
             </template>
           </template>
         </v-autocomplete>
-        <v-btn raised color="secondary" v-on:click="searchByName" :disabled="!selectModel || loading" :loading="loading">Add</v-btn>
+        <v-btn raised color="secondary" 
+          v-on:click="searchByName" 
+          :disabled="!selectModel || loading" 
+          :loading="loading">Add</v-btn>
+      <alert-ribbon 
+        :alerts="alerts" />
       </v-flex>
   </v-layout>
 </template>
@@ -33,22 +40,53 @@
 <script>
 import axios from 'axios'
 import seiyuu from 'static/quickSeiyuulist.json'
+import AlertRibbon from '@/components/shared/ui-components/AlertRibbon.vue'
 
 export default {
   name: 'SeiyuuBrowser',
+  components: {
+    'alert-ribbon': AlertRibbon
+  },
   props: {
-    searchedIdCache: {
+    searchedId: {
       type: Array,
       required: false
     }
   },
   data () {
     return {
-      searchedId: '',
       loading: false,
       cachedSeiyuu: [],
       selectModel: null,
-      shareLinkData: null
+      shareLinkData: null,
+      maximumSeiyuuNumber: 6,
+      alerts: [
+        {
+          name: 'tooMuchRecords',
+          text: 'You can choose 6 seiyuu at max.',
+          value: false
+        },
+        {
+          name: 'alreadyOnTheList',
+          text: 'This seiyuu is already selected.',
+          value: false
+        },
+        {
+          name: 'tooManyRequests',
+          text: 'The Jikan API has too many requests to send. Wait a little and try again.',
+          value: false
+        },
+        {
+          name: 'dataUnobtainable',
+          text: 'This data is currently not obtainable :(',
+          value: false
+        },
+        {
+          name: 'reloadNeeded',
+          text: 'Network error occured during loading additional seiyuu list. Please consider refreshing the page.',
+          value: false
+        }
+      ]
     }
   },
   methods: {
@@ -61,23 +99,26 @@ export default {
           surnameName.indexOf(searchText) > -1
     },
     searchByName () {
-      this.loading = true
-      if (this.searchedIdCache.indexOf(parseInt(this.selectModel)) > -1) {
-        this.$emit('alreadyOnTheList')
-        this.loading = false
+      if (this.searchedId.length >= this.maximumSeiyuuNumber) {
+        this.handleBrowsingError('tooMuchRecords')
       } else {
-        axios.get(process.env.JIKAN_URL + 'person/' + String(this.selectModel))
-          .then((response) => {
-            this.$emit('seiyuuReturned', response.data)
-            this.loading = false
-          })
-          .catch((error) => {
-            console.log(error)
-            if (error.error != undefined && error.error.startsWith('429')) {
-              this.$emit('tooManyRequests')
-            }
-            this.loading = false
-          })
+        this.loading = true
+        if (this.searchedId.includes(parseInt(this.selectModel))) {
+          this.handleBrowsingError('alreadyOnTheList')
+          this.loading = false
+        } else {
+          axios.get(process.env.JIKAN_URL + 'person/' + String(this.selectModel))
+            .then((response) => {
+              this.addToList(response.data)
+            })
+            .catch((error) => {
+              console.log(error)
+              if (error.error != undefined && error.error.startsWith('429')) {
+                this.handleBrowsingError('tooManyRequests')
+              }
+              this.loading = false
+            })
+        }
       }
     },
     loadCachedSeiyuu () {
@@ -94,7 +135,7 @@ export default {
             })
             .catch((error) => {
               console.log(error)
-              this.$emit('reloadNeeded')
+              this.handleBrowsingError('reloadNeeded')
               this.cachedSeiyuu = []
             })
         })
@@ -108,18 +149,18 @@ export default {
       this.cachedSeiyuu = seiyuu
     },
     loadDataFromLink () {
+      this.loading = true
       if (this.shareLinkData.length > 1 && this.shareLinkData.length < 6) {
         this.shareLinkData.forEach(element => {
-          if (this.searchedIdCache.indexOf(element) === -1  && Number.parseInt(element) !== 'NaN' && Number.parseInt(element) > 0) {
+          if (this.searchedId.includes(element) && Number.parseInt(element) !== 'NaN' && Number.parseInt(element) > 0) {
             axios.get(process.env.JIKAN_URL + 'person/' + String(element))
               .then((response) => {
-                this.$emit('seiyuuReturned', response.data)
-                this.loading = false
+                this.addToList(response.data)
               })
               .catch((error) => {
                 console.log(error)
-                if (error.error != undefined && error.error.startsWith('429')) {
-                  this.$emit('tooManyRequests')
+                if (error != undefined && error.startsWith('429')) {
+                  this.handleBrowsingError('tooManyRequests')
                 }
                 this.loading = false
               })
@@ -129,11 +170,27 @@ export default {
       
     },
     emitRunImmediately () {
-      if (this.searchedIdCache != null && this.shareLinkData != null) {
-        if (this.searchedIdCache.length === this.shareLinkData.length) {
+      if (this.searchedId != null && this.shareLinkData != null) {
+        if (this.searchedId.length === this.shareLinkData.length) {
           this.$emit('runImmediately')
         }
       }
+    },
+    handleBrowsingError (errorType) {
+      var errorIndex = this.alerts.map(x => x.name).indexOf(errorType)
+      if (errorIndex !== -1) {
+        this.alerts[errorIndex].value = true;
+      }
+    },
+    resetAlerts () {
+      this.alerts.forEach(alert => {
+        alert.value = false
+      });
+    },
+    addToList (returnedData) {
+      this.$emit('seiyuuReturned', returnedData)
+      this.loading = false
+      this.resetAlerts()
     }
   },
   created () {

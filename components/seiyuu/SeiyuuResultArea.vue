@@ -70,7 +70,7 @@
       </v-flex>
       <share-link-snackbar
         :showSnackbar="snackbar"
-        @snackbarClicked="snackbar = false"/>
+        @hideSnackBar="snackbar = false"/>
     </v-layout>
 </template>
 

@@ -27,18 +27,28 @@
             </template>
           </template>
         </v-autocomplete>
-      <v-btn raised color="secondary" v-on:click="sendAnimeRequest" v-if="loadingSearch" :disabled="loadingSearch || !model" :loading="loadingSearch">Add</v-btn>
+      <v-btn raised color="secondary" 
+        v-on:click="sendAnimeRequest" 
+        v-if="loadingSearch" 
+        :disabled="loadingSearch || !model" 
+        :loading="loadingSearch">Add</v-btn>
+      <alert-ribbon 
+        :alerts="alerts" />
     </v-flex>
   </v-layout>
 </template>
 
 <script>
 import axios from 'axios'
+import AlertRibbon from '@/components/shared/ui-components/AlertRibbon.vue'
 
 export default {
   name: 'AnimeBrowser',
+  components: {
+    'alert-ribbon': AlertRibbon
+  },
   props: {
-    searchedIdCache: {
+    searchedId: {
       type: Array,
       required: false
     }
@@ -51,7 +61,29 @@ export default {
       searchResults: [],
       loadingSearch: false,
       timeout: null,
-      timeoutLimit: 500
+      timeoutLimit: 500,
+      alerts: [
+        {
+          name: 'tooMuchRecords',
+          text: 'You can choose 6 anime at max.',
+          value: false
+        },
+        {
+          name: 'alreadyOnTheList',
+          text: 'This anime is already selected.',
+          value: false
+        },
+        {
+          name: 'tooManyRequests',
+          text: 'The Jikan API has too many requests to send. Wait a little and try again.',
+          value: false
+        },
+        {
+          name: 'noResultsFound',
+          text: 'No results found!',
+          value: false
+        }
+      ]
     }
   },
   computed: {
@@ -63,30 +95,39 @@ export default {
   },
   methods: {
     sendAnimeRequest () {
-      this.loadingSearch = true
-      axios.get(process.env.JIKAN_URL + 'anime/' + String(this.model))
-        .then((response) => {
-          this.sendAnimeCharactersRequest(response.data)
-          this.resetSearch()
-        })
-        .catch((error) => {
-          if (error.error != undefined && error.error.startsWith('429')) {
-            this.$emit('tooManyRequests')
-          }
-          this.resetErrorSearch(error)
-        })
+      if (this.searchedId.length >= this.maximumSeiyuuNumber) {
+        this.handleBrowsingError('tooMuchRecords')
+      } else {
+        this.loading = true
+        console.log(String(this.model))
+        if (this.searchedId.includes(parseInt(this.model))) {
+          this.handleBrowsingError('alreadyOnTheList')
+          this.model = null
+          this.loading = false
+        } else {
+          axios.get(process.env.JIKAN_URL + 'anime/' + String(this.model))
+            .then((response) => {
+              this.sendAnimeCharactersRequest(response.data)
+              this.resetSearch()
+            })
+            .catch((error) => {
+              if (error.error != undefined && error.error.startsWith('429')) {
+                this.handleBrowsingError('tooManyRequests')
+              }
+              this.resetErrorSearch(error)
+            })
+        }
+      }
     },
     sendAnimeCharactersRequest (animeModel) {
       axios.get(process.env.JIKAN_URL + 'anime/' + String(animeModel.mal_id) + '/characters_staff')
         .then((response) => {
-            this.$emit('animeReturned', { anime: animeModel, characters: response.data.characters})
-        .catch((error) => {
-            this.resetErrorSearch(error)
-          })
+          this.$emit('animeReturned', { anime: animeModel, characters: response.data.characters})
+          this.resetAlerts()
         })
         .catch((error) => {
           this.resetErrorSearch(error)
-        })
+      })
     },
     resetSearch() {
       this.loadingSearch = false
@@ -103,7 +144,7 @@ export default {
       if (this.shareLinkData.length > 1 && this.shareLinkData.length < 6) {
         this.loading = true
         this.shareLinkData.forEach(element => {
-          if (this.searchedIdCache.indexOf(element) === -1  && Number.parseInt(element) !== 'NaN' && Number.parseInt(element) > 0) {
+          if (this.searchedId.indexOf(element) === -1  && Number.parseInt(element) !== 'NaN' && Number.parseInt(element) > 0) {
             axios.get(process.env.JIKAN_URL + 'anime/' + String(element))
               .then((response) => {
                 this.sendAnimeCharactersRequest(response.data)
@@ -111,8 +152,8 @@ export default {
               })
               .catch((error) => {
                 console.log(error)
-                if (error.error != undefined && error.error.startsWith('429')) {
-                  this.$emit('tooManyRequests')
+                if (error != undefined && error.startsWith('429')) {
+                  this.handleBrowsingError('tooManyRequests')
                 }
                 this.loading = false
               })
@@ -122,11 +163,22 @@ export default {
       
     },
     emitRunImmediately () {
-      if (this.searchedIdCache != null && this.shareLinkData != null) {
-        if (this.searchedIdCache.length === this.shareLinkData.length) {
+      if (this.searchedId != null && this.shareLinkData != null) {
+        if (this.searchedId.length === this.shareLinkData.length) {
           this.$emit('runImmediately')
         }
       }
+    },
+    handleBrowsingError (errorType) {
+      var errorIndex = this.alerts.map(x => x.name).indexOf(errorType)
+      if (errorIndex !== -1) {
+        this.alerts[errorIndex].value = true;
+      }
+    },
+    resetAlerts () {
+      this.alerts.forEach(alert => {
+        alert.value = false
+      });
     }
   },
   watch: {
@@ -158,7 +210,7 @@ export default {
       if (val !== null)
         this.sendAnimeRequest()
     },
-    searchedIdCache: {
+    searchedId: {
       handler: 'emitRunImmediately',
       immediate: true
     }
