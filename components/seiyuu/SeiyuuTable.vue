@@ -223,7 +223,7 @@ export default {
       this.headers.push({
         text: 'Anime',
         align: 'left',
-        value: 'anime[0].entry.name',
+        value: 'anime.length',
         image: ''
       })
       for (var headerIndex = 0; headerIndex < this.seiyuuData.length; headerIndex++) {
@@ -306,7 +306,7 @@ export default {
       for (var headerIndex = 0; headerIndex < this.seiyuuData.length; headerIndex++) {
         this.headers.push({
           text: this.seiyuuData[headerIndex].name,
-          value: 'roles[' + headerIndex + '].character.name',
+          value: 'roles[' + headerIndex + '].characters.length',
           image: this.seiyuuData[headerIndex].image_url})
       }
       this.showTables = true

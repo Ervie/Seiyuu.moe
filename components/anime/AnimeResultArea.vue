@@ -159,12 +159,16 @@ export default {
 
 <style>
 img.miniav {
-    height: 98px;
-    width: 63px;
+    max-height: 98px;
+    max-width: 63px;
+    width: auto;
+    height: auto;
 }
 
 img.av {
-    height: 140px;
-    width: 90px;
+    max-height: 140px;
+    max-width: 90px;
+    width: auto;
+    height: auto;
 }
 </style>

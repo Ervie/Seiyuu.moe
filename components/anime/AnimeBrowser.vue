@@ -99,7 +99,6 @@ export default {
         this.handleBrowsingError('tooMuchRecords')
       } else {
         this.loading = true
-        console.log(String(this.model))
         if (this.searchedId.includes(parseInt(this.model))) {
           this.handleBrowsingError('alreadyOnTheList')
           this.model = null
@@ -111,9 +110,7 @@ export default {
               this.resetSearch()
             })
             .catch((error) => {
-              if (error.error != undefined && error.error.startsWith('429')) {
-                this.handleBrowsingError('tooManyRequests')
-              }
+              this.handleBrowsingError('tooManyRequests')
               this.resetErrorSearch(error)
             })
         }
@@ -152,9 +149,7 @@ export default {
               })
               .catch((error) => {
                 console.log(error)
-                if (error != undefined && error.startsWith('429')) {
-                  this.handleBrowsingError('tooManyRequests')
-                }
+                this.handleBrowsingError('tooManyRequests')
                 this.loading = false
               })
           }

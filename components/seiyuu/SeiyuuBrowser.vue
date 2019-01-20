@@ -113,9 +113,7 @@ export default {
             })
             .catch((error) => {
               console.log(error)
-              if (error.error != undefined && error.error.startsWith('429')) {
-                this.handleBrowsingError('tooManyRequests')
-              }
+              this.handleBrowsingError('tooManyRequests')
               this.loading = false
             })
         }
