@@ -4,6 +4,7 @@
          <v-autocomplete
           :items="items"
           :search-input.sync="search"
+          :loading="loadingSearch"
           v-model="model"
           hide-no-data
           no-filter
@@ -27,11 +28,6 @@
             </template>
           </template>
         </v-autocomplete>
-      <v-btn raised color="secondary" 
-        v-on:click="sendAnimeRequest" 
-        v-if="loadingSearch" 
-        :disabled="loadingSearch || !model" 
-        :loading="loadingSearch">Add</v-btn>
       <alert-ribbon 
         :alerts="alerts" />
     </v-flex>
@@ -98,11 +94,11 @@ export default {
       if (this.searchedId.length >= this.maximumSeiyuuNumber) {
         this.handleBrowsingError('tooMuchRecords')
       } else {
-        this.loading = true
+        this.loadingSearch = true
         if (this.searchedId.includes(parseInt(this.model))) {
           this.handleBrowsingError('alreadyOnTheList')
           this.model = null
-          this.loading = false
+          this.loadingSearch = false
         } else {
           axios.get(process.env.JIKAN_URL + 'anime/' + String(this.model))
             .then((response) => {
@@ -120,6 +116,7 @@ export default {
       axios.get(process.env.JIKAN_URL + 'anime/' + String(animeModel.mal_id) + '/characters_staff')
         .then((response) => {
           this.$emit('animeReturned', { anime: animeModel, characters: response.data.characters})
+          this.loadingSearch = false
           this.resetAlerts()
         })
         .catch((error) => {

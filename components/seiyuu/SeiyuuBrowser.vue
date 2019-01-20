@@ -4,6 +4,7 @@
         <v-autocomplete
           :items="cachedSeiyuu"
           :filter="customFilter"
+          :loading="loading"
           v-model="selectModel"
           label="Search by Seiyuu Name..."
           item-text="name"
