@@ -57,7 +57,7 @@ export default {
       searchResults: [],
       loadingSearch: false,
       timeout: null,
-      timeoutLimit: 500,
+      timeoutLimit: 300,
       alerts: [
         {
           name: 'tooMuchRecords',
@@ -152,7 +152,14 @@ export default {
           }
         })
       }
-      
+    },
+    excludeFromSearchResults () {
+      this.searchedId.forEach(id => {
+        var index = this.entries.map(x => x.mal_id).indexOf(id);
+        if (index > -1) {
+          this.entries.splice(index, 1);
+        }
+      });
     },
     emitRunImmediately () {
       if (this.searchedId != null && this.shareLinkData != null) {
@@ -189,6 +196,7 @@ export default {
             .then(res => {
               if (res.data.length > 0) {
                 self.entries = res.data
+                self.excludeFromSearchResults()
               }
               self.isLoading = false
             })
