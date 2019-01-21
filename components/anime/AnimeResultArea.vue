@@ -89,14 +89,14 @@ export default {
         filteredData[i] = []
       }
 
-      for (var k = 0; k < this.charactersData.length; k++) {
+      for (var k = 0; k < this.animeData.length; k++) {
         for (i = 0; i < this.charactersData[k].length; i++) {
           for (var j = 0; j < this.charactersData[k][i].voice_actors.length; j++) {
             if (this.charactersData[k][i].voice_actors[j].language === 'Japanese') {
               filteredData[k].push({
                 seiyuu: this.charactersData[k][i].voice_actors[j],
                 roles: [{
-                  anime: this.charactersData[k].title,
+                  anime: this.animeData[k].title,
                   character: this.charactersData[k][i]
                 }]
               })
@@ -115,7 +115,7 @@ export default {
               var cloneObject = JSON.parse(JSON.stringify(partialResults[animeIndex - 1][j]))
               partialResults[animeIndex].push(cloneObject)
               partialResults[animeIndex][partialResults[animeIndex].length - 1].roles.push({
-                anime: this.charactersData[animeIndex].title,
+                anime: this.animeData[animeIndex].title,
                 character: filteredData[animeIndex][i].roles[0].character
               })
             }
