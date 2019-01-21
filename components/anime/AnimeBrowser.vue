@@ -71,7 +71,7 @@ export default {
         },
         {
           name: 'tooManyRequests',
-          text: 'The Jikan API has too many requests to send. Wait a little and try again.',
+          text: 'There are has too many requests to send. Wait a few seconds and select anime again.',
           value: false
         },
         {
@@ -120,6 +120,7 @@ export default {
           this.resetAlerts()
         })
         .catch((error) => {
+          this.handleBrowsingError('tooManyRequests')
           this.resetErrorSearch(error)
       })
     },
@@ -145,7 +146,6 @@ export default {
                 this.loading = false
               })
               .catch((error) => {
-                console.log(error)
                 this.handleBrowsingError('tooManyRequests')
                 this.loading = false
               })

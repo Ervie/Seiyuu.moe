@@ -74,7 +74,7 @@ export default {
         },
         {
           name: 'tooManyRequests',
-          text: 'The Jikan API has too many requests to send. Wait a little and try again.',
+          text: 'There are has too many requests to send. Wait a few seconds and select seiyuu again.',
           value: false
         },
         {
@@ -158,9 +158,7 @@ export default {
               })
               .catch((error) => {
                 console.log(error)
-                if (error != undefined && error.startsWith('429')) {
-                  this.handleBrowsingError('tooManyRequests')
-                }
+                this.handleBrowsingError('tooManyRequests')
                 this.loading = false
               })
           }
