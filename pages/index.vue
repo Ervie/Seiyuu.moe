@@ -127,14 +127,14 @@ export default {
         title: 'Compare seiyuu',	
         text: 'Get started - select and compare seiyuu.',	
         altText: 'Select and compare seiyuu.',	
-        link: '/Seiyuu'	
+        link: '/seiyuu'	
       },	
       {	
         imageSrc: '/carousel.jpg',	
         title: 'Compare anime',	
         text: 'Get started - select and compare anime.',	
         altText: 'Select and compare anime.',	
-        link: '/Anime'	
+        link: '/anime'	
       }
     ]
   })

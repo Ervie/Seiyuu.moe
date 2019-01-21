@@ -130,7 +130,7 @@ export default {
       seiyuuIds = seiyuuIds.slice(0, -1)
       seiyuuIds = this.encodeURL(seiyuuIds)
 
-      var shareLink = process.env.baseUrl + $nuxt.$route.path + '?seiyuuIds=' + seiyuuIds
+      var shareLink = process.env.baseUrl + $nuxt.$route.path.toLowerCase() + '?seiyuuIds=' + seiyuuIds
 
       this.$copyText(shareLink)
       this.snackbar = true

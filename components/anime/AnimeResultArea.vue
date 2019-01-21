@@ -136,7 +136,7 @@ export default {
       animeIds = animeIds.slice(0, -1)
       animeIds = this.encodeURL(animeIds)
 
-      var shareLink = process.env.baseUrl + $nuxt.$route.path + '?animeIds=' + animeIds
+      var shareLink = process.env.baseUrl + $nuxt.$route.path.toLowerCase() + '?animeIds=' + animeIds
 
       this.$copyText(shareLink)
       this.snackbar = true
