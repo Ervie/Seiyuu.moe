@@ -1,22 +1,27 @@
 <template>
-<v-container fluid grid-list-xs v-if="!avatarMode">
-<v-layout v-for="entry in items" :key="entry.mal_id" row>
-    <v-flex xs8 align-content-center>
+<v-container fluid v-if="!avatarMode">
+    <v-layout wrap align-center justify-center fill-height>
+    <div v-for="entry in items" :key="entry.mal_id" width="225px">
+        <v-card
+        class="tableCard">
+        <a :href="entry.entry.url" target="_blank">
+            <v-img
+            height="195px"
+            aspect-ratio="1.5"
+            :src="changeUrlToOriginalSize(entry.entry.image_url)"
+            ></v-img>
+        </a>
+
+        <v-card-text class="caption title   ">{{ swapNameSurname(decodeHtml(entry.entry.name)) }}</v-card-text>
+        </v-card>
+    </div>
+    </v-layout>
+<!-- <v-layout v-for="entry in items" :key="entry.mal_id">
     <v-card-text class="subheading">{{ swapNameSurname(decodeHtml(entry.entry.name)) }}</v-card-text>
-    </v-flex>
-    <v-flex xs4>
-    <a :href="entry.entry.url" target="_blank">
-        <v-img
-        height="70px"
-        :src="changeUrlToOriginalSize(entry.entry.image_url)"
-        contain
-        ></v-img>
-    </a>
-    </v-flex>
-</v-layout>
+</v-layout> -->
 </v-container>
 <v-container fluid grid-list-xs v-else>
-    <v-layout v-for="entry in items" :key="entry.mal_id" row>
+    <v-layout v-for="entry in items" :key="entry.mal_id">
         <v-flex xs12 justify-center v-if="entry.entry.image_url">
         <a :href="entry.entry.url" target="_blank">
             <v-tooltip bottom>
@@ -52,3 +57,12 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+    .tableCard {
+        /* display: inline-flex; */
+        margin: 5px;
+        height: 265px;
+        width: 195px;
+    }
+</style>
