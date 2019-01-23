@@ -12,14 +12,20 @@
           <table-header :imageUrl="props.header.image" :text="props.header.text" />
         </template>
         <template slot="items" slot-scope="props">
-          <tr @click="props.expanded = !props.expanded">
             <td>
               <single-record-cell :preferText="true" :item="props.item.anime[0]" />
             </td>
             <td v-for="role in props.item.roles" :key="role.seiyuu">
               <single-record-cell :preferText="true" :item="role.characters[0]" />
             </td>
-          </tr>
+            <td>
+              <v-btn fab dark 
+                color="primary"
+                @click="props.expanded = !props.expanded"
+              >
+                <v-icon dark>expand</v-icon>
+              </v-btn>
+          </td>
         </template>
         <template slot="expand" slot-scope="props">
           <td>
@@ -135,6 +141,11 @@ export default {
           value: 'roles[' + headerIndex + '].characters[0].entry.name',
           image: this.seiyuuData[headerIndex].image_url})
       }
+      this.headers.push({
+        text: '',
+        sortable: false,
+        value: 'name'
+      })
       this.showTables = true
     },
     computeResultsSeries () {
@@ -190,6 +201,11 @@ export default {
           value: 'roles[' + headerIndex + '].characters.length',
           image: this.seiyuuData[headerIndex].image_url})
       }
+      this.headers.push({
+        text: '',
+        sortable: false,
+        value: 'name'
+      })
       this.showTables = true
     },
     computeResultsCharacters () {
@@ -246,6 +262,11 @@ export default {
           value: 'roles[' + headerIndex + '].characters[0].entry.name',
           image: this.seiyuuData[headerIndex].image_url})
       }
+      this.headers.push({
+        text: '',
+        sortable: false,
+        value: 'name'
+      })
       this.showTables = true
     },
     computeResultsSeriesCharacters () {
@@ -323,6 +344,11 @@ export default {
           value: 'roles[' + headerIndex + '].characters.length',
           image: this.seiyuuData[headerIndex].image_url})
       }
+      this.headers.push({
+        text: '',
+        sortable: false,
+        value: 'name'
+      })
       this.showTables = true
     },
     combinationCode (data) {

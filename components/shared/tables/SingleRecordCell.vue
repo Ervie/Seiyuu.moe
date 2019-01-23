@@ -16,13 +16,9 @@
     </v-layout>
   </v-container>
     <!-- Text mode -->
-  <!-- <v-container fluid grid-list-xs v-else> -->
     <v-layout v-else row>
-        <!-- <v-flex xs12 justify-center> -->
-        <v-card-text class="subheading">{{decodeHtml(item.entry.name)}}</v-card-text>
-        <!-- </v-flex> -->
+        <div class="title">{{decodeHtml(item.entry.name)}}</div>
     </v-layout>
-  <!-- </v-container> -->
 </template>
 
 <script>

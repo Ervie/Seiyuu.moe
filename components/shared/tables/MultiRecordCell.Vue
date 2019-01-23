@@ -6,7 +6,7 @@
         class="tableCard">
         <a :href="entry.entry.url" target="_blank">
             <v-img
-            height="195px"
+            height="250px"
             aspect-ratio="1.5"
             :src="changeUrlToOriginalSize(entry.entry.image_url)"
             ></v-img>
@@ -43,7 +43,7 @@ export default {
     .tableCard {
         /* display: inline-flex; */
         margin: 5px;
-        height: 265px;
+        height: 295px;
         width: 195px;
     }
 </style>
