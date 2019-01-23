@@ -19,21 +19,16 @@
               <single-record-cell :preferText="true" :item="role.characters[0]" />
             </td>
             <td>
-              <v-btn fab dark 
+              <v-btn fab dark small
                 color="primary"
                 @click="props.expanded = !props.expanded"
               >
-                <v-icon dark>expand</v-icon>
+                <v-icon dark>fa-expand</v-icon>
               </v-btn>
           </td>
         </template>
         <template slot="expand" slot-scope="props">
-          <td>
-              <multi-record-cell :items="props.item.anime" />
-            </td>
-            <td v-for="role in props.item.roles" :key="role.seiyuu">
-              <multi-record-cell :items="role.characters" />
-            </td>
+            <multi-record-cell :mainColumnItems="props.item.anime" :subColumnsItems="props.item.roles" />
         </template>
         <template slot="no-data">
           <v-alert :value="true" color="error" icon="warning">

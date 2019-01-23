@@ -51,13 +51,13 @@
           slider-color="secondary"
           grow
         >
-          <v-tab :href="`#tab-anime`">
-            Anime
-            <v-icon large>fa-tv</v-icon>
+          <v-tab :href="`#tab-table`">
+            Table
+            <v-icon large>fa-table</v-icon>
           </v-tab>
         </v-tabs>
         <v-tabs-items v-model="tabs" v-if="showTables">
-          <v-tab-item :value="`tab-anime`" >
+          <v-tab-item :value="`tab-table`" >
             <seiyuu-table 
               :inputData="outputData" 
               :counter="counter" 
@@ -98,7 +98,7 @@ export default {
       showTables: false,
       windowWidth: 0,
       counter: 0,
-      tabs: 'tab-anime',
+      tabs: 'tab-table',
       outputData: [],
       searchOption: {
         groupBySeries: true,
