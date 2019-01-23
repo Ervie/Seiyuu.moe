@@ -17,7 +17,7 @@
   </v-container>
     <!-- Text mode -->
     <v-layout v-else row>
-        <div class="title">{{decodeHtml(item.entry.name)}}</div>
+        <div class="title">{{ swapNameSurname(decodeHtml(item.entry.name))}}</div>
     </v-layout>
 </template>
 

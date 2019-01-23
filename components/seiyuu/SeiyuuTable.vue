@@ -1,6 +1,15 @@
 <template>
   <div>
     <v-container hidden-sm-and-down>
+      <v-toolbar light color="primary">
+        <v-spacer/>
+        <v-switch
+          color="white"
+          class="white--text"
+          label="Compact Mode"
+          v-model="compactMode"
+        ></v-switch>
+      </v-toolbar>
       <v-data-table 
         :headers="headers" 
         :items="tableData" 
@@ -12,23 +21,33 @@
           <table-header :imageUrl="props.header.image" :text="props.header.text" />
         </template>
         <template slot="items" slot-scope="props">
+          <tr v-if="compactMode">
             <td>
-              <single-record-cell :preferText="true" :item="props.item.anime[0]" />
+              <multi-record-cell :preferText="true" :items="props.item.anime" />
             </td>
             <td v-for="role in props.item.roles" :key="role.seiyuu">
-              <single-record-cell :preferText="true" :item="role.characters[0]" />
+              <multi-record-cell :preferText="true" :items="role.characters" />
             </td>
             <td>
               <v-btn fab dark small
-                color="primary"
+                color="secondary"
                 @click="props.expanded = !props.expanded"
               >
-                <v-icon dark>fa-expand</v-icon>
+                <v-icon>{{ props.expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</v-icon>
               </v-btn>
           </td>
+          </tr>
+          <tr v-else>
+            <td>
+            <multi-record-cell :preferText="false" :items="props.item.anime" />
+            </td>
+            <td v-for="role in props.item.roles" :key="role.seiyuu">
+              <multi-record-cell :preferText="false" :items="role.characters" />
+            </td>
+          </tr>
         </template>
         <template slot="expand" slot-scope="props">
-            <multi-record-cell :mainColumnItems="props.item.anime" :subColumnsItems="props.item.roles" />
+            <expanded-panel light :mainColumnItems="props.item.anime" :subColumnsItems="props.item.roles" class="expandedRow"/>
         </template>
         <template slot="no-data">
           <v-alert :value="true" color="error" icon="warning">
@@ -46,7 +65,8 @@
 <script>
 import decode from 'decode-html'
 import TableHeader from '@/components/shared/tables/TableHeader'
-import SingleRecordCell from '@/components/shared/tables/SingleRecordCell'
+import ExpandedPanel from '@/components/shared/tables/ExpandedPanel'
+// import SingleRecordCell from '@/components/shared/tables/SingleRecordCell'
 import MultiRecordCell from '@/components/shared/tables/MultiRecordCell'
 import CardCell from '@/components/shared/tables/seiyuu/CardCell'
 
@@ -54,8 +74,9 @@ export default {
   name: 'SeiyuuTable',
   components: {
     'table-header': TableHeader,
+    'expanded-panel': ExpandedPanel,
     'multi-record-cell': MultiRecordCell,
-    'single-record-cell': SingleRecordCell,
+    // 'single-record-cell': SingleRecordCell,
     'card-cell': CardCell
   },
   props: {
@@ -79,7 +100,8 @@ export default {
   data () {
     return {
       headers: [],
-      tableData: []
+      tableData: [],
+      compactMode: false
     }
   },
   methods: {
@@ -257,11 +279,13 @@ export default {
           value: 'roles[' + headerIndex + '].characters[0].entry.name',
           image: this.seiyuuData[headerIndex].image_url})
       }
-      this.headers.push({
-        text: '',
-        sortable: false,
-        value: 'name'
-      })
+      if (this.compactMode) {
+        this.headers.push({
+          text: '',
+          sortable: false,
+          value: 'name'
+        })
+      }
       this.showTables = true
     },
     computeResultsSeriesCharacters () {
@@ -339,11 +363,13 @@ export default {
           value: 'roles[' + headerIndex + '].characters.length',
           image: this.seiyuuData[headerIndex].image_url})
       }
-      this.headers.push({
-        text: '',
-        sortable: false,
-        value: 'name'
-      })
+      if (this.compactMode) {
+        this.headers.push({
+          text: '',
+          sortable: false,
+          value: 'name'
+        })
+      }
       this.showTables = true
     },
     combinationCode (data) {
@@ -370,11 +396,17 @@ export default {
     groupingMode: {
       handler: 'selectComputeMethod',
       immediate: false
+    },
+    compactMode: {
+      handler: 'selectComputeMethod',
+      immediate: false
     }
   }
 }
 </script>
 
 <style>
-
+.expandedRow {
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+}
 </style>
