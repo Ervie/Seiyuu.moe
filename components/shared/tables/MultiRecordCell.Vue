@@ -1,5 +1,5 @@
 <template>
-<v-container fluid v-if="!avatarMode">
+<v-container fluid >
     <v-layout wrap align-center justify-center fill-height>
     <div v-for="entry in items" :key="entry.mal_id" width="225px">
         <v-card
@@ -12,7 +12,7 @@
             ></v-img>
         </a>
 
-        <v-card-text class="caption title   ">{{ swapNameSurname(decodeHtml(entry.entry.name)) }}</v-card-text>
+        <v-card-text class="caption title">{{ swapNameSurname(decodeHtml(entry.entry.name)) }}</v-card-text>
         </v-card>
     </div>
     </v-layout>
@@ -20,31 +20,12 @@
     <v-card-text class="subheading">{{ swapNameSurname(decodeHtml(entry.entry.name)) }}</v-card-text>
 </v-layout> -->
 </v-container>
-<v-container fluid grid-list-xs v-else>
-    <v-layout v-for="entry in items" :key="entry.mal_id">
-        <v-flex xs12 justify-center v-if="entry.entry.image_url">
-        <a :href="entry.entry.url" target="_blank">
-            <v-tooltip bottom>
-            <img :src="changeUrlToOriginalSize(entry.entry.image_url)" slot="activator" class="miniav">
-            <span>{{swapNameSurname(decodeHtml(entry.entry.name))}}</span>
-            </v-tooltip>
-        </a>
-        </v-flex>
-        <v-flex md1 justify-center v-else>
-        <v-card-text>{{swapNameSurname(decodeHtml(entry.entry.name))}}</v-card-text>
-        </v-flex>
-    </v-layout>
-</v-container>
 </template>
 
 <script>
 export default {
   Name: 'MultiRecordCell',
   props: {
-    avatarMode: {
-      type: Boolean,
-      required: true
-    },
     items: {
       type: Array,
       required: true

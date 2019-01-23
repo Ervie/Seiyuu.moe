@@ -1,17 +1,33 @@
 <template>
   <div>
     <v-container hidden-sm-and-down>
-      <v-data-table :headers="headers" :items="tableData" hide-actions class="elevation-1">
+      <v-data-table 
+        :headers="headers" 
+        :items="tableData" 
+        :expand="true"
+        hide-actions
+        item-key="anime[0].entry.name"
+        class="elevation-1">
         <template slot="headerCell" slot-scope="props">
-          <table-header :imageUrl="props.header.image" :text="props.header.text" :avatarMode="avatarMode" />
+          <table-header :imageUrl="props.header.image" :text="props.header.text" />
         </template>
         <template slot="items" slot-scope="props">
+          <tr @click="props.expanded = !props.expanded">
+            <td>
+              <single-record-cell :preferText="true" :item="props.item.anime[0]" />
+            </td>
+            <td v-for="role in props.item.roles" :key="role.seiyuu">
+              <single-record-cell :preferText="true" :item="role.characters[0]" />
+            </td>
+          </tr>
+        </template>
+        <template slot="expand" slot-scope="props">
           <td>
-            <multi-record-cell :avatarMode="avatarMode" :items="props.item.anime" />
-          </td>
-          <td v-for="role in props.item.roles" :key="role.seiyuu">
-            <multi-record-cell :avatarMode="avatarMode" :items="role.characters" />
-          </td>
+              <multi-record-cell :items="props.item.anime" />
+            </td>
+            <td v-for="role in props.item.roles" :key="role.seiyuu">
+              <multi-record-cell :items="role.characters" />
+            </td>
         </template>
         <template slot="no-data">
           <v-alert :value="true" color="error" icon="warning">
@@ -29,6 +45,7 @@
 <script>
 import decode from 'decode-html'
 import TableHeader from '@/components/shared/tables/TableHeader'
+import SingleRecordCell from '@/components/shared/tables/SingleRecordCell'
 import MultiRecordCell from '@/components/shared/tables/MultiRecordCell'
 import CardCell from '@/components/shared/tables/seiyuu/CardCell'
 
@@ -37,16 +54,13 @@ export default {
   components: {
     'table-header': TableHeader,
     'multi-record-cell': MultiRecordCell,
+    'single-record-cell': SingleRecordCell,
     'card-cell': CardCell
   },
   props: {
     inputData: {
       type: Array,
       required: false
-    },
-    avatarMode: {
-      type: Boolean,
-      required: true
     },
     counter: {
       type: Number,

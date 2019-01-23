@@ -60,7 +60,6 @@
           <v-tab-item :value="`tab-anime`" >
             <seiyuu-table 
               :inputData="outputData" 
-              :avatarMode="avatarMode" 
               :counter="counter" 
               :seiyuuData="inputData" 
               :groupingMode="selectedTable"
@@ -97,7 +96,6 @@ export default {
   data () {
     return {
       showTables: false,
-      avatarMode: false,
       windowWidth: 0,
       counter: 0,
       tabs: 'tab-anime',
@@ -113,13 +111,6 @@ export default {
   methods: {
     resetList () {
       this.$emit('resetList')
-    },
-    handleResize (windowWidth) {
-      if (windowWidth / this.inputData.length < 400) {
-        this.avatarMode = true
-      } else {
-        this.avatarMode = false
-      }
     },
     generateShareLink () {
       var seiyuuIds = ''
@@ -215,26 +206,11 @@ export default {
         this.showTables = false
       }
     },
-    windowWidth: function (newWidth, oldWidth) {
-      this.handleResize(newWidth)
-    },
     runImmediately: function (val) {
       if (val === true) {
         this.computeResults()
       }
     }
-  },
-  mounted () {
-    let that = this
-    this.$nextTick(function () {
-      window.addEventListener('resize', function (e) {
-        that.windowWidth = window.innerWidth
-        that.handleResize(this.windowWidth)
-      })
-    })
-  },
-  beforeDestroy: function () {
-    window.removeEventListener('resize', this.handleResize)
   }
 }
 </script>
