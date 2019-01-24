@@ -93,4 +93,9 @@
    object-fit: cover;
    object-position: 100% 20%;
  }
+
+.accentedText {
+  font-style: italic;
+  color: #B2DFDB;
+}
 </style>

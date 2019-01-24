@@ -66,7 +66,6 @@
 import decode from 'decode-html'
 import TableHeader from '@/components/shared/tables/TableHeader'
 import ExpandedPanel from '@/components/shared/tables/ExpandedPanel'
-// import SingleRecordCell from '@/components/shared/tables/SingleRecordCell'
 import MultiRecordCell from '@/components/shared/tables/MultiRecordCell'
 import CardCell from '@/components/shared/tables/seiyuu/CardCell'
 
@@ -76,7 +75,6 @@ export default {
     'table-header': TableHeader,
     'expanded-panel': ExpandedPanel,
     'multi-record-cell': MultiRecordCell,
-    // 'single-record-cell': SingleRecordCell,
     'card-cell': CardCell
   },
   props: {
@@ -101,7 +99,7 @@ export default {
     return {
       headers: [],
       tableData: [],
-      compactMode: false
+      compactMode: true
     }
   },
   methods: {
