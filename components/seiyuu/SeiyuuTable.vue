@@ -47,7 +47,7 @@
           </tr>
         </template>
         <template slot="expand" slot-scope="props">
-            <expanded-panel light :mainColumnItems="props.item.anime" :subColumnsItems="props.item.roles" class="expandedRow"/>
+            <expanded-panel v-if="compactMode" light :mainColumnItems="props.item.anime" :subColumnsItems="props.item.roles" class="expandedRow"/>
         </template>
         <template slot="no-data">
           <v-alert :value="true" color="error" icon="warning">
