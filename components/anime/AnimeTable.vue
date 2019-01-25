@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-container hidden-sm-and-down>
+    <v-container hidden-md-and-down>
       <v-data-table :headers="headers" :items="tableData" hide-actions class="elevation-1">
         <template slot="headerCell" slot-scope="props">
           <table-header :imageUrl="props.header.image" :text="props.header.text" :avatarMode="avatarMode" />
@@ -20,7 +20,7 @@
         </template>
       </v-data-table>
     </v-container>
-    <v-container hidden-md-and-up>
+    <v-container hidden-lg-and-up>
        <card-cell v-for="(item, i) in tableData" v-bind:key="i" :item="item"/>
     </v-container>
   </div>

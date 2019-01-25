@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-container hidden-sm-and-down>
+    <v-container hidden-md-and-down>
       <v-toolbar light color="primary">
         <v-spacer/>
         <v-switch
@@ -47,7 +47,11 @@
           </tr>
         </template>
         <template slot="expand" slot-scope="props">
-            <expanded-panel v-if="compactMode" light :mainColumnItems="props.item.anime" :subColumnsItems="props.item.roles" class="expandedRow"/>
+            <expanded-panel 
+              v-if="compactMode" 
+              :mainColumnItems="props.item.anime" 
+              :subColumnsItems="props.item.roles" 
+              class="expandedRow"/>
         </template>
         <template slot="no-data">
           <v-alert :value="true" color="error" icon="warning">
@@ -56,7 +60,7 @@
         </template>
       </v-data-table>
     </v-container>
-     <v-container hidden-md-and-up>
+     <v-container hidden-lg-and-up>
        <card-cell v-for="(item, i) in tableData" v-bind:key="i" :item="item"/>
     </v-container>
   </div>
