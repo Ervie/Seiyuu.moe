@@ -1,23 +1,6 @@
 <template>
     <v-layout>
       <v-flex>
-        <v-expansion-panel popout>
-          <v-expansion-panel-content>
-            <div slot="header" class="title">Compare Options</div>
-            <v-card>
-              <v-layout row wrap hidden-sm-and-down>
-                <v-flex xs4>
-                  <v-checkbox label="Group by seiyuu" v-model="searchOption.groupBySeiyuu" color="secondary"></v-checkbox>
-                </v-flex>
-              </v-layout>
-              <v-layout row wrap hidden-md-and-up>
-                <v-flex xs12>
-                  <v-checkbox label="Group by seiyuu" v-model="searchOption.groupBySeiyuu" color="secondary"></v-checkbox>
-                </v-flex>
-              </v-layout>
-            </v-card>
-          </v-expansion-panel-content>
-        </v-expansion-panel>
         <div>
           <v-btn raised large color="error" class="optionButton" v-on:click="resetList" :disabled="charactersData.length < 1">Reset</v-btn>
           <v-btn depressed large color="primary" class="optionButton" v-on:click="computeResults" :disabled="charactersData.length < 2">Compare</v-btn>
@@ -27,10 +10,8 @@
           <anime-table 
             v-if="showTables" 
             :charactersData="outputData" 
-            :avatarMode="avatarMode" 
             :counter="counter" 
-            :animeData="animeData" 
-            :groupBySeiyuu="searchOption.groupBySeiyuu"/>
+            :animeData="animeData"/>
         </div>
       </v-flex>
       <share-link-snackbar
@@ -66,12 +47,8 @@ export default {
   data () {
     return {
       showTables: false,
-      avatarMode: false,
       counter: 0,
       outputData: [],
-      searchOption: {
-        groupBySeiyuu: true
-      },
       snackbar: false
     }
   },
