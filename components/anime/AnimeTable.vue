@@ -54,6 +54,7 @@
             v-if="compactMode" 
             :mainColumnItems="props.item.seiyuu" 
             :subColumnsItems="props.item.roles" 
+            :tableType="'Anime'"
             class="expandedRow"/>
         </template>
         <template slot="no-data">

@@ -35,7 +35,7 @@
                       ></v-img>
                   </a>
                 <div class="body-2">{{ swapNameSurname(decodeHtml(entry.characterName)) }}</div>
-                <div class="body-2 accentedText">{{ decodeHtml(entry.seiyuu) }}</div>
+                <div class="body-2 accentedText">{{ decodeHtml(entry.extraData) }}</div>
                 </v-card>
             <!-- </div> -->
           </v-layout>
@@ -55,6 +55,10 @@ export default {
     subColumnsItems: {
       type: Array,
       required: true
+    },
+    tableType: {
+      type: String,
+      required: true
     }
   },
   computed: {
@@ -63,7 +67,7 @@ export default {
       this.subColumnsItems.forEach(element => {
         element.characters.forEach(character => {
           flattened.push({
-            seiyuu: element.seiyuu,
+            extraData: this.tableType === "Anime" ? element.anime : element.seiyuu,
             url: character.entry.url,
             mal_id: character.entry.mal_id,
             image_url: character.entry.image_url,

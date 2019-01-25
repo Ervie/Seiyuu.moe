@@ -50,7 +50,8 @@
             <expanded-panel 
               v-if="compactMode" 
               :mainColumnItems="props.item.anime" 
-              :subColumnsItems="props.item.roles" 
+              :subColumnsItems="props.item.roles"
+              :tableType="'Seiyuu'"
               class="expandedRow"/>
         </template>
         <template slot="no-data">
