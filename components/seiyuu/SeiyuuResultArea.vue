@@ -7,24 +7,18 @@
             <v-card>
               <v-layout row wrap hidden-sm-and-down>
                 <v-flex xs4>
-                  <v-checkbox label="Group by series" v-model="searchOption.groupBySeries" color="secondary"></v-checkbox>
+                  <v-checkbox label="Group by series" v-model="searchOptions.groupBySeries" color="secondary"></v-checkbox>
                 </v-flex>
                 <v-flex xs4>
-                  <v-checkbox label="Group by character" v-model="searchOption.groupByCharacter" color="secondary"></v-checkbox>
-                </v-flex>
-                <v-flex xs4>
-                  <v-checkbox label="Main roles only" v-model="searchOption.mainRolesOnly" color="secondary"></v-checkbox>
+                  <v-checkbox label="Main roles only" v-model="searchOptions.mainRolesOnly" color="secondary"></v-checkbox>
                 </v-flex>
               </v-layout>
               <v-layout row wrap hidden-md-and-up>
                 <v-flex xs12>
-                  <v-checkbox label="Group by series" v-model="searchOption.groupBySeries" color="secondary"></v-checkbox>
+                  <v-checkbox label="Group by series" v-model="searchOptions.groupBySeries" color="secondary"></v-checkbox>
                 </v-flex>
                 <v-flex xs12>
-                  <v-checkbox label="Group by character" v-model="searchOption.groupByCharacter" color="secondary"></v-checkbox>
-                </v-flex>
-                <v-flex xs12>
-                  <v-checkbox label="Main roles only" v-model="searchOption.mainRolesOnly" color="secondary"></v-checkbox>
+                  <v-checkbox label="Main roles only" v-model="searchOptions.mainRolesOnly" color="secondary"></v-checkbox>
                 </v-flex>
               </v-layout>
             </v-card>
@@ -62,7 +56,7 @@
               :inputData="outputData" 
               :counter="counter" 
               :seiyuuData="inputData" 
-              :groupingMode="selectedTable"
+              :groupBySeries="searchOptions.groupBySeries"
             />
           </v-tab-item>
         </v-tabs-items>
@@ -100,9 +94,8 @@ export default {
       counter: 0,
       tabs: 'tab-table',
       outputData: [],
-      searchOption: {
+      searchOptions: {
         groupBySeries: true,
-        groupByCharacter: true,
         mainRolesOnly: false
       },
       snackbar: false
@@ -137,7 +130,7 @@ export default {
         filteredData[i] = []
       }
 
-      if (this.searchOption.mainRolesOnly) {
+      if (this.searchOptions.mainRolesOnly) {
         for (i = 0; i < this.inputData.length; i++) {
           filteredData[i] = this.seiyuuRoles[i].filter(x => x.role === 'Main')
         }
@@ -183,21 +176,6 @@ export default {
   computed: {
     seiyuuRoles () {
       return this.inputData.map(x => x.voice_acting_roles)
-    },
-    selectedTable () {
-      if (this.searchOption.groupBySeries) {
-        if (this.searchOption.groupByCharacter) {
-          return 'SeriesCharacters'
-        } else {
-          return 'Series'
-        }
-      } else {
-        if (this.searchOption.groupByCharacter) {
-          return 'Characters'
-        } else {
-          return 'None'
-        }
-      }
     }
   },
   watch: {
