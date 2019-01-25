@@ -112,7 +112,8 @@ export default {
         }
       }
     },
-    sendAnimeCharactersRequest (animeModel) {
+    async sendAnimeCharactersRequest (animeModel) {
+      await this.sleep(1000);
       axios.get(process.env.JIKAN_URL + 'anime/' + String(animeModel.mal_id) + '/characters_staff')
         .then((response) => {
           this.$emit('animeReturned', { anime: animeModel, characters: response.data.characters})

@@ -18,9 +18,9 @@ Vue.mixin({
     },
     pathToImage (path) {
       if (path) {
-        return path
+        return path;
       } else {
-        return 'questionMark.png'
+        return 'questionMark.png';
       }
     },
     encodeURL (inputURL) {
@@ -32,6 +32,9 @@ Vue.mixin({
                 return false;
         }
         return JSON.stringify(obj) === JSON.stringify({});
+    },
+    sleep (ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
     }
   }
 })
