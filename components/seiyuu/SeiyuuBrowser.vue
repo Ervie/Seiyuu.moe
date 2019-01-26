@@ -148,10 +148,10 @@ export default {
       this.cachedSeiyuu = seiyuu
     },
     loadDataFromLink () {
-      this.loading = true
       if (this.shareLinkData.length > 1 && this.shareLinkData.length < 6) {
         this.shareLinkData.forEach(element => {
-          if (this.searchedId.includes(element) && Number.parseInt(element) !== 'NaN' && Number.parseInt(element) > 0) {
+          if (!this.searchedId.includes(element) && Number.parseInt(element) !== 'NaN' && Number.parseInt(element) > 0) {
+            this.loading = true
             axios.get(process.env.JIKAN_URL + 'person/' + String(element))
               .then((response) => {
                 this.addToList(response.data)
@@ -164,7 +164,6 @@ export default {
           }
         })
       }
-      
     },
     emitRunImmediately () {
       if (this.searchedId != null && this.shareLinkData != null) {
@@ -206,7 +205,7 @@ export default {
       handler: 'sendDataFetchedEvent',
       immediate: true
     },
-    searchedIdCache: {
+    searchedId: {
       handler: 'emitRunImmediately',
       immediate: true
     }
