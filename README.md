@@ -40,12 +40,18 @@ Require npm, vue and nuxt installed.
 
 ## Changelog
 
-### Version 1.2 - 15th January 2019
+### Version 1.3 - 26th January 2019
 
-* Share links (after search).
-* Fixed seiyuu photo positioning in search list.
-* Massive speed boost for anime searching.
-* Adjusted application to work under Jikan REST API v3.
+* Features
+    * New display mode for tables.
+    * Possibility to choose between new and old display mode.
+    * Updated seiyuu database.
+* Fixes
+    * Added small delay to avoid 429 (too much requests) error.
+    * Fixed incorrect data in Seiyuu cards.
+    * Clearing alerts on loading correct data.
+    * Fixed sharelinks.
+    * Remove anime from search results if already selected.
 
 **[Read More](https://github.com/Ervie/Seiyuu.moe/blob/master/Changelog.md)**
 
