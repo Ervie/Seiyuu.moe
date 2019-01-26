@@ -104,10 +104,9 @@ export default {
         imageAltText: 'Seiyuu Namikawa Daisuke during recording',
         expanded: false,
         paragraphs: [
+          "26th January 2018 - new viewing mode is enabled. You can select between this and old one.",
           '9th January 2018 - You can now share links of your selected combinations using "Share Link" buttons! Also searching anime should be working again.',
-          '15th August 2018 - Anime search is up! Select anime, find seiyuu which collaborated on selected works.',
-          '5th July 2018 - Website is fully functional now.',
-          '1st July 2018 - MAL is coming back, site functionality is expected to work in one week.'
+          '15th August 2018 - Anime search is up! Select anime, find seiyuu which collaborated on selected works.'
         ]
       },
       {
