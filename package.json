@@ -19,7 +19,7 @@
     "axios": "^0.18.0",
     "decode-html": "^2.0.0",
     "npm": "^6.6.0",
-    "nuxt": "^2.3.4",
+    "nuxt": "^2.4.0",
     "nuxt-clipboard2": "^0.2.1",
     "vuelidate": "^0.7.4",
     "vuetify": "^1.4.3"

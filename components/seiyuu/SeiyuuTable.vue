@@ -23,10 +23,10 @@
         <template slot="items" slot-scope="props">
           <tr v-if="compactMode">
             <td>
-              <multi-record-cell :preferText="true" :items="props.item.anime" />
+              <text-record-cell :items="props.item.anime" />
             </td>
             <td v-for="role in props.item.roles" :key="role.seiyuu">
-              <multi-record-cell :preferText="true" :items="role.characters" />
+              <text-record-cell :items="role.characters" />
             </td>
             <td>
               <v-btn fab dark small
@@ -39,10 +39,10 @@
           </tr>
           <tr v-else>
             <td>
-            <multi-record-cell :preferText="false" :items="props.item.anime" />
+              <avatar-record-cell :items="props.item.anime" />
             </td>
             <td v-for="role in props.item.roles" :key="role.seiyuu">
-              <multi-record-cell :preferText="false" :items="role.characters" />
+              <avatar-record-cell :items="role.characters" />
             </td>
           </tr>
         </template>
@@ -71,7 +71,8 @@
 import decode from 'decode-html'
 import TableHeader from '@/components/shared/tables/TableHeader'
 import ExpandedPanel from '@/components/shared/tables/ExpandedPanel'
-import MultiRecordCell from '@/components/shared/tables/MultiRecordCell'
+import AvatarRecordCell from '@/components/shared/tables/AvatarRecordCell'
+import TextRecordCell from '@/components/shared/tables/TextRecordCell'
 import CardCell from '@/components/shared/tables/seiyuu/CardCell'
 
 export default {
@@ -79,7 +80,8 @@ export default {
   components: {
     'table-header': TableHeader,
     'expanded-panel': ExpandedPanel,
-    'multi-record-cell': MultiRecordCell,
+    'avatar-record-cell': AvatarRecordCell,
+    'text-record-cell': TextRecordCell,
     'card-cell': CardCell
   },
   props: {
@@ -109,7 +111,6 @@ export default {
   },
   methods: {
     selectComputeMethod () {
-      console.log('zmiana')
       if (!this.groupBySeries) {
         this.computeResultsSimple()
       } else {

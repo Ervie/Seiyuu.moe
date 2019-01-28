@@ -1,5 +1,5 @@
 <template>
-    <v-container v-if="!preferText" fluid grid-list-xs>
+    <v-container fluid grid-list-xs>
         <v-layout v-for="entry in items" :key="entry.mal_id" row>
             <v-flex xs8 align-content-center>
                 <v-card-text class="subheading">{{ swapNameSurname(decodeHtml(entry.entry.name)) }}</v-card-text>
@@ -15,23 +15,14 @@
             </v-flex>
         </v-layout>
     </v-container>
-    <v-container v-else>
-        <v-layout row v-for="entry in items" :key="entry.mal_id">
-            <div class="title" >{{ swapNameSurname(decodeHtml(entry.entry.name))}}</div>
-        </v-layout>
-    </v-container>
 </template>
 
 <script>
 export default {
-  Name: 'MultiRecordCell',
+  Name: 'AvatarRecordCell',
   props: {
     items: {
       type: Array,
-      required: true
-    },
-    preferText: {
-      type: Boolean,
       required: true
     }
   },
