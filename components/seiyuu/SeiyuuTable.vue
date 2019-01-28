@@ -1,19 +1,21 @@
 <template>
   <div>
     <v-container hidden-md-and-down>
-      <v-toolbar light color="primary">
-        <v-spacer/>
-        <v-switch
-          color="white"
-          class="white--text"
-          label="Compact Mode"
-          v-model="compactMode"
-        ></v-switch>
-      </v-toolbar>
+      <v-expansion-panel>
+        <v-expansion-panel-content>
+          <div slot="header" class="title">Display mode</div>
+          <v-radio-group v-model="viewMode" row>
+            <v-radio label="Expanded (avatars)" value="expanded"></v-radio>
+            <v-radio label="Mixed (small avatars)" value="mixed"></v-radio>
+            <v-radio label="Compact (text)" value="compact"></v-radio>
+          </v-radio-group>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
       <v-data-table 
         :headers="headers" 
         :items="tableData" 
         :expand="true"
+        :hide-headers="viewMode === 'expanded'"
         hide-actions
         item-key="anime[0].entry.name"
         class="elevation-1">
@@ -21,7 +23,7 @@
           <table-header :imageUrl="props.header.image" :text="props.header.text" />
         </template>
         <template slot="items" slot-scope="props">
-          <tr v-if="compactMode">
+          <tr v-if="viewMode === 'compact'">
             <td>
               <text-record-cell :items="props.item.anime" />
             </td>
@@ -37,7 +39,7 @@
               </v-btn>
           </td>
           </tr>
-          <tr v-else>
+          <tr v-else-if="viewMode === 'mixed'">
             <td>
               <avatar-record-cell :items="props.item.anime" />
             </td>
@@ -45,10 +47,15 @@
               <avatar-record-cell :items="role.characters" />
             </td>
           </tr>
+          <expanded-panel v-else
+              :mainColumnItems="props.item.anime" 
+              :subColumnsItems="props.item.roles"
+              :tableType="'Seiyuu'"
+              class="expandedRow"/>
         </template>
         <template slot="expand" slot-scope="props">
             <expanded-panel 
-              v-if="compactMode" 
+              v-if="viewMode === 'compact'" 
               :mainColumnItems="props.item.anime" 
               :subColumnsItems="props.item.roles"
               :tableType="'Seiyuu'"
@@ -106,7 +113,7 @@ export default {
     return {
       headers: [],
       tableData: [],
-      compactMode: true
+      viewMode: 'expanded'
     }
   },
   methods: {
@@ -170,11 +177,13 @@ export default {
           value: 'roles[' + headerIndex + '].characters.length',
           image: this.seiyuuData[headerIndex].image_url})
       }
-      this.headers.push({
-        text: '',
-        sortable: false,
-        value: 'name'
-      })
+      if (this.viewMode === 'compact') {
+        this.headers.push({
+          text: '',
+          sortable: false,
+          value: 'name'
+        })
+      }
       this.showTables = true
     },
     computeResultsSeries () {
@@ -252,7 +261,7 @@ export default {
           value: 'roles[' + headerIndex + '].characters.length',
           image: this.seiyuuData[headerIndex].image_url})
       }
-      if (this.compactMode) {
+      if (this.viewMode === 'compact') {
         this.headers.push({
           text: '',
           sortable: false,
@@ -376,7 +385,7 @@ export default {
           value: 'roles[' + headerIndex + '].characters[0].entry.name',
           image: this.seiyuuData[headerIndex].image_url})
       }
-      if (this.compactMode) {
+      if (this.viewMode === 'mixed') {
         this.headers.push({
           text: '',
           sortable: false,
@@ -395,7 +404,7 @@ export default {
       handler: 'selectComputeMethod',
       immediate: false
     },
-    compactMode: {
+    viewMode: {
       handler: 'selectComputeMethod',
       immediate: false
     }
