@@ -1,72 +1,51 @@
 <template>
   <div>
     <v-container hidden-md-and-down>
-      <v-expansion-panel>
-        <v-expansion-panel-content>
-          <div slot="header" class="title">Display mode</div>
-          <v-radio-group v-model="viewMode" row>
-            <v-radio label="Expanded (avatars)" value="expanded"></v-radio>
-            <v-radio label="Mixed (small avatars)" value="mixed"></v-radio>
-            <v-radio label="Compact (text)" value="compact"></v-radio>
-          </v-radio-group>
-        </v-expansion-panel-content>
-      </v-expansion-panel>
-      <v-data-table 
-        :headers="headers" 
-        :items="tableData" 
-        :expand="true"
-        :hide-headers="viewMode === 'expanded'"
-        hide-actions
-        item-key="anime[0].entry.name"
-        class="elevation-1">
-        <template slot="headerCell" slot-scope="props">
-          <table-header :imageUrl="props.header.image" :text="props.header.text" />
-        </template>
-        <template slot="items" slot-scope="props">
-          <tr v-if="viewMode === 'compact'">
-            <td>
-              <text-record-cell :items="props.item.anime" />
-            </td>
-            <td v-for="role in props.item.roles" :key="role.seiyuu">
-              <text-record-cell :items="role.characters" />
-            </td>
-            <td>
-              <v-btn fab dark small
-                color="secondary"
-                @click="props.expanded = !props.expanded"
-              >
-                <v-icon>{{ props.expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</v-icon>
-              </v-btn>
-          </td>
-          </tr>
-          <tr v-else-if="viewMode === 'mixed'">
-            <td>
-              <avatar-record-cell :items="props.item.anime" />
-            </td>
-            <td v-for="role in props.item.roles" :key="role.seiyuu">
-              <avatar-record-cell :items="role.characters" />
-            </td>
-          </tr>
-          <expanded-panel v-else
-              :mainColumnItems="props.item.anime" 
-              :subColumnsItems="props.item.roles"
-              :tableType="'Seiyuu'"
-              class="expandedRow"/>
-        </template>
-        <template slot="expand" slot-scope="props">
-            <expanded-panel 
-              v-if="viewMode === 'compact'" 
-              :mainColumnItems="props.item.anime" 
-              :subColumnsItems="props.item.roles"
-              :tableType="'Seiyuu'"
-              class="expandedRow"/>
-        </template>
-        <template slot="no-data">
-          <v-alert :value="true" color="error" icon="warning">
-            Sorry, nothing to display here :(
-          </v-alert>
-        </template>
-      </v-data-table>
+      <v-tabs
+          centered
+          fixed-tabs
+          slot="extension"
+          v-model="viewMode"
+          color="primary"
+          slider-color="secondary"
+          grow
+        >
+          <v-tab :href="`#tab-expanded`">
+            Expanded View
+          </v-tab>
+          <v-tab :href="`#tab-mixed`">
+            Mixed View
+          </v-tab>
+          <v-tab :href="`#tab-compact`">
+            Compact View
+          </v-tab>
+        </v-tabs>
+        <v-tabs-items v-model="viewMode">
+          <v-tab-item :value="`tab-expanded`" >
+            <seiyuu-expanded-table
+              :items="tableData" 
+              :headers="headers"
+              :seiyuuData="inputData" 
+              :groupBySeries="groupBySeries"
+            />
+          </v-tab-item>
+          <v-tab-item :value="`tab-mixed`" >
+            <seiyuu-mixed-table
+              :items="tableData" 
+              :headers="headers"
+              :seiyuuData="inputData" 
+              :groupBySeries="groupBySeries"
+            />
+          </v-tab-item>
+          <v-tab-item :value="`tab-compact`" >
+            <seiyuu-compact-table
+              :items="tableData" 
+              :headers="headers"
+              :seiyuuData="inputData" 
+              :groupBySeries="groupBySeries"
+            />
+          </v-tab-item>
+        </v-tabs-items>
     </v-container>
      <v-container hidden-lg-and-up>
        <card-cell v-for="(item, i) in tableData" v-bind:key="i" :item="item"/>
@@ -76,19 +55,17 @@
 
 <script>
 import decode from 'decode-html'
-import TableHeader from '@/components/shared/tables/TableHeader'
-import ExpandedPanel from '@/components/shared/tables/ExpandedPanel'
-import AvatarRecordCell from '@/components/shared/tables/AvatarRecordCell'
-import TextRecordCell from '@/components/shared/tables/TextRecordCell'
+import SeiyuuCompactTable from '@/components/seiyuu/tables/SeiyuuCompactTable'
+import SeiyuuExpandedTable from '@/components/seiyuu/tables/SeiyuuExpandedTable'
+import SeiyuuMixedTable from '@/components/seiyuu/tables/SeiyuuMixedTable'
 import CardCell from '@/components/shared/tables/seiyuu/CardCell'
 
 export default {
-  name: 'SeiyuuTable',
+  name: 'SeiyuuTableSelection',
   components: {
-    'table-header': TableHeader,
-    'expanded-panel': ExpandedPanel,
-    'avatar-record-cell': AvatarRecordCell,
-    'text-record-cell': TextRecordCell,
+    'seiyuu-compact-table': SeiyuuCompactTable,
+    'seiyuu-expanded-table': SeiyuuExpandedTable,
+    'seiyuu-mixed-table': SeiyuuMixedTable,
     'card-cell': CardCell
   },
   props: {
@@ -113,7 +90,7 @@ export default {
     return {
       headers: [],
       tableData: [],
-      viewMode: 'expanded'
+      viewMode: 'tab-expanded'
     }
   },
   methods: {
@@ -177,7 +154,7 @@ export default {
           value: 'roles[' + headerIndex + '].characters.length',
           image: this.seiyuuData[headerIndex].image_url})
       }
-      if (this.viewMode === 'compact') {
+      if (this.viewMode === 'tab-compact') {
         this.headers.push({
           text: '',
           sortable: false,
@@ -261,7 +238,7 @@ export default {
           value: 'roles[' + headerIndex + '].characters.length',
           image: this.seiyuuData[headerIndex].image_url})
       }
-      if (this.viewMode === 'compact') {
+      if (this.viewMode === 'tab-compact') {
         this.headers.push({
           text: '',
           sortable: false,

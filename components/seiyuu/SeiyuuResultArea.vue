@@ -52,7 +52,7 @@
         </v-tabs>
         <v-tabs-items v-model="tabs" v-if="showTables">
           <v-tab-item :value="`tab-table`" >
-            <seiyuu-table 
+            <seiyuu-table-selection 
               :inputData="outputData" 
               :counter="counter" 
               :seiyuuData="inputData" 
@@ -68,13 +68,13 @@
 </template>
 
 <script>
-import SeiyuuTable from '@/components/seiyuu/SeiyuuTable.vue'
+import SeiyuuTableSelection from '@/components/seiyuu/SeiyuuTableSelection.vue'
 import ShareLinkSnackbar from '@/components/shared/ui-components/ShareLinkSnackbar.vue';
 
 export default {
   name: 'SeiyuuResultArea',
   components: {
-    'seiyuu-table': SeiyuuTable,
+    'seiyuu-table-selection': SeiyuuTableSelection,
     'share-link-snackbar': ShareLinkSnackbar
   },
   props: {

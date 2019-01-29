@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid >
+  <v-container fluid>
     <v-layout wrap align-center justify-center fill-height>
         <v-flex sm6>
           <v-layout align-center justify-center fill-height row wrap>
@@ -21,7 +21,6 @@
         </v-flex>
         <v-flex sm6 >
           <v-layout align-center justify-center fill-height row wrap>
-            <!-- <div v-for="role in subColumnsItems" :key="role.seiyuu">  -->
                 <v-card
                 v-for="entry in flattenedData" :key="entry.mal_id"
                 flat
@@ -37,7 +36,6 @@
                 <div class="body-2">{{ swapNameSurname(decodeHtml(entry.characterName)) }}</div>
                 <div class="body-2 accentedText">{{ decodeHtml(entry.extraData) }}</div>
                 </v-card>
-            <!-- </div> -->
           </v-layout>
         </v-flex>
     </v-layout>
