@@ -121,16 +121,15 @@ export default {
       }
     },
     loadCachedSeiyuu () {
-      this.loadPopularList()
       this.$axios.get(process.env.API_URL + '/api/Seiyuu')
         .then((response) => {
-          this.cachedSeiyuu = response.data
+          this.cachedSeiyuu = response.data.sort(function(a, b){return b.popularity-a.popularity})
         })
         .catch((error) => {
           console.log(error)
           this.$axios.get(process.env.API_URL2 + '/api/Seiyuu')
             .then((response) => {
-              this.cachedSeiyuu = response.data
+              this.cachedSeiyuu = response.data.sort(function(a, b){return b.popularity-a.popularity})
             })
             .catch((error) => {
               console.log(error)
@@ -143,9 +142,6 @@ export default {
       if (typeof this.cachedSeiyuu !== 'undefined' && this.cachedSeiyuu.length > 200) {
         this.$emit('dataFetched')
       }
-    },
-    loadPopularList (callback) {
-      this.cachedSeiyuu = seiyuu
     },
     loadDataFromLink () {
       if (this.shareLinkData.length > 1 && this.shareLinkData.length < 6) {
