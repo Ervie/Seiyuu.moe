@@ -97,7 +97,8 @@ export default {
         const searchText = queryText.toLowerCase()
 
         return nameSurname.indexOf(searchText) > -1 ||
-          surnameName.indexOf(searchText) > -1
+          surnameName.indexOf(searchText) > -1 ||
+          item.japanese_name.indexOf(searchText) > -1
     },
     searchByName () {
       if (this.searchedId.length >= this.maximumSeiyuuNumber) {
