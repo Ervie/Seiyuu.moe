@@ -1,11 +1,10 @@
 <template>
     <v-data-table 
         :headers="headers" 
-        :items="tableData" 
+        :items="items" 
         :expand="true"
-        :hide-headers="viewMode === 'expanded'"
         hide-actions
-        item-key="anime[0].entry.name"
+        item-key="seiyuu[0].entry.name"
         class="elevation-1">
         <template slot="headerCell" slot-scope="props">
           <table-header :imageUrl="props.header.image" :text="props.header.text" />
@@ -13,28 +12,12 @@
         <template slot="items" slot-scope="props">
           <tr>
             <td>
-              <text-record-cell :items="props.item.anime" />
+              <avatar-record-cell :items="props.item.seiyuu" />
             </td>
-            <td v-for="role in props.item.roles" :key="role.seiyuu">
-              <text-record-cell :items="role.characters" />
-            </td>
-            <td>
-              <v-btn fab dark small
-                color="secondary"
-                @click="props.expanded = !props.expanded"
-              >
-                <v-icon>{{ props.expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</v-icon>
-              </v-btn>
+            <td v-for="role in props.item.roles" :key="role.anime">
+              <avatar-record-cell :items="role.characters" />
             </td>
           </tr>
-        </template>
-        <template slot="expand" slot-scope="props">
-            <expanded-panel 
-              v-if="viewMode === 'compact'" 
-              :mainColumnItems="props.item.anime" 
-              :subColumnsItems="props.item.roles"
-              :tableType="'Seiyuu'"
-              class="expandedRow"/>
         </template>
         <template slot="no-data">
           <v-alert :value="true" color="error" icon="warning">
@@ -46,10 +29,14 @@
 
 <script>
 import TableHeader from '@/components/shared/tables/TableHeader'
-import TextRecordCell from '@/components/shared/tables/TextRecordCell'
+import AvatarRecordCell from '@/components/shared/tables/AvatarRecordCell'
 
 export default {
-    name: 'AnimeCompactTable',
+    name: 'AnimeMixedTable',
+    components: {
+        'table-header': TableHeader,
+        'avatar-record-cell': AvatarRecordCell
+    },
     props: {
         headers: {
             type: Array,

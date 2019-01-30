@@ -1,68 +1,45 @@
 <template>
   <div>
     <v-container hidden-md-and-down>
-      <v-toolbar light color="primary">
-        <v-spacer/>
-        <v-switch
-          color="white"
-          class="white--text"
-          label="Compact Mode"
-          v-model="compactMode"
-        ></v-switch>
-      </v-toolbar>
-      <v-data-table 
-        :headers="headers" 
-        :items="tableData" 
-        :expand="true"
-        hide-actions
-        item-key="seiyuu[0].entry.name"
-        class="elevation-1">
-        <template slot="headerCell" slot-scope="props">
-          <table-header 
-          :imageUrl="props.header.image" 
-          :text="props.header.text" 
-          />
-        </template>
-        <template slot="items" slot-scope="props">
-          <tr v-if="compactMode">
-            <td>
-              <text-record-cell :items="props.item.seiyuu" />
-            </td>
-            <td v-for="role in props.item.roles" :key="role.anime">
-              <text-record-cell :items="role.characters" />
-            </td>
-            <td>
-              <v-btn fab dark small
-                color="secondary"
-                @click="props.expanded = !props.expanded"
-              >
-                <v-icon>{{ props.expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</v-icon>
-              </v-btn>
-            </td>
-          </tr>
-          <tr v-else>
-            <td>
-              <avatar-record-cell :items="props.item.seiyuu" />
-            </td>
-            <td v-for="role in props.item.roles" :key="role.anime">
-              <avatar-record-cell :items="role.characters" />
-            </td>
-          </tr>
-        </template>
-        <template slot="expand" slot-scope="props">
-          <expanded-panel 
-            v-if="compactMode" 
-            :mainColumnItems="props.item.seiyuu" 
-            :subColumnsItems="props.item.roles" 
-            :tableType="'Anime'"
-            class="expandedRow"/>
-        </template>
-        <template slot="no-data">
-          <v-alert :value="true" color="error" icon="warning">
-            Sorry, nothing to display here :(
-          </v-alert>
-        </template>
-      </v-data-table>
+      <v-tabs
+          centered
+          fixed-tabs
+          slot="extension"
+          v-model="viewMode"
+          color="primary"
+          slider-color="secondary"
+          grow
+        >
+          <v-tab :href="`#tab-expanded`">
+            Expanded View
+          </v-tab>
+          <v-tab :href="`#tab-mixed`">
+            Mixed View
+          </v-tab>
+          <v-tab :href="`#tab-compact`">
+            Compact View
+          </v-tab>
+        </v-tabs>
+        <v-tabs-items v-model="viewMode">
+          <v-tab-item :value="`tab-expanded`" >
+            <anime-expanded-table
+              :items="tableData" 
+              :headers="headers"
+            />
+          </v-tab-item>
+          <v-tab-item :value="`tab-mixed`" >
+            <anime-mixed-table
+              :items="tableData" 
+              :headers="headers"
+            />
+          </v-tab-item>
+          <v-tab-item :value="`tab-compact`" >
+            <anime-compact-table
+              :items="tableData" 
+              :headers="headers"
+            />
+          </v-tab-item>
+        </v-tabs-items>
     </v-container>
     <v-container hidden-lg-and-up>
        <card-cell v-for="(item, i) in tableData" v-bind:key="i" :item="item"/>
@@ -71,19 +48,17 @@
 </template>
 
 <script>
-import TableHeader from '@/components/shared/tables/TableHeader'
-import ExpandedPanel from '@/components/shared/tables/ExpandedPanel'
-import AvatarRecordCell from '@/components/shared/tables/AvatarRecordCell'
-import TextRecordCell from '@/components/shared/tables/TextRecordCell'
+import AnimeCompactTable from '@/components/anime/tables/AnimeCompactTable'
+import AnimeExpandedTable from '@/components/anime/tables/AnimeExpandedTable'
+import AnimeMixedTable from '@/components/anime/tables/AnimeMixedTable'
 import CardCell from '@/components/shared/tables/anime/CardCell'
 
 export default {
-  name: 'AnimeTable',
+  name: 'AnimeTableSelection',
   components: {
-    'table-header': TableHeader,
-    'expanded-panel': ExpandedPanel,
-    'avatar-record-cell': AvatarRecordCell,
-    'text-record-cell': TextRecordCell,
+    'anime-compact-table': AnimeCompactTable,
+    'anime-expanded-table': AnimeExpandedTable,
+    'anime-mixed-table': AnimeMixedTable,
     'card-cell': CardCell
   },
   props: {
@@ -104,7 +79,7 @@ export default {
     return {
       headers: [],
       tableData: [],
-      compactMode: true
+      viewMode: 'tab-expanded'
     }
   },
   methods: {
@@ -163,7 +138,7 @@ export default {
           value: 'roles[' + headerIndex + '].characters.length',
           image: this.animeData[headerIndex].image_url})
       }
-      if (this.compactMode) {
+      if (this.viewMode === 'tab-compact') {
         this.headers.push({
           text: '',
           sortable: false,
@@ -209,7 +184,7 @@ export default {
           value: 'roles[' + headerIndex + '].characters[0].entry.name',
           image: this.animeData[headerIndex].image_url})
       }
-      if (this.compactMode) {
+      if (this.viewMode === 'tab-compact') {
         this.headers.push({
           text: '',
           sortable: false,

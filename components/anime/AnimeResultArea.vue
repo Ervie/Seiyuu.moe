@@ -7,7 +7,7 @@
           <v-btn depressed large color="secondary" class="optionButton" v-on:click="generateShareLink" :disabled="!showTables || charactersData.length < 2">Share Link</v-btn>
         </div>
         <div>
-          <anime-table 
+          <anime-table-selection 
             v-if="showTables" 
             :charactersData="outputData" 
             :counter="counter" 
@@ -21,13 +21,13 @@
 </template>
 
 <script>
-import AnimeTable from '@/components/anime/AnimeTable.vue'
+import AnimeTableSelection from '@/components/anime/AnimeTableSelection.vue'
 import ShareLinkSnackbar from '@/components/shared/ui-components/ShareLinkSnackbar.vue';
 
 export default {
   name: 'AnimeResultArea',
   components: {
-    'anime-table': AnimeTable,
+    'anime-table-selection': AnimeTableSelection,
     'share-link-snackbar': ShareLinkSnackbar
   },
   props: {
