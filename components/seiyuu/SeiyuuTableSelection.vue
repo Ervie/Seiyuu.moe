@@ -103,7 +103,6 @@ export default {
     },
     computeResultsSimple () {
       this.tableData = []
-      this.headers = []
       var intersectAnime = []
       var animeIndex = -1
       var roleIndex = -1
@@ -143,29 +142,10 @@ export default {
       }
 
       this.tableData = intersectAnime
-      this.headers.push({
-        text: 'Anime',
-        align: 'left',
-        value: 'anime[0].entry.name'
-      })
-      for (var headerIndex = 0; headerIndex < this.seiyuuData.length; headerIndex++) {
-        this.headers.push({
-          text: this.seiyuuData[headerIndex].name,
-          value: 'roles[' + headerIndex + '].characters.length',
-          image: this.seiyuuData[headerIndex].image_url})
-      }
-      if (this.viewMode === 'tab-compact') {
-        this.headers.push({
-          text: '',
-          sortable: false,
-          value: 'name'
-        })
-      }
-      this.showTables = true
+      this.setTableHeaders();
     },
     computeResultsSeries () {
       this.tableData = []
-      this.headers = []
       var animeIndex = -1
       var charactersIndex = -1
       var franchiseIndex = -1
@@ -225,27 +205,7 @@ export default {
           }
         }
       }
-
-      this.headers.push({
-        text: 'Anime',
-        align: 'left',
-        value: 'anime[0].entry.name',
-        image: ''
-      })
-      for (var headerIndex = 0; headerIndex < this.seiyuuData.length; headerIndex++) {
-        this.headers.push({
-          text: this.seiyuuData[headerIndex].name,
-          value: 'roles[' + headerIndex + '].characters.length',
-          image: this.seiyuuData[headerIndex].image_url})
-      }
-      if (this.viewMode === 'tab-compact') {
-        this.headers.push({
-          text: '',
-          sortable: false,
-          value: 'name'
-        })
-      }
-      this.showTables = true
+      this.setTableHeaders();
     },
     combinationCode (data) {
       var returnCode = ''
@@ -261,6 +221,30 @@ export default {
         return new Array(width + (/\./.test(number) ? 2 : 1)).join('0') + number
       }
       return number + ''
+    },
+    setTableHeaders () {
+      this.headers = [];
+
+      this.headers.push({
+        text: 'Anime',
+        align: 'left',
+        value: 'anime[0].entry.name',
+        image: ''
+      });
+      for (var headerIndex = 0; headerIndex < this.seiyuuData.length; headerIndex++) {
+        this.headers.push({
+          text: this.seiyuuData[headerIndex].name,
+          value: 'roles[' + headerIndex + '].characters.length',
+          image: this.seiyuuData[headerIndex].image_url});
+      };
+      if (this.viewMode === 'tab-compact') {
+        this.headers.push({
+          text: '',
+          sortable: false,
+          value: 'name'
+        });
+      }
+      this.showTables = true;
     },
     computeResultsSimpleNoGrouping () {
       // Old code - might be useful in the future
@@ -382,7 +366,7 @@ export default {
       immediate: false
     },
     viewMode: {
-      handler: 'selectComputeMethod',
+      handler: 'setTableHeaders',
       immediate: false
     }
   }

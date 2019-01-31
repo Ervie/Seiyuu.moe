@@ -85,7 +85,6 @@ export default {
   methods: {
     computeResults () {
       this.tableData = []
-      this.headers = []
       var intersectSeiyuu = []
       var characterIndex = -1
       var seiyuuIndex = -1
@@ -125,27 +124,32 @@ export default {
         }
       }
 
-      this.tableData = intersectSeiyuu
+      this.tableData = intersectSeiyuu;
+      this.setTableHeaders();
+    },
+    setTableHeaders () {
+      this.headers = [];
+
       this.headers.push({
         text: 'Seiyuu',
         align: 'left',
         value: 'seiyuu[0].entry.name',
         image: ''
-      })
+      });
       for (var headerIndex = 0; headerIndex < this.animeData.length; headerIndex++) {
         this.headers.push({
           text: this.animeData[headerIndex].title,
           value: 'roles[' + headerIndex + '].characters.length',
-          image: this.animeData[headerIndex].image_url})
+          image: this.animeData[headerIndex].image_url});
       }
       if (this.viewMode === 'tab-compact') {
         this.headers.push({
           text: '',
           sortable: false,
           value: 'name'
-        })
+        });
       }
-      this.showTables = true
+      this.showTables = true;
     },
     computeResultsSimple () {
       // Old code - might be reused in future
@@ -198,8 +202,12 @@ export default {
     counter: {
       handler: 'computeResults',
       immediate: true
+    },
+    viewMode: {
+      handler: 'setTableHeaders',
+      immediate: false
     }
-  }
+  }  
 }
 </script>
 
