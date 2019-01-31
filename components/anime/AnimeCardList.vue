@@ -1,12 +1,12 @@
 <template>
 <div>
-  <v-layout row wrap v-show="animeToCompare.length > 0" hidden-sm-and-down>
+  <v-layout row wrap v-show="animeToCompare.length > 0" v-if="$vuetify.breakpoint.lgAndUp">
       <v-flex v-for="(anime, index) in animeToCompare" :key="anime.mal_id" xs2 class="animeCard"  >
         <anime-card :animeData="anime" :cardId="index" :avatarHeight="280"
          @animeRemoved="removeAnime"/>
       </v-flex>
   </v-layout>
-  <v-layout row wrap v-show="animeToCompare.length > 0" hidden-md-and-up>
+  <v-layout row wrap v-show="animeToCompare.length > 0" v-if="$vuetify.breakpoint.mdAndDown">
       <v-flex v-for="(anime, index) in animeToCompare" :key="anime.mal_id" xs4 class="animeCard">
         <anime-card :animeData="anime" :cardId="index" :avatarHeight="210"
          @animeRemoved="removeAnime"/>

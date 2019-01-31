@@ -10,7 +10,6 @@
       :searchedId="searchedId"/>
     <seiyuu-card-list 
       :seiyuuToCompare="seiyuuToCompare" 
-      :maximumSeiyuuNumber="maximumSeiyuuNumber" 
       @seiyuuRemoved="removeSeiyuu"/>
     <seiyuu-result-area 
       :inputData="seiyuuToCompare" 

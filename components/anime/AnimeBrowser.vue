@@ -58,6 +58,7 @@ export default {
       loadingSearch: false,
       timeout: null,
       timeoutLimit: 300,
+      maximumAnimeNumber: 6,
       alerts: [
         {
           name: 'tooMuchRecords',
@@ -91,7 +92,7 @@ export default {
   },
   methods: {
     sendAnimeRequest () {
-      if (this.searchedId.length >= this.maximumSeiyuuNumber) {
+      if (this.searchedId.length >= this.maximumAnimeNumber) {
         this.handleBrowsingError('tooMuchRecords')
       } else {
         this.loadingSearch = true
