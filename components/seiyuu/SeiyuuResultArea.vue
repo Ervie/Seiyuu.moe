@@ -7,18 +7,18 @@
             <v-card>
               <v-layout row wrap hidden-sm-and-down>
                 <v-flex xs4>
-                  <v-checkbox label="Group by series" v-model="searchOptions.groupBySeries" color="secondary"></v-checkbox>
+                  <v-checkbox label="Group by series" v-model="groupBySeries" color="secondary"></v-checkbox>
                 </v-flex>
                 <v-flex xs4>
-                  <v-checkbox label="Main roles only" v-model="searchOptions.mainRolesOnly" color="secondary"></v-checkbox>
+                  <v-checkbox label="Main roles only" v-model="mainRolesOnly" color="secondary"></v-checkbox>
                 </v-flex>
               </v-layout>
               <v-layout row wrap hidden-md-and-up>
                 <v-flex xs12>
-                  <v-checkbox label="Group by series" v-model="searchOptions.groupBySeries" color="secondary"></v-checkbox>
+                  <v-checkbox label="Group by series" v-model="groupBySeries" color="secondary"></v-checkbox>
                 </v-flex>
                 <v-flex xs12>
-                  <v-checkbox label="Main roles only" v-model="searchOptions.mainRolesOnly" color="secondary"></v-checkbox>
+                  <v-checkbox label="Main roles only" v-model="mainRolesOnly" color="secondary"></v-checkbox>
                 </v-flex>
               </v-layout>
             </v-card>
@@ -56,7 +56,7 @@
               :inputData="outputData" 
               :counter="counter" 
               :seiyuuData="inputData" 
-              :groupBySeries="searchOptions.groupBySeries"
+              :groupBySeries="groupBySeries"
             />
           </v-tab-item>
         </v-tabs-items>
@@ -90,15 +90,17 @@ export default {
   data () {
     return {
       showTables: false,
-      windowWidth: 0,
       counter: 0,
       tabs: 'tab-table',
       outputData: [],
-      searchOptions: {
-        groupBySeries: true,
-        mainRolesOnly: false
-      },
+      groupBySeries: true,
+      mainRolesOnly: false,
       snackbar: false
+    }
+  },
+  computed: {
+    seiyuuRoles () {
+      return this.inputData.map(x => x.voice_acting_roles)
     }
   },
   methods: {
@@ -130,7 +132,7 @@ export default {
         filteredData[i] = []
       }
 
-      if (this.searchOptions.mainRolesOnly) {
+      if (this.mainRolesOnly) {
         for (i = 0; i < this.inputData.length; i++) {
           filteredData[i] = this.seiyuuRoles[i].filter(x => x.role === 'Main')
         }
@@ -173,11 +175,6 @@ export default {
       this.showTables = true
     }
   },
-  computed: {
-    seiyuuRoles () {
-      return this.inputData.map(x => x.voice_acting_roles)
-    }
-  },
   watch: {
     inputData: function (newVal, oldVal) {
       if (this.inputData.length === 0) {
@@ -188,6 +185,10 @@ export default {
       if (val === true) {
         this.computeResults()
       }
+    },
+    mainRolesOnly: {
+      handler: 'computeResults',
+      immediate: false
     }
   }
 }
