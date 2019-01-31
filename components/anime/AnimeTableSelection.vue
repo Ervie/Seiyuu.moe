@@ -139,7 +139,7 @@ export default {
       for (var headerIndex = 0; headerIndex < this.animeData.length; headerIndex++) {
         this.headers.push({
           text: this.animeData[headerIndex].title,
-          value: 'roles[' + headerIndex + '].characters.length',
+          sortable: false,
           image: this.animeData[headerIndex].image_url});
       }
       if (this.viewMode === 'tab-compact') {

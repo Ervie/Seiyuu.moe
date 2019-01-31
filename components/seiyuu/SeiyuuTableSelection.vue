@@ -234,7 +234,7 @@ export default {
       for (var headerIndex = 0; headerIndex < this.seiyuuData.length; headerIndex++) {
         this.headers.push({
           text: this.seiyuuData[headerIndex].name,
-          value: 'roles[' + headerIndex + '].characters.length',
+          sortable: false,
           image: this.seiyuuData[headerIndex].image_url});
       };
       if (this.viewMode === 'tab-compact') {
