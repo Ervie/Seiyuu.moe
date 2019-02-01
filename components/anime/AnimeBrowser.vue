@@ -104,7 +104,6 @@ export default {
           axios.get(process.env.JIKAN_URL + 'anime/' + String(this.model))
             .then((response) => {
               this.sendAnimeCharactersRequest(response.data)
-              this.resetSearch()
             })
             .catch((error) => {
               this.handleBrowsingError('tooManyRequests')
@@ -118,8 +117,8 @@ export default {
       axios.get(process.env.JIKAN_URL + 'anime/' + String(animeModel.mal_id) + '/characters_staff')
         .then((response) => {
           this.$emit('animeReturned', { anime: animeModel, characters: response.data.characters})
-          this.loadingSearch = false
           this.resetAlerts()
+          this.resetSearch()
         })
         .catch((error) => {
           this.handleBrowsingError('tooManyRequests')
