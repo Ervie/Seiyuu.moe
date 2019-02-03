@@ -48,7 +48,9 @@
         </v-tabs-items>
     </v-container>
      <v-container hidden-lg-and-up>
-       <card-cell v-for="(item, i) in tableData" v-bind:key="i" :item="item"/>
+       <seiyuu-data-iterator
+          :items="tableData" 
+        />
     </v-container>
   </div>
 </template>
@@ -56,17 +58,17 @@
 <script>
 import decode from 'decode-html'
 import SeiyuuCompactTable from '@/components/seiyuu/tables/SeiyuuCompactTable'
+import SeiyuuDataIterator from '@/components/seiyuu/tables/SeiyuuDataIterator'
 import SeiyuuExpandedTable from '@/components/seiyuu/tables/SeiyuuExpandedTable'
 import SeiyuuMixedTable from '@/components/seiyuu/tables/SeiyuuMixedTable'
-import CardCell from '@/components/shared/tables/seiyuu/CardCell'
 
 export default {
   name: 'SeiyuuTableSelection',
   components: {
     'seiyuu-compact-table': SeiyuuCompactTable,
+    'seiyuu-data-iterator': SeiyuuDataIterator,
     'seiyuu-expanded-table': SeiyuuExpandedTable,
-    'seiyuu-mixed-table': SeiyuuMixedTable,
-    'card-cell': CardCell
+    'seiyuu-mixed-table': SeiyuuMixedTable
   },
   props: {
     inputData: {
