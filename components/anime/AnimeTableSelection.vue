@@ -42,24 +42,26 @@
         </v-tabs-items>
     </v-container>
     <v-container hidden-lg-and-up>
-       <card-cell v-for="(item, i) in tableData" v-bind:key="i" :item="item"/>
+       <anime-data-iterator
+          :items="tableData" 
+        />
     </v-container>
   </div>
 </template>
 
 <script>
 import AnimeCompactTable from '@/components/anime/tables/AnimeCompactTable'
+import AnimeDataIterator from '@/components/anime/tables/AnimeDataIterator'
 import AnimeExpandedTable from '@/components/anime/tables/AnimeExpandedTable'
 import AnimeMixedTable from '@/components/anime/tables/AnimeMixedTable'
-import CardCell from '@/components/shared/tables/anime/CardCell'
 
 export default {
   name: 'AnimeTableSelection',
   components: {
     'anime-compact-table': AnimeCompactTable,
+    'anime-data-iterator': AnimeDataIterator,
     'anime-expanded-table': AnimeExpandedTable,
-    'anime-mixed-table': AnimeMixedTable,
-    'card-cell': CardCell
+    'anime-mixed-table': AnimeMixedTable
   },
   props: {
     charactersData: {
