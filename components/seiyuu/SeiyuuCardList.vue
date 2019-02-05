@@ -1,6 +1,6 @@
 <template>
   <v-layout row wrap v-show="seiyuuToCompare.length > 0">
-      <v-flex v-for="(seiyuu, index) in seiyuuToCompare" :key="seiyuu.mal_id" lg2 xs4 class="seiyuuCard"  >
+      <v-flex v-for="(seiyuu, index) in seiyuuToCompare" :key="seiyuu.mal_id" lg2 sm4 xs6 class="seiyuuCard"  >
         <seiyuu-card :seiyuuData="seiyuu" :cardId="index" :avatarHeight="280"
          @seiyuuRemoved="removeSeiyuu"/>
       </v-flex>
