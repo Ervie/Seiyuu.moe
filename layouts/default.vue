@@ -98,4 +98,15 @@
   font-style: italic;
   color: #B2DFDB;
 }
+
+.card-title {
+  padding: 8px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  font-weight: bold;
+  height: 36px;
+  position: relative;
+}    
+
 </style>

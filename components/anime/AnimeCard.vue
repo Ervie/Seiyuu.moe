@@ -1,6 +1,6 @@
 <template>
   <v-card v-if="animeData">
-    <v-card-text style="font-weight: bold"> {{ animeData.title }}</v-card-text>
+    <v-card-text class="card-title"> {{ animeData.title }}</v-card-text>
     <v-img :src="pathToImage(this.animeData.image_url)" :height="avatarHeight" v-on:click="showDialog = true" hidden-sm-and-down></v-img>
     <v-card-actions>
       <v-btn icon value="removeAnime" v-on:click="removeAnime()">

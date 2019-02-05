@@ -1,6 +1,6 @@
 <template>
   <v-card v-if="seiyuuData">
-    <v-card-text style="font-weight: bold"> {{ seiyuuData.name }}</v-card-text>
+    <v-card-text class="card-title"> {{ seiyuuData.name }}</v-card-text>
     <v-img :src="pathToImage(this.seiyuuData.image_url)" :height="avatarHeight" v-on:click="showDialog = true" hidden-sm-and-down></v-img>
     <v-card-actions>
       <v-btn icon value="removeSeiyuu" v-on:click="removeSeiyuu()">
