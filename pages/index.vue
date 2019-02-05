@@ -23,9 +23,9 @@
         </v-carousel-item>	
       </v-carousel>	
     </v-container>
-    <v-container grid-list-xl text-xs-center style="min-height: 0;" hidden-sm-and-down>
+    <v-container grid-list-xl text-xs-center style="min-height: 0;">
     <v-layout row wrap>
-      <v-flex v-for="(item, i) in cardItems" v-bind:key="i" xs4>
+      <v-flex v-for="(item, i) in cardItems" v-bind:key="i" lg4 md6 xs12>
         <v-card color="primary" class="white--text">
             <v-img
               :src="item.imageSrc"
@@ -49,28 +49,6 @@
         </v-card>
       </v-flex>
     </v-layout>
-    </v-container>
-    <v-container grid-list-xl text-xs-center style="min-height: 0;" hidden-md-and-up>
-        <v-layout row wrap>
-          <v-flex v-for="(item, i) in cardItems" v-bind:key="i" xs12>
-            <v-card color="primary" class="white--text">
-              <v-img :src="item.imageSrc" height="250px" :alt="item.imageAltText"></v-img>
-              <v-card-actions>
-                <v-card-title class="styledHeader" v-html="item.header">>
-                </v-card-title>
-                <v-spacer></v-spacer>
-                <v-btn icon @click.native="item.expanded = !item.expanded" :aria-label="item.expanded ? 'Hide text' : 'Show text'">
-                  <v-icon>{{ item.expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</v-icon>
-                </v-btn>
-              </v-card-actions>
-              <v-card-text v-show="item.expanded" class="subheading">
-                <p v-for="(paragraph, j) in item.paragraphs" v-bind:key="j">
-                  {{ paragraph }}
-                </p>
-              </v-card-text>
-            </v-card>
-          </v-flex>
-        </v-layout>
     </v-container>
     <v-container hidden-sm-and-down>
       <link-footer />

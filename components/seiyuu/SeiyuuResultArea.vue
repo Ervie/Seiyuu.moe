@@ -5,19 +5,11 @@
           <v-expansion-panel-content>
             <div slot="header" class="title">Compare Options</div>
             <v-card>
-              <v-layout row wrap hidden-sm-and-down>
-                <v-flex xs4>
+              <v-layout row wrap>
+                <v-flex xs12 md6 lg4>
                   <v-checkbox label="Group by series" v-model="groupBySeries" color="secondary"></v-checkbox>
                 </v-flex>
-                <v-flex xs4>
-                  <v-checkbox label="Main roles only" v-model="mainRolesOnly" color="secondary"></v-checkbox>
-                </v-flex>
-              </v-layout>
-              <v-layout row wrap hidden-md-and-up>
-                <v-flex xs12>
-                  <v-checkbox label="Group by series" v-model="groupBySeries" color="secondary"></v-checkbox>
-                </v-flex>
-                <v-flex xs12>
+                <v-flex xs12 md6 lg4>
                   <v-checkbox label="Main roles only" v-model="mainRolesOnly" color="secondary"></v-checkbox>
                 </v-flex>
               </v-layout>
