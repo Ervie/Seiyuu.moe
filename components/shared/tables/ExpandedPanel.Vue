@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <v-layout wrap align-center justify-center fill-height>
-        <v-flex sm6>
+        <v-flex xs6>
           <v-layout align-center justify-center fill-height row wrap>
             <v-card
               v-for="entry in mainColumnItems" :key="entry.mal_id"
@@ -19,23 +19,23 @@
             </v-card>
           </v-layout>
         </v-flex>
-        <v-flex sm6 >
+        <v-flex xs6>
           <v-layout align-center justify-center fill-height row wrap>
-                <v-card
-                v-for="entry in flattenedData" :key="entry.mal_id"
-                flat
-                tile
-                class="tableCard">
-                  <a :href="entry.url" target="_blank">
-                      <v-img
-                      height="225px"
-                      aspect-ratio="1.5"
-                      :src="changeUrlToOriginalSize(entry.image_url)"
-                      ></v-img>
-                  </a>
-                <div class="body-2">{{ swapNameSurname(decodeHtml(entry.characterName)) }}</div>
-                <div class="body-2 accentedText">{{ decodeHtml(entry.extraData) }}</div>
-                </v-card>
+            <v-card
+            v-for="entry in flattenedData" :key="entry.id"
+            flat
+            tile
+            class="tableCard">
+              <a :href="entry.url" target="_blank">
+                  <v-img
+                  height="225px"
+                  aspect-ratio="1.5"
+                  :src="changeUrlToOriginalSize(entry.image_url)"
+                  ></v-img>
+              </a>
+              <div class="body-2">{{ swapNameSurname(decodeHtml(entry.characterName)) }}</div>
+              <div class="body-2 accentedText">{{ decodeHtml(entry.extraData) }}</div>
+            </v-card>
           </v-layout>
         </v-flex>
     </v-layout>
@@ -62,12 +62,13 @@ export default {
   computed: {
     flattenedData () {
       var flattened = [];
-      this.subColumnsItems.forEach(element => {
+      this.subColumnsItems.forEach((element, i) => {
         element.characters.forEach(character => {
           flattened.push({
             extraData: this.tableType === "Anime" ? element.anime : element.seiyuu,
             url: character.entry.url,
             mal_id: character.entry.mal_id,
+            id: i + 'm' + character.entry.mal_id,
             image_url: character.entry.image_url,
             characterName: character.entry.name
           });
