@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2037
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeiyuuMoe.API", "SeiyuuMoe.API\SeiyuuMoe.API.csproj", "{063A78DC-5608-4795-A2CF-5C095D065744}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1360E317-D336-4D52-8E4A-13938E3BF083} = {1360E317-D336-4D52-8E4A-13938E3BF083}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeiyuuMoe.Data", "SeiyuuMoe.Data\SeiyuuMoe.Data.csproj", "{1360E317-D336-4D52-8E4A-13938E3BF083}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SeiyuuMoe.Application", "SeiyuuMoe.Application", "{5170E228-3170-4EA4-8381-A29A06107731}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SeiyuuMoe.Utils", "SeiyuuMoe.Utils", "{261D75A0-A7B7-4989-B862-AE3DB9D9C8F0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeiyuuMoe.Services", "SeiyuuMoe.Services\SeiyuuMoe.Services.csproj", "{EEDF32DE-F31A-4034-9D98-424D78F5AC2C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeiyuuMoe.JikanToDBParser", "SeiyuuMoe.JikanToDBParser\SeiyuuMoe.JikanToDBParser.csproj", "{4512DA0F-47E1-4C91-B718-A5B6BBEDE542}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{063A78DC-5608-4795-A2CF-5C095D065744}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{063A78DC-5608-4795-A2CF-5C095D065744}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{063A78DC-5608-4795-A2CF-5C095D065744}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{063A78DC-5608-4795-A2CF-5C095D065744}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1360E317-D336-4D52-8E4A-13938E3BF083}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1360E317-D336-4D52-8E4A-13938E3BF083}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1360E317-D336-4D52-8E4A-13938E3BF083}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1360E317-D336-4D52-8E4A-13938E3BF083}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEDF32DE-F31A-4034-9D98-424D78F5AC2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEDF32DE-F31A-4034-9D98-424D78F5AC2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEDF32DE-F31A-4034-9D98-424D78F5AC2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEDF32DE-F31A-4034-9D98-424D78F5AC2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4512DA0F-47E1-4C91-B718-A5B6BBEDE542}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4512DA0F-47E1-4C91-B718-A5B6BBEDE542}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4512DA0F-47E1-4C91-B718-A5B6BBEDE542}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4512DA0F-47E1-4C91-B718-A5B6BBEDE542}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1360E317-D336-4D52-8E4A-13938E3BF083} = {5170E228-3170-4EA4-8381-A29A06107731}
+		{EEDF32DE-F31A-4034-9D98-424D78F5AC2C} = {5170E228-3170-4EA4-8381-A29A06107731}
+		{4512DA0F-47E1-4C91-B718-A5B6BBEDE542} = {261D75A0-A7B7-4989-B862-AE3DB9D9C8F0}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0D18D8DE-F5C0-4254-B3F2-3B6F16384392}
+	EndGlobalSection
+EndGlobal
