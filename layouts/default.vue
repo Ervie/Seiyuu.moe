@@ -32,7 +32,7 @@
           v-for="(item, i) in items"
         >
           <v-list-tile-action>
-            <v-icon medium v-html="item.icon"></v-icon>
+            <font-awesome-icon size="2x" :icon="[item.iconPrefix, item.icon]"/>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title v-text="item.title"></v-list-tile-title>
@@ -41,9 +41,6 @@
       </v-list>
     </v-navigation-drawer>
     <v-footer height="auto" app fixed class="styledFooter">
-      <!-- Remove when npm Font Awesome update to 5.0.0 at least -->
-      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg"
-        crossorigin="anonymous">
        <v-card flat tile class="flex primary" height="40px">
         <span class="primary justify-center ">
           &copy;2018 — 2019 -
@@ -62,9 +59,9 @@
         drawer: false,
         fixed: false,
         items: [
-          { icon: 'fa-users', title: 'Compare Seiyuu', to: '/seiyuu' },
-          { icon: 'fa-tv', title: 'Compare Anime', to: '/anime' },
-          { icon: 'fa-info-circle', title: 'About', to: '/' }
+          { iconPrefix: 'fa', icon: 'users', title: 'Compare Seiyuu', to: '/seiyuu' },
+          { iconPrefix: 'fa', icon: 'tv', title: 'Compare Anime', to: '/anime' },
+          { iconPrefix: 'fa', icon: 'info-circle', title: 'About', to: '/' }
         ],
         miniVariant: false,
         title: 'Seiyuu.Moe',

@@ -43,7 +43,8 @@ module.exports = {
   ** Global CSS
   */
   css: [
-    'vuetify/src/stylus/main.styl'
+    'vuetify/src/stylus/main.styl',
+    '@fortawesome/fontawesome-svg-core/styles.css'
   ],
 
   /*
@@ -52,7 +53,8 @@ module.exports = {
   plugins: [
     '@/plugins/vuetify',
     '@/plugins/vuelidate',
-    '@/plugins/mixinCommonMethods'
+    '@/plugins/mixinCommonMethods',
+    '@/plugins/fontAwesome.js',
   ],
 
   /*
@@ -63,11 +65,10 @@ module.exports = {
     '@nuxtjs/axios',
     'nuxt-clipboard2',
     '@nuxtjs/dotenv',
-    '@nuxtjs/font-awesome',
+    '@nuxtjs/pwa',
     ['@nuxtjs/google-analytics', {
       id: 'UA-114739960-4'
-    }],
-    '@nuxtjs/pwa'
+    }]
   ],
   /*
   ** Axios module configuration

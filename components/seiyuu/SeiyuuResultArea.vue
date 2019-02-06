@@ -39,7 +39,7 @@
         >
           <v-tab :href="`#tab-table`">
             Table
-            <v-icon large>fa-table</v-icon>
+              <font-awesome-icon size="3x" :icon="['fa', 'table']"/>
           </v-tab>
         </v-tabs>
         <v-tabs-items v-model="tabs" v-if="showTables">

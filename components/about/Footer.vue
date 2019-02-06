@@ -7,11 +7,11 @@
               <span class="subheading" v-text="col.title.toUpperCase()"></span>
               <div v-for="(child, i) in col.children" :key="i">
                 <a :href="child.link" v-if="child.link" class="white--text">
-                  <v-icon small> {{ child.icon }} </v-icon>
+                  <font-awesome-icon size="lg" :icon="[child.iconPrefix, child.icon]"/>
                   {{ child.text }}
                 </a>
                 <div v-else>
-                  <v-icon small> {{ child.icon }} </v-icon>
+                  <font-awesome-icon size="lg" :icon="[child.iconPrefix, child.icon]"/>
                   {{ child.text }}
                 </div>
               </div>
@@ -32,7 +32,8 @@ export default {
             description: 'Social Media',
             children: [
               {
-                icon: 'fab fa-github',
+                iconPrefix: 'fab',
+                icon: 'github',
                 text: 'Github',
                 link: 'https://github.com/Ervie/Seiyuu.moe'
               }
@@ -43,11 +44,13 @@ export default {
             description: 'Related sites',
             children: [
               {
+                iconPrefix: '',
                 icon: '',
                 text: 'Jikan API',
                 link: 'https://jikan.moe/'
               },
               {
+                iconPrefix: '',
                 icon: '',
                 text: 'MyAnimeList',
                 link: 'https://myanimelist.net/'
@@ -59,17 +62,20 @@ export default {
             description: 'Related sites',
             children: [
               {
-                icon: 'fa-envelope',
+                iconPrefix: 'fa',
+                icon: 'envelope',
                 text: 'bbuchala93@gmail.com',
                 link: 'mailto:bbuchala93@gmail.com'
               },
               {
-                icon: 'fab fa-discord',
+                iconPrefix: 'fab',
+                icon: 'discord',
                 text: 'Ervie#8837',
                 link: ''
               },
               {
-                icon: 'fab fa-reddit',
+                iconPrefix: 'fab',
+                icon: 'reddit',
                 text: 'Ervelan',
                 link: 'https://www.reddit.com/message/compose/?to=Ervelan'
               }
