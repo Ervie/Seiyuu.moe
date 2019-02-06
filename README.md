@@ -8,6 +8,8 @@ Current version can be found under this [link](https://seiyuu.moe).
 
 ## Build Setup
 
+### App
+
 ``` bash
 # install dependencies
 npm install
@@ -24,6 +26,22 @@ npm run start
 ```
 
 Require npm, vue and nuxt installed.
+
+### API
+
+``` bash
+
+# install dependencies
+dotnet restore
+
+# build project in Release configuration
+dotnet build --configuration Release
+
+# start project at port 5000
+dotnet SeiyuuMoe.API.dll
+```
+
+Require .Net Core 2.2 installed.
 
 ## Features
 
