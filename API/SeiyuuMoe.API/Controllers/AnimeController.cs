@@ -23,7 +23,7 @@ namespace SeiyuuMoe.API.Controllers
 
 		[HttpGet]
 		[Route("AiringDates")]
-		public ICollection<AnimeAiring> Get([FromRoute] ICollection<long> malId) =>
+		public ICollection<AnimeAiring> Get([FromQuery] ICollection<long> malId) =>
 			 _dbContext.Anime
 			.Where(x => malId.Contains(x.MalId))
 			.Select(entry => new AnimeAiring{ MalId = entry.MalId, AiringFrom = entry.AiringFrom })
