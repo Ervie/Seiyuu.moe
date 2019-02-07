@@ -22,7 +22,7 @@ namespace SeiyuuMoe.Data.Model
 		[JsonProperty("title_synonyms")]
 		public string TitleSynonyms { get; set; }
 
-		[JsonProperty("aired_from")]
+		[JsonProperty("airing_from")]
 		public DateTime? AiringFrom{ get; set; }
 	}
 }

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SeiyuuMoe.Data;
@@ -17,12 +16,6 @@ namespace SeiyuuMoe.API
 			var builder = new ConfigurationBuilder().SetBasePath(AppContext.BaseDirectory).AddJsonFile("configuration.json");
 
 			Configuration = builder.Build();
-
-			//using (var client = new DatabaseContext())
-			//{
-			//	client.Database.EnsureCreated();
-			//	client.Database.Migrate();
-			//}
 		}
 
 		public IConfiguration Configuration { get; }

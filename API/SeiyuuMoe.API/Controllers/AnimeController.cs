@@ -20,5 +20,13 @@ namespace SeiyuuMoe.API.Controllers
 			 _dbContext.Anime
 			.Where(x => x.Title.ToLower().Contains(query.ToLower()) || x.TitleSynonyms.ToLower().Contains(query.ToLower()))
 			.OrderByDescending(x => x.Popularity).ToList();
+
+		[HttpGet]
+		[Route("AiringDates")]
+		public ICollection<AnimeAiring> Get([FromRoute] ICollection<long> malId) =>
+			 _dbContext.Anime
+			.Where(x => malId.Contains(x.MalId))
+			.Select(entry => new AnimeAiring{ MalId = entry.MalId, AiringFrom = entry.AiringFrom })
+			.OrderByDescending(x => x.AiringFrom).ToList();
 	}
 }
