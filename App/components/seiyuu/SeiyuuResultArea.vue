@@ -41,6 +41,10 @@
             Table
               <font-awesome-icon size="3x" :icon="['fa', 'table']"/>
           </v-tab>
+          <v-tab :href="`#tab-calendar`">
+            Timeline
+              <font-awesome-icon size="3x" :icon="['fa', 'calendar']"/>
+          </v-tab>
         </v-tabs>
         <v-tabs-items v-model="tabs" v-if="showTables">
           <v-tab-item :value="`tab-table`" >
@@ -50,6 +54,9 @@
               :seiyuuData="inputData" 
               :groupBySeries="groupBySeries"
             />
+          </v-tab-item>
+          <v-tab-item :value="`tab-calendar`" >
+            <seiyuu-timeline />
           </v-tab-item>
         </v-tabs-items>
       </v-flex>
@@ -61,12 +68,14 @@
 
 <script>
 import SeiyuuTableSelection from '@/components/seiyuu/SeiyuuTableSelection.vue'
+import SeiyuuTimeline from '@/components/seiyuu/SeiyuuTimeline.vue'
 import ShareLinkSnackbar from '@/components/shared/ui-components/ShareLinkSnackbar.vue';
 
 export default {
   name: 'SeiyuuResultArea',
   components: {
     'seiyuu-table-selection': SeiyuuTableSelection,
+    'seiyuu-timeline': SeiyuuTimeline,
     'share-link-snackbar': ShareLinkSnackbar
   },
   props: {
