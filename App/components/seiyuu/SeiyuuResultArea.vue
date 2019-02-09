@@ -56,7 +56,8 @@
             />
           </v-tab-item>
           <v-tab-item :value="`tab-calendar`" >
-            <seiyuu-timeline />
+            <seiyuu-timeline
+              :items="outputData" />
           </v-tab-item>
         </v-tabs-items>
       </v-flex>
