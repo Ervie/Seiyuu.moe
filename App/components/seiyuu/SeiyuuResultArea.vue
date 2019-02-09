@@ -43,7 +43,7 @@
           </v-tab>
           <v-tab :href="`#tab-calendar`">
             Timeline
-              <font-awesome-icon size="3x" :icon="['fa', 'calendar']"/>
+              <font-awesome-icon size="3x" :icon="['fa', 'calendar-alt']"/>
           </v-tab>
         </v-tabs>
         <v-tabs-items v-model="tabs" v-if="showTables">

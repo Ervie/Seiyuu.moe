@@ -1,22 +1,20 @@
 <template>
     <v-timeline>
     <v-timeline-item
-      v-for="entry in items"
-      :key="entry.anime.mal_id"
+      v-for="anime in animeData"
+      :key="anime.mal_id"
       color="accent"
-      large
     >
-      <v-avatar slot="icon">
-        <img :src="entry.anime.image_url" class="dropdownAvatar timeline-dot" >
-      </v-avatar>
-      <span slot="opposite"> {{ entry.anime.airedDate}} </span>
-      <v-card class="elevation-2">
-        <v-card-title class="headline"> {{ entry.anime.name }} </v-card-title>
-        <!-- <v-img :src="pathToImage(entry.anime.image_url)" width="150px" height="250px"/> -->
-        <v-card-text>
-          Lorem ipsum dolor sit amet, no nam oblique veritus. Commune scaevola imperdiet nec ut, sed euismod convenire principes at. Est et nobis iisque percipit, an vim zril disputando voluptatibus, vix an salutandi sententiae.
-        </v-card-text>
-      </v-card>
+      <span slot="opposite" class="title"> {{ anime.aired_date }} </span>
+        <v-layout>
+          
+        <v-flex xs8>
+        <div class="headline"> {{ anime.name }} </div>
+        </v-flex>
+        <v-flex xs4>
+        <v-img :src="pathToImage(anime.image_url)" width="150px" height="250px"/>
+        </v-flex>
+        </v-layout>
     </v-timeline-item>
   </v-timeline>
 </template>
@@ -29,6 +27,38 @@ export default {
             type: Array,
             required: false
         },
+    },
+    computed: {
+      animeData () {
+        var data = this.items.map(x => x.anime);
+
+        data.forEach(element => {
+          element.aired_date = '';
+        });
+
+        return data;
+      }
+    },
+    methods: {
+      formatDate(inputDate) {
+        var m = new Date(inputDate);
+        return m.getUTCFullYear() + "/" +
+            ("0" + (m.getUTCMonth()+1)).slice(-2) + "/" +
+            ("0" + m.getUTCDate()).slice(-2);
+      }
+    },
+    mounted () {
+      var malIds = this.animeData.map(x => x.mal_id).join('&malId=');
+
+      this.$axios.get(process.env.API_URL + '/api/Anime/AiringDates?malId=' + malIds)
+        .then((response) => {
+          this.animeData.forEach(anime => {
+            anime.aired_date = this.formatDate(response.data[response.data.map(x => x.mal_id).indexOf(anime.mal_id)].airing_from);
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
 }
 </script>
