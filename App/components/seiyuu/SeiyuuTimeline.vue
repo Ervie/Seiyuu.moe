@@ -1,22 +1,53 @@
 <template>
+<div>
+  <v-container hidden-md-and-down>
     <v-timeline>
-    <v-timeline-item
-      v-for="anime in animeData"
-      :key="anime.mal_id"
-      color="accent"
-    >
-      <span slot="opposite" class="title"> {{ anime.aired_date }} </span>
-        <v-layout>
-          
-        <v-flex xs8>
-        <div class="headline"> {{ anime.name }} </div>
-        </v-flex>
-        <v-flex xs4>
-        <v-img :src="pathToImage(anime.image_url)" width="150px" height="250px"/>
-        </v-flex>
-        </v-layout>
-    </v-timeline-item>
-  </v-timeline>
+      <v-timeline-item
+        v-for="(anime,i) in animeData"
+        :key="i"
+        color="accent"
+      >
+        <span slot="opposite" class="title"> {{ anime.aired_date }} </span>
+          <v-layout align-center justify-center row fill-height v-if="i % 2 === 0">
+            <v-flex xs8>
+              <div class="headline"> {{ anime.name }} </div>
+            </v-flex>
+            <v-flex xs4>
+              <v-img :src="pathToImage(anime.image_url)" width="145px" height="210px"/>
+            </v-flex>
+          </v-layout>
+          <v-layout align-center justify-center row fill-height v-else>
+            <v-flex xs4>
+              <v-img :src="pathToImage(anime.image_url)" width="145px" height="210px"/>
+            </v-flex>
+            <v-flex xs8>
+              <div class="headline"> {{ anime.name }} </div>
+            </v-flex>
+          </v-layout>
+      </v-timeline-item>
+    </v-timeline>
+  </v-container>
+  <v-container hidden-lg-and-up>
+    <v-timeline
+      align-top
+      dense>
+      <v-timeline-item
+        v-for="(anime,i) in animeData"
+        :key="i"
+        color="accent"
+      >
+        <v-layout align-center justify-center row fill-height >
+            <v-flex xs4>
+        <div class="caption"> {{ anime.aired_date }} </div>
+            </v-flex>
+            <v-flex xs8>
+        <div class="subheading"> {{ anime.name }}  </div>
+            </v-flex>
+          </v-layout>
+      </v-timeline-item>
+    </v-timeline>
+  </v-container>
+</div>
 </template>
 
 <script>
