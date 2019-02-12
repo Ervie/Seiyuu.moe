@@ -24,42 +24,53 @@ export default {
     name: 'SeiyuuTimeline',
     props: {
         items: {
-            type: Array,
-            required: false
+          type: Array,
+          required: false,
+          default: () => {
+            return [];
+          }
         },
+        dates: {
+          type: Array,
+          required: false,
+          default: () => {
+            return [];
+          }
+        }
     },
     computed: {
       animeData () {
-        var data = this.items.map(x => x.anime);
-
-        data.forEach(element => {
-          element.aired_date = '';
-        });
-
-        return data;
+        if (this.items != null) {
+          return this.items.map(x => x.anime);
+        } else {
+          return [];
+        }
       }
     },
     methods: {
       formatDate(inputDate) {
         var m = new Date(inputDate);
-        return m.getUTCFullYear() + "/" +
-            ("0" + (m.getUTCMonth()+1)).slice(-2) + "/" +
+        return m.getUTCFullYear() + "." +
+            ("0" + (m.getUTCMonth()+1)).slice(-2) + "." +
             ("0" + m.getUTCDate()).slice(-2);
+      },
+      matchDatesWithAnime() {
+        var newAnimeData = this.items;
+
+        newAnimeData.map(x => x.anime).forEach(anime => {
+          anime.aired_date = this.formatDate(this.dates[this.dates.map(x => x.mal_id).indexOf(anime.mal_id)].airing_from);
+        });
+
+        // Forces timeline to re-render
+        this.items = this.newAnimeData;
       }
     },
-    mounted () {
-      var malIds = this.animeData.map(x => x.mal_id).join('&malId=');
-
-      this.$axios.get(process.env.API_URL + '/api/Anime/AiringDates?malId=' + malIds)
-        .then((response) => {
-          this.animeData.forEach(anime => {
-            anime.aired_date = this.formatDate(response.data[response.data.map(x => x.mal_id).indexOf(anime.mal_id)].airing_from);
-          });
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
+    watch: {
+      dates: {
+        handler: 'matchDatesWithAnime',
+        immediate: false
+      }
+  }
 }
 </script>
 

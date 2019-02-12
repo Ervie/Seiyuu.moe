@@ -57,7 +57,8 @@
           </v-tab-item>
           <v-tab-item :value="`tab-calendar`" >
             <seiyuu-timeline
-              :items="outputData" />
+              :items="outputData"
+              :dates="timelineDates" />
           </v-tab-item>
         </v-tabs-items>
       </v-flex>
@@ -95,6 +96,7 @@ export default {
       counter: 0,
       tabs: 'tab-table',
       outputData: [],
+      timelineDates: [],
       groupBySeries: true,
       mainRolesOnly: false,
       snackbar: false
@@ -173,8 +175,20 @@ export default {
       intersectAnime = partialResults[this.inputData.length - 1]
 
       this.outputData = intersectAnime
+      this.getTimelineDates();
       this.counter++
       this.showTables = true
+    },
+    getTimelineDates() {
+      var malIds = this.outputData.map(x => x.anime.mal_id).join('&malId=');
+
+      this.$axios.get(process.env.API_URL + '/api/Anime/AiringDates?malId=' + malIds)
+        .then((response) => {
+          this.timelineDates = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   },
   watch: {
