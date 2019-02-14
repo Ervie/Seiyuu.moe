@@ -57,7 +57,6 @@ export default {
                     tempData.push(anime);
                 }
             });
-            console.log(tempData)
             tempData.forEach(anime => {
                 anime.aired_date = this.formatDate(this.dates[this.dates.map(x => x.mal_id).indexOf(anime.mal_id)].airing_from);
             });
@@ -68,7 +67,7 @@ export default {
     watch: {
         timelineItems: {
             handler: 'getTimelineDates',
-            immediate: false
+            immediate: true
         }
     }
 
