@@ -1,9 +1,9 @@
 <template>
 <div>
   <v-container hidden-md-and-down>
-    <v-timeline>
+    <v-timeline v-if="items != null">
       <v-timeline-item
-        v-for="(anime,i) in animeData"
+        v-for="(anime,i) in items"
         :key="i"
         color="accent"
       >
@@ -32,13 +32,13 @@
       align-top
       dense>
       <v-timeline-item
-        v-for="(anime,i) in animeData"
+        v-for="(anime,i) in items"
         :key="i"
         color="accent"
       >
         <v-layout align-center justify-center row fill-height >
             <v-flex xs4>
-        <div class="caption"> {{ anime.aired_date }} </div>
+        <div class="caption" > {{ anime.aired_date }} </div>
             </v-flex>
             <v-flex xs8>
         <div class="subheading"> {{ anime.name }}  </div>
@@ -60,48 +60,8 @@ export default {
           default: () => {
             return [];
           }
-        },
-        dates: {
-          type: Array,
-          required: false,
-          default: () => {
-            return [];
-          }
         }
-    },
-    computed: {
-      animeData () {
-        if (this.items != null) {
-          return this.items.map(x => x.anime);
-        } else {
-          return [];
-        }
-      }
-    },
-    methods: {
-      formatDate(inputDate) {
-        var m = new Date(inputDate);
-        return m.getUTCFullYear() + "." +
-            ("0" + (m.getUTCMonth()+1)).slice(-2) + "." +
-            ("0" + m.getUTCDate()).slice(-2);
-      },
-      matchDatesWithAnime() {
-        var newAnimeData = this.items;
-
-        newAnimeData.map(x => x.anime).forEach(anime => {
-          anime.aired_date = this.formatDate(this.dates[this.dates.map(x => x.mal_id).indexOf(anime.mal_id)].airing_from);
-        });
-
-        // Forces timeline to re-render
-        this.items = this.newAnimeData;
-      }
-    },
-    watch: {
-      dates: {
-        handler: 'matchDatesWithAnime',
-        immediate: false
-      }
-  }
+    }
 }
 </script>
 

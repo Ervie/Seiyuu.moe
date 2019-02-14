@@ -56,9 +56,9 @@
             />
           </v-tab-item>
           <v-tab-item :value="`tab-calendar`" >
-            <seiyuu-timeline
-              :items="outputData"
-              :dates="timelineDates" />
+            <seiyuu-timeline-container
+              :showTimeline="showTables"
+              :timelineItems="outputData" />
           </v-tab-item>
         </v-tabs-items>
       </v-flex>
@@ -70,15 +70,15 @@
 
 <script>
 import SeiyuuTableSelection from '@/components/seiyuu/SeiyuuTableSelection.vue'
-import SeiyuuTimeline from '@/components/seiyuu/SeiyuuTimeline.vue'
+import SeiyuuTimelineContainer from '@/components/seiyuu/timeline/SeiyuuTimelineContainer.vue'
 import ShareLinkSnackbar from '@/components/shared/ui-components/ShareLinkSnackbar.vue';
 
 export default {
   name: 'SeiyuuResultArea',
   components: {
     'seiyuu-table-selection': SeiyuuTableSelection,
-    'seiyuu-timeline': SeiyuuTimeline,
-    'share-link-snackbar': ShareLinkSnackbar
+    'share-link-snackbar': ShareLinkSnackbar,
+    'seiyuu-timeline-container': SeiyuuTimelineContainer
   },
   props: {
     inputData: {
@@ -174,21 +174,9 @@ export default {
       }
       intersectAnime = partialResults[this.inputData.length - 1]
 
-      this.outputData = intersectAnime
-      this.getTimelineDates();
-      this.counter++
-      this.showTables = true
-    },
-    getTimelineDates() {
-      var malIds = this.outputData.map(x => x.anime.mal_id).join('&malId=');
-
-      this.$axios.get(process.env.API_URL + '/api/Anime/AiringDates?malId=' + malIds)
-        .then((response) => {
-          this.timelineDates = response.data;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      this.outputData = intersectAnime;
+      this.counter++;
+      this.showTables = true;
     }
   },
   watch: {
