@@ -8,6 +8,7 @@
         color="accent"
       >
         <span slot="opposite" class="title"> {{ anime.aired_date }} </span>
+        <v-card>
           <v-layout align-center justify-center row fill-height v-if="i % 2 === 0">
             <v-flex xs8>
               <div class="headline"> {{ anime.name }} </div>
@@ -24,6 +25,7 @@
               <div class="headline"> {{ anime.name }} </div>
             </v-flex>
           </v-layout>
+        </v-card>
       </v-timeline-item>
     </v-timeline>
   </v-container>
