@@ -14,12 +14,16 @@
               <div class="headline"> {{ anime.name }} </div>
             </v-flex>
             <v-flex xs4>
-              <v-img :src="pathToImage(anime.image_url)" width="145px" height="210px"/>
+              <v-layout align-center justify-center>
+                <v-img :src="pathToImage(anime.image_url)" width="145px" height="210px"/>
+              </v-layout>
             </v-flex>
           </v-layout>
           <v-layout align-center justify-center row fill-height v-else>
             <v-flex xs4>
-              <v-img :src="pathToImage(anime.image_url)" width="145px" height="210px"/>
+              <v-layout align-center justify-center>
+               <v-img :src="pathToImage(anime.image_url)" width="145px" height="210px"/>
+              </v-layout>
             </v-flex>
             <v-flex xs8>
               <div class="headline"> {{ anime.name }} </div>
@@ -45,7 +49,7 @@
             <v-flex xs8>
         <div class="subheading"> {{ anime.name }}  </div>
             </v-flex>
-          </v-layout>
+        </v-layout>
       </v-timeline-item>
     </v-timeline>
   </v-container>

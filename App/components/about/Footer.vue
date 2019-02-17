@@ -7,11 +7,11 @@
               <span class="subheading" v-text="col.title.toUpperCase()"></span>
               <div v-for="(child, i) in col.children" :key="i">
                 <a :href="child.link" v-if="child.link" class="white--text">
-                  <font-awesome-icon size="lg" :icon="[child.iconPrefix, child.icon]"/>
+                  <font-awesome-icon v-if="child.icon" size="lg" :icon="[child.iconPrefix, child.icon]"/>
                   {{ child.text }}
                 </a>
                 <div v-else>
-                  <font-awesome-icon size="lg" :icon="[child.iconPrefix, child.icon]"/>
+                  <font-awesome-icon v-if="child.icon"  size="lg" :icon="[child.iconPrefix, child.icon]"/>
                   {{ child.text }}
                 </div>
               </div>
