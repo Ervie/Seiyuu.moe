@@ -3,13 +3,25 @@
   <v-container hidden-md-and-down>
     <v-timeline v-if="items != null">
       <v-timeline-item
-        v-for="(anime,i) in items"
+      color="secondary"
+      fill-dot
+      >
+        <v-btn 
+          flat icon
+          @click="orderFromEldest = !orderFromEldest"
+          slot="icon">
+          <font-awesome-icon v-if="orderFromEldest"  size="2x" :icon="['fas', 'arrow-circle-up']"/>
+          <font-awesome-icon v-else size="2x" :icon="['fas', 'arrow-circle-down']"/>
+        </v-btn>
+      </v-timeline-item>
+      <v-timeline-item
+        v-for="(anime,i) in timelineData"
         :key="i"
         color="accent"
       >
         <span slot="opposite" class="title"> {{ anime.aired_date }} </span>
         <v-card>
-          <v-layout align-center justify-center row fill-height v-if="i % 2 === 0">
+          <v-layout align-center justify-center row fill-height v-if="i % 2 === 1">
             <v-flex xs8>
               <div class="headline"> {{ anime.name }} </div>
             </v-flex>
@@ -67,6 +79,16 @@ export default {
             return [];
           }
         }
+    },
+    data() {
+      return {
+        orderFromEldest: true
+      }
+    },
+    computed: {
+      timelineData() {
+        return this.orderFromEldest ? this.items : this.items.slice().reverse(); 
+      }
     }
 }
 </script>
