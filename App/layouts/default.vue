@@ -59,9 +59,10 @@
         drawer: false,
         fixed: false,
         items: [
+          { iconPrefix: 'fa', icon: 'home', title: 'Home', to: '/' },
           { iconPrefix: 'fa', icon: 'users', title: 'Compare Seiyuu', to: '/seiyuu' },
           { iconPrefix: 'fa', icon: 'tv', title: 'Compare Anime', to: '/anime' },
-          { iconPrefix: 'fa', icon: 'info-circle', title: 'About', to: '/' }
+          { iconPrefix: 'fa', icon: 'info-circle', title: 'About', to: '/about' }
         ],
         miniVariant: false,
         title: 'Seiyuu.Moe',
