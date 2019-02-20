@@ -14,10 +14,12 @@
 
 ### Version 1.2 - 15th January 2019
 
-* Share links (after search).
-* Fixed seiyuu photo positioning in search list.
-* Massive speed boost for anime searching.
-* Adjusted application to work under Jikan REST API v3.
+* Features
+    * Share links (after search).
+* Fixes
+    * Fixed seiyuu photo positioning in search list.
+    * Massive speed boost for anime searching.
+    * Adjusted application to work under Jikan REST API v3.
 
 ### Version 1.1 - 15th August 2018
 

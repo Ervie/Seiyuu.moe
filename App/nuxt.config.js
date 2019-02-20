@@ -14,7 +14,7 @@ module.exports = {
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: 'Did you ever wonder if those two seiyū worked together? This website allows you to select them from the list and find joint works between Japanese voice actors' },
-      { name:"keywords", content:"Seiyuu, joint works, list, comparison, 2018, find, compare, find, voice actor, anime"},
+      { name:"keywords", content:"Seiyuu, joint works, list, comparison, 2018, find, compare, find, voice actor, anime, connection, 2019, casting"},
       { name:"author", content:"Bartłomiej Buchała"},
       { name:"theme-color", content:"#26A69A"},
       { property:"og:image", content:"https://image.flaticon.com/icons/svg/186/186067.svg"},
