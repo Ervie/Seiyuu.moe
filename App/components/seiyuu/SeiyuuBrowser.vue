@@ -40,7 +40,7 @@
 
 <script>
 import axios from 'axios'
-import seiyuu from 'static/quickSeiyuulist.json'
+import seiyuu from 'static/quickSeiyuuList.json'
 import AlertRibbon from '@/components/shared/ui-components/AlertRibbon.vue'
 
 export default {

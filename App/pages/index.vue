@@ -13,7 +13,7 @@
           <v-img
                   src="/namikawa.png"
                   alt="Compare Seiyuu"
-                  height="300px"
+                  height="1000px"
                   class="linkCard">
           <v-container fill-height fluid>
               <v-layout fill-height>
@@ -40,7 +40,7 @@
           <v-img
                   src="/rie.jpg"
                   alt="Compare Anime"
-                  height="300px"
+                  height="1000px"
                   class="linkCard">
           <v-container fill-height fluid>
               <v-layout fill-height>
