@@ -47,12 +47,25 @@
   </v-container>
   <v-container hidden-lg-and-up>
     <v-timeline
-      align-top
       dense>
       <v-timeline-item
-        v-for="(anime,i) in items"
+      color="secondary"
+      small
+      fill-dot
+      >
+        <v-btn 
+          flat icon
+          @click="orderFromEldest = !orderFromEldest"
+          slot="icon">
+          <font-awesome-icon v-if="orderFromEldest" :icon="['fas', 'arrow-circle-up']"/>
+          <font-awesome-icon v-else :icon="['fas', 'arrow-circle-down']"/>
+        </v-btn>
+      </v-timeline-item>
+      <v-timeline-item
+        v-for="(anime,i) in timelineData"
         :key="i"
         color="accent"
+        small
       >
         <v-layout align-center justify-center row fill-height >
             <v-flex xs4>
