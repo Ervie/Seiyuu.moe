@@ -50,27 +50,38 @@
             return {
                 items: [
                     {
-                        title: 'Version 1.3 - Expanded view for comparing',
-                        date: '26th January 2019',
-                        items: [
-                            { isFeature: true, title: 'New display mode for tables.' },
-                            { isFeature: true, title: 'Possibility to choose between new and old display mode.' },
-                            { isFeature: true, title: 'Updated seiyuu database.' },
-                            { isFeature: false, title: 'Added small delay to avoid 429 (too much requests) error.' },
-                            { isFeature: false, title: 'Fixed incorrect data in Seiyuu cards.' },
-                            { isFeature: false, title: 'Fixed sharelinks.' },
-                            { isFeature: false, title: 'Remove anime from search results if already selected.' },
-                        ]},
+                      title: 'Version 1.4 - Timeline view',
+                      date: '22th February 2019',
+                      items: [
+                          { isFeature: true, title: 'Three possbile table views.' },
+                          { isFeature: true, title: 'Timeline view for seiyuu comparison.' },
+                          { isFeature: true, title: 'New about and home pages.' },
+                          { isFeature: false, title: 'Auto re-render when changing "Main roles only" option.' },
+                          { isFeature: false, title: 'Removed few errors from console.' },
+                          { isFeature: false, title: 'Adjusted text display.' }
+                      ]},
                     {
-                        title: 'Version 1.2 - Share links',
-                        date: '9th January 2019',
-                        items: [
-                            { isFeature: true, title: 'Share links (after search.)' },
-                            { isFeature: false, title: 'Fixes seiyuu photo positioning in search list.' },
-                            { isFeature: false, title: 'Massive speed boost for anime searching.' },
-                            { isFeature: false, title: 'Adjusted application to work under Jikan REST API v3.' }
+                      title: 'Version 1.3 - Expanded view for comparing',
+                      date: '26th January 2019',
+                      items: [
+                          { isFeature: true, title: 'New display mode for tables.' },
+                          { isFeature: true, title: 'Possibility to choose between new and old display mode.' },
+                          { isFeature: true, title: 'Updated seiyuu database.' },
+                          { isFeature: false, title: 'Added small delay to avoid 429 (too much requests) error.' },
+                          { isFeature: false, title: 'Fixed incorrect data in Seiyuu cards.' },
+                          { isFeature: false, title: 'Fixed sharelinks.' },
+                          { isFeature: false, title: 'Remove anime from search results if already selected.' },
+                      ]},
+                    {
+                      title: 'Version 1.2 - Share links',
+                      date: '9th January 2019',
+                      items: [
+                          { isFeature: true, title: 'Share links (after search.)' },
+                          { isFeature: false, title: 'Fixes seiyuu photo positioning in search list.' },
+                          { isFeature: false, title: 'Massive speed boost for anime searching.' },
+                          { isFeature: false, title: 'Adjusted application to work under Jikan REST API v3.' }
 
-                        ]
+                      ]
                     },
                     {
                         title: 'Version 1.1 - Anime search',

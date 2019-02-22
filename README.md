@@ -47,45 +47,34 @@ Require .Net Core 2.2 installed.
 
 * Searching collaboration works between seiyuu (up to 6 at once).
     * Mode for grouping by series.
-    * Mode for grouping by character.
-    * Mode for grouping by franchise (group by character + series).
+    * Three separate display modes.
     * Main roles only filter.
+    * Timeline view.
     * Precached list for fast searching most popular seiyuu.
     * Details cards for extra information.
 * Searching common seiyuu between anime (up to 6 titles at once).
-    * Mode for grouping by seiyuu.
+    * Three separate display modes.
     * Details cards for extra information.
 
 ## Changelog
 
-### Version 1.3 - 26th January 2019
+### Version 1.4 - 22th February 2019 (latest)
 
 * Features
-    * New display mode for tables.
-    * Possibility to choose between new and old display mode.
-    * Updated seiyuu database.
+    * Three possbile table views.
+    * Timeline view for seiyuu comparison.
+    * New about and home pages.
+    * Changelog in about page.
 * Fixes
-    * Added small delay to avoid 429 (too much requests) error.
-    * Fixed incorrect data in Seiyuu cards.
-    * Clearing alerts on loading correct data.
-    * Fixed sharelinks.
-    * Remove anime from search results if already selected.
+    * Auto re-render when changing "Main roles only" option.
+    * Removed few errors from console.
+    * Adjusted text display.
 
 **[Read More](https://github.com/Ervie/Seiyuu.moe/blob/master/Changelog.md)**
 
 ### Roadmap
 
-* New entry page.
-* Current entry page as separate (about) page.
-* Improvements within compare algorithm.
-* Displaying additional information - main or supporting role.
-* Small changes in table appearance (fill blank space).
-* Enhance juxtaposition by emphasis on most important collaborations.
-    * Partial results.
-    * Statistics for most selected comparisons.
-* Franchise search - similar to anime search, loading data from entire anime franchise rather than single anime.
-* Character search - find if seiyuu of selected characters worked together on other works.
-* Searching for Visual Novels/Games.
+Most planned features can be found in [Projects](https://github.com/Ervie/Seiyuu.moe/projects) page.
   
 ## Special mentions
 

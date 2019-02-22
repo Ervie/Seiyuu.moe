@@ -1,5 +1,17 @@
 
-### Version 1.3 - 26th January 2019 (latest)
+### Version 1.4 - 22th February 2019 (latest)
+
+* Features
+    * Three possbile table views.
+    * Timeline view for seiyuu comparison.
+    * New about and home pages.
+    * Changelog in about page.
+* Fixes
+    * Auto re-render when changing "Main roles only" option.
+    * Removed few errors from console.
+    * Adjusted text display.
+
+### Version 1.3 - 26th January 2019
 
 * Features
     * New display mode for tables.
