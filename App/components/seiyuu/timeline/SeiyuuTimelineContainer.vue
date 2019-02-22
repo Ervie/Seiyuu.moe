@@ -32,7 +32,7 @@ export default {
     },
     methods: {
         getTimelineDates() {
-            var malIds = this.timelineItems.map(x => x.anime.mal_id).join('&malId=');
+            var malIds = this.timelineItems.map(x => x.anime.mal_id).filter((v, i, a) => a.indexOf(v) === i).join('&malId=');
 
             this.$axios.get(process.env.API_URL + '/api/Anime/AiringDates?malId=' + malIds)
                 .then((response) => {
