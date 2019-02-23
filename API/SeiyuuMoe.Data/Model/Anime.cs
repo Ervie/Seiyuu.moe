@@ -3,7 +3,7 @@ using System;
 
 namespace SeiyuuMoe.Data.Model
 {
-	public class AnimeSnippet
+	public class Anime
 	{
 		public long Id { get; set; }
 

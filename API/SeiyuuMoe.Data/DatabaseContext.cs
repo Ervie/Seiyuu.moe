@@ -6,8 +6,8 @@ namespace SeiyuuMoe.Data
 {
 	public class DatabaseContext : DbContext
 	{
-		public DbSet<Seiyuu> Seiyuus { get; set; }
-		public DbSet<AnimeSnippet> Anime { get; set; }
+		public DbSet<Seiyuu> SeiyuuSet { get; set; }
+		public DbSet<Anime> AnimeSet { get; set; }
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{

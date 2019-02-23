@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SeiyuuMoe.Data;
+using SeiyuuMoe.Data.Context;
 using SeiyuuMoe.Data.Model;
 using SeiyuuMoe.Services;
 using System.Collections.Generic;
@@ -21,10 +22,10 @@ namespace SeiyuuMoe.API.Controllers
 
 		[HttpGet]
 		public IEnumerable<Seiyuu> Get() =>
-			_dbContext.Seiyuus.OrderByDescending(x => x.Popularity);
+			_dbContext.SeiyuuSet.OrderByDescending(x => x.Popularity);
 
 		[HttpGet("{id}")]
 		public Seiyuu Get(long id) =>
-			_dbContext.Seiyuus.Find(id);
+			_dbContext.SeiyuuSet.Find(id);
 	}
 }

@@ -2,6 +2,7 @@
 using JikanDotNet.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using SeiyuuMoe.Data;
+using SeiyuuMoe.Data.Context;
 using SeiyuuMoe.Data.Model;
 using System;
 using System.Collections;
@@ -13,7 +14,7 @@ namespace SeiyuuMoe.JikanToDBParser
 {
 	public static class JikanParser
 	{
-		private readonly static DatabaseContext dbContext = new DatabaseContext();
+		private static readonly DatabaseContext dbContext = new DatabaseContext();
 
 		private readonly static IJikan jikan;
 
@@ -52,10 +53,10 @@ namespace SeiyuuMoe.JikanToDBParser
 
 						foreach (var anime in seasonToParse.SeasonEntries)
 						{
-							if (dbContext.Anime.FirstOrDefault(x => x.MalId == anime.MalId) == null)
+							if (dbContext.AnimeSet.FirstOrDefault(x => x.MalId == anime.MalId) == null)
 							{
-								dbContext.Anime.Add(
-									new AnimeSnippet
+								dbContext.AnimeSet.Add(
+									new Data.Model.Anime
 									{
 										MalId = anime.MalId,
 										ImageUrl = anime.ImageURL,
@@ -108,13 +109,13 @@ namespace SeiyuuMoe.JikanToDBParser
 					continue;
 				}
 
-				if (dbContext.Seiyuus.FirstOrDefault(x => x.MalId == seiyuu.MalId) != null)
+				if (dbContext.SeiyuuSet.FirstOrDefault(x => x.MalId == seiyuu.MalId) != null)
 				{
 					Console.WriteLine($"Omitted {seiyuu.Name} - already in database");
 					continue;
 				}
 
-				dbContext.Seiyuus.Add(
+				dbContext.SeiyuuSet.Add(
 					new Seiyuu
 					{
 						Name = seiyuu.Name,
@@ -130,7 +131,7 @@ namespace SeiyuuMoe.JikanToDBParser
 
 		public static void ParseSeiyuuAdditional()
 		{
-			ICollection<Seiyuu> seiyuuCollection = dbContext.Seiyuus.Where(x => !x.Popularity.HasValue).ToList();
+			ICollection<Seiyuu> seiyuuCollection = dbContext.SeiyuuSet.Where(x => !x.Popularity.HasValue).ToList();
 			string japaneseName = string.Empty;
 
 			foreach (Seiyuu seiyuu in seiyuuCollection)
@@ -214,12 +215,12 @@ namespace SeiyuuMoe.JikanToDBParser
 
 		public static void ParseAnimeAdditional()
 		{
-			ICollection<AnimeSnippet> animeCollection = dbContext.Anime.Where(x => !x.AiringFrom.HasValue).ToList();
+			ICollection<Data.Model.Anime> animeCollection = dbContext.AnimeSet.Where(x => !x.AiringFrom.HasValue).ToList();
 			string japaneseName = string.Empty;
 
-			foreach (AnimeSnippet anime in animeCollection)
+			foreach (Data.Model.Anime anime in animeCollection)
 			{
-				Anime animeFullData = SendSingleAnimeRequest(anime.MalId, 0);
+				JikanDotNet.Anime animeFullData = SendSingleAnimeRequest(anime.MalId, 0);
 				japaneseName = string.Empty;
 
 				if (animeFullData != null)
@@ -242,9 +243,9 @@ namespace SeiyuuMoe.JikanToDBParser
 			}
 		}
 
-		private static Anime SendSingleAnimeRequest(long malId, short retryCount)
+		private static JikanDotNet.Anime SendSingleAnimeRequest(long malId, short retryCount)
 		{
-			Anime anime = null;
+			JikanDotNet.Anime anime = null;
 			Thread.Sleep(3000 + retryCount * 10000);
 
 			try
