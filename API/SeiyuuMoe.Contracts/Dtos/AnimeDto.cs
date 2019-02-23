@@ -10,10 +10,6 @@ namespace SeiyuuMoe.Contracts.Dtos
 
 		public long MalId { get; set; }
 
-		public int Popularity { get; set; }
-
-		public string TitleSynonyms { get; set; }
-
 		public DateTime? AiringFrom { get; set; }
 	}
 }
