@@ -2,7 +2,6 @@
 using SeiyuuMoe.Data;
 using SeiyuuMoe.Data.Context;
 using SeiyuuMoe.Data.Model;
-using SeiyuuMoe.Services;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -13,11 +12,8 @@ namespace SeiyuuMoe.API.Controllers
 	{
 		private readonly DatabaseContext _dbContext = new DatabaseContext();
 
-		private readonly JSONSerializerService _jSONSerializer;
-
-		public SeiyuuController(JSONSerializerService jSONSerializer)
+		public SeiyuuController()
 		{
-			_jSONSerializer = jSONSerializer;
 		}
 
 		[HttpGet]

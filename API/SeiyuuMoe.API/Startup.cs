@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SeiyuuMoe.Data;
-using SeiyuuMoe.Services;
 using System;
 
 namespace SeiyuuMoe.API
@@ -27,7 +26,6 @@ namespace SeiyuuMoe.API
 			services.AddCors();
 			services.AddSingleton<IConfiguration>(Configuration);
 			services.AddEntityFrameworkSqlite().AddDbContext<DatabaseContext>();
-			services.AddSingleton<JSONSerializerService>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
