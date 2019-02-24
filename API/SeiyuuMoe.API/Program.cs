@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore;
+﻿using Autofac.Extensions.DependencyInjection;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
 namespace SeiyuuMoe.API
@@ -14,6 +15,7 @@ namespace SeiyuuMoe.API
 			WebHost.CreateDefaultBuilder(args)
 				.UseKestrel()
 				.UseIISIntegration()
+				.ConfigureServices(services => services.AddAutofac())
 				.UseStartup<Startup>()
 				.UseUrls("http://localhost:5000/")
 				.Build();

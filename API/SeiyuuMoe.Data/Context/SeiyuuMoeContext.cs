@@ -4,7 +4,7 @@ using SeiyuuMoe.Data.Model;
 
 namespace SeiyuuMoe.Data.Context
 {
-	public class SeiyuuMoeContext : DbContext
+	public class SeiyuuMoeContext : DbContext, ISeiyuuMoeContext
 	{
 		private readonly string dataSource;
 
