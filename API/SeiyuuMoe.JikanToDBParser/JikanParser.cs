@@ -1,11 +1,10 @@
 ﻿using JikanDotNet;
 using JikanDotNet.Exceptions;
 using Microsoft.EntityFrameworkCore;
-using SeiyuuMoe.Data;
 using SeiyuuMoe.Data.Context;
 using SeiyuuMoe.Data.Model;
+using SeiyuuMoe.Repositories.Repositories;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -14,9 +13,10 @@ namespace SeiyuuMoe.JikanToDBParser
 {
 	public static class JikanParser
 	{
-		private static readonly SeiyuuMoeContext dbContext = new SeiyuuMoeContext();
+		private static readonly SeiyuuMoeContext dbContext = new SeiyuuMoeContext("SeiyuuMoeDB.db");
 
 		private readonly static IJikan jikan;
+		private readonly static ISeasonRepository seasonRepository;
 
 		static JikanParser()
 		{
@@ -24,6 +24,8 @@ namespace SeiyuuMoe.JikanToDBParser
 
 			dbContext.Database.EnsureCreated();
 			dbContext.Database.Migrate();
+
+			seasonRepository = new SeasonRepository(dbContext);
 		}
 
 		public static void ParseAnime()
@@ -33,7 +35,6 @@ namespace SeiyuuMoe.JikanToDBParser
 
 			if (archiveSeasons != null)
 			{
-
 				foreach (SeasonArchive year in archiveSeasons.Archives.Reverse())
 				{
 					foreach (var season in year.Season)
@@ -86,7 +87,7 @@ namespace SeiyuuMoe.JikanToDBParser
 			for (int malId = minId; malId < maxId; malId++)
 			{
 				Person seiyuu = SendSinglePersonRequest(malId, false);
-				
+
 				if (seiyuu != null)
 				{
 					Console.WriteLine($"Parsed id:{seiyuu.MalId}");
@@ -129,6 +130,24 @@ namespace SeiyuuMoe.JikanToDBParser
 			}
 		}
 
+		public static void ParseSeason()
+		{
+			SeasonArchives seasonArchives = jikan.GetSeasonArchive().Result;
+
+			foreach (SeasonArchive archive in seasonArchives.Archives.Reverse())
+			{
+				foreach (var season in archive.Season)
+				{
+					seasonRepository.Add(new Data.Model.Season()
+					{
+						Name = season.ToString(),
+						Year = archive.Year
+					});
+					seasonRepository.Commit();
+				}
+			}
+		}
+
 		public static void ParseSeiyuuAdditional()
 		{
 			ICollection<Seiyuu> seiyuuCollection = dbContext.Seiyuu.Where(x => !x.Popularity.HasValue).ToList();
@@ -162,56 +181,6 @@ namespace SeiyuuMoe.JikanToDBParser
 				}
 			}
 		}
-
-		public static Person SendSinglePersonRequest(int malId, bool retry)
-		{
-			Person seiyuu = null;
-			Thread.Sleep(3000);
-
-			try
-			{
-				seiyuu = jikan.GetPerson(malId).Result;
-			}
-			catch (Exception ex)
-			{
-				if (ex.InnerException is JikanRequestException && !retry)
-				{
-					if ((ex.InnerException as JikanRequestException).ResponseCode == System.Net.HttpStatusCode.TooManyRequests)
-					{
-						// Additional extra time to recover from IP ban
-						Thread.Sleep(30 * 1000);
-						SendSinglePersonRequest(malId, true);
-					}
-				}
-			}
-
-			return seiyuu;
-		}
-
-		public static Person SendSinglePersonRequest(long malId, short retryCount)
-		{
-			Person seiyuu = null;
-			Thread.Sleep(3000 + retryCount * 10000);
-
-			try
-			{
-				seiyuu = jikan.GetPerson(malId).Result;
-			}
-			catch (Exception ex)
-			{
-				if (retryCount < 10)
-				{
-					if (ex.InnerException is JikanRequestException && (ex.InnerException as JikanRequestException).ResponseCode == System.Net.HttpStatusCode.TooManyRequests)
-					{
-						retryCount++;
-						SendSinglePersonRequest(malId, retryCount);
-					}
-				}
-			}
-
-			return seiyuu;
-		}
-
 		public static void ParseAnimeAdditional()
 		{
 			ICollection<Data.Model.Anime> animeCollection = dbContext.Anime.Where(x => !string.IsNullOrEmpty(x.AiringDate)).ToList();
@@ -264,6 +233,55 @@ namespace SeiyuuMoe.JikanToDBParser
 			}
 
 			return anime;
+		}
+
+		private static Person SendSinglePersonRequest(long malId, short retryCount)
+		{
+			Person seiyuu = null;
+			Thread.Sleep(3000 + retryCount * 10000);
+
+			try
+			{
+				seiyuu = jikan.GetPerson(malId).Result;
+			}
+			catch (Exception ex)
+			{
+				if (retryCount < 10)
+				{
+					if (ex.InnerException is JikanRequestException && (ex.InnerException as JikanRequestException).ResponseCode == System.Net.HttpStatusCode.TooManyRequests)
+					{
+						retryCount++;
+						SendSinglePersonRequest(malId, retryCount);
+					}
+				}
+			}
+
+			return seiyuu;
+		}
+
+		private static Person SendSinglePersonRequest(int malId, bool retry)
+		{
+			Person seiyuu = null;
+			Thread.Sleep(3000);
+
+			try
+			{
+				seiyuu = jikan.GetPerson(malId).Result;
+			}
+			catch (Exception ex)
+			{
+				if (ex.InnerException is JikanRequestException && !retry)
+				{
+					if ((ex.InnerException as JikanRequestException).ResponseCode == System.Net.HttpStatusCode.TooManyRequests)
+					{
+						// Additional extra time to recover from IP ban
+						Thread.Sleep(30 * 1000);
+						SendSinglePersonRequest(malId, true);
+					}
+				}
+			}
+
+			return seiyuu;
 		}
 	}
 }

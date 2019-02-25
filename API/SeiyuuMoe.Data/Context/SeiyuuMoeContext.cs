@@ -156,7 +156,7 @@ namespace SeiyuuMoe.Data.Context
 
             modelBuilder.Entity<Season>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                //entity.Property(e => e.Id).ValueGeneratedNever();
             });
 
             modelBuilder.Entity<Seiyuu>(entity =>

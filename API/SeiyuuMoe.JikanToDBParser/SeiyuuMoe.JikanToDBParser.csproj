@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SeiyuuMoe.Data\SeiyuuMoe.Data.csproj" />
+    <ProjectReference Include="..\SeiyuuMoe.Repositories\SeiyuuMoe.Repositories.csproj" />
   </ItemGroup>
 
 </Project>
