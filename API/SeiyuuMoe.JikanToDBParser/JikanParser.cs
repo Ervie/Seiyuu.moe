@@ -17,6 +17,7 @@ namespace SeiyuuMoe.JikanToDBParser
 
 		private readonly static IJikan jikan;
 		private readonly static ISeasonRepository seasonRepository;
+		private readonly static ISeiyuuRepository seiyuuRepository;
 
 		static JikanParser()
 		{
@@ -26,6 +27,7 @@ namespace SeiyuuMoe.JikanToDBParser
 			dbContext.Database.Migrate();
 
 			seasonRepository = new SeasonRepository(dbContext);
+			seiyuuRepository = new SeiyuuRepository(dbContext);
 		}
 
 		public static void ParseAnime()
@@ -150,7 +152,7 @@ namespace SeiyuuMoe.JikanToDBParser
 
 		public static void ParseSeiyuuAdditional()
 		{
-			ICollection<Seiyuu> seiyuuCollection = dbContext.Seiyuu.Where(x => !x.Popularity.HasValue).ToList();
+			ICollection<Seiyuu> seiyuuCollection = dbContext.Seiyuu.ToList();
 			string japaneseName = string.Empty;
 
 			foreach (Seiyuu seiyuu in seiyuuCollection)
@@ -162,13 +164,17 @@ namespace SeiyuuMoe.JikanToDBParser
 				{
 					Console.WriteLine($"Parsed id:{seiyuu.MalId}");
 
+					seiyuu.Name = seiyuuFullData.Name;
+					seiyuu.ImageUrl = seiyuuFullData.ImageURL;
 					seiyuu.Popularity = seiyuuFullData.MemberFavorites;
-
-					if (!string.IsNullOrWhiteSpace(seiyuuFullData.GivenName))
-						japaneseName += seiyuuFullData.GivenName;
+					seiyuu.About = seiyuuFullData.More;
+					seiyuu.Birthday = seiyuuFullData.Birthday.ToString();
 
 					if (!string.IsNullOrWhiteSpace(seiyuuFullData.FamilyName))
 						japaneseName += seiyuuFullData.FamilyName;
+
+					if (!string.IsNullOrWhiteSpace(seiyuuFullData.GivenName))
+						japaneseName +=  string.IsNullOrEmpty(japaneseName) ? seiyuuFullData.GivenName : " " + seiyuuFullData.GivenName;
 
 					seiyuu.JapaneseName = japaneseName;
 
@@ -181,6 +187,7 @@ namespace SeiyuuMoe.JikanToDBParser
 				}
 			}
 		}
+
 		public static void ParseAnimeAdditional()
 		{
 			ICollection<Data.Model.Anime> animeCollection = dbContext.Anime.Where(x => !string.IsNullOrEmpty(x.AiringDate)).ToList();
