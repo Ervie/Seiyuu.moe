@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using EnsureThat;
 using SeiyuuMoe.BusinessServices;
 using SeiyuuMoe.Contracts.Dtos;
 using SeiyuuMoe.Contracts.SearchCriteria;
@@ -21,6 +22,8 @@ namespace SeiyuuMoe.Services
 
 		public async Task<QueryResponse<PagedResult<SeiyuuDto>>> GetAsync(Query<SeiyuuSearchCriteria> query)
 		{
+			Ensure.That(query, nameof(query)).IsNotNull();
+
 			var payload = await seiyuuBusinessService.GetAsync(query);
 
 			return new QueryResponse<PagedResult<SeiyuuDto>>(payload);
