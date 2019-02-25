@@ -10,8 +10,8 @@ namespace SeiyuuMoe.Data
 		{
 			var module = Assembly.GetAssembly(this.GetType());
 
-			//builder.RegisterType<SeiyuuMoeContext>().As<ISeiyuuMoeContext>()
-			//	.WithParameter("dataSource", "SeiyuuMoeDB.db");
+			builder.RegisterType<SeiyuuMoeContext>().As<ISeiyuuMoeContext>()
+				.WithParameter("dataSource", "SeiyuuMoeDB.db");
 
 			base.Load(builder);
 		}

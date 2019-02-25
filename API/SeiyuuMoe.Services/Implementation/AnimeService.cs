@@ -22,13 +22,13 @@ namespace SeiyuuMoe.Services
 			this.animeSearchCriteriaService = animeSearchCriteriaService;
 		}
 
-		public async Task<PagedResult<AnimeDto>> GetAsync(Query<AnimeSearchCriteria> query)
+		public async Task<QueryResponse<PagedResult<AnimeDto>>> GetAsync(Query<AnimeSearchCriteria> query)
 		{
 			var expression = await animeSearchCriteriaService.BuildExpression(query.SearchCriteria);
 
 			var entities = await animeRepository.GetOrderedPageAsync(expression, query.SortExpression, query.Page, query.PageSize);
 
-			return mapper.Map<PagedResult<AnimeDto>>(entities);
+			return new QueryResponse<PagedResult<AnimeDto>>(mapper.Map<PagedResult<AnimeDto>>(entities));
 		}
 
 		public async Task<PagedResult<AnimeAiringDto>> GetDatesAsync(Query<AnimeSearchCriteria> query)

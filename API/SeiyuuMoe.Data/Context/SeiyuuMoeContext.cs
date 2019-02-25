@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using SeiyuuMoe.Data.Model;
@@ -7,7 +8,9 @@ namespace SeiyuuMoe.Data.Context
 {
     public partial class SeiyuuMoeContext : DbContext, ISeiyuuMoeContext
     {
-        public SeiyuuMoeContext()
+		private readonly string dataSource;
+
+		public SeiyuuMoeContext()
         {
         }
 
@@ -16,7 +19,12 @@ namespace SeiyuuMoe.Data.Context
         {
         }
 
-        public virtual DbSet<Anime> Anime { get; set; }
+		public SeiyuuMoeContext(string dataSource)
+		{
+			this.dataSource = dataSource;
+		}
+
+		public virtual DbSet<Anime> Anime { get; set; }
         public virtual DbSet<AnimeStatus> AnimeStatus { get; set; }
         public virtual DbSet<AnimeType> AnimeType { get; set; }
         public virtual DbSet<Character> Character { get; set; }
@@ -30,8 +38,12 @@ namespace SeiyuuMoe.Data.Context
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlite("DataSource=SeiyuuMoeDB.db");
-            }
+				var connectionStringBuilder = new SqliteConnectionStringBuilder { DataSource = this.dataSource ?? string.Empty };
+				var connectionString = connectionStringBuilder.ToString();
+				var connection = new SqliteConnection(connectionString);
+
+				optionsBuilder.UseSqlite(connection);
+			}
         }
 
 		public void SetAttached<TEntity>(TEntity entity) where TEntity : class

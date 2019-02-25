@@ -8,7 +8,7 @@ namespace SeiyuuMoe.Services
 {
 	public interface IAnimeService
 	{
-		Task<PagedResult<AnimeDto>> GetAsync(Query<AnimeSearchCriteria> query);
+		Task<QueryResponse<PagedResult<AnimeDto>>> GetAsync(Query<AnimeSearchCriteria> query);
 
 		Task<PagedResult<AnimeAiringDto>> GetDatesAsync(Query<AnimeSearchCriteria> query);
 	}
