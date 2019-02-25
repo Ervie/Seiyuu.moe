@@ -2,7 +2,7 @@
 using SeiyuuMoe.Contracts.Dtos;
 using SeiyuuMoe.Data.Model;
 
-namespace SeiyuuMoe.Services.Mapper.Profiles
+namespace SeiyuuMoe.ServBusinessServicesices.Mapper.Profiles
 {
 	internal class AnimeProfile : Profile
 	{

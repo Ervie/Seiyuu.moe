@@ -4,7 +4,7 @@ using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace SeiyuuMoe.Services.SearchCriteria
+namespace SeiyuuMoe.BusinessServices.SearchCriteria
 {
 	public interface IAnimeSearchCriteriaService
 	{

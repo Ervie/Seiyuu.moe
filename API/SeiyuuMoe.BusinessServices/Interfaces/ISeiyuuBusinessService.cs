@@ -4,10 +4,10 @@ using SeiyuuMoe.Repositories.Models;
 using SeiyuuMoe.WebEssentials;
 using System.Threading.Tasks;
 
-namespace SeiyuuMoe.Services
+namespace SeiyuuMoe.BusinessServices
 {
-	public interface ISeiyuuService
+	public interface ISeiyuuBusinessService
 	{
-		Task<QueryResponse<PagedResult<SeiyuuDto>>> GetAsync(Query<SeiyuuSearchCriteria> query);
+		Task<PagedResult<SeiyuuDto>> GetAsync(Query<SeiyuuSearchCriteria> query);
 	}
 }

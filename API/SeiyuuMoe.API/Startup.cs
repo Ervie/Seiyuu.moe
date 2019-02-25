@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SeiyuuMoe.BusinessServices;
 using SeiyuuMoe.Data;
 using SeiyuuMoe.Repositories;
 using SeiyuuMoe.Services;
@@ -29,6 +30,7 @@ namespace SeiyuuMoe.API
 		{
 			builder.RegisterModule(new ContextModule());
 			builder.RegisterModule(new RepositoriesModule());
+			builder.RegisterModule(new BusinessServicesModule());
 			builder.RegisterModule(new ServicesModule());
 		}
 

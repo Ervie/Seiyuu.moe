@@ -2,16 +2,18 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
+    <AssemblyName>SeiyuuMoe.BusinessServices</AssemblyName>
+    <RootNamespace>SeiyuuMoe.BusinessServices</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Autofac" Version="4.9.1" />
-    <PackageReference Include="Ensure.That" Version="8.1.1" />
+    <PackageReference Include="AutoMapper" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SeiyuuMoe.BusinessServices\SeiyuuMoe.BusinessServices.csproj" />
     <ProjectReference Include="..\SeiyuuMoe.Contracts\SeiyuuMoe.Contracts.csproj" />
+    <ProjectReference Include="..\SeiyuuMoe.Data\SeiyuuMoe.Data.csproj" />
     <ProjectReference Include="..\SeiyuuMoe.Repositories\SeiyuuMoe.Repositories.csproj" />
     <ProjectReference Include="..\SeiyuuMoe.WebEssentials\SeiyuuMoe.WebEssentials.csproj" />
   </ItemGroup>

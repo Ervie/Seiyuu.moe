@@ -1,43 +1,36 @@
-﻿using AutoMapper;
+﻿using SeiyuuMoe.BusinessServices;
 using SeiyuuMoe.Contracts.Dtos;
 using SeiyuuMoe.Contracts.SearchCriteria;
 using SeiyuuMoe.Repositories.Models;
-using SeiyuuMoe.Repositories.Repositories;
-using SeiyuuMoe.Services.SearchCriteria;
 using SeiyuuMoe.WebEssentials;
+using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace SeiyuuMoe.Services
 {
-	internal class AnimeService : IAnimeService
+	class AnimeService : IAnimeService
 	{
-		private readonly IMapper mapper;
-		private readonly IAnimeRepository animeRepository;
-		private readonly IAnimeSearchCriteriaService animeSearchCriteriaService;
+		private readonly IAnimeBusinessService animeBusinessService;
 
-		public AnimeService(IMapper mapper, IAnimeRepository animeRepository, IAnimeSearchCriteriaService animeSearchCriteriaService)
+		public AnimeService(IAnimeBusinessService animeBusinessService)
 		{
-			this.mapper = mapper;
-			this.animeRepository = animeRepository;
-			this.animeSearchCriteriaService = animeSearchCriteriaService;
+			this.animeBusinessService = animeBusinessService;
 		}
 
 		public async Task<QueryResponse<PagedResult<AnimeDto>>> GetAsync(Query<AnimeSearchCriteria> query)
 		{
-			var expression = await animeSearchCriteriaService.BuildExpression(query.SearchCriteria);
+			var payload = await animeBusinessService.GetAsync(query);
 
-			var entities = await animeRepository.GetOrderedPageAsync(expression, query.SortExpression, query.Page, query.PageSize);
-
-			return new QueryResponse<PagedResult<AnimeDto>>(mapper.Map<PagedResult<AnimeDto>>(entities));
+			return new QueryResponse<PagedResult<AnimeDto>>(payload);
 		}
 
-		public async Task<PagedResult<AnimeAiringDto>> GetDatesAsync(Query<AnimeSearchCriteria> query)
+		public async Task<QueryResponse<PagedResult<AnimeAiringDto>>> GetDatesAsync(Query<AnimeSearchCriteria> query)
 		{
-			var expression = await animeSearchCriteriaService.BuildExpression(query.SearchCriteria);
+			var payload = await animeBusinessService.GetDatesAsync(query);
 
-			var entities = await animeRepository.GetOrderedPageAsync(expression, query.SortExpression, query.Page, query.PageSize);
-
-			return mapper.Map<PagedResult<AnimeAiringDto>>(entities);
+			return new QueryResponse<PagedResult<AnimeAiringDto>>(payload);
 		}
 	}
 }

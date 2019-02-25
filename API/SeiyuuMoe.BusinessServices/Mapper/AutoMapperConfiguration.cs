@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using System.Collections.Generic;
 
-namespace SeiyuuMoe.Services.Mapper
+namespace SeiyuuMoe.BusinessServices.Mapper
 {
 	internal class AutoMapperConfiguration : MapperConfiguration
 	{

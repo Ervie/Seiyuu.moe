@@ -27,8 +27,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SeiyuuMoe.Services\SeiyuuMoe.Services.csproj" />
+    <ProjectReference Include="..\SeiyuuMoe.Contracts\SeiyuuMoe.Contracts.csproj" />
     <ProjectReference Include="..\SeiyuuMoe.Data\SeiyuuMoe.Data.csproj" />
+    <ProjectReference Include="..\SeiyuuMoe.Repositories\SeiyuuMoe.Repositories.csproj" />
+    <ProjectReference Include="..\SeiyuuMoe.Services\SeiyuuMoe.Services.csproj" />
+    <ProjectReference Include="..\SeiyuuMoe.WebEssentials\SeiyuuMoe.WebEssentials.csproj" />
   </ItemGroup>
 
   <ItemGroup>
