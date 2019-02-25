@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SeiyuuMoe.Data.Context;
+using SeiyuuMoe.Data.Model;
 using SeiyuuMoe.Repositories.Models;
 using SeiyuuMoe.Repositories.Utilities;
 using System;

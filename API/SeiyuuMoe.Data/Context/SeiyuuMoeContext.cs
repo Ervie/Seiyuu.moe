@@ -1,33 +1,38 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using System;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using SeiyuuMoe.Data.Model;
 
 namespace SeiyuuMoe.Data.Context
 {
-	public class SeiyuuMoeContext : DbContext, ISeiyuuMoeContext
-	{
-		private readonly string dataSource;
+    public partial class SeiyuuMoeContext : DbContext, ISeiyuuMoeContext
+    {
+        public SeiyuuMoeContext()
+        {
+        }
 
-		public DbSet<Seiyuu> SeiyuuSet { get; set; }
-		public DbSet<Anime> AnimeSet { get; set; }
+        public SeiyuuMoeContext(DbContextOptions<SeiyuuMoeContext> options)
+            : base(options)
+        {
+        }
 
-		public SeiyuuMoeContext()
-		{
-		}
+        public virtual DbSet<Anime> Anime { get; set; }
+        public virtual DbSet<AnimeStatus> AnimeStatus { get; set; }
+        public virtual DbSet<AnimeType> AnimeType { get; set; }
+        public virtual DbSet<Character> Character { get; set; }
+        public virtual DbSet<Language> Language { get; set; }
+        public virtual DbSet<Role> Role { get; set; }
+        public virtual DbSet<RoleType> RoleType { get; set; }
+        public virtual DbSet<Season> Season { get; set; }
+        public virtual DbSet<Seiyuu> Seiyuu { get; set; }
 
-		public SeiyuuMoeContext(string dataSource)
-		{
-			this.dataSource = dataSource;
-		}
-
-		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-		{
-			var connectionStringBuilder = new SqliteConnectionStringBuilder { DataSource = this.dataSource ?? string.Empty };
-			var connectionString = connectionStringBuilder.ToString();
-			var connection = new SqliteConnection(connectionString);
-
-			optionsBuilder.UseSqlite(connection);
-		}
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlite("DataSource=SeiyuuMoeDB.db");
+            }
+        }
 
 		public void SetAttached<TEntity>(TEntity entity) where TEntity : class
 		{
@@ -46,5 +51,110 @@ namespace SeiyuuMoe.Data.Context
 		{
 			Entry(entity).State = EntityState.Deleted;
 		}
-	}
+
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.HasAnnotation("ProductVersion", "3.0.0-preview.19074.3");
+
+            modelBuilder.Entity<Anime>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.AiringDate).HasColumnType("NUMERIC");
+
+                entity.Property(e => e.Title).IsRequired();
+
+                entity.HasOne(d => d.Season)
+                    .WithMany(p => p.Anime)
+                    .HasForeignKey(d => d.SeasonId)
+                    .OnDelete(DeleteBehavior.SetNull);
+
+                entity.HasOne(d => d.Status)
+                    .WithMany(p => p.Anime)
+                    .HasForeignKey(d => d.StatusId)
+                    .OnDelete(DeleteBehavior.SetNull);
+
+                entity.HasOne(d => d.Type)
+                    .WithMany(p => p.Anime)
+                    .HasForeignKey(d => d.TypeId)
+                    .OnDelete(DeleteBehavior.SetNull);
+            });
+
+            modelBuilder.Entity<AnimeStatus>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.Name).IsRequired();
+            });
+
+            modelBuilder.Entity<AnimeType>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.Name).IsRequired();
+            });
+
+            modelBuilder.Entity<Character>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.Name).IsRequired();
+            });
+
+            modelBuilder.Entity<Language>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.Name).IsRequired();
+            });
+
+            modelBuilder.Entity<Role>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.Title).IsRequired();
+
+                entity.HasOne(d => d.Anime)
+                    .WithMany(p => p.Role)
+                    .HasForeignKey(d => d.AnimeId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(d => d.Character)
+                    .WithMany(p => p.Role)
+                    .HasForeignKey(d => d.CharacterId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(d => d.RoleType)
+                    .WithMany(p => p.Role)
+                    .HasForeignKey(d => d.RoleTypeId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(d => d.Seiyuu)
+                    .WithMany(p => p.Role)
+                    .HasForeignKey(d => d.SeiyuuId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<RoleType>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.Name).IsRequired();
+            });
+
+            modelBuilder.Entity<Season>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+            });
+
+            modelBuilder.Entity<Seiyuu>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.Birthday).HasColumnType("NUMERIC");
+
+                entity.Property(e => e.Name).IsRequired();
+            });
+        }
+    }
 }

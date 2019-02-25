@@ -22,7 +22,7 @@ namespace SeiyuuMoe.API
 		{
 			services.AddMvc();
 			services.AddCors();
-			services.AddEntityFrameworkSqlite().AddDbContext<DatabaseContext>();
+			//services.AddEntityFrameworkSqlite().AddDbContext<DatabaseContext>();
 		}
 
 		public void ConfigureContainer(ContainerBuilder builder)

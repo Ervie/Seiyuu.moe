@@ -14,7 +14,7 @@ namespace SeiyuuMoe.JikanToDBParser
 {
 	public static class JikanParser
 	{
-		private static readonly DatabaseContext dbContext = new DatabaseContext();
+		private static readonly SeiyuuMoeContext dbContext = new SeiyuuMoeContext();
 
 		private readonly static IJikan jikan;
 
@@ -28,7 +28,7 @@ namespace SeiyuuMoe.JikanToDBParser
 
 		public static void ParseAnime()
 		{
-			Season seasonToParse;
+			JikanDotNet.Season seasonToParse;
 			var archiveSeasons = jikan.GetSeasonArchive().Result;
 
 			if (archiveSeasons != null)
@@ -53,9 +53,9 @@ namespace SeiyuuMoe.JikanToDBParser
 
 						foreach (var anime in seasonToParse.SeasonEntries)
 						{
-							if (dbContext.AnimeSet.FirstOrDefault(x => x.MalId == anime.MalId) == null)
+							if (dbContext.Anime.FirstOrDefault(x => x.MalId == anime.MalId) == null)
 							{
-								dbContext.AnimeSet.Add(
+								dbContext.Anime.Add(
 									new Data.Model.Anime
 									{
 										MalId = anime.MalId,
@@ -109,13 +109,13 @@ namespace SeiyuuMoe.JikanToDBParser
 					continue;
 				}
 
-				if (dbContext.SeiyuuSet.FirstOrDefault(x => x.MalId == seiyuu.MalId) != null)
+				if (dbContext.Seiyuu.FirstOrDefault(x => x.MalId == seiyuu.MalId) != null)
 				{
 					Console.WriteLine($"Omitted {seiyuu.Name} - already in database");
 					continue;
 				}
 
-				dbContext.SeiyuuSet.Add(
+				dbContext.Seiyuu.Add(
 					new Seiyuu
 					{
 						Name = seiyuu.Name,
@@ -131,7 +131,7 @@ namespace SeiyuuMoe.JikanToDBParser
 
 		public static void ParseSeiyuuAdditional()
 		{
-			ICollection<Seiyuu> seiyuuCollection = dbContext.SeiyuuSet.Where(x => !x.Popularity.HasValue).ToList();
+			ICollection<Seiyuu> seiyuuCollection = dbContext.Seiyuu.Where(x => !x.Popularity.HasValue).ToList();
 			string japaneseName = string.Empty;
 
 			foreach (Seiyuu seiyuu in seiyuuCollection)
@@ -144,7 +144,6 @@ namespace SeiyuuMoe.JikanToDBParser
 					Console.WriteLine($"Parsed id:{seiyuu.MalId}");
 
 					seiyuu.Popularity = seiyuuFullData.MemberFavorites;
-					seiyuu.NumberOfRoles = seiyuuFullData.VoiceActingRoles.Count;
 
 					if (!string.IsNullOrWhiteSpace(seiyuuFullData.GivenName))
 						japaneseName += seiyuuFullData.GivenName;
@@ -215,7 +214,7 @@ namespace SeiyuuMoe.JikanToDBParser
 
 		public static void ParseAnimeAdditional()
 		{
-			ICollection<Data.Model.Anime> animeCollection = dbContext.AnimeSet.Where(x => !x.AiringFrom.HasValue).ToList();
+			ICollection<Data.Model.Anime> animeCollection = dbContext.Anime.Where(x => !string.IsNullOrEmpty(x.AiringDate)).ToList();
 			string japaneseName = string.Empty;
 
 			foreach (Data.Model.Anime anime in animeCollection)
@@ -228,7 +227,7 @@ namespace SeiyuuMoe.JikanToDBParser
 					Console.WriteLine($"Parsed id:{anime.Id}, malId:{anime.MalId}");
 
 					if (animeFullData.Aired.From.HasValue)
-						anime.AiringFrom = animeFullData.Aired.From;
+						anime.AiringDate = animeFullData.Aired.From.ToString();
 
 					if (animeFullData.TitleSynonyms.Count > 0)
 						anime.TitleSynonyms = string.Join(';', animeFullData.TitleSynonyms);
