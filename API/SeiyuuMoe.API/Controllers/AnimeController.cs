@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SeiyuuMoe.API.Controllers.Base;
-using SeiyuuMoe.Contracts.Dtos;
 using SeiyuuMoe.Contracts.SearchCriteria;
-using SeiyuuMoe.Repositories.Models;
 using SeiyuuMoe.Services;
 using SeiyuuMoe.WebEssentials;
 using System.Threading.Tasks;
@@ -20,18 +18,16 @@ namespace SeiyuuMoe.API.Controllers
 		}
 
 		[HttpGet("{query}")]
-		public Task<IActionResult> Get(Query<AnimeSearchCriteria> query)
+		public Task<IActionResult> Get([FromQuery] Query<AnimeSearchCriteria> query)
 		{
-			return Handle(async () => HandleServiceResult<PagedResult<AnimeDto>>(await animeService.GetAsync(query)));
+			return Handle(async () => HandleServiceResult(await animeService.GetAsync(query)));
 		}
 
-		//	[HttpGet]
-		//	[Route("AiringDates")]
-		//	public ICollection<AnimeAiring> Get([FromQuery] ICollection<long> malId) =>
-		//		 _dbContext.AnimeSet
-		//		.Where(x => malId.Contains(x.MalId))
-		//		.Select(entry => new AnimeAiring{ MalId = entry.MalId, AiringFrom = entry.AiringFrom })
-		//		.OrderByDescending(x => x.AiringFrom).ToList();
-		//}
+		[HttpGet]
+		[Route("AiringDates")]
+		public Task<IActionResult> GetDates([FromQuery] Query<AnimeSearchCriteria> query)
+		{
+			return Handle(async () => HandleServiceResult(await animeService.GetDatesAsync(query)));
+		}
 	}
 }

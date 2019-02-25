@@ -1,22 +1,26 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Linq;
+using SeiyuuMoe.API.Controllers.Base;
+using SeiyuuMoe.Contracts.SearchCriteria;
+using SeiyuuMoe.Services;
+using SeiyuuMoe.WebEssentials;
+using System.Threading.Tasks;
 
 namespace SeiyuuMoe.API.Controllers
 {
 	[Route("api/[controller]")]
-	public class SeiyuuController : Controller
+	public class SeiyuuController : BaseController
 	{
-		public SeiyuuController()
+		private readonly ISeiyuuService seiyuuService;
+
+		public SeiyuuController(ISeiyuuService seiyuuService)
 		{
+			this.seiyuuService = seiyuuService;
 		}
 
-		//[HttpGet]
-		//public IEnumerable<Seiyuu> Get() =>
-		//	_dbContext.SeiyuuSet.OrderByDescending(x => x.Popularity);
-
-		//[HttpGet("{id}")]
-		//public Seiyuu Get(long id) =>
-		//	_dbContext.SeiyuuSet.Find(id);
+		[HttpGet]
+		public Task<IActionResult> Get([FromQuery] Query<SeiyuuSearchCriteria> query)
+		{
+			return Handle(async () => HandleServiceResult(await seiyuuService.GetAsync(query)));
+		}
 	}
 }

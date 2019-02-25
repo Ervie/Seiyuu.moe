@@ -3,14 +3,11 @@ using SeiyuuMoe.Contracts.Dtos;
 using SeiyuuMoe.Contracts.SearchCriteria;
 using SeiyuuMoe.Repositories.Models;
 using SeiyuuMoe.WebEssentials;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SeiyuuMoe.Services
 {
-	class AnimeService : IAnimeService
+	internal class AnimeService : IAnimeService
 	{
 		private readonly IAnimeBusinessService animeBusinessService;
 

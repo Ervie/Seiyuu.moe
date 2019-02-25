@@ -1,9 +1,11 @@
 ﻿using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using SeiyuuMoe.BusinessServices;
 using SeiyuuMoe.Data;
 using SeiyuuMoe.Repositories;
@@ -14,24 +16,32 @@ namespace SeiyuuMoe.API
 {
 	public class Startup
 	{
+		public IContainer ApplicationContainer { get; private set; }
+
+		public IConfigurationRoot Configuration { get; }
+
 		public Startup(IConfiguration configuration)
 		{
 		}
 
 		// This method gets called by the runtime. Use this method to add services to the container.
-		public void ConfigureServices(IServiceCollection services)
+		public IServiceProvider ConfigureServices(IServiceCollection services)
 		{
-			services.AddMvc();
+			services.AddMvc().AddControllersAsServices();
 			services.AddCors();
-			//services.AddEntityFrameworkSqlite().AddDbContext<DatabaseContext>();
-		}
 
-		public void ConfigureContainer(ContainerBuilder builder)
-		{
+			var builder = new ContainerBuilder();
+
+			builder.Populate(services);
+
 			builder.RegisterModule(new ContextModule());
 			builder.RegisterModule(new RepositoriesModule());
 			builder.RegisterModule(new BusinessServicesModule());
 			builder.RegisterModule(new ServicesModule());
+
+			ApplicationContainer = builder.Build();
+
+			return new AutofacServiceProvider(this.ApplicationContainer);
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,6 +56,7 @@ namespace SeiyuuMoe.API
 			{
 				ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
 			});
+
 
 			app.UseCors(builder => builder
 			.AllowAnyOrigin()

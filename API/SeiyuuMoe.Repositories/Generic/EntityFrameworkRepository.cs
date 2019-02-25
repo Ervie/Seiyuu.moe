@@ -6,7 +6,7 @@ using System.Text;
 namespace SeiyuuMoe.Repositories.Generic
 {
 	public class EntityFrameworkRepository<TContext>
-	   where TContext : SeiyuuMoeContext
+	   where TContext : ISeiyuuMoeContext
 	{
 		protected TContext Context { get; }
 

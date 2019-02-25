@@ -13,7 +13,7 @@ namespace SeiyuuMoe.Repositories.Generic
 {
 	public class CRUDEntityFrameworkRepository<TEntity, TContext, TKey> : EntityFrameworkRepository<TContext>, IRepository<TEntity>
 	where TEntity : class
-	where TContext : SeiyuuMoeContext
+	where TContext : ISeiyuuMoeContext
 	{
 		protected readonly DbSet<TEntity> DbSetEntities;
 
@@ -22,7 +22,7 @@ namespace SeiyuuMoe.Repositories.Generic
 		protected CRUDEntityFrameworkRepository(TContext dbContext, Expression<Func<TEntity, TKey>> defaultKey) : base(dbContext)
 		{
 			DefaultKey = defaultKey;
-			DbSetEntities = Context.Set<TEntity>();
+			DbSetEntities = (Context as DbContext).Set<TEntity>();
 		}
 
 		public async Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IQueryable<TEntity>> includeExpression = null)
@@ -123,12 +123,12 @@ namespace SeiyuuMoe.Repositories.Generic
 
 		public void Commit()
 		{
-			Context.SaveChanges();
+			(Context as DbContext).SaveChanges();
 		}
 
 		public async Task CommitAsync()
 		{
-			await Context.SaveChangesAsync();
+			await (Context as DbContext).SaveChangesAsync();
 		}
 
 		protected virtual IQueryable<TEntity> IncludeListReferences(IQueryable<TEntity> entities)

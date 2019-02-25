@@ -4,9 +4,9 @@ using SeiyuuMoe.Repositories.Generic;
 
 namespace SeiyuuMoe.Repositories.Repositories
 {
-	public class SeiyuuRepository : CRUDEntityFrameworkRepository<Seiyuu, SeiyuuMoeContext, long>, ISeiyuuRepository
+	public class SeiyuuRepository : CRUDEntityFrameworkRepository<Seiyuu, ISeiyuuMoeContext, long>, ISeiyuuRepository
 	{
-		public SeiyuuRepository(SeiyuuMoeContext dbContext) : base(dbContext, x => x.Id)
+		public SeiyuuRepository(ISeiyuuMoeContext dbContext) : base(dbContext, x => x.Id)
 		{
 		}
 	}
