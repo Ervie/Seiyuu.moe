@@ -7,5 +7,7 @@
 		public string ImageUrl { get; set; }
 
 		public long MalId { get; set; }
+
+		public string JapaneseName { get; set; }
 	}
 }

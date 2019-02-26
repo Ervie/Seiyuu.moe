@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SeiyuuMoe.Contracts.Dtos
+﻿namespace SeiyuuMoe.Contracts.Dtos
 {
 	public class AnimeDto
 	{
@@ -9,7 +7,5 @@ namespace SeiyuuMoe.Contracts.Dtos
 		public string ImageUrl { get; set; }
 
 		public long MalId { get; set; }
-
-		public DateTime? AiringFrom { get; set; }
 	}
 }

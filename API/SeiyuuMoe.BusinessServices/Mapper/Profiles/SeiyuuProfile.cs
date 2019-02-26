@@ -11,6 +11,7 @@ namespace SeiyuuMoe.BusinessServices.Mapper.Profiles
 			CreateMap<Seiyuu, SeiyuuDto>()
 				.ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
 				.ForMember(dest => dest.MalId, opt => opt.MapFrom(src => src.MalId))
+				.ForMember(dest => dest.JapaneseName, opt => opt.MapFrom(src => src.JapaneseName))
 				.ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl));
 		}
 	}

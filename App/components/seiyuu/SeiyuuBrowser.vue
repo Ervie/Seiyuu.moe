@@ -6,9 +6,9 @@
           :filter="customFilter"
           :loading="loading"
           v-model="selectModel"
-          label="Search by Seiyuu Name..."
+          label="Search by Seiyuu Name... (e.g. Kana Hanazawa)"
           item-text="name"
-          item-value="mal_id"
+          item-value="malId"
           :menu-props="{maxHeight:'300'}"
           prepend-icon="search"
         >
@@ -20,7 +20,7 @@
               <v-list-tile-avatar>
                 <v-img 
                   class="dropdownAvatar" 
-                  :src="pathToImage(data.item.image_url)" />
+                  :src="pathToImage(data.item.imageUrl)" />
               </v-list-tile-avatar>
               <v-list-tile-content>
                 <v-list-tile-title v-html="data.item.name"></v-list-tile-title>
@@ -90,6 +90,13 @@ export default {
       ]
     }
   },
+  computed: {
+    requestUrl() {
+      return process.env.API_URL +
+            '/api/Seiyuu/' +
+            '?Page=0&PageSize=10000&SortExpression=Popularity DESC'
+    }
+  },
   methods: {
     customFilter (item, queryText, itemText) {
         const nameSurname = item.name.toLowerCase()
@@ -98,7 +105,7 @@ export default {
 
         return nameSurname.indexOf(searchText) > -1 ||
           surnameName.indexOf(searchText) > -1 ||
-          item.japanese_name.indexOf(searchText) > -1
+          item.japaneseName.indexOf(searchText) > -1
     },
     searchByName () {
       if (this.searchedId.length >= this.maximumSeiyuuNumber) {
@@ -122,15 +129,15 @@ export default {
       }
     },
     loadCachedSeiyuu () {
-      this.$axios.get(process.env.API_URL + '/api/Seiyuu')
+      this.$axios.get(this.requestUrl)
         .then((response) => {
-          this.cachedSeiyuu = response.data.sort(function(a, b){return b.popularity-a.popularity})
+          this.cachedSeiyuu = response.data.payload.results;
         })
         .catch((error) => {
           console.log(error)
           this.$axios.get(process.env.API_URL2 + '/api/Seiyuu')
             .then((response) => {
-              this.cachedSeiyuu = response.data.sort(function(a, b){return b.popularity-a.popularity})
+              this.cachedSeiyuu = response.data.payload.results;
             })
             .catch((error) => {
               console.log(error)
