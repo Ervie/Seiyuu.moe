@@ -18,6 +18,8 @@ namespace SeiyuuMoe.JikanToDBParser
 		private readonly static IJikan jikan;
 		private readonly static ISeasonRepository seasonRepository;
 		private readonly static ISeiyuuRepository seiyuuRepository;
+		private readonly static IAnimeTypeRepository animeTypeRepository;
+		private readonly static IAnimeStatusRepository animeStatusRepository;
 
 		static JikanParser()
 		{
@@ -28,6 +30,8 @@ namespace SeiyuuMoe.JikanToDBParser
 
 			seasonRepository = new SeasonRepository(dbContext);
 			seiyuuRepository = new SeiyuuRepository(dbContext);
+			animeTypeRepository = new AnimeTypeRepository(dbContext);
+			animeStatusRepository = new AnimeStatusRepository(dbContext);
 		}
 
 		public static void ParseAnime()
@@ -174,7 +178,7 @@ namespace SeiyuuMoe.JikanToDBParser
 						japaneseName += seiyuuFullData.FamilyName;
 
 					if (!string.IsNullOrWhiteSpace(seiyuuFullData.GivenName))
-						japaneseName +=  string.IsNullOrEmpty(japaneseName) ? seiyuuFullData.GivenName : " " + seiyuuFullData.GivenName;
+						japaneseName += string.IsNullOrEmpty(japaneseName) ? seiyuuFullData.GivenName : " " + seiyuuFullData.GivenName;
 
 					seiyuu.JapaneseName = japaneseName;
 
@@ -200,13 +204,23 @@ namespace SeiyuuMoe.JikanToDBParser
 
 				if (animeFullData != null)
 				{
-					Console.WriteLine($"Parsed id:{anime.Id}, malId:{anime.MalId}");
+					Console.WriteLine($"{DateTime.Now}: Parsed id:{anime.Id}, malId:{anime.MalId}");
+
+					anime.Title = animeFullData.Title;
+					anime.About = animeFullData.Synopsis;
+					anime.ImageUrl = animeFullData.ImageURL;
+					anime.JapaneseTitle = animeFullData.TitleJapanese;
+					anime.Popularity = animeFullData.Members;
 
 					if (animeFullData.Aired.From.HasValue)
 						anime.AiringDate = animeFullData.Aired.From.ToString();
 
 					if (animeFullData.TitleSynonyms.Count > 0)
 						anime.TitleSynonyms = string.Join(';', animeFullData.TitleSynonyms);
+
+					anime.TypeId = MatchAnimeType(animeFullData.Type);
+					anime.StatusId = MatchAnimeStatus(animeFullData.Status);
+					anime.SeasonId = MatchSeason(animeFullData.Premiered);
 
 					dbContext.SaveChanges();
 				}
@@ -217,6 +231,8 @@ namespace SeiyuuMoe.JikanToDBParser
 				}
 			}
 		}
+
+		#region Requests
 
 		private static JikanDotNet.Anime SendSingleAnimeRequest(long malId, short retryCount)
 		{
@@ -290,5 +306,52 @@ namespace SeiyuuMoe.JikanToDBParser
 
 			return seiyuu;
 		}
+
+		#endregion Requests
+
+		#region ForeignKeyMatching
+
+		private static long? MatchAnimeType(string typeName)
+		{
+			Data.Model.AnimeType foundType = animeTypeRepository.GetAsync(x => x.Name.ToLower().Equals(typeName.ToLower())).Result;
+
+			return (foundType != null) ? foundType.Id : (long?)null;
+		}
+
+		private static long? MatchAnimeStatus(string statusName)
+		{
+			Data.Model.AnimeStatus foundStatus = animeStatusRepository.GetAsync(x => x.Name.ToLower().Equals(statusName.ToLower())).Result;
+
+			return (foundStatus != null) ? foundStatus.Id : (long?)null;
+		}
+
+		private static long? MatchSeason(string seasonName)
+		{
+			try
+			{
+				if (!string.IsNullOrWhiteSpace(seasonName))
+				{
+					string[] seasonParts = seasonName.Split(' ');
+
+					if (seasonParts.Length > 1)
+					{
+						int year = Int32.Parse(seasonParts[1]);
+						string season = seasonParts[0];
+
+						Data.Model.Season foundSeason = seasonRepository.GetAsync(x => x.Name.ToLower().Equals(season.ToLower()) && x.Year.Equals(year)).Result;
+
+						return (foundSeason != null) ? foundSeason.Id : (long?)null;
+					}
+					return null;
+				}
+				return null;
+			}
+			catch (Exception)
+			{
+				return null;
+			}
+		}
+
+		#endregion
 	}
 }
