@@ -156,7 +156,7 @@ namespace SeiyuuMoe.JikanToDBParser
 
 		public static void ParseSeiyuuAdditional()
 		{
-			ICollection<Seiyuu> seiyuuCollection = dbContext.Seiyuu.ToList();
+			ICollection<Seiyuu> seiyuuCollection = dbContext.Seiyuu.Where(x => x.Birthday == null).ToList();
 			string japaneseName = string.Empty;
 
 			foreach (Seiyuu seiyuu in seiyuuCollection)
@@ -166,7 +166,7 @@ namespace SeiyuuMoe.JikanToDBParser
 
 				if (seiyuuFullData != null)
 				{
-					Console.WriteLine($"Parsed id:{seiyuu.MalId}");
+					Console.WriteLine($"{DateTime.Now}: Parsed id:{seiyuu.Id}, MalId:{seiyuu.MalId}");
 
 					seiyuu.Name = seiyuuFullData.Name;
 					seiyuu.ImageUrl = seiyuuFullData.ImageURL;
@@ -194,7 +194,7 @@ namespace SeiyuuMoe.JikanToDBParser
 
 		public static void ParseAnimeAdditional()
 		{
-			ICollection<Data.Model.Anime> animeCollection = dbContext.Anime.Where(x => !string.IsNullOrEmpty(x.AiringDate)).ToList();
+			ICollection<Data.Model.Anime> animeCollection = dbContext.Anime.Where(x => !x.StatusId.HasValue).ToList();
 			string japaneseName = string.Empty;
 
 			foreach (Data.Model.Anime anime in animeCollection)
