@@ -16,6 +16,7 @@ namespace SeiyuuMoe.JikanToDBParser
 		private static readonly SeiyuuMoeContext dbContext = new SeiyuuMoeContext("SeiyuuMoeDB.db");
 
 		private readonly static IJikan jikan;
+		private readonly static IAnimeRepository animeRepository;
 		private readonly static ISeasonRepository seasonRepository;
 		private readonly static ISeiyuuRepository seiyuuRepository;
 		private readonly static IAnimeTypeRepository animeTypeRepository;
@@ -28,6 +29,7 @@ namespace SeiyuuMoe.JikanToDBParser
 			dbContext.Database.EnsureCreated();
 			dbContext.Database.Migrate();
 
+			animeRepository = new AnimeRepository(dbContext);
 			seasonRepository = new SeasonRepository(dbContext);
 			seiyuuRepository = new SeiyuuRepository(dbContext);
 			animeTypeRepository = new AnimeTypeRepository(dbContext);
@@ -232,6 +234,43 @@ namespace SeiyuuMoe.JikanToDBParser
 			}
 		}
 
+		public static void ParseSeasonAdditional()
+		{
+			var archiveSeasons = jikan.GetSeasonArchive().Result;
+
+			if (archiveSeasons != null)
+			{
+				foreach (SeasonArchive year in archiveSeasons.Archives.Reverse())
+				{
+					foreach (var season in year.Season)
+					{
+						JikanDotNet.Season seasonToParse = SendSingleSeasonRequest(year.Year, season, 0);
+
+						if (seasonToParse != null)
+						{
+							Console.WriteLine($"{DateTime.Now}: Currently parsing {year.Year} {season}");
+
+							foreach (var anime in seasonToParse.SeasonEntries)
+							{
+								Data.Model.Anime animeToUpdate = animeRepository.GetAsync(x => x.MalId == anime.MalId).Result;
+								if (animeToUpdate != null)
+								{
+									animeToUpdate.SeasonId = MatchSeason(year.Year, season);
+
+								}
+								dbContext.SaveChanges();
+							}
+						}
+						else
+						{
+							Console.WriteLine($"Error on {year.Year} {season} - not found");
+							continue;
+						}
+					}
+				}
+			}
+		}
+
 		#region Requests
 
 		private static JikanDotNet.Anime SendSingleAnimeRequest(long malId, short retryCount)
@@ -307,6 +346,33 @@ namespace SeiyuuMoe.JikanToDBParser
 			return seiyuu;
 		}
 
+		private static JikanDotNet.Season SendSingleSeasonRequest(int year, Seasons seasonName, short retryCount)
+		{
+			JikanDotNet.Season season = null;
+			Thread.Sleep(3000 + retryCount * 10000);
+
+			try
+			{
+				season = jikan.GetSeason(year, seasonName).Result;
+			}
+			catch (Exception ex)
+			{
+				if (retryCount < 5)
+				{
+					if (ex.InnerException is JikanRequestException)
+					{
+						if ((ex.InnerException as JikanRequestException).ResponseCode == System.Net.HttpStatusCode.TooManyRequests)
+						{
+							retryCount++;
+							SendSingleSeasonRequest(year, seasonName, retryCount);
+						}
+					}
+				}
+			}
+
+			return season;
+		}
+
 		#endregion Requests
 
 		#region ForeignKeyMatching
@@ -345,6 +411,20 @@ namespace SeiyuuMoe.JikanToDBParser
 					return null;
 				}
 				return null;
+			}
+			catch (Exception)
+			{
+				return null;
+			}
+		}
+
+		private static long? MatchSeason(int year, Seasons season)
+		{
+			try
+			{
+				Data.Model.Season foundSeason = seasonRepository.GetAsync(x => x.Name.Equals(season.ToString()) && x.Year.Equals(year)).Result;
+
+				return (foundSeason != null) ? foundSeason.Id : (long?)null;
 			}
 			catch (Exception)
 			{
