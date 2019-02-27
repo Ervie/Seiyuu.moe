@@ -17,7 +17,7 @@ namespace SeiyuuMoe.API.Controllers
 			this.animeService = animeService;
 		}
 
-		[HttpGet("{query}")]
+		[HttpGet]
 		public Task<IActionResult> Get([FromQuery] Query<AnimeSearchCriteria> query)
 		{
 			return Handle(async () => HandleServiceResult(await animeService.GetAsync(query)));

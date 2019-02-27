@@ -8,9 +8,9 @@
           v-model="model"
           hide-no-data
           no-filter
-          label="Search anime by title..."
+          label="Search anime by title... (e.g. Death Note)"
           item-text="title"
-          item-value="mal_id"
+          item-value="malId"
           :menu-props="{maxHeight:'300'}"
           prepend-icon="search"
         >
@@ -20,7 +20,7 @@
             </template>
             <template v-else>
               <v-list-tile-avatar>
-                <v-img class="dropdownAvatar" :src="pathToImage(data.item.image_url)" />
+                <v-img class="dropdownAvatar" :src="pathToImage(data.item.imageUrl)" />
               </v-list-tile-avatar>
               <v-list-tile-content>
                 <v-list-tile-title v-html="data.item.title"></v-list-tile-title>
@@ -193,10 +193,17 @@ export default {
             return
           }
 
-          axios.get(process.env.API_URL + '/api/anime/' +  String(val.replace('/', ' ')))
+          var requestUrl = process.env.API_URL +
+            '/api/anime/' +
+            '?Page=0&PageSize=10&SortExpression=Popularity DESC' +
+            '&SearchCriteria.Title=' +
+            String(val.replace('/', ' ')) 
+
+          axios.get(requestUrl)
             .then(res => {
-              if (res.data.length > 0) {
-                self.entries = res.data
+              if (res.data.payload.results.length > 0) {
+                console.log(res.data);
+                self.entries = res.data.payload.results
                 self.excludeFromSearchResults()
               }
               self.isLoading = false
