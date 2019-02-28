@@ -27,7 +27,8 @@ namespace SeiyuuMoe.Data.Context
 		public virtual DbSet<Anime> Anime { get; set; }
         public virtual DbSet<AnimeStatus> AnimeStatus { get; set; }
         public virtual DbSet<AnimeType> AnimeType { get; set; }
-        public virtual DbSet<Character> Character { get; set; }
+		public virtual DbSet<BlacklistedId> BlacklistedId { get; set; }
+		public virtual DbSet<Character> Character { get; set; }
         public virtual DbSet<Language> Language { get; set; }
         public virtual DbSet<Role> Role { get; set; }
         public virtual DbSet<RoleType> RoleType { get; set; }
@@ -106,7 +107,16 @@ namespace SeiyuuMoe.Data.Context
                 entity.Property(e => e.Name).IsRequired();
             });
 
-            modelBuilder.Entity<Character>(entity =>
+			modelBuilder.Entity<BlacklistedId>(entity =>
+			{
+				entity.Property(e => e.Id).ValueGeneratedNever();
+
+				entity.Property(e => e.MalId).IsRequired();
+
+				entity.Property(e => e.EntityType).IsRequired();
+			});
+
+			modelBuilder.Entity<Character>(entity =>
             {
                 entity.Property(e => e.Id).ValueGeneratedNever();
 
