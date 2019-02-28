@@ -3,6 +3,7 @@ using JikanDotNet.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using SeiyuuMoe.Data.Context;
 using SeiyuuMoe.Data.Model;
+using SeiyuuMoe.Logger;
 using SeiyuuMoe.Repositories.Repositories;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,8 @@ namespace SeiyuuMoe.JikanToDBParser
 	public static class JikanParser
 	{
 		private static readonly SeiyuuMoeContext dbContext = new SeiyuuMoeContext("SeiyuuMoeDB.db");
+
+		private static readonly LoggingService logger = new LoggingService();
 
 		private readonly static IJikan jikan;
 		private readonly static IAnimeRepository animeRepository;
@@ -49,7 +52,7 @@ namespace SeiyuuMoe.JikanToDBParser
 					{
 						Thread.Sleep(2010);
 
-						System.Console.WriteLine($"Currently parsing {year.Year} {season}");
+						logger.Log($"Currently parsing {year.Year} {season}");
 
 						seasonToParse = jikan.GetSeason(year.Year, season).Result;
 
@@ -74,7 +77,7 @@ namespace SeiyuuMoe.JikanToDBParser
 									}
 								);
 
-								System.Console.WriteLine($"Inserted anime with Id {anime.MalId}: {anime.Title} with MalId = {anime.MalId}");
+								logger.Log($"Inserted anime with Id {anime.MalId}: {anime.Title} with MalId = {anime.MalId}");
 							}
 							dbContext.SaveChanges();
 						}
@@ -90,7 +93,7 @@ namespace SeiyuuMoe.JikanToDBParser
 
 			dbContext.Database.ExecuteSqlCommand("DELETE FROM Seiyuus;");
 			dbContext.SaveChanges();
-			Console.WriteLine("Cleared database");
+			logger.Log("Cleared database");
 
 			for (int malId = minId; malId < maxId; malId++)
 			{
@@ -98,29 +101,29 @@ namespace SeiyuuMoe.JikanToDBParser
 
 				if (seiyuu != null)
 				{
-					Console.WriteLine($"Parsed id:{seiyuu.MalId}");
+					logger.Log($"Parsed id:{seiyuu.MalId}");
 				}
 				else
 				{
-					Console.WriteLine($"Omitted {malId} - not found");
+					logger.Log($"Omitted {malId} - not found");
 					continue;
 				}
 
 				if (string.IsNullOrWhiteSpace(seiyuu.GivenName) && string.IsNullOrWhiteSpace(seiyuu.FamilyName))
 				{
-					Console.WriteLine($"Omitted {seiyuu.Name} - not Japanese");
+					logger.Log($"Omitted {seiyuu.Name} - not Japanese");
 					continue;
 				}
 
 				if (seiyuu.VoiceActingRoles.Count <= 0)
 				{
-					Console.WriteLine($"Omitted {seiyuu.Name} - not a seiyuu");
+					logger.Log($"Omitted {seiyuu.Name} - not a seiyuu");
 					continue;
 				}
 
 				if (dbContext.Seiyuu.FirstOrDefault(x => x.MalId == seiyuu.MalId) != null)
 				{
-					Console.WriteLine($"Omitted {seiyuu.Name} - already in database");
+					logger.Log($"Omitted {seiyuu.Name} - already in database");
 					continue;
 				}
 
@@ -134,7 +137,7 @@ namespace SeiyuuMoe.JikanToDBParser
 				);
 				dbContext.SaveChanges();
 
-				Console.WriteLine($"Inserted {seiyuu.Name} with MalId: {seiyuu.MalId}");
+				logger.Log($"Inserted {seiyuu.Name} with MalId: {seiyuu.MalId}");
 			}
 		}
 
@@ -168,7 +171,7 @@ namespace SeiyuuMoe.JikanToDBParser
 
 				if (seiyuuFullData != null)
 				{
-					Console.WriteLine($"{DateTime.Now}: Parsed id:{seiyuu.Id}, MalId:{seiyuu.MalId}");
+					logger.Log($"Parsed id:{seiyuu.Id}, MalId:{seiyuu.MalId}");
 
 					seiyuu.Name = seiyuuFullData.Name;
 					seiyuu.ImageUrl = seiyuuFullData.ImageURL;
@@ -188,7 +191,7 @@ namespace SeiyuuMoe.JikanToDBParser
 				}
 				else
 				{
-					Console.WriteLine($"Error on {seiyuu.MalId} - not found");
+					logger.Log($"Error on {seiyuu.MalId} - not found");
 					continue;
 				}
 			}
@@ -206,7 +209,7 @@ namespace SeiyuuMoe.JikanToDBParser
 
 				if (animeFullData != null)
 				{
-					Console.WriteLine($"{DateTime.Now}: Parsed id:{anime.Id}, malId:{anime.MalId}");
+					logger.Log($"Parsed id:{anime.Id}, malId:{anime.MalId}");
 
 					anime.Title = animeFullData.Title;
 					anime.About = animeFullData.Synopsis;
@@ -228,7 +231,7 @@ namespace SeiyuuMoe.JikanToDBParser
 				}
 				else
 				{
-					Console.WriteLine($"Error on {anime.MalId} - not found");
+					logger.Log($"Error on {anime.MalId} - not found");
 					continue;
 				}
 			}
@@ -248,7 +251,7 @@ namespace SeiyuuMoe.JikanToDBParser
 
 						if (seasonToParse != null)
 						{
-							Console.WriteLine($"{DateTime.Now}: Currently parsing {year.Year} {season}");
+							logger.Log($"Currently parsing {year.Year} {season}");
 
 							foreach (var anime in seasonToParse.SeasonEntries)
 							{
@@ -263,7 +266,7 @@ namespace SeiyuuMoe.JikanToDBParser
 						}
 						else
 						{
-							Console.WriteLine($"Error on {year.Year} {season} - not found");
+							logger.Log($"Error on {year.Year} {season} - not found");
 							continue;
 						}
 					}

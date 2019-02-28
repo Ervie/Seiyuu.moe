@@ -11,7 +11,14 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SeiyuuMoe.Data\SeiyuuMoe.Data.csproj" />
+    <ProjectReference Include="..\SeiyuuMoe.Logger\SeiyuuMoe.Logger.csproj" />
     <ProjectReference Include="..\SeiyuuMoe.Repositories\SeiyuuMoe.Repositories.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="nlog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
