@@ -24,6 +24,8 @@ namespace SeiyuuMoe.JikanToDBParser
 		private readonly static ISeiyuuRepository seiyuuRepository;
 		private readonly static IAnimeTypeRepository animeTypeRepository;
 		private readonly static IAnimeStatusRepository animeStatusRepository;
+		private readonly static IBlacklistedIdRepository blacklistedIdRepository;
+		private readonly static ICharacterRepository characterRepository;
 
 		static JikanParser()
 		{
@@ -37,6 +39,8 @@ namespace SeiyuuMoe.JikanToDBParser
 			seiyuuRepository = new SeiyuuRepository(dbContext);
 			animeTypeRepository = new AnimeTypeRepository(dbContext);
 			animeStatusRepository = new AnimeStatusRepository(dbContext);
+			blacklistedIdRepository = new BlacklistedIdRepository(dbContext);
+			characterRepository = new CharacterRepository(dbContext);
 		}
 
 		public static void ParseAnime()
@@ -138,6 +142,61 @@ namespace SeiyuuMoe.JikanToDBParser
 				dbContext.SaveChanges();
 
 				logger.Log($"Inserted {seiyuu.Name} with MalId: {seiyuu.MalId}");
+			}
+		}
+
+		public static void ParseCharacter()
+		{
+			const int minId = 1;
+			const int maxId = 166416;
+
+			ICollection<long> blacklistedIds = blacklistedIdRepository.GetAllAsync(x => x.EntityType == "Character").Result.Select(x => x.MalId).ToList();
+			ICollection<long> alreadyInsertedIds = characterRepository.GetAllAsync().Result.Select(x => x.MalId).ToList();
+
+			for (int malId = minId; malId < maxId; malId++)
+			{
+				if (blacklistedIds.Contains(malId))
+				{
+					logger.Log($"Ommitting id {malId} - blacklisted.");
+					continue;
+				}
+
+				if (alreadyInsertedIds.Contains(malId))
+				{
+					logger.Log($"Ommitting id {malId} - already inserted.");
+					continue;
+				}
+
+				JikanDotNet.Character characterFullData = SendSingleCharacterRequest(malId, 0);
+				string nicknames = string.Empty;
+
+				if (characterFullData != null)
+				{
+					logger.Log($"Parsed id:{characterFullData.MalId}");
+				}
+				else
+				{
+					logger.Log($"Omitted {malId} - not found");
+					continue;
+				}
+
+
+				if (characterFullData.Nicknames.Any())
+					nicknames = string.Join(';', characterFullData.Nicknames.ToArray());
+
+				characterRepository.Add(
+					new Data.Model.Character
+					{
+						MalId = malId,
+						ImageUrl = characterFullData.ImageURL,
+						Name = characterFullData.Name,
+						Popularity = characterFullData.MemberFavorites,
+						About = characterFullData.About,
+						NameKanji = characterFullData.NameKanji,
+						Nicknames = nicknames
+					}
+				);
+				dbContext.SaveChanges();
 			}
 		}
 
@@ -349,6 +408,53 @@ namespace SeiyuuMoe.JikanToDBParser
 			return seiyuu;
 		}
 
+		private static JikanDotNet.Character SendSingleCharacterRequest(long malId, short retryCount)
+		{
+			JikanDotNet.Character character = null;
+			Thread.Sleep(3000 + retryCount * 10000);
+
+			try
+			{
+				character = jikan.GetCharacter(malId).Result;
+			}
+			catch (Exception ex)
+			{
+				if (retryCount < 10)
+				{
+					if (ex.InnerException is JikanRequestException && (ex.InnerException as JikanRequestException).ResponseCode == System.Net.HttpStatusCode.TooManyRequests)
+					{
+						retryCount++;
+						return SendSingleCharacterRequest(malId, retryCount);
+					}
+					else
+					{
+						if (ex.InnerException is JikanRequestException)
+						{
+							System.Net.HttpStatusCode responseCode = (ex.InnerException as JikanRequestException).ResponseCode;
+
+							switch (responseCode)
+							{
+								case (System.Net.HttpStatusCode.NotFound):
+									BlacklistId(malId, "Character", "404 Not Found");
+									break;
+								case (System.Net.HttpStatusCode.InternalServerError):
+									BlacklistId(malId, "Character", "Not exist");
+									break;
+								case (System.Net.HttpStatusCode.TooManyRequests):
+									BlacklistId(malId, "Character", "429 Too much request");
+									break;
+								default:
+									BlacklistId(malId, "Character", "Other");
+									break;
+							}
+						}
+					}
+				}
+			}
+
+			return character;
+		}
+
 		private static JikanDotNet.Season SendSingleSeasonRequest(int year, Seasons seasonName, short retryCount)
 		{
 			JikanDotNet.Season season = null;
@@ -436,5 +542,18 @@ namespace SeiyuuMoe.JikanToDBParser
 		}
 
 		#endregion
+
+		private static void BlacklistId(long id, string type, string reason = null)
+		{
+			BlacklistedId blacklistedId = new BlacklistedId()
+			{
+				MalId = id,
+				EntityType = type,
+				Reason = reason
+			};
+
+			blacklistedIdRepository.Add(blacklistedId);
+			dbContext.SaveChanges();
+		}
 	}
 }

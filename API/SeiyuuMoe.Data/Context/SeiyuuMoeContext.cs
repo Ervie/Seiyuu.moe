@@ -109,7 +109,7 @@ namespace SeiyuuMoe.Data.Context
 
 			modelBuilder.Entity<BlacklistedId>(entity =>
 			{
-				entity.Property(e => e.Id).ValueGeneratedNever();
+				//entity.Property(e => e.Id).ValueGeneratedNever();
 
 				entity.Property(e => e.MalId).IsRequired();
 
@@ -118,7 +118,7 @@ namespace SeiyuuMoe.Data.Context
 
 			modelBuilder.Entity<Character>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                //entity.Property(e => e.Id).ValueGeneratedNever();
 
                 entity.Property(e => e.Name).IsRequired();
             });

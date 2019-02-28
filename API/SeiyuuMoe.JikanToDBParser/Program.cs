@@ -9,7 +9,8 @@
 			//JikanParser.ParseSeason();
 			//JikanParser.ParseSeiyuuAdditional();
 			//JikanParser.ParseAnimeAdditional();
-			JikanParser.ParseSeasonAdditional();
+			//JikanParser.ParseSeasonAdditional();
+			JikanParser.ParseCharacter();
 		}
 	}
 }
