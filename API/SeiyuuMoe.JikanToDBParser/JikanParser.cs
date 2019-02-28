@@ -253,7 +253,7 @@ namespace SeiyuuMoe.JikanToDBParser
 							foreach (var anime in seasonToParse.SeasonEntries)
 							{
 								Data.Model.Anime animeToUpdate = animeRepository.GetAsync(x => x.MalId == anime.MalId).Result;
-								if (animeToUpdate != null)
+								if (animeToUpdate != null && (anime.Continued.HasValue && !anime.Continued.Value))
 								{
 									animeToUpdate.SeasonId = MatchSeason(year.Year, season);
 
