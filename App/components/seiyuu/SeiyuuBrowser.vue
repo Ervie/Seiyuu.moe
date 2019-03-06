@@ -86,6 +86,11 @@ export default {
           name: 'reloadNeeded',
           text: 'Network error occured during loading additional seiyuu list. Please consider refreshing the page.',
           value: false
+        },
+        {
+          name: 'serviceUnavailable',
+          text: 'The service is currently unavailable. Please come back later.',
+          value: false
         }
       ]
     }
@@ -141,7 +146,7 @@ export default {
             })
             .catch((error) => {
               console.log(error)
-              this.handleBrowsingError('reloadNeeded')
+              this.handleBrowsingError('serviceUnavailable');
               this.cachedSeiyuu = []
             })
         })

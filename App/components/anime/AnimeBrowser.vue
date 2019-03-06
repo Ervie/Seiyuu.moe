@@ -79,6 +79,11 @@ export default {
           name: 'noResultsFound',
           text: 'No results found!',
           value: false
+        },
+        {
+          name: 'serviceUnavailable',
+          text: 'The service is currently unavailable. Please come back later.',
+          value: false
         }
       ]
     }
@@ -209,8 +214,9 @@ export default {
               self.isLoading = false
             })
             .catch(error => {
-              console.log(error)
-              self.isLoading = false
+              console.log(error);
+              this.handleBrowsingError('serviceUnavailable');
+              self.isLoading = false;
             })
         }, this.timeoutLimit)
     },
