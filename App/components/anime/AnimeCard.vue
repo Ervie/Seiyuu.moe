@@ -31,7 +31,7 @@
                         <p class="text-sm-left">
                           <b>Original title:</b> {{ animeData.japaneseTitle }}
                         </p>
-                         <div class="text-sm-left">
+                         <div class="text-sm-left alternativeTitles">
                           <b>Other titles:</b> <p class="alternativeTitle" v-for="(title, i) in alternativeTitles" :key="i"> {{ title }} </p>
                         </div>
                         <p class="text-sm-left">
@@ -93,7 +93,7 @@ export default {
       return detailsToEncode.replace(/\\n/g, '<br/>')
     },
     alternativeTitles () {
-      if (this.animeData.titleSynonyms.length > 0) {
+      if (this.animeData && this.animeData.titleSynonyms && this.animeData.titleSynonyms.length > 0) {
         return this.animeData.titleSynonyms.split(';');
       } else {
         return ['None'];
@@ -107,6 +107,10 @@ export default {
 
 .white-space-pre {
     white-space: pre-wrap;
+}
+
+.alternativeTitles {
+  margin-bottom: 16px;
 }
 
 .alternativeTitle {
