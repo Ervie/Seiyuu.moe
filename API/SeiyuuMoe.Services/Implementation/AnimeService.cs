@@ -34,5 +34,14 @@ namespace SeiyuuMoe.Services
 
 			return new QueryResponse<PagedResult<AnimeAiringDto>>(payload);
 		}
+
+		public async Task<QueryResponse<AnimeCardDto>> GetSingleAsync(long id)
+		{
+			Ensure.That(id, nameof(id)).IsGte(1);
+
+			var payload = await animeBusinessService.GetSingleAsync(id);
+
+			return new QueryResponse<AnimeCardDto>(payload);
+		}
 	}
 }

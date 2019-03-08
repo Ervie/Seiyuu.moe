@@ -91,8 +91,12 @@ export default {
   computed: {
     items () {
       return this.entries.map(entry => {
-        return Object.assign({}, entry, { mal_id: entry.mal_id, title: entry.title, image_url: entry.image_url })
+        return Object.assign({}, entry, { malId: entry.malId, title: entry.title, imageUrl: entry.imageUrl })
       })
+    },
+    cardInfoRequest () {
+      return process.env.API_URL +
+            '/api/anime/' + String(this.model);
     }
   },
   methods: {
@@ -106,9 +110,11 @@ export default {
           this.model = null
           this.loadingSearch = false
         } else {
-          axios.get(process.env.JIKAN_URL + 'anime/' + String(this.model))
+          axios.get(this.cardInfoRequest)
             .then((response) => {
-              this.sendAnimeCharactersRequest(response.data)
+              if (response.data.payload !== null) {
+                this.sendAnimeCharactersRequest(response.data.payload);
+              }
             })
             .catch((error) => {
               this.handleBrowsingError('tooManyRequests')
@@ -119,7 +125,7 @@ export default {
     },
     async sendAnimeCharactersRequest (animeModel) {
       await this.sleep(1000);
-      axios.get(process.env.JIKAN_URL + 'anime/' + String(animeModel.mal_id) + '/characters_staff')
+      axios.get(process.env.JIKAN_URL + 'anime/' + String(animeModel.malId) + '/characters_staff')
         .then((response) => {
           this.$emit('animeReturned', { anime: animeModel, characters: response.data.characters})
           this.resetAlerts()
@@ -161,7 +167,7 @@ export default {
     },
     excludeFromSearchResults () {
       this.searchedId.forEach(id => {
-        var index = this.entries.map(x => x.mal_id).indexOf(id);
+        var index = this.entries.map(x => x.malId).indexOf(id);
         if (index > -1) {
           this.entries.splice(index, 1);
         }
@@ -207,7 +213,6 @@ export default {
           axios.get(requestUrl)
             .then(res => {
               if (res.data.payload.results.length > 0) {
-                console.log(res.data);
                 self.entries = res.data.payload.results
                 self.excludeFromSearchResults()
               }

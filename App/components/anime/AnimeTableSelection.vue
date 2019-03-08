@@ -142,7 +142,7 @@ export default {
         this.headers.push({
           text: this.animeData[headerIndex].title,
           sortable: false,
-          image: this.animeData[headerIndex].image_url});
+          image: this.animeData[headerIndex].imageUrl});
       }
       if (this.viewMode === 'tab-compact') {
         this.headers.push({
@@ -188,7 +188,7 @@ export default {
         this.headers.push({
           text: this.animeData[headerIndex].title,
           value: 'roles[' + headerIndex + '].characters[0].entry.name',
-          image: this.animeData[headerIndex].image_url})
+          image: this.animeData[headerIndex].imageUrl})
       }
       if (this.viewMode === 'tab-compact') {
         this.headers.push({

@@ -1,6 +1,9 @@
-﻿using SeiyuuMoe.Data.Context;
+﻿using Microsoft.EntityFrameworkCore;
+using SeiyuuMoe.Data.Context;
 using SeiyuuMoe.Data.Model;
 using SeiyuuMoe.Repositories.Generic;
+using System;
+using System.Linq;
 
 namespace SeiyuuMoe.Repositories.Repositories
 {
@@ -9,5 +12,10 @@ namespace SeiyuuMoe.Repositories.Repositories
 		public AnimeRepository(ISeiyuuMoeContext dbContext) : base(dbContext, x => x.Id)
 		{
 		}
+
+		public override Func<IQueryable<Anime>, IQueryable<Anime>> IncludeExpression => anime => anime
+			.Include(a => a.Type)
+			.Include(a => a.Status)
+			.Include(a => a.Season);
 	}
 }

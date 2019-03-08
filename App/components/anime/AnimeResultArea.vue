@@ -107,7 +107,7 @@ export default {
     generateShareLink () {
       var animeIds = ''
       this.animeData.forEach(element => {
-        animeIds += element.mal_id + ';'
+        animeIds += element.malId + ';'
       });
       
       animeIds = animeIds.slice(0, -1)

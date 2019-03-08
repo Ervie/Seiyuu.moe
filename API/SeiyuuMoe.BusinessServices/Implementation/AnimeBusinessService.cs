@@ -39,5 +39,12 @@ namespace SeiyuuMoe.BusinessServices
 
 			return mapper.Map<PagedResult<AnimeAiringDto>>(entities);
 		}
+
+		public async Task<AnimeCardDto> GetSingleAsync(long id)
+		{
+			var entity = await animeRepository.GetAsync(x => x.MalId.Equals(id), animeRepository.IncludeExpression);
+
+			return mapper.Map<AnimeCardDto>(entity);
+		}
 	}
 }

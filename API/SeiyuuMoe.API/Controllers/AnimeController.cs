@@ -18,6 +18,13 @@ namespace SeiyuuMoe.API.Controllers
 		}
 
 		[HttpGet]
+		[Route("{id}")]
+		public Task<IActionResult> GetSingle(long id)
+		{
+			return Handle(async () => HandleServiceResult(await animeService.GetSingleAsync(id)));
+		}
+
+		[HttpGet]
 		public Task<IActionResult> Get([FromQuery] Query<AnimeSearchCriteria> query)
 		{
 			return Handle(async () => HandleServiceResult(await animeService.GetAsync(query)));

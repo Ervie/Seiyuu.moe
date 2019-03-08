@@ -38,7 +38,7 @@ export default {
   computed: {
     searchedId () {
       if (this.animeToCompare.length > 0) {
-        return this.animeToCompare.map(animeEntry => animeEntry.anime.mal_id)
+        return this.animeToCompare.map(animeEntry => animeEntry.anime.malId)
       } else {
         return [];
       }

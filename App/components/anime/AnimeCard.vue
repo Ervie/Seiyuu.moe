@@ -1,7 +1,7 @@
 <template>
   <v-card v-if="animeData">
     <v-card-text class="card-title"> {{ animeData.title }}</v-card-text>
-    <v-img :src="pathToImage(this.animeData.image_url)" :height="avatarHeight" v-on:click="showDialog = true" hidden-sm-and-down></v-img>
+    <v-img :src="pathToImage(this.animeData.imageUrl)" :height="avatarHeight" v-on:click="showDialog = true" hidden-sm-and-down></v-img>
     <v-card-actions>
       <v-btn icon value="removeAnime" v-on:click="removeAnime()">
         <v-icon color="red">delete</v-icon>
@@ -19,7 +19,7 @@
                 <v-layout row>
                   <v-flex xs4>
                     <v-img
-                      :src="pathToImage(this.animeData.image_url)"
+                      :src="pathToImage(this.animeData.imageUrl)"
                       height="350px"
                       contain
                     ></v-img>
@@ -29,10 +29,13 @@
                       <div class="headline">{{ animeData.title }}</div>
                       <v-card-text>
                         <p class="text-sm-left">
-                          <b>Original title:</b> {{ animeData.title_japanese }}
+                          <b>Original title:</b> {{ animeData.japaneseTitle }}
                         </p>
+                         <div class="text-sm-left">
+                          <b>Other titles:</b> <p class="alternativeTitle" v-for="(title, i) in alternativeTitles" :key="i"> {{ title }} </p>
+                        </div>
                         <p class="text-sm-left">
-                          <b>Aired:</b> {{ animeData.aired.string }}
+                          <b>Premiered:</b> {{ animeData.airingDate }}
                         </p>
                         <p class="text-sm-left">
                           <b>Type:</b> {{ animeData.type }}
@@ -41,7 +44,7 @@
                           <b>Status:</b> {{ animeData.status }}
                         </p>
                         <p class="text-sm-left">
-                          <b>Score:</b> {{ animeData.score }}
+                          <b>Season:</b> {{ animeData.season }}
                         </p>
                         <p class="text-sm-left white-space-pre">
                           <b>Synopsis:</b> {{ decodeHtml(moreDetails) }}
@@ -86,8 +89,15 @@ export default {
   },
   computed: {
     moreDetails () {
-      var detailsToEncode = String(this.animeData.synopsis).replace(/\\n/g, '\n')
+      var detailsToEncode = String(this.animeData.about).replace(/\\n/g, '\n')
       return detailsToEncode.replace(/\\n/g, '<br/>')
+    },
+    alternativeTitles () {
+      if (this.animeData.titleSynonyms.length > 0) {
+        return this.animeData.titleSynonyms.split(';');
+      } else {
+        return ['None'];
+      }
     }
   }
 }
@@ -97,5 +107,9 @@ export default {
 
 .white-space-pre {
     white-space: pre-wrap;
+}
+
+.alternativeTitle {
+  margin: 0 16px;
 }
 </style>
