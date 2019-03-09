@@ -6,10 +6,10 @@
         hide-actions
         item-key="anime[0].entry.name"
         class="elevation-1">
-        <template slot="headerCell" slot-scope="props">
+        <template v-slot:headerCell="props">
           <table-header :imageUrl="props.header.image" :text="props.header.text" />
         </template>
-        <template slot="items" slot-scope="props">
+        <template v-slot:items="props">
           <tr>
             <td>
               <avatar-record-cell :items="props.item.anime" />

@@ -14,7 +14,7 @@
           :menu-props="{maxHeight:'300'}"
           prepend-icon="search"
         >
-          <template slot="item" slot-scope="data">
+          <template v-slot:item="data">
             <template v-if="typeof data.item !== 'object'">
               <v-list-tile-content v-text="data.item"></v-list-tile-content>
             </template>
