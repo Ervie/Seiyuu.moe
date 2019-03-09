@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using EnsureThat;
+﻿using EnsureThat;
 using SeiyuuMoe.BusinessServices;
 using SeiyuuMoe.Contracts.Dtos;
 using SeiyuuMoe.Contracts.SearchCriteria;
 using SeiyuuMoe.Repositories.Models;
 using SeiyuuMoe.WebEssentials;
+using System.Threading.Tasks;
 
 namespace SeiyuuMoe.Services
 {
-	class SeiyuuService : ISeiyuuService
+	public class SeiyuuService : ISeiyuuService
 	{
 		private readonly ISeiyuuBusinessService seiyuuBusinessService;
 

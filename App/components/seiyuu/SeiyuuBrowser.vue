@@ -2,10 +2,12 @@
   <v-layout row wrap>
       <v-flex xs12>
         <v-autocomplete
-          :items="cachedSeiyuu"
-          :filter="customFilter"
+          :items="items"
+          :search-input.sync="search"
           :loading="loading"
-          v-model="selectModel"
+          :filter="customFilter"
+          v-model="model"
+          hide-no-data
           label="Search by Seiyuu Name... (e.g. Kana Hanazawa)"
           item-text="name"
           item-value="malId"
@@ -28,10 +30,6 @@
             </template>
           </template>
         </v-autocomplete>
-        <v-btn raised color="secondary" 
-          v-on:click="searchByName" 
-          :disabled="!selectModel || loading" 
-          :loading="loading">Add</v-btn>
       <alert-ribbon 
         :alerts="alerts" />
       </v-flex>
@@ -56,9 +54,13 @@ export default {
   },
   data () {
     return {
+      entries: [],
       loading: false,
-      cachedSeiyuu: [],
-      selectModel: null,
+      model: null,
+      search: null,
+      searchResults: [],
+      timeout: null,
+      timeoutLimit: 300,
       shareLinkData: null,
       maximumSeiyuuNumber: 6,
       alerts: [
@@ -99,37 +101,43 @@ export default {
     requestUrl() {
       return process.env.API_URL +
             '/api/Seiyuu/' +
-            '?Page=0&PageSize=10000&SortExpression=Popularity DESC'
+            '?Page=0&PageSize=10&SortExpression=Popularity DESC'
+    },
+    items () {
+      return this.entries.map(entry => {
+        return Object.assign({}, entry, { malId: entry.malId, name: entry.name, imageUrl: entry.imageUrl })
+      })
     }
   },
   methods: {
     customFilter (item, queryText, itemText) {
-        const nameSurname = item.name.toLowerCase()
-        const surnameName = this.swapNameSurname(item.name.toLowerCase(), " ")
-        const searchText = queryText.toLowerCase()
+        const nameSurname = item.name.toLowerCase();
+        const surnameName = this.swapNameSurname(item.name.toLowerCase(), " ");
+        const searchText = queryText.toLowerCase();
 
         return nameSurname.indexOf(searchText) > -1 ||
-          surnameName.indexOf(searchText) > -1 ||
-          item.japaneseName.indexOf(searchText) > -1
+          surnameName.indexOf(searchText) > -1;
     },
-    searchByName () {
-      if (this.searchedId.length >= this.maximumSeiyuuNumber) {
-        this.handleBrowsingError('tooMuchRecords')
-      } else {
-        this.loading = true
-        if (this.searchedId.includes(parseInt(this.selectModel))) {
-          this.handleBrowsingError('alreadyOnTheList')
-          this.loading = false
+    sendSeiyuuRequest () {
+      if (this.model) {
+        if (this.searchedId.length >= this.maximumSeiyuuNumber) {
+          this.handleBrowsingError('tooMuchRecords')
         } else {
-          axios.get(process.env.JIKAN_URL + 'person/' + String(this.selectModel))
-            .then((response) => {
-              this.addToList(response.data)
-            })
-            .catch((error) => {
-              console.log(error)
-              this.handleBrowsingError('tooManyRequests')
-              this.loading = false
-            })
+          this.loading = true
+          if (this.searchedId.includes(parseInt(this.model))) {
+            this.handleBrowsingError('alreadyOnTheList')
+            this.loading = false
+          } else {
+            axios.get(process.env.JIKAN_URL + 'person/' + String(this.model))
+              .then((response) => {
+                this.addToList(response.data)
+              })
+              .catch((error) => {
+                console.log(error)
+                this.handleBrowsingError('tooManyRequests')
+                this.loading = false
+              })
+          }
         }
       }
     },
@@ -151,10 +159,13 @@ export default {
             })
         })
     },
-    sendDataFetchedEvent () {
-      if (typeof this.cachedSeiyuu !== 'undefined' && this.cachedSeiyuu.length > 200) {
-        this.$emit('dataFetched')
-      }
+    excludeFromSearchResults () {
+      this.searchedId.forEach(id => {
+        var index = this.entries.map(x => x.malId).indexOf(id);
+        if (index > -1) {
+          this.entries.splice(index, 1);
+        }
+      });
     },
     loadDataFromLink () {
       if (this.shareLinkData.length > 1 && this.shareLinkData.length < 6) {
@@ -193,13 +204,11 @@ export default {
       });
     },
     addToList (returnedData) {
-      this.$emit('seiyuuReturned', returnedData)
-      this.loading = false
-      this.resetAlerts()
+      this.$emit('seiyuuReturned', returnedData);
+      this.loading = false;
+      this.model = null;
+      this.resetAlerts();
     }
-  },
-  created () {
-    this.loadCachedSeiyuu()
   },
   mounted () {
     if (this.$route.query !== null && !this.isEmpty(this.$route.query)) {
@@ -210,13 +219,45 @@ export default {
     }
   },
   watch: {
-    cachedSeiyuu: {
-      handler: 'sendDataFetchedEvent',
+    model: {
+      handler: 'sendSeiyuuRequest',
       immediate: true
     },
     searchedId: {
       handler: 'emitRunImmediately',
       immediate: true
+    },
+    search (val) {
+      clearTimeout(this.timeout)
+      var self = this
+      this.timeout = setTimeout(function() {
+        self.isLoading = true
+
+        if (self.model != null || val === '' || val === null || val.length < 3) {
+          self.entries = []
+          return
+        }
+
+        var requestUrl = process.env.API_URL +
+          '/api/seiyuu/' +
+          '?Page=0&PageSize=10&SortExpression=Popularity DESC' +
+          '&SearchCriteria.Name=' +
+          String(val.replace('/', ' ')) 
+
+        axios.get(requestUrl)
+          .then(res => {
+            if (res.data.payload.results.length > 0) {
+              self.entries = res.data.payload.results
+              self.excludeFromSearchResults()
+            }
+            self.isLoading = false
+          })
+          .catch(error => {
+            console.log(error);
+            this.handleBrowsingError('serviceUnavailable');
+            self.isLoading = false;
+          })
+      }, this.timeoutLimit)
     }
   }
 }

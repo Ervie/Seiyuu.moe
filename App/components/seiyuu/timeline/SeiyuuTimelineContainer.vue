@@ -30,13 +30,22 @@ export default {
             outputData: []
         }
     },
+    computed: {
+        malIds() {
+            return this.timelineItems.map(x => x.anime.mal_id).filter((v, i, a) => a.indexOf(v) === i).join('&SearchCriteria.MalId=');
+        },
+        animeDatesRequest() {
+            return process.env.API_URL +
+            '/api/anime/AiringDates' +
+            '?Page=0&PageSize=1000&SortExpression=Popularity DESC' +
+            '&SearchCriteria.MalId=' + this.malIds;
+        }
+    },
     methods: {
         getTimelineDates() {
-            var malIds = this.timelineItems.map(x => x.anime.mal_id).filter((v, i, a) => a.indexOf(v) === i).join('&malId=');
-
-            this.$axios.get(process.env.API_URL + '/api/Anime/AiringDates?malId=' + malIds)
+            this.$axios.get(this.animeDatesRequest)
                 .then((response) => {
-                    this.dates = response.data;
+                    this.dates = response.data.payload.results;
                     this.matchDatesWithAnime();
                 })
                 .catch((error) => {
@@ -57,8 +66,9 @@ export default {
                     tempData.push(anime);
                 }
             });
+            
             tempData.forEach(anime => {
-                anime.aired_date = this.formatDate(this.dates[this.dates.map(x => x.mal_id).indexOf(anime.mal_id)].airing_from);
+                anime.aired_date = this.formatDate(this.dates[this.dates.map(x => x.malId).indexOf(anime.mal_id)].airingFrom);
             });
             
             this.outputData = tempData.sort((a,b) => (a.aired_date > b.aired_date) ? 1 : ((b.aired_date > a.aired_date) ? -1 : 0));

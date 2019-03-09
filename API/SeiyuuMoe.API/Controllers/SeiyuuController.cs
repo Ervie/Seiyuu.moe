@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SeiyuuMoe.API.Controllers
 {
-	[Route("api/[controller]")]
+	[Route("api/seiyuu")]
 	public class SeiyuuController : BaseController
 	{
 		private readonly ISeiyuuService seiyuuService;

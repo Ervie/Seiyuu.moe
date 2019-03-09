@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SeiyuuMoe.Common\SeiyuuMoe.Common.csproj" />
     <ProjectReference Include="..\SeiyuuMoe.Contracts\SeiyuuMoe.Contracts.csproj" />
     <ProjectReference Include="..\SeiyuuMoe.Data\SeiyuuMoe.Data.csproj" />
     <ProjectReference Include="..\SeiyuuMoe.Repositories\SeiyuuMoe.Repositories.csproj" />

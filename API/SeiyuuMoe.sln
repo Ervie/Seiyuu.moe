@@ -27,7 +27,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeiyuuMoe.BusinessServices"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeiyuuMoe.Services", "SeiyuuMoe.Services\SeiyuuMoe.Services.csproj", "{5872B9AF-4714-4FFF-801E-E5844681FF5E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeiyuuMoe.Logger", "SeiyuuMoe.Logger\SeiyuuMoe.Logger.csproj", "{0A3A911C-ECDA-449D-926C-0C45C9F8F155}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeiyuuMoe.Logger", "SeiyuuMoe.Logger\SeiyuuMoe.Logger.csproj", "{0A3A911C-ECDA-449D-926C-0C45C9F8F155}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeiyuuMoe.Common", "SeiyuuMoe.Common\SeiyuuMoe.Common.csproj", "{3215DAE2-C14D-4F1E-A139-7F5C33D1D0A7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,6 +73,10 @@ Global
 		{0A3A911C-ECDA-449D-926C-0C45C9F8F155}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A3A911C-ECDA-449D-926C-0C45C9F8F155}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A3A911C-ECDA-449D-926C-0C45C9F8F155}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3215DAE2-C14D-4F1E-A139-7F5C33D1D0A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3215DAE2-C14D-4F1E-A139-7F5C33D1D0A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3215DAE2-C14D-4F1E-A139-7F5C33D1D0A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3215DAE2-C14D-4F1E-A139-7F5C33D1D0A7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -84,6 +90,7 @@ Global
 		{C701F7CB-E174-4ED6-87CF-E1F9F4950FFC} = {5170E228-3170-4EA4-8381-A29A06107731}
 		{5872B9AF-4714-4FFF-801E-E5844681FF5E} = {5170E228-3170-4EA4-8381-A29A06107731}
 		{0A3A911C-ECDA-449D-926C-0C45C9F8F155} = {5170E228-3170-4EA4-8381-A29A06107731}
+		{3215DAE2-C14D-4F1E-A139-7F5C33D1D0A7} = {5170E228-3170-4EA4-8381-A29A06107731}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0D18D8DE-F5C0-4254-B3F2-3B6F16384392}

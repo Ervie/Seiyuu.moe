@@ -1,12 +1,8 @@
 <template>
   <v-container grid-list-md text-xs-center>
-    <v-alert type="info" :value="!seiyuuExtraDataFetched">
-      The extra data is loading, please be patient...
-    </v-alert>
     <browser 
       @seiyuuReturned="addSeiyuu"
       @runImmediately="runImmediately = true"
-      @dataFetched="seiyuuExtraDataFetched = true"
       :searchedId="searchedId"/>
     <seiyuu-card-list 
       :seiyuuToCompare="seiyuuToCompare" 
@@ -34,7 +30,6 @@ export default {
     return {
       seiyuuToCompare: [],
       maximumSeiyuuNumber: 6,
-      seiyuuExtraDataFetched: false,
       runImmediately: false
     }
   },

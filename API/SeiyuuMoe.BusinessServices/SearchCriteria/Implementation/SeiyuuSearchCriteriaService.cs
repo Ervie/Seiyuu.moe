@@ -1,4 +1,5 @@
-﻿using SeiyuuMoe.Contracts.SearchCriteria;
+﻿using SeiyuuMoe.Common.Extensions;
+using SeiyuuMoe.Contracts.SearchCriteria;
 using SeiyuuMoe.Data.Model;
 using SeiyuuMoe.Repositories.Utilities;
 using System;
@@ -23,7 +24,9 @@ namespace SeiyuuMoe.BusinessServices.SearchCriteria
 		{
 			return predicate
 				.And(!string.IsNullOrWhiteSpace(searchCriteria.Name), () => seiyuu =>
-					seiyuu.Name.Contains(searchCriteria.Name) || seiyuu.JapaneseName.Contains(searchCriteria.Name));
+					seiyuu.Name.Contains(searchCriteria.Name, StringComparison.InvariantCultureIgnoreCase) ||
+					seiyuu.Name.Contains(searchCriteria.Name.SwapNameSurname(), StringComparison.InvariantCultureIgnoreCase) ||
+					seiyuu.JapaneseName.Contains(searchCriteria.Name, StringComparison.InvariantCultureIgnoreCase));
 		}
 	}
 }
