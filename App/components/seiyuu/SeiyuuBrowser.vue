@@ -5,7 +5,6 @@
           :items="items"
           :search-input.sync="search"
           :loading="loading"
-          :filter="customFilter"
           v-model="model"
           hide-no-data
           label="Search by Seiyuu Name... (e.g. Kana Hanazawa)"
@@ -110,14 +109,6 @@ export default {
     }
   },
   methods: {
-    customFilter (item, queryText, itemText) {
-        const nameSurname = item.name.toLowerCase();
-        const surnameName = this.swapNameSurname(item.name.toLowerCase(), " ");
-        const searchText = queryText.toLowerCase();
-
-        return nameSurname.indexOf(searchText) > -1 ||
-          surnameName.indexOf(searchText) > -1;
-    },
     sendSeiyuuRequest () {
       if (this.model) {
         if (this.searchedId.length >= this.maximumSeiyuuNumber) {
