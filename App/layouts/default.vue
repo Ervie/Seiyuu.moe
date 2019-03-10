@@ -40,7 +40,7 @@
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
-    <v-footer height="auto" app fixed class="styledFooter" v-if="$vuetify.breakpoint.mdAndUp">
+    <v-footer height="auto" app fixed class="styledFooter" v-show="$vuetify.breakpoint.mdAndUp">
        <v-card flat tile class="flex primary" height="40px">
         <span class="primary justify-center ">
           &copy;2018 — 2019 -

@@ -6,6 +6,7 @@
           :search-input.sync="search"
           :loading="loading"
           v-model="model"
+          dark
           hide-no-data
           label="Search by Seiyuu Name... (e.g. Kana Hanazawa)"
           item-text="name"
