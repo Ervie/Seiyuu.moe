@@ -17,13 +17,13 @@ namespace SeiyuuMoe.Services
 			this.animeBusinessService = animeBusinessService;
 		}
 
-		public async Task<QueryResponse<PagedResult<AnimeDto>>> GetAsync(Query<AnimeSearchCriteria> query)
+		public async Task<QueryResponse<PagedResult<AnimeSearchEntryDto>>> GetAsync(Query<AnimeSearchCriteria> query)
 		{
 			Ensure.That(query, nameof(query)).IsNotNull();
 
 			var payload = await animeBusinessService.GetAsync(query);
 
-			return new QueryResponse<PagedResult<AnimeDto>>(payload);
+			return new QueryResponse<PagedResult<AnimeSearchEntryDto>>(payload);
 		}
 
 		public async Task<QueryResponse<PagedResult<AnimeAiringDto>>> GetDatesAsync(Query<AnimeSearchCriteria> query)

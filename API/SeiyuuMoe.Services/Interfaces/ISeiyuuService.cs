@@ -8,6 +8,6 @@ namespace SeiyuuMoe.Services
 {
 	public interface ISeiyuuService
 	{
-		Task<QueryResponse<PagedResult<SeiyuuDto>>> GetAsync(Query<SeiyuuSearchCriteria> query);
+		Task<QueryResponse<PagedResult<SeiyuuSearchEntryDto>>> GetAsync(Query<SeiyuuSearchCriteria> query);
 	}
 }

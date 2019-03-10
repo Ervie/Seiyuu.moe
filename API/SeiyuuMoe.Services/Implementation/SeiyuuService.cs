@@ -17,13 +17,13 @@ namespace SeiyuuMoe.Services
 			this.seiyuuBusinessService = seiyuuBusinessService;
 		}
 
-		public async Task<QueryResponse<PagedResult<SeiyuuDto>>> GetAsync(Query<SeiyuuSearchCriteria> query)
+		public async Task<QueryResponse<PagedResult<SeiyuuSearchEntryDto>>> GetAsync(Query<SeiyuuSearchCriteria> query)
 		{
 			Ensure.That(query, nameof(query)).IsNotNull();
 
 			var payload = await seiyuuBusinessService.GetAsync(query);
 
-			return new QueryResponse<PagedResult<SeiyuuDto>>(payload);
+			return new QueryResponse<PagedResult<SeiyuuSearchEntryDto>>(payload);
 		}
 	}
 }

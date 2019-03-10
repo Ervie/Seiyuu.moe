@@ -12,7 +12,7 @@
                   <v-img
                   height="225px"
                   aspect-ratio="1.5"
-                  :src="changeUrlToOriginalSize(entry.entry.image_url)"
+                  :src="pathToImage(changeUrlToOriginalSize(entry.entry.image_url))"
                   ></v-img>
               </a>
               <v-card-text class="caption">{{ swapNameSurname(decodeHtml(entry.entry.name)) }}</v-card-text>
@@ -30,7 +30,7 @@
                   <v-img
                   height="225px"
                   aspect-ratio="1.5"
-                  :src="changeUrlToOriginalSize(entry.image_url)"
+                  :src="pathToImage(changeUrlToOriginalSize(entry.image_url))"
                   ></v-img>
               </a>
               <div class="body-2">{{ swapNameSurname(decodeHtml(entry.characterName)) }}</div>

@@ -10,7 +10,7 @@ namespace SeiyuuMoe.BusinessServices
 	{
 		Task<AnimeCardDto> GetSingleAsync(long id);
 
-		Task<PagedResult<AnimeDto>> GetAsync(Query<AnimeSearchCriteria> query);
+		Task<PagedResult<AnimeSearchEntryDto>> GetAsync(Query<AnimeSearchCriteria> query);
 
 		Task<PagedResult<AnimeAiringDto>> GetDatesAsync(Query<AnimeSearchCriteria> query);
 	}

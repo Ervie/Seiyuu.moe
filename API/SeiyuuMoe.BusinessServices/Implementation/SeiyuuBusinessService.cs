@@ -23,13 +23,13 @@ namespace SeiyuuMoe.SerBusinessServicesvices
 			this.seiyuuSearchCriteriaService = seiyuuSearchCriteriaService;
 		}
 
-		public async Task<PagedResult<SeiyuuDto>> GetAsync(Query<SeiyuuSearchCriteria> query)
+		public async Task<PagedResult<SeiyuuSearchEntryDto>> GetAsync(Query<SeiyuuSearchCriteria> query)
 		{
 			var expression = await seiyuuSearchCriteriaService.BuildExpression(query.SearchCriteria);
 
 			var entities = await seiyuuRepository.GetOrderedPageAsync(expression, query.SortExpression, query.Page, query.PageSize);
 
-			return mapper.Map<PagedResult<SeiyuuDto>>(entities);
+			return mapper.Map<PagedResult<SeiyuuSearchEntryDto>>(entities);
 		}
 	}
 }

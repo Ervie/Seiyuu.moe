@@ -17,10 +17,8 @@ Vue.mixin({
       }
     },
     pathToImage (path) {
-      if (path) {
-        var img = new Image();
-        img.src = path;
-        return img.height === 0 ? 'questionMark.png' : path;
+      if (path && path !== 'https://cdn.myanimelist.net/images/questionmark_23.gif') {
+        return path;
       } else {
         return 'questionMark.png';
       }

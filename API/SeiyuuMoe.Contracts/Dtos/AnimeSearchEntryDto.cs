@@ -1,6 +1,6 @@
 ﻿namespace SeiyuuMoe.Contracts.Dtos
 {
-	public class AnimeDto
+	public class AnimeSearchEntryDto
 	{
 		public string Title { get; set; }
 

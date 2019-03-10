@@ -21,7 +21,7 @@
             <template v-else>
               <v-list-tile-avatar>
                 <v-img 
-                  class="dropdownAvatar" 
+                  class="dropdownAvatar"
                   :src="pathToImage(data.item.imageUrl)" />
               </v-list-tile-avatar>
               <v-list-tile-content>

@@ -8,7 +8,7 @@ namespace SeiyuuMoe.ServBusinessServicesices.Mapper.Profiles
 	{
 		public AnimeProfile()
 		{
-			CreateMap<Anime, AnimeDto>()
+			CreateMap<Anime, AnimeSearchEntryDto>()
 				.ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
 				.ForMember(dest => dest.MalId, opt => opt.MapFrom(src => src.MalId))
 				.ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl));
