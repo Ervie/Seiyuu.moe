@@ -31,7 +31,9 @@ module.exports = {
   },
 
   env: {
-    baseUrl: "https://seiyuu.moe"
+    baseUrl: process.env.BASE_URL || "http://localhost:3000",
+    jikanUrl: process.env.JIKAN_URL || "https://api.jikan.moe/v3/",
+    apiUrl: process.env.API_URL || "http://localhost:5000",
   },
 
   /*

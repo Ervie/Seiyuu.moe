@@ -35,7 +35,7 @@ export default {
             return this.timelineItems.map(x => x.anime.mal_id).filter((v, i, a) => a.indexOf(v) === i).join('&SearchCriteria.MalId=');
         },
         animeDatesRequest() {
-            return process.env.API_URL +
+            return process.env.apiUrl +
             '/api/anime/AiringDates' +
             '?Page=0&PageSize=1000&SortExpression=Popularity DESC' +
             '&SearchCriteria.MalId=' + this.malIds;

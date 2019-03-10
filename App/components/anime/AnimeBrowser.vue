@@ -95,7 +95,7 @@ export default {
       })
     },
     cardInfoRequest () {
-      return process.env.API_URL +
+      return process.env.apiUrl +
             '/api/anime/' + String(this.model);
     }
   },
@@ -125,7 +125,7 @@ export default {
     },
     async sendAnimeCharactersRequest (animeModel) {
       await this.sleep(1000);
-      axios.get(process.env.JIKAN_URL + 'anime/' + String(animeModel.malId) + '/characters_staff')
+      axios.get(process.env.jikanUrl + 'anime/' + String(animeModel.malId) + '/characters_staff')
         .then((response) => {
           this.$emit('animeReturned', { anime: animeModel, characters: response.data.characters})
           this.resetAlerts()
@@ -152,7 +152,7 @@ export default {
         this.loading = true
         this.shareLinkData.forEach(element => {
           if (this.searchedId.indexOf(element) === -1  && Number.parseInt(element) !== 'NaN' && Number.parseInt(element) > 0) {
-            axios.get(process.env.JIKAN_URL + 'anime/' + String(element))
+            axios.get(process.env.jikanUrl + 'anime/' + String(element))
               .then((response) => {
                 this.sendAnimeCharactersRequest(response.data)
                 this.loading = false
@@ -204,7 +204,7 @@ export default {
             return
           }
 
-          var requestUrl = process.env.API_URL +
+          var requestUrl = process.env.apiUrl +
             '/api/anime/' +
             '?Page=0&PageSize=10&SortExpression=Popularity DESC' +
             '&SearchCriteria.Title=' +

@@ -98,7 +98,7 @@ export default {
   },
   computed: {
     requestUrl() {
-      return process.env.API_URL +
+      return process.env.apiUrl +
             '/api/Seiyuu/' +
             '?Page=0&PageSize=10&SortExpression=Popularity DESC'
     },
@@ -127,7 +127,7 @@ export default {
             this.handleBrowsingError('alreadyOnTheList')
             this.loading = false
           } else {
-            axios.get(process.env.JIKAN_URL + 'person/' + String(this.model))
+            axios.get(process.env.jikanUrl + 'person/' + String(this.model))
               .then((response) => {
                 this.addToList(response.data)
               })
@@ -153,7 +153,7 @@ export default {
         this.shareLinkData.forEach(element => {
           if (!this.searchedId.includes(element) && Number.parseInt(element) !== 'NaN' && Number.parseInt(element) > 0) {
             this.loading = true
-            axios.get(process.env.JIKAN_URL + 'person/' + String(element))
+            axios.get(process.env.jikanUrl + 'person/' + String(element))
               .then((response) => {
                 this.addToList(response.data)
               })
@@ -219,7 +219,7 @@ export default {
           return
         }
 
-        var requestUrl = process.env.API_URL +
+        var requestUrl = process.env.apiUrl +
           '/api/seiyuu/' +
           '?Page=0&PageSize=10&SortExpression=Popularity DESC' +
           '&SearchCriteria.Name=' +
