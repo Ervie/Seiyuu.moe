@@ -18,13 +18,15 @@ Vue.mixin({
     },
     pathToImage (path) {
       if (path) {
-        return path;
+        var img = new Image();
+        img.src = path;
+        return img.height === 0 ? 'questionMark.png' : path;
       } else {
         return 'questionMark.png';
       }
     },
     encodeURL (inputURL) {
-      return encodeURIComponent(inputURL)
+      return encodeURIComponent(inputURL);
     },
     isEmpty (obj) {
         for(var prop in obj) {
