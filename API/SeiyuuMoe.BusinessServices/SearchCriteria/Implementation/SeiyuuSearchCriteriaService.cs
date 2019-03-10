@@ -25,7 +25,7 @@ namespace SeiyuuMoe.BusinessServices.SearchCriteria
 			return predicate
 				.And(!string.IsNullOrWhiteSpace(searchCriteria.Name), () => seiyuu =>
 					seiyuu.Name.Contains(searchCriteria.Name, StringComparison.InvariantCultureIgnoreCase) ||
-					seiyuu.Name.Contains(searchCriteria.Name.SwapNameSurname(), StringComparison.InvariantCultureIgnoreCase) ||
+					seiyuu.Name.SwapNameSurname().Contains(searchCriteria.Name, StringComparison.InvariantCultureIgnoreCase) ||
 					seiyuu.JapaneseName.Contains(searchCriteria.Name, StringComparison.InvariantCultureIgnoreCase));
 		}
 	}

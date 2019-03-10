@@ -5,6 +5,7 @@
           :items="items"
           :search-input.sync="search"
           :loading="loading"
+          :filter="customFilter"
           v-model="model"
           dark
           hide-no-data
@@ -57,7 +58,6 @@ export default {
       loading: false,
       model: null,
       search: null,
-      searchResults: [],
       timeout: null,
       timeoutLimit: 300,
       shareLinkData: null,
@@ -109,6 +109,14 @@ export default {
     }
   },
   methods: {
+    customFilter (item, queryText, itemText) {
+        const nameSurname = item.name.toLowerCase();
+        const surnameName = this.swapNameSurname(item.name.toLowerCase(), " ");
+        const searchText = queryText.toLowerCase();
+
+        return nameSurname.indexOf(searchText) > -1 ||
+          surnameName.indexOf(searchText) > -1;
+    },
     sendSeiyuuRequest () {
       if (this.model) {
         if (this.searchedId.length >= this.maximumSeiyuuNumber) {
@@ -131,24 +139,6 @@ export default {
           }
         }
       }
-    },
-    loadCachedSeiyuu () {
-      this.$axios.get(this.requestUrl)
-        .then((response) => {
-          this.cachedSeiyuu = response.data.payload.results;
-        })
-        .catch((error) => {
-          console.log(error)
-          this.$axios.get(process.env.API_URL2 + '/api/Seiyuu')
-            .then((response) => {
-              this.cachedSeiyuu = response.data.payload.results;
-            })
-            .catch((error) => {
-              console.log(error)
-              this.handleBrowsingError('serviceUnavailable');
-              this.cachedSeiyuu = []
-            })
-        })
     },
     excludeFromSearchResults () {
       this.searchedId.forEach(id => {
