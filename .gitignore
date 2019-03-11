@@ -16,3 +16,4 @@ dist
 # Suggested by @nuxtjs/pwa module
 sw.*
 todo\.txt
+API/SeiyuuMoe.API/SeiyuuMoeDB.db
