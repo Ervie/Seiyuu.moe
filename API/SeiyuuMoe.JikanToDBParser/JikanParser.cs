@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace SeiyuuMoe.JikanToDBParser
 {
@@ -25,6 +26,7 @@ namespace SeiyuuMoe.JikanToDBParser
 		private readonly static IAnimeTypeRepository animeTypeRepository;
 		private readonly static IAnimeStatusRepository animeStatusRepository;
 		private readonly static IBlacklistedIdRepository blacklistedIdRepository;
+		private readonly static IRoleRepository roleRepository;
 		private readonly static ICharacterRepository characterRepository;
 
 		static JikanParser()
@@ -41,6 +43,7 @@ namespace SeiyuuMoe.JikanToDBParser
 			animeStatusRepository = new AnimeStatusRepository(dbContext);
 			blacklistedIdRepository = new BlacklistedIdRepository(dbContext);
 			characterRepository = new CharacterRepository(dbContext);
+			roleRepository = new RoleRepository(dbContext);
 		}
 
 		public static void ParseAnime()
@@ -101,7 +104,7 @@ namespace SeiyuuMoe.JikanToDBParser
 
 			for (int malId = minId; malId < maxId; malId++)
 			{
-				Person seiyuu = SendSinglePersonRequest(malId, false);
+				Person seiyuu = SendSinglePersonRequest(malId, 0).Result;
 
 				if (seiyuu != null)
 				{
@@ -167,7 +170,7 @@ namespace SeiyuuMoe.JikanToDBParser
 					continue;
 				}
 
-				JikanDotNet.Character characterFullData = SendSingleCharacterRequest(malId, 0);
+				JikanDotNet.Character characterFullData = SendSingleCharacterRequest(malId, 0).Result;
 				string nicknames = string.Empty;
 
 				if (characterFullData != null)
@@ -218,6 +221,34 @@ namespace SeiyuuMoe.JikanToDBParser
 			}
 		}
 
+		public async static Task ParseRole()
+		{
+			ICollection<long> seiyuuIdCollection = dbContext.Seiyuu.Select(x => x.MalId).ToList();
+
+			foreach (long seiyuuMalId in seiyuuIdCollection)
+			{
+				var seiyuuRoles = await roleRepository.GetAllAsync(x => x.SeiyuuId.Equals(seiyuuMalId));
+
+				Person seiyuuFullData = await SendSinglePersonRequest(seiyuuMalId, 0);
+
+				foreach (VoiceActingRole role in seiyuuFullData.VoiceActingRoles)
+				{
+					if (!seiyuuRoles.Any(x => x.AnimeId.Equals(role.Anime.MalId) && x.CharacterId.Equals(role.Character.MalId)))
+					{
+						roleRepository.Add(new Role()
+						{
+							LanguageId = 1, // Always japanese for now
+							RoleTypeId = role.Role.Equals("Main") ? 1 : 2,
+							AnimeId = role.Anime.MalId,
+							CharacterId = role.Character.MalId,
+							SeiyuuId = seiyuuMalId
+						});
+						roleRepository.Commit();
+					}
+				}
+			}
+		}
+
 		public static void ParseSeiyuuAdditional()
 		{
 			ICollection<Seiyuu> seiyuuCollection = dbContext.Seiyuu.Where(x => x.Birthday == null).ToList();
@@ -225,7 +256,7 @@ namespace SeiyuuMoe.JikanToDBParser
 
 			foreach (Seiyuu seiyuu in seiyuuCollection)
 			{
-				Person seiyuuFullData = SendSinglePersonRequest(seiyuu.MalId, 0);
+				Person seiyuuFullData = SendSinglePersonRequest(seiyuu.MalId, 0).Result;
 				japaneseName = string.Empty;
 
 				if (seiyuuFullData != null)
@@ -359,14 +390,14 @@ namespace SeiyuuMoe.JikanToDBParser
 			return anime;
 		}
 
-		private static Person SendSinglePersonRequest(long malId, short retryCount)
+		private async static Task<Person> SendSinglePersonRequest(long malId, short retryCount)
 		{
 			Person seiyuu = null;
 			Thread.Sleep(3000 + retryCount * 10000);
 
 			try
 			{
-				seiyuu = jikan.GetPerson(malId).Result;
+				seiyuu = await jikan.GetPerson(malId);
 			}
 			catch (Exception ex)
 			{
@@ -375,7 +406,7 @@ namespace SeiyuuMoe.JikanToDBParser
 					if (ex.InnerException is JikanRequestException && (ex.InnerException as JikanRequestException).ResponseCode == System.Net.HttpStatusCode.TooManyRequests)
 					{
 						retryCount++;
-						SendSinglePersonRequest(malId, retryCount);
+						return await SendSinglePersonRequest(malId, retryCount);
 					}
 				}
 			}
@@ -383,39 +414,14 @@ namespace SeiyuuMoe.JikanToDBParser
 			return seiyuu;
 		}
 
-		private static Person SendSinglePersonRequest(int malId, bool retry)
-		{
-			Person seiyuu = null;
-			Thread.Sleep(3000);
-
-			try
-			{
-				seiyuu = jikan.GetPerson(malId).Result;
-			}
-			catch (Exception ex)
-			{
-				if (ex.InnerException is JikanRequestException && !retry)
-				{
-					if ((ex.InnerException as JikanRequestException).ResponseCode == System.Net.HttpStatusCode.TooManyRequests)
-					{
-						// Additional extra time to recover from IP ban
-						Thread.Sleep(30 * 1000);
-						SendSinglePersonRequest(malId, true);
-					}
-				}
-			}
-
-			return seiyuu;
-		}
-
-		private static JikanDotNet.Character SendSingleCharacterRequest(long malId, short retryCount)
+		private static async Task<JikanDotNet.Character> SendSingleCharacterRequest(long malId, short retryCount)
 		{
 			JikanDotNet.Character character = null;
 			Thread.Sleep(3000 + retryCount * 10000);
 
 			try
 			{
-				character = jikan.GetCharacter(malId).Result;
+				character = await jikan.GetCharacter(malId);
 			}
 			catch (Exception ex)
 			{
@@ -424,7 +430,7 @@ namespace SeiyuuMoe.JikanToDBParser
 					if (ex.InnerException is JikanRequestException && (ex.InnerException as JikanRequestException).ResponseCode == System.Net.HttpStatusCode.TooManyRequests)
 					{
 						retryCount++;
-						return SendSingleCharacterRequest(malId, retryCount);
+						return await SendSingleCharacterRequest(malId, retryCount);
 					}
 					else
 					{
