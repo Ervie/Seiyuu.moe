@@ -152,9 +152,9 @@ export default {
         this.loading = true
         this.shareLinkData.forEach(element => {
           if (this.searchedId.indexOf(element) === -1  && Number.parseInt(element) !== 'NaN' && Number.parseInt(element) > 0) {
-            axios.get(process.env.jikanUrl + 'anime/' + String(element))
+            axios.get(process.env.apiUrl + '/api/anime/'+ String(element))
               .then((response) => {
-                this.sendAnimeCharactersRequest(response.data)
+                this.sendAnimeCharactersRequest(response.data.payload)
                 this.loading = false
               })
               .catch((error) => {
