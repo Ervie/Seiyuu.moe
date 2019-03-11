@@ -58,17 +58,15 @@ Require .Net Core 2.2 installed.
 
 ## Changelog
 
-### Version 1.4 - 22th February 2019 (latest)
+### Version 1.5 - 11th March 2019 (latest)
 
-* Features
-    * Three possbile table views.
-    * Timeline view for seiyuu comparison.
-    * New about and home pages.
-    * Changelog in about page.
+* The amount of data transferred has been reduced.
+* Less "Too much requests" errors.
+* Performance improvement on anime searching
 * Fixes
-    * Auto re-render when changing "Main roles only" option.
-    * Removed few errors from console.
-    * Adjusted text display.
+    * Loading images (for most most).
+    * Handling error 503 (service not available).
+    * Added sample placeholder for search controls.
 
 **[Read More](https://github.com/Ervie/Seiyuu.moe/blob/master/Changelog.md)**
 

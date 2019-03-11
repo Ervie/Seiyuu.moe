@@ -1,5 +1,14 @@
+### Version 1.5 - 11th March 2019 (latest)
 
-### Version 1.4 - 22th February 2019 (latest)
+* The amount of data transferred has been reduced.
+* Less "Too much requests" errors.
+* Performance improvement on anime searching
+* Fixes
+    * Loading images (for most most).
+    * Handling error 503 (service not available).
+    * Added sample placeholder for search controls.
+
+### Version 1.4 - 22th February 2019
 
 * Features
     * Three possbile table views.

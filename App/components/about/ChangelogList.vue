@@ -50,6 +50,15 @@
             return {
                 items: [
                     {
+                      title: 'Version 1.5 - Performance improvement',
+                      date: '11th March 2019',
+                      items: [
+                          { isFeature: false, title: 'Limited amount of data sent.' },
+                          { isFeature: false, title: 'Improved data loading time.' },
+                          { isFeature: false, title: 'Lessened "too much requests" error amount on anime search.' },
+                          { isFeature: false, title: 'Fixed (for most part) image loading.' },
+                      ]},
+                    {
                       title: 'Version 1.4 - Timeline view',
                       date: '22th February 2019',
                       items: [
