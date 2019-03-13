@@ -71,8 +71,6 @@ namespace SeiyuuMoe.Data.Context
 
             modelBuilder.Entity<Anime>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.AiringDate).HasColumnType("NUMERIC");
 
                 entity.Property(e => e.Title).IsRequired();
@@ -132,9 +130,7 @@ namespace SeiyuuMoe.Data.Context
 
             modelBuilder.Entity<Role>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
-                entity.Property(e => e.Title).IsRequired();
+                //entity.Property(e => e.Id).ValueGeneratedNever();
 
                 entity.HasOne(d => d.Anime)
                     .WithMany(p => p.Role)
@@ -171,8 +167,6 @@ namespace SeiyuuMoe.Data.Context
 
             modelBuilder.Entity<Seiyuu>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.Birthday).HasColumnType("NUMERIC");
 
                 entity.Property(e => e.Name).IsRequired();

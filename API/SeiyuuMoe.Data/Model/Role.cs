@@ -6,7 +6,6 @@ namespace SeiyuuMoe.Data.Model
     public partial class Role
     {
         public long Id { get; set; }
-        public string Title { get; set; }
         public long? AnimeId { get; set; }
         public long? RoleTypeId { get; set; }
         public long? CharacterId { get; set; }

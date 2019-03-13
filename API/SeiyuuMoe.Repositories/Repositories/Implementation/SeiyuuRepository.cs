@@ -6,7 +6,7 @@ namespace SeiyuuMoe.Repositories.Repositories
 {
 	public class SeiyuuRepository : CRUDEntityFrameworkRepository<Seiyuu, ISeiyuuMoeContext, long>, ISeiyuuRepository
 	{
-		public SeiyuuRepository(ISeiyuuMoeContext dbContext) : base(dbContext, x => x.Id)
+		public SeiyuuRepository(ISeiyuuMoeContext dbContext) : base(dbContext, x => x.MalId)
 		{
 		}
 	}

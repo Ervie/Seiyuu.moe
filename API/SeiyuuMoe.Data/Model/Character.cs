@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace SeiyuuMoe.Data.Model
 {
@@ -10,9 +11,9 @@ namespace SeiyuuMoe.Data.Model
             Role = new HashSet<Role>();
         }
 
-        public long Id { get; set; }
         public string Name { get; set; }
-        public long MalId { get; set; }
+		[Key]
+		public long MalId { get; set; }
         public string ImageUrl { get; set; }
         public long? Popularity { get; set; }
         public string NameKanji { get; set; }
