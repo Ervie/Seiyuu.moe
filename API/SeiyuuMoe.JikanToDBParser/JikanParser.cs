@@ -577,81 +577,106 @@ namespace SeiyuuMoe.JikanToDBParser
 			{
 				logger.Log($"Error during inserting with anime {voiceActingRole.Anime.Name}, character {voiceActingRole.Character.Name}: {ex.Message}");
 				RecreateDbContext();
-				await InsertCharacter(voiceActingRole);
-				await InsertAnime(voiceActingRole);
-				await InsertRole(seiyuuMalId, voiceActingRole, seiyuuRoles);
+				if (await InsertCharacter(voiceActingRole) && await InsertAnime(voiceActingRole))
+					await InsertRole(seiyuuMalId, voiceActingRole, seiyuuRoles);
+				else
+					logger.Log($"Could not insert anime with id {voiceActingRole.Anime.MalId}, or character with id {voiceActingRole.Character.MalId}, omitting role.");
 			}
 		}
 
-		private async static Task InsertAnime(VoiceActingRole voiceActingRole)
+		private async static Task<bool> InsertAnime(VoiceActingRole voiceActingRole)
 		{
 			var existingAnime = await animeRepository.GetAsync(voiceActingRole.Anime.MalId);
 
 			if (existingAnime == null)
 			{
-				JikanDotNet.Anime animeFullData = SendSingleAnimeRequest(voiceActingRole.Anime.MalId, 0).Result;
-				string titleSynonym = string.Empty;
-
-				if (animeFullData != null)
+				try
 				{
-					logger.Log($"Parsed anime with id:{animeFullData.MalId}");
+					JikanDotNet.Anime animeFullData = SendSingleAnimeRequest(voiceActingRole.Anime.MalId, 0).Result;
+					string titleSynonym = string.Empty;
+
+					if (animeFullData != null)
+					{
+						logger.Log($"Parsed anime with id:{animeFullData.MalId}");
 
 
-					if (animeFullData.TitleSynonyms.Any())
-						titleSynonym = string.Join(';', animeFullData.TitleSynonyms.ToArray());
+						if (animeFullData.TitleSynonyms.Any())
+							titleSynonym = string.Join(';', animeFullData.TitleSynonyms.ToArray());
 
-					animeRepository.Add(
-						new Data.Model.Anime
-						{
-							MalId = animeFullData.MalId,
-							ImageUrl = animeFullData.ImageURL,
-							Title = animeFullData.Title,
-							Popularity = animeFullData.Members,
-							About = animeFullData.Synopsis,
-							JapaneseTitle = animeFullData.TitleJapanese,
-							AiringDate = animeFullData.Aired.From.HasValue ? animeFullData.Aired.From.Value.ToString() : null,
-							StatusId = MatchAnimeStatus(animeFullData.Status),
-							TypeId = MatchAnimeStatus(animeFullData.Type),
-							SeasonId = MatchAnimeStatus(animeFullData.Premiered)
-						}
-					);
-					dbContext.SaveChanges();
+						animeRepository.Add(
+							new Data.Model.Anime
+							{
+								MalId = animeFullData.MalId,
+								ImageUrl = animeFullData.ImageURL,
+								Title = animeFullData.Title,
+								Popularity = animeFullData.Members,
+								About = animeFullData.Synopsis,
+								JapaneseTitle = animeFullData.TitleJapanese,
+								AiringDate = animeFullData.Aired.From.HasValue ? animeFullData.Aired.From.Value.ToString() : null,
+								StatusId = MatchAnimeStatus(animeFullData.Status),
+								TypeId = MatchAnimeType(animeFullData.Type),
+								SeasonId = MatchSeason(animeFullData.Premiered)
+							}
+						);
+						dbContext.SaveChanges();
+						return true;
+					}
+					return false;
+				}
+				catch (Exception ex)
+				{
+					logger.Log($"Error during inserting anime {voiceActingRole.Anime.Name} with id {voiceActingRole.Character.MalId}: {ex.Message}");
+					return false;
 				}
 			}
+			else
+				return true; //already inserted
 		}
 
-		private async static Task InsertCharacter(VoiceActingRole voiceActingRole)
+		private async static Task<bool> InsertCharacter(VoiceActingRole voiceActingRole)
 		{
 			var existingCharacter = await characterRepository.GetAsync(voiceActingRole.Character.MalId);
 
 			if (existingCharacter == null)
 			{
-				JikanDotNet.Character characterFullData = SendSingleCharacterRequest(voiceActingRole.Character.MalId, 0).Result;
-				string nicknames = string.Empty;
-
-				if (characterFullData != null)
+				try
 				{
-					logger.Log($"Parsed id:{characterFullData.MalId}");
+					JikanDotNet.Character characterFullData = SendSingleCharacterRequest(voiceActingRole.Character.MalId, 0).Result;
+					string nicknames = string.Empty;
+
+					if (characterFullData != null)
+					{
+						logger.Log($"Parsed id:{characterFullData.MalId}");
 
 
-					if (characterFullData.Nicknames.Any())
-						nicknames = string.Join(';', characterFullData.Nicknames.ToArray());
+						if (characterFullData.Nicknames.Any())
+							nicknames = string.Join(';', characterFullData.Nicknames.ToArray());
 
-					characterRepository.Add(
-						new Data.Model.Character
-						{
-							MalId = characterFullData.MalId,
-							ImageUrl = characterFullData.ImageURL,
-							Name = characterFullData.Name,
-							Popularity = characterFullData.MemberFavorites,
-							About = characterFullData.About,
-							NameKanji = characterFullData.NameKanji,
-							Nicknames = nicknames
-						}
-					);
-					dbContext.SaveChanges();
+						characterRepository.Add(
+							new Data.Model.Character
+							{
+								MalId = characterFullData.MalId,
+								ImageUrl = characterFullData.ImageURL,
+								Name = characterFullData.Name,
+								Popularity = characterFullData.MemberFavorites,
+								About = characterFullData.About,
+								NameKanji = characterFullData.NameKanji,
+								Nicknames = nicknames
+							}
+						);
+						dbContext.SaveChanges();
+						return true;
+					}
+					return false;
+				}
+				catch (Exception ex)
+				{
+					logger.Log($"Error during inserting character {voiceActingRole.Anime.Name} with id {voiceActingRole.Anime.MalId}: {ex.Message}");
+					return false;
 				}
 			}
+			else
+				return true; //already inserted
 		}
 
 		#endregion
