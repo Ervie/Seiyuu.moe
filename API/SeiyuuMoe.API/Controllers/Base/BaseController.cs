@@ -3,15 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using SeiyuuMoe.Common.Extensions;
+using SeiyuuMoe.Logger;
 using SeiyuuMoe.WebEssentials;
 
 namespace SeiyuuMoe.API.Controllers.Base
 {
     public abstract class BaseController : ControllerBase
     {
-		public BaseController()
+		private readonly ILoggingService loggingService;
+
+		public BaseController(ILoggingService loggingService)
 		{
+			this.loggingService = loggingService;
 		}
+
 		protected async Task<IActionResult> Handle(Func<Task<IActionResult>> func)
 		{
 			try
@@ -30,6 +36,12 @@ namespace SeiyuuMoe.API.Controllers.Base
 				};
 
 				return StatusCode(400, result);
+			}
+			catch (Exception ex)
+			{
+				loggingService.Log($"Internal Error: {ex.GetType().Name}, Message: {ex.GetFullMessage()}, stack trace: {ex.StackTrace}");
+
+				return StatusCode(500);
 			}
 		}
 

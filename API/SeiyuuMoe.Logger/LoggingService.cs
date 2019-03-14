@@ -4,7 +4,7 @@ using System.IO;
 
 namespace SeiyuuMoe.Logger
 {
-	public class LoggingService
+	public class LoggingService: ILoggingService
 	{
 		private NLog.Logger logger;
 
@@ -20,6 +20,16 @@ namespace SeiyuuMoe.Logger
 			logger = LogManager.GetCurrentClassLogger();
 
 			logger.Info("Logger init");
+		}
+
+		public void Info(string message)
+		{
+			logger.Log(LogLevel.Info, message);
+		}
+
+		public void Error(string message)
+		{
+			logger.Log(LogLevel.Error, message);
 		}
 
 		public void Log(string message)

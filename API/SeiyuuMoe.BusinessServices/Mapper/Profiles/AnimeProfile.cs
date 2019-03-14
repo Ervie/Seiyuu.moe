@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using SeiyuuMoe.Contracts.Dtos;
 using SeiyuuMoe.Data.Model;
+using System.Globalization;
 
 namespace SeiyuuMoe.ServBusinessServicesices.Mapper.Profiles
 {
@@ -15,7 +16,7 @@ namespace SeiyuuMoe.ServBusinessServicesices.Mapper.Profiles
 
 			CreateMap<Anime, AnimeAiringDto>()
 				.ForMember(dest => dest.MalId, opt => opt.MapFrom(src => src.MalId))
-				.ForMember(dest => dest.AiringFrom, opt => opt.MapFrom(src => src.AiringDate));
+				.ForMember(dest => dest.AiringFrom, opt => opt.MapFrom(src => System.DateTime.ParseExact(src.AiringDate, "dd/MM/yyyy hh:mm:ss", null)));
 
 			CreateMap<Anime, AnimeCardDto>()
 				.ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))

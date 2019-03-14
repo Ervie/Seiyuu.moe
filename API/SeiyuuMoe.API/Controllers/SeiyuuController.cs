@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SeiyuuMoe.API.Controllers.Base;
 using SeiyuuMoe.Contracts.SearchCriteria;
+using SeiyuuMoe.Logger;
 using SeiyuuMoe.Services;
 using SeiyuuMoe.WebEssentials;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ namespace SeiyuuMoe.API.Controllers
 	{
 		private readonly ISeiyuuService seiyuuService;
 
-		public SeiyuuController(ISeiyuuService seiyuuService)
+		public SeiyuuController(ISeiyuuService seiyuuService, ILoggingService loggingService) : base(loggingService)
 		{
 			this.seiyuuService = seiyuuService;
 		}

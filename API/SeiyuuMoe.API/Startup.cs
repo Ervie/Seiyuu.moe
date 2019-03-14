@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SeiyuuMoe.BusinessServices;
 using SeiyuuMoe.Data;
+using SeiyuuMoe.Logger;
 using SeiyuuMoe.Repositories;
 using SeiyuuMoe.Services;
 using System;
@@ -38,6 +39,7 @@ namespace SeiyuuMoe.API
 			builder.RegisterModule(new RepositoriesModule());
 			builder.RegisterModule(new BusinessServicesModule());
 			builder.RegisterModule(new ServicesModule());
+			builder.RegisterModule(new LoggerModule());
 
 			ApplicationContainer = builder.Build();
 

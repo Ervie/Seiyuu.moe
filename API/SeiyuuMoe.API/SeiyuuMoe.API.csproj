@@ -12,6 +12,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="nlog.config" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
@@ -27,8 +31,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="nlog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\SeiyuuMoe.Contracts\SeiyuuMoe.Contracts.csproj" />
     <ProjectReference Include="..\SeiyuuMoe.Data\SeiyuuMoe.Data.csproj" />
+    <ProjectReference Include="..\SeiyuuMoe.Logger\SeiyuuMoe.Logger.csproj" />
     <ProjectReference Include="..\SeiyuuMoe.Repositories\SeiyuuMoe.Repositories.csproj" />
     <ProjectReference Include="..\SeiyuuMoe.Services\SeiyuuMoe.Services.csproj" />
     <ProjectReference Include="..\SeiyuuMoe.WebEssentials\SeiyuuMoe.WebEssentials.csproj" />
