@@ -248,19 +248,19 @@ namespace SeiyuuMoe.JikanToDBParser
 			}
 		}
 
-		public static void ParseSeiyuuAdditional()
+		public async static Task ParseSeiyuuAdditional()
 		{
-			ICollection<Seiyuu> seiyuuCollection = dbContext.Seiyuu.Where(x => x.Birthday == null).ToList();
+			IReadOnlyCollection<Seiyuu> seiyuuCollection = await seiyuuRepository.GetAllAsync();
 			string japaneseName = string.Empty;
 
 			foreach (Seiyuu seiyuu in seiyuuCollection)
 			{
-				Person seiyuuFullData = SendSinglePersonRequest(seiyuu.MalId, 0).Result;
+				Person seiyuuFullData = await SendSinglePersonRequest(seiyuu.MalId, 0);
 				japaneseName = string.Empty;
 
 				if (seiyuuFullData != null)
 				{
-					logger.Log($"Parsed id:{seiyuu.MalId}");
+					logger.Log($"Parsed id:{seiyuu.MalId}, {seiyuu.Name}");
 
 					seiyuu.Name = seiyuuFullData.Name;
 					seiyuu.ImageUrl = seiyuuFullData.ImageURL;
@@ -276,11 +276,13 @@ namespace SeiyuuMoe.JikanToDBParser
 
 					seiyuu.JapaneseName = japaneseName;
 
+					seiyuuRepository.Update(seiyuu);
+
 					dbContext.SaveChanges();
 				}
 				else
 				{
-					logger.Log($"Error on {seiyuu.MalId} - not found");
+					logger.Error($"Error on {seiyuu.MalId} - not found");
 					continue;
 				}
 			}

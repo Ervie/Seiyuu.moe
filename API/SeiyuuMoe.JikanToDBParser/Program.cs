@@ -7,11 +7,11 @@
 			//JikanParser.ParseAnime();
 			//JikanParser.ParseSeiyuu();
 			//JikanParser.ParseSeason();
-			//JikanParser.ParseSeiyuuAdditional();
+			JikanParser.ParseSeiyuuAdditional();
 			//JikanParser.ParseAnimeAdditional();
 			//JikanParser.ParseSeasonAdditional();
 			//JikanParser.ParseCharacter();
-			JikanParser.ParseRole();
+			//JikanParser.ParseRole();
 		}
 	}
 }
