@@ -290,17 +290,17 @@ namespace SeiyuuMoe.JikanToDBParser
 
 		public async static Task ParseAnimeAdditional()
 		{
-			ICollection<Data.Model.Anime> animeCollection = dbContext.Anime.Where(x => !x.StatusId.HasValue).ToList();
+			IReadOnlyCollection<Data.Model.Anime> animeCollection = await animeRepository.GetAllAsync();
 			string japaneseName = string.Empty;
 
-			foreach (Data.Model.Anime anime in animeCollection)
+			foreach (Data.Model.Anime anime in animeCollection.OrderBy(x => x.MalId))
 			{
 				JikanDotNet.Anime animeFullData = await SendSingleAnimeRequest(anime.MalId, 0);
 				japaneseName = string.Empty;
 
 				if (animeFullData != null)
 				{
-					logger.Log($"Parsed id:{anime.MalId}");
+					logger.Log($"Parsed anime with id{anime.MalId}: {anime.Title}");
 
 					anime.Title = animeFullData.Title;
 					anime.About = animeFullData.Synopsis;
@@ -316,7 +316,11 @@ namespace SeiyuuMoe.JikanToDBParser
 
 					anime.TypeId = MatchAnimeType(animeFullData.Type);
 					anime.StatusId = MatchAnimeStatus(animeFullData.Status);
-					anime.SeasonId = MatchSeason(animeFullData.Premiered);
+					anime.SeasonId = string.IsNullOrEmpty(animeFullData.Premiered) ?
+						anime.SeasonId :
+						MatchSeason(animeFullData.Premiered);
+
+					animeRepository.Update(anime);
 
 					dbContext.SaveChanges();
 				}
@@ -374,7 +378,7 @@ namespace SeiyuuMoe.JikanToDBParser
 
 			try
 			{
-				anime = await jikan.GetAnime(malId);
+				anime = jikan.GetAnime(malId).Result;
 			}
 			catch (Exception ex)
 			{
