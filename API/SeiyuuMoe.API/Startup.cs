@@ -21,21 +21,27 @@ namespace SeiyuuMoe.API
 
 		public IConfigurationRoot Configuration { get; }
 
-		public Startup(IConfiguration configuration)
+		public Startup()
 		{
+			var configurationBuilder = new ConfigurationBuilder()
+				.SetBasePath(AppContext.BaseDirectory)
+				.AddJsonFile("appsettings.json");
+
+			Configuration = configurationBuilder.Build();
 		}
 
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public IServiceProvider ConfigureServices(IServiceCollection services)
 		{
 			services.AddMvc().AddControllersAsServices();
+			services.AddSingleton<IConfiguration>(Configuration);
 			services.AddCors();
 
 			var builder = new ContainerBuilder();
 
 			builder.Populate(services);
 
-			builder.RegisterModule(new ContextModule());
+			builder.RegisterModule(new ContextModule(Configuration["Config:pathToDB"]));
 			builder.RegisterModule(new RepositoriesModule());
 			builder.RegisterModule(new BusinessServicesModule());
 			builder.RegisterModule(new ServicesModule());

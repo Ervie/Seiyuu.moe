@@ -1,6 +1,7 @@
 ﻿using JikanDotNet;
 using JikanDotNet.Exceptions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using SeiyuuMoe.Data.Context;
 using SeiyuuMoe.Data.Model;
 using SeiyuuMoe.Logger;
@@ -15,11 +16,13 @@ namespace SeiyuuMoe.JikanToDBParser
 {
 	public static class JikanParser
 	{
-		private static SeiyuuMoeContext dbContext = new SeiyuuMoeContext("SeiyuuMoeDB.db");
+		private static SeiyuuMoeContext dbContext;
 
 		private static LoggingService logger = new LoggingService();
 
 		private static IJikan jikan;
+		private static readonly IConfiguration configuration;
+
 		private static IAnimeRepository animeRepository;
 		private static ISeasonRepository seasonRepository;
 		private static ISeiyuuRepository seiyuuRepository;
@@ -31,6 +34,13 @@ namespace SeiyuuMoe.JikanToDBParser
 
 		static JikanParser()
 		{
+			var configurationBuilder = new ConfigurationBuilder()
+				.SetBasePath(AppContext.BaseDirectory)
+				.AddJsonFile("appsettings.json");
+
+			configuration = configurationBuilder.Build();
+
+			dbContext = new SeiyuuMoeContext(configuration["Config:pathToDB"]);
 			jikan = new Jikan(true, false);
 
 			dbContext.Database.EnsureCreated();

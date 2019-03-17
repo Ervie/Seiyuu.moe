@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeiyuuMoe.Data", "SeiyuuMoe
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SeiyuuMoe.Application", "SeiyuuMoe.Application", "{5170E228-3170-4EA4-8381-A29A06107731}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SeiyuuMoe.Utils", "SeiyuuMoe.Utils", "{261D75A0-A7B7-4989-B862-AE3DB9D9C8F0}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SeiyuuMoe.Parser", "SeiyuuMoe.Parser", "{261D75A0-A7B7-4989-B862-AE3DB9D9C8F0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeiyuuMoe.JikanToDBParser", "SeiyuuMoe.JikanToDBParser\SeiyuuMoe.JikanToDBParser.csproj", "{4512DA0F-47E1-4C91-B718-A5B6BBEDE542}"
 EndProject
@@ -29,7 +29,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeiyuuMoe.Services", "Seiyu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeiyuuMoe.Logger", "SeiyuuMoe.Logger\SeiyuuMoe.Logger.csproj", "{0A3A911C-ECDA-449D-926C-0C45C9F8F155}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeiyuuMoe.Common", "SeiyuuMoe.Common\SeiyuuMoe.Common.csproj", "{3215DAE2-C14D-4F1E-A139-7F5C33D1D0A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeiyuuMoe.Common", "SeiyuuMoe.Common\SeiyuuMoe.Common.csproj", "{3215DAE2-C14D-4F1E-A139-7F5C33D1D0A7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

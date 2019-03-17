@@ -11,8 +11,6 @@ namespace SeiyuuMoe.Repositories
 		{
 			var module = Assembly.GetAssembly(this.GetType());
 
-			builder.RegisterModule<ContextModule>();
-
 			builder.RegisterAssemblyTypes(module)
 				.Where(t => t.Name.EndsWith("Repository"))
 				.AsImplementedInterfaces();

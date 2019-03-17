@@ -6,12 +6,19 @@ namespace SeiyuuMoe.Data
 {
 	public class ContextModule : Autofac.Module
 	{
+		private readonly string pathToDB;
+
+		public ContextModule(string dataSource)
+		{
+			this.pathToDB = dataSource;
+		}
+
 		protected override void Load(ContainerBuilder builder)
 		{
 			var module = Assembly.GetAssembly(this.GetType());
 
 			builder.RegisterType<SeiyuuMoeContext>().As<ISeiyuuMoeContext>()
-				.WithParameter("dataSource", "SeiyuuMoeDB.db");
+				.WithParameter("dataSource", pathToDB);
 
 			base.Load(builder);
 		}
