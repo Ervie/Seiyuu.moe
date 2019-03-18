@@ -317,7 +317,7 @@ namespace SeiyuuMoe.JikanToDBParser
 					anime.TypeId = MatchAnimeType(animeFullData.Type);
 					anime.StatusId = MatchAnimeStatus(animeFullData.Status);
 					anime.SeasonId = string.IsNullOrEmpty(animeFullData.Premiered) ?
-						anime.SeasonId :
+						MatchSeason(animeFullData.Aired.From) :
 						MatchSeason(animeFullData.Premiered);
 
 					animeRepository.Update(anime);
@@ -531,6 +531,41 @@ namespace SeiyuuMoe.JikanToDBParser
 					return null;
 				}
 				return null;
+			}
+			catch (Exception)
+			{
+				return null;
+			}
+		}
+
+		private static long? MatchSeason(DateTime? airingFrom)
+		{
+			try
+			{
+				if (airingFrom.HasValue)
+				{
+					DateTime airingDate = airingFrom.Value.Date;
+
+					Seasons seasonEnumValue;
+					int yearOfSeason = airingFrom.Value.Year;
+
+					if (airingDate.DayOfYear > 349 || airingDate.DayOfYear < 75)
+						seasonEnumValue = Seasons.Winter;
+					else if (airingDate.DayOfYear >= 75 && airingDate.DayOfYear < 166)
+						seasonEnumValue = Seasons.Spring;
+					else if (airingDate.DayOfYear >= 167 && airingDate.DayOfYear < 258)
+						seasonEnumValue = Seasons.Summer;
+					else
+						seasonEnumValue = Seasons.Fall;
+
+					if (airingDate.DayOfYear > 349)
+						yearOfSeason++;
+
+					return MatchSeason(yearOfSeason, seasonEnumValue);
+
+				}
+				else
+					return null;
 			}
 			catch (Exception)
 			{
