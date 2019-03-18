@@ -16,21 +16,21 @@ namespace SeiyuuMoe.JikanToDBParser
 {
 	public class JikanParser: IJikanParser
 	{
-		private static SeiyuuMoeContext dbContext;
+		private SeiyuuMoeContext dbContext;
 
 		private LoggingService logger = new LoggingService();
 
-		private static IJikan jikan;
-		private static readonly IConfiguration configuration;
+		private IJikan jikan;
+		private readonly IConfiguration configuration;
 
-		private static IAnimeRepository animeRepository;
-		private static ISeasonRepository seasonRepository;
-		private static ISeiyuuRepository seiyuuRepository;
-		private static IAnimeTypeRepository animeTypeRepository;
-		private static IAnimeStatusRepository animeStatusRepository;
-		private static IBlacklistedIdRepository blacklistedIdRepository;
-		private static IRoleRepository roleRepository;
-		private static ICharacterRepository characterRepository;
+		private IAnimeRepository animeRepository;
+		private ISeasonRepository seasonRepository;
+		private ISeiyuuRepository seiyuuRepository;
+		private IAnimeTypeRepository animeTypeRepository;
+		private IAnimeStatusRepository animeStatusRepository;
+		private IBlacklistedIdRepository blacklistedIdRepository;
+		private IRoleRepository roleRepository;
+		private ICharacterRepository characterRepository;
 
 		public JikanParser()
 		{
@@ -435,43 +435,51 @@ namespace SeiyuuMoe.JikanToDBParser
 
 			foreach (Data.Model.Anime anime in animeCollection.OrderBy(x => x.MalId))
 			{
-				var animeRoles = await roleRepository.GetAllAsync(x => x.AnimeId.Equals(anime.MalId));
-
-				AnimeCharactersStaff animeCharactersStaff = await SendSingleAnimeCharactersStaffRequest(anime.MalId, 0);
-
-				if (animeCharactersStaff != null)
+				try
 				{
-					logger.Log($"Parsed anime with id {anime.MalId}: {anime.Title}");
+					var animeRoles = await roleRepository.GetAllAsync(x => x.AnimeId.Equals(anime.MalId));
 
-					foreach (var animeRole in animeRoles)
+					AnimeCharactersStaff animeCharactersStaff = await SendSingleAnimeCharactersStaffRequest(anime.MalId, 0);
+
+					if (animeCharactersStaff != null)
 					{
-						var foundRole = animeCharactersStaff.Characters.First(x =>
-							x.MalId.Equals(animeRole.CharacterId) &&
-							x.VoiceActors.Select(y => y.MalId).ToList().Contains(animeRole.SeiyuuId.Value));
+						logger.Log($"Parsed anime with id {anime.MalId}: {anime.Title}");
 
-						if (foundRole != null)
+						foreach (var animeRole in animeRoles)
 						{
-							switch (foundRole.VoiceActors.FirstOrDefault(x => x.MalId.Equals(animeRole.SeiyuuId)).Language)
-							{
-								case "Japanese":
-									animeRole.LanguageId = 1;
-									break;
-								case "Korean":
-									animeRole.LanguageId = 2;
-									break;
-								default:
-									animeRole.LanguageId = null;
-									break;
-							}
+							var foundRole = animeCharactersStaff.Characters.First(x =>
+								x.MalId.Equals(animeRole.CharacterId) &&
+								x.VoiceActors.Select(y => y.MalId).ToList().Contains(animeRole.SeiyuuId.Value));
 
-							roleRepository.Update(animeRole);
-							await roleRepository.CommitAsync();
+							if (foundRole != null)
+							{
+								switch (foundRole.VoiceActors.FirstOrDefault(x => x.MalId.Equals(animeRole.SeiyuuId)).Language)
+								{
+									case "Japanese":
+										animeRole.LanguageId = 1;
+										break;
+									case "Korean":
+										animeRole.LanguageId = 2;
+										break;
+									default:
+										animeRole.LanguageId = null;
+										break;
+								}
+
+								roleRepository.Update(animeRole);
+								await roleRepository.CommitAsync();
+							}
 						}
 					}
+					else
+					{
+						logger.Error($"Error on {anime.MalId} - not found");
+						continue;
+					}
 				}
-				else
+				catch (Exception ex)
 				{
-					logger.Error($"Error on {anime.MalId} - not found");
+					logger.Error($"Error on {anime.MalId} - {ex.Message}");
 					continue;
 				}
 			}
