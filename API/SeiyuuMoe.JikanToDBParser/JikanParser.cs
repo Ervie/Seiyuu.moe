@@ -369,6 +369,54 @@ namespace SeiyuuMoe.JikanToDBParser
 			}
 		}
 
+		public async static Task FilterNonJapanese()
+		{
+			IReadOnlyCollection<Data.Model.Anime> animeCollection = await animeRepository.GetAllAsync();
+
+			foreach (Data.Model.Anime anime in animeCollection.OrderBy(x => x.MalId))
+			{
+				var animeRoles = await roleRepository.GetAllAsync(x => x.AnimeId.Equals(anime.MalId));
+
+				AnimeCharactersStaff animeCharactersStaff = await SendSingleAnimeCharactersStaffRequest(anime.MalId, 0);
+
+				if (animeCharactersStaff != null)
+				{
+					logger.Log($"Parsed anime with id {anime.MalId}: {anime.Title}");
+
+					foreach (var animeRole in animeRoles)
+					{
+						var foundRole = animeCharactersStaff.Characters.First(x =>
+							x.MalId.Equals(animeRole.CharacterId) &&
+							x.VoiceActors.Select(y => y.MalId).ToList().Contains(animeRole.SeiyuuId.Value));
+
+						if (foundRole != null)
+						{
+							switch (foundRole.VoiceActors.FirstOrDefault(x => x.MalId.Equals(animeRole.SeiyuuId)).Language)
+							{
+								case "Japanese":
+									animeRole.LanguageId = 1;
+									break;
+								case "Korean":
+									animeRole.LanguageId = 2;
+									break;
+								default:
+									animeRole.LanguageId = null;
+									break;
+							}
+
+							roleRepository.Update(animeRole);
+							await roleRepository.CommitAsync();
+						}
+					}
+				}
+				else
+				{
+					logger.Error($"Error on {anime.MalId} - not found");
+					continue;
+				}
+			}
+		}
+
 		#region Requests
 
 		private async static Task<JikanDotNet.Anime> SendSingleAnimeRequest(long malId, short retryCount)
@@ -393,6 +441,30 @@ namespace SeiyuuMoe.JikanToDBParser
 			}
 
 			return anime;
+		}
+
+		private async static Task<JikanDotNet.AnimeCharactersStaff> SendSingleAnimeCharactersStaffRequest(long malId, short retryCount)
+		{
+			JikanDotNet.AnimeCharactersStaff animeCharactersStaff = null;
+			Thread.Sleep(3000 + retryCount * 10000);
+
+			try
+			{
+				animeCharactersStaff = jikan.GetAnimeCharactersStaff(malId).Result;
+			}
+			catch (Exception ex)
+			{
+				if (retryCount < 10)
+				{
+					if (ex.InnerException is JikanRequestException && (ex.InnerException as JikanRequestException).ResponseCode == System.Net.HttpStatusCode.TooManyRequests)
+					{
+						retryCount++;
+						return await SendSingleAnimeCharactersStaffRequest(malId, retryCount);
+					}
+				}
+			}
+
+			return animeCharactersStaff;
 		}
 
 		private async static Task<Person> SendSinglePersonRequest(long malId, short retryCount)
