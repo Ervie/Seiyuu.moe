@@ -4,6 +4,7 @@
 	{
 		private static void Main(string[] args)
 		{
+			JikanParser jikanParser = new JikanParser();
 			//JikanParser.ParseAnime();
 			//JikanParser.ParseSeiyuu();
 			//JikanParser.ParseSeason();
@@ -12,7 +13,7 @@
 			//JikanParser.ParseSeasonAdditional();
 			//JikanParser.ParseCharacter();
 			//JikanParser.ParseRole();
-			JikanParser.FilterNonJapanese();
+			jikanParser.FilterNonJapanese();
 		}
 	}
 }
