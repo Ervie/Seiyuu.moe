@@ -8,4 +8,8 @@
     <Folder Include="Enums\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SeiyuuMoe.Data\SeiyuuMoe.Data.csproj" />
+  </ItemGroup>
+
 </Project>

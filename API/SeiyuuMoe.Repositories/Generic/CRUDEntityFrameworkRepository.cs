@@ -52,6 +52,14 @@ namespace SeiyuuMoe.Repositories.Generic
 				.ToListAsync();
 		}
 
+		public async Task<IReadOnlyList<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IQueryable<TEntity>> includeExpression)
+		{
+			return await includeExpression(DbSetEntities)
+				.Where(predicate)
+				.AsNoTracking()
+				.ToListAsync();
+		}
+
 		public async Task<PagedResult<TEntity>> GetPageAsync(Expression<Func<TEntity, bool>> predicate, int page, int pageSize)
 		{
 			var entities = DbSetEntities.Where(predicate);

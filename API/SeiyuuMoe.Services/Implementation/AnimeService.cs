@@ -1,9 +1,11 @@
 ﻿using EnsureThat;
 using SeiyuuMoe.BusinessServices;
+using SeiyuuMoe.Contracts.ComparisonEntities;
 using SeiyuuMoe.Contracts.Dtos;
 using SeiyuuMoe.Contracts.SearchCriteria;
 using SeiyuuMoe.Repositories.Models;
 using SeiyuuMoe.WebEssentials;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SeiyuuMoe.Services
@@ -42,6 +44,16 @@ namespace SeiyuuMoe.Services
 			var payload = await animeBusinessService.GetSingleAsync(id);
 
 			return new QueryResponse<AnimeCardDto>(payload);
+		}
+
+		public async Task<QueryResponse<ICollection<AnimeComparisonEntryDto>>> GetAnimeComparison(Query<RoleSearchCriteria> query)
+		{
+			Ensure.That(query, nameof(query)).IsNotNull();
+			Ensure.That(query.SearchCriteria, nameof(query.SearchCriteria)).IsNotNull();
+			Ensure.That(query.SearchCriteria.AnimeMalId, nameof(query.SearchCriteria.AnimeMalId)).IsNotNull();
+			Ensure.That(query.SearchCriteria.AnimeMalId.Count).IsGte(2);
+
+			return new QueryResponse<ICollection<AnimeComparisonEntryDto>>(await animeBusinessService.GetAnimeComparison(query.SearchCriteria));
 		}
 	}
 }

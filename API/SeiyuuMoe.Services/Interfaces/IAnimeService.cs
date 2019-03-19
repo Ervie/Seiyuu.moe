@@ -2,6 +2,7 @@
 using SeiyuuMoe.Contracts.SearchCriteria;
 using SeiyuuMoe.Repositories.Models;
 using SeiyuuMoe.WebEssentials;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SeiyuuMoe.Services
@@ -13,5 +14,7 @@ namespace SeiyuuMoe.Services
 		Task<QueryResponse<PagedResult<AnimeSearchEntryDto>>> GetAsync(Query<AnimeSearchCriteria> query);
 
 		Task<QueryResponse<PagedResult<AnimeAiringDto>>> GetDatesAsync(Query<AnimeSearchCriteria> query);
+
+		Task<QueryResponse<ICollection<AnimeComparisonEntryDto>>> GetAnimeComparison(Query<RoleSearchCriteria> searchCriteria);
 	}
 }

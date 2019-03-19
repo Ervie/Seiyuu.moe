@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
 using SeiyuuMoe.Contracts.Dtos;
 using SeiyuuMoe.Data.Model;
-using System.Globalization;
 
 namespace SeiyuuMoe.ServBusinessServicesices.Mapper.Profiles
 {
 	internal class AnimeProfile : Profile
 	{
+		private const string malAnimeBaseUrl = "https://myanimelist.net/anime/";
+
 		public AnimeProfile()
 		{
 			CreateMap<Anime, AnimeSearchEntryDto>()
@@ -29,6 +30,12 @@ namespace SeiyuuMoe.ServBusinessServicesices.Mapper.Profiles
 				.ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.Name))
 				.ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.Name))
 				.ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl));
+			
+			CreateMap<Anime, AnimeTableEntryDto>()
+				.ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
+				.ForMember(dest => dest.MalId, opt => opt.MapFrom(src => src.MalId))
+				.ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl))
+				.ForMember(dest => dest.Url, opt => opt.MapFrom(src => malAnimeBaseUrl + src.MalId));
 		}
 	}
 }

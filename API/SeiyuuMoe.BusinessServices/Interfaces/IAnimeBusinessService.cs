@@ -1,7 +1,9 @@
-﻿using SeiyuuMoe.Contracts.Dtos;
+﻿using SeiyuuMoe.Contracts.ComparisonEntities;
+using SeiyuuMoe.Contracts.Dtos;
 using SeiyuuMoe.Contracts.SearchCriteria;
 using SeiyuuMoe.Repositories.Models;
 using SeiyuuMoe.WebEssentials;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SeiyuuMoe.BusinessServices
@@ -13,5 +15,7 @@ namespace SeiyuuMoe.BusinessServices
 		Task<PagedResult<AnimeSearchEntryDto>> GetAsync(Query<AnimeSearchCriteria> query);
 
 		Task<PagedResult<AnimeAiringDto>> GetDatesAsync(Query<AnimeSearchCriteria> query);
+
+		Task<ICollection<AnimeComparisonEntryDto>> GetAnimeComparison(RoleSearchCriteria searchCriteria);
 	}
 }

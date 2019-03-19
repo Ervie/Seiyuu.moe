@@ -37,5 +37,12 @@ namespace SeiyuuMoe.API.Controllers
 		{
 			return Handle(async () => HandleServiceResult(await animeService.GetDatesAsync(query)));
 		}
+
+		[HttpGet]
+		[Route("Compare")]
+		public Task<IActionResult> GetComparison([FromQuery] Query<RoleSearchCriteria> query)
+		{
+			return Handle(async () => HandleServiceResult(await animeService.GetAnimeComparison(query)));
+		}
 	}
 }

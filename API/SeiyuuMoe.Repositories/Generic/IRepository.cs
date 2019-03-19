@@ -19,6 +19,8 @@ namespace SeiyuuMoe.Repositories.Generic
 
 		Task<IReadOnlyList<T>> GetAllAsync(Expression<Func<T, bool>> predicate);
 
+		Task<IReadOnlyList<T>> GetAllAsync(Expression<Func<T, bool>> predicate, Func<IQueryable<T>, IQueryable<T>> includeExpression);
+
 		Task<PagedResult<T>> GetPageAsync(Expression<Func<T, bool>> predicate, int page, int pageSize);
 
 		Task<PagedResult<T>> GetOrderedPageAsync(Expression<Func<T, bool>> predicate, string sortExpression, int page, int pageSize);
