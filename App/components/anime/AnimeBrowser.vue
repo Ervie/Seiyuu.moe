@@ -113,7 +113,9 @@ export default {
           axios.get(this.cardInfoRequest)
             .then((response) => {
               if (response.data.payload !== null) {
-                this.sendAnimeCharactersRequest(response.data.payload);
+                this.$emit('animeReturned', response.data.payload)
+                this.resetAlerts()
+                this.resetSearch()
               }
             })
             .catch((error) => {
@@ -122,19 +124,6 @@ export default {
             })
         }
       }
-    },
-    async sendAnimeCharactersRequest (animeModel) {
-      await this.sleep(1000);
-      axios.get(process.env.jikanUrl + 'anime/' + String(animeModel.malId) + '/characters_staff')
-        .then((response) => {
-          this.$emit('animeReturned', { anime: animeModel, characters: response.data.characters})
-          this.resetAlerts()
-          this.resetSearch()
-        })
-        .catch((error) => {
-          this.handleBrowsingError('tooManyRequests')
-          this.resetErrorSearch(error)
-      })
     },
     resetSearch() {
       this.loadingSearch = false
@@ -154,8 +143,9 @@ export default {
           if (this.searchedId.indexOf(element) === -1  && Number.parseInt(element) !== 'NaN' && Number.parseInt(element) > 0) {
             axios.get(process.env.apiUrl + '/api/anime/'+ String(element))
               .then((response) => {
-                this.sendAnimeCharactersRequest(response.data.payload)
-                this.loading = false
+                this.$emit('animeReturned', response.data.payload)
+                this.resetAlerts()
+                this.resetSearch()
               })
               .catch((error) => {
                 this.handleBrowsingError('tooManyRequests')

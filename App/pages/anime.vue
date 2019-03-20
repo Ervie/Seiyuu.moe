@@ -5,12 +5,11 @@
       :searchedId="searchedId"
       @runImmediately="runImmediately = true" />
     <anime-card-list 
-      :animeToCompare="animeModels" 
+      :animeToCompare="animeToCompare" 
       :maximumAnimeNumber="maximumAnimeNumber" 
       @animeRemoved="removeAnime"/>
     <anime-result-area 
-      :charactersData="charactersRosters" 
-      :animeData="animeModels"
+      :animeIds="searchedId"
       :runImmediately="runImmediately"
       @resetList="resetList"/>
   </v-container>
@@ -38,16 +37,10 @@ export default {
   computed: {
     searchedId () {
       if (this.animeToCompare.length > 0) {
-        return this.animeToCompare.map(animeEntry => animeEntry.anime.malId)
+        return this.animeToCompare.map(animeEntry => animeEntry.malId)
       } else {
         return [];
       }
-    },
-    animeModels () {
-      return this.animeToCompare.map(animeEntry => animeEntry.anime)
-    },
-    charactersRosters () {
-      return this.animeToCompare.map(animeEntry => animeEntry.characters)
     }
   },
   methods: {

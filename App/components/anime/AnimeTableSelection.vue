@@ -34,17 +34,17 @@
             />
           </v-tab-item>
           <v-tab-item :value="`tab-compact`" >
-            <anime-compact-table
+            <!-- <anime-compact-table
               :items="tableData" 
               :headers="headers"
-            />
+            /> -->
           </v-tab-item>
         </v-tabs-items>
     </v-container>
     <v-container hidden-lg-and-up>
-       <anime-data-iterator
+       <!-- <anime-data-iterator
           :items="tableData" 
-        />
+        /> -->
     </v-container>
   </div>
 </template>
@@ -58,13 +58,13 @@ import AnimeMixedTable from '@/components/anime/tables/AnimeMixedTable'
 export default {
   name: 'AnimeTableSelection',
   components: {
-    'anime-compact-table': AnimeCompactTable,
-    'anime-data-iterator': AnimeDataIterator,
+    // 'anime-compact-table': AnimeCompactTable,
+    // 'anime-data-iterator': AnimeDataIterator,
     'anime-expanded-table': AnimeExpandedTable,
     'anime-mixed-table': AnimeMixedTable
   },
   props: {
-    charactersData: {
+    tableData: {
       type: Array,
       required: false
     },
@@ -72,61 +72,15 @@ export default {
       type: Number,
       required: true
     },
-    animeData: {
-      type: Array,
-      required: false
-    }
   },
   data () {
     return {
       headers: [],
-      tableData: [],
       viewMode: 'tab-expanded'
     }
   },
   methods: {
     computeResults () {
-      this.tableData = []
-      var intersectSeiyuu = []
-      var characterIndex = -1
-      var seiyuuIndex = -1
-
-      for (var i = 0; i < this.charactersData.length; i++) {
-        if (intersectSeiyuu.length > 0) {
-          seiyuuIndex = intersectSeiyuu.map(x => x.seiyuu[0].entry.name).indexOf(this.charactersData[i].seiyuu.name)
-        }
-        if (seiyuuIndex === -1) {
-          intersectSeiyuu.push({
-            seiyuu: [{
-              entry: {
-                name: this.charactersData[i].seiyuu.name,
-                image_url: this.charactersData[i].seiyuu.image_url,
-                url: this.charactersData[i].seiyuu.url
-              }
-            }],
-            roles: []
-          })
-          for (var j = 0; j < this.charactersData[i].roles.length; j++) {
-            intersectSeiyuu[intersectSeiyuu.length - 1].roles.push({
-              anime: this.charactersData[i].roles[j].anime,
-              characters: [{
-                entry: this.charactersData[i].roles[j].character
-              }]
-            })
-          }
-        } else {
-          for (var l = 0; l < this.animeData.length; l++) {
-            characterIndex = intersectSeiyuu[seiyuuIndex].roles[l].characters.map(x => x.entry.mal_id).indexOf(this.charactersData[i].roles[l].character.mal_id)
-            if (characterIndex === -1) {
-              intersectSeiyuu[seiyuuIndex].roles[l].characters.push({
-                entry: this.charactersData[i].roles[l].character
-              })
-            }
-          }
-        }
-      }
-
-      this.tableData = intersectSeiyuu;
       this.setTableHeaders();
     },
     setTableHeaders () {
@@ -135,14 +89,15 @@ export default {
       this.headers.push({
         text: 'Seiyuu',
         align: 'left',
-        value: 'seiyuu[0].entry.name',
+        value: 'seiyuu.name',
         image: ''
       });
-      for (var headerIndex = 0; headerIndex < this.animeData.length; headerIndex++) {
+      
+      for (var headerIndex = 0; headerIndex < this.tableData[0].animeCharacters.length; headerIndex++) {
         this.headers.push({
-          text: this.animeData[headerIndex].title,
+          text: this.tableData[0].animeCharacters[headerIndex].anime.title,
           sortable: false,
-          image: this.animeData[headerIndex].imageUrl});
+          image: this.tableData[0].animeCharacters[headerIndex].anime.imageUrl});
       }
       if (this.viewMode === 'tab-compact') {
         this.headers.push({
@@ -151,54 +106,7 @@ export default {
           value: 'name'
         });
       }
-      this.showTables = true;
-    },
-    computeResultsSimple () {
-      // Old code - might be reused in future
-      this.tableData = []
-      this.headers = []
-      for (var i = 0; i < this.charactersData.length; i++) {
-        this.tableData.push({
-          seiyuu: [{
-            entry: {
-              name: this.charactersData[i].seiyuu.name,
-              image_url: this.charactersData[i].seiyuu.image_url,
-              url: this.charactersData[i].seiyuu.url
-            }
-          }],
-          roles: []
-        })
-        for (var l = 0; l < this.charactersData[i].roles.length; l++) {
-          this.tableData[this.tableData.length - 1].roles.push({
-            anime: this.charactersData[i].roles[l].anime,
-            characters: [{
-              entry: this.charactersData[i].roles[l].character
-            }]
-          })
-        }
-      }
-
-      this.headers.push({
-        text: 'Seiyuu',
-        align: 'left',
-        value: 'seiyuu[0].entry.name',
-        image: ''
-      })
-      for (var headerIndex = 0; headerIndex < this.animeData.length; headerIndex++) {
-        this.headers.push({
-          text: this.animeData[headerIndex].title,
-          value: 'roles[' + headerIndex + '].characters[0].entry.name',
-          image: this.animeData[headerIndex].imageUrl})
-      }
-      if (this.viewMode === 'tab-compact') {
-        this.headers.push({
-          text: '',
-          sortable: false,
-          value: 'name'
-        })
-      }
-      this.showTables = true
-    },
+    }
   },
   watch: {
     counter: {
