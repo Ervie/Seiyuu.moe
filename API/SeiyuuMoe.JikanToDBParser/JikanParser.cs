@@ -431,55 +431,33 @@ namespace SeiyuuMoe.JikanToDBParser
 
 		public async Task FilterNonJapanese()
 		{
-			IReadOnlyCollection<Data.Model.Anime> animeCollection = await animeRepository.GetAllAsync();
+			IReadOnlyCollection<Seiyuu> seiyuuCollection = await seiyuuRepository.GetAllAsync();
 
-			foreach (Data.Model.Anime anime in animeCollection.OrderBy(x => x.MalId))
+			foreach (Seiyuu seiyuu in seiyuuCollection.OrderBy(x => x.MalId))
 			{
 				try
 				{
-					var animeRoles = await roleRepository.GetAllAsync(x => x.AnimeId.Equals(anime.MalId));
+					bool isKanji = seiyuu.JapaneseName.All(x => 
+					(x >= 0x4E00 && x <= 0x9FBF) || // kanji
+					(x >= 0x3040 && x <= 0x309F) || // hiragana
+					(x >= 0x30A0 && x <= 0x30FF) || // katakana
+					x == ' ' ||
+					x == 12293);
 
-					AnimeCharactersStaff animeCharactersStaff = await SendSingleAnimeCharactersStaffRequest(anime.MalId, 0);
-
-					if (animeCharactersStaff != null)
+					if (isKanji)
 					{
-						logger.Log($"Parsed anime with id {anime.MalId}: {anime.Title}");
-
-						foreach (var animeRole in animeRoles)
-						{
-							var foundRole = animeCharactersStaff.Characters.First(x =>
-								x.MalId.Equals(animeRole.CharacterId) &&
-								x.VoiceActors.Select(y => y.MalId).ToList().Contains(animeRole.SeiyuuId.Value));
-
-							if (foundRole != null)
-							{
-								switch (foundRole.VoiceActors.FirstOrDefault(x => x.MalId.Equals(animeRole.SeiyuuId)).Language)
-								{
-									case "Japanese":
-										animeRole.LanguageId = 1;
-										break;
-									case "Korean":
-										animeRole.LanguageId = 2;
-										break;
-									default:
-										animeRole.LanguageId = null;
-										break;
-								}
-
-								roleRepository.Update(animeRole);
-								await roleRepository.CommitAsync();
-							}
-						}
+						logger.Log($"Parsed {seiyuu.MalId}: {seiyuu.Name}");
 					}
 					else
 					{
-						logger.Error($"Error on {anime.MalId} - not found");
-						continue;
+						logger.Log($"Removing {seiyuu.MalId}: {seiyuu.Name}");
+						seiyuuRepository.Delete(seiyuu);
+						await seiyuuRepository.CommitAsync();
 					}
 				}
 				catch (Exception ex)
 				{
-					logger.Error($"Error on {anime.MalId} - {ex.Message}");
+					logger.Error($"Error on {seiyuu.MalId} - {ex.Message}");
 					continue;
 				}
 			}
