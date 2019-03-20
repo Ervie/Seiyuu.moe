@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using SeiyuuMoe.Contracts.ComparisonEntities;
 using SeiyuuMoe.Contracts.Dtos;
-using SeiyuuMoe.Data.Model;
 
 namespace SeiyuuMoe.BusinessServices.Mapper.Profiles
 {
@@ -11,11 +10,11 @@ namespace SeiyuuMoe.BusinessServices.Mapper.Profiles
 		{
 			CreateMap<AnimeComparisonEntry, AnimeComparisonEntryDto>()
 				.ForMember(dest => dest.Seiyuu, opt => opt.MapFrom(src => src.Seiyuu))
-				.ForMember(dest => dest.CharacterAnimePairs, opt => opt.MapFrom(src => src.CharacterAnimePairs));
+				.ForMember(dest => dest.CharacterAnimePairs, opt => opt.MapFrom(src => src.AnimeCharacters));
 
-			CreateMap<CharacterAnimePair, CharacterAnimePairDto>()
+			CreateMap<AnimeComparisonSubEntry, AnimeComparisonSubEntryDto>()
 				.ForMember(dest => dest.Anime, opt => opt.MapFrom(src => src.Anime))
-				.ForMember(dest => dest.Character, opt => opt.MapFrom(src => src.Character));
+				.ForMember(dest => dest.Characters, opt => opt.MapFrom(src => src.Characters));
 		}
 	}
 }

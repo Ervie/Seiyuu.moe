@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace SeiyuuMoe.Contracts.Dtos
 {
@@ -8,13 +6,13 @@ namespace SeiyuuMoe.Contracts.Dtos
 	{
 		public SeiyuuTableEntryDto Seiyuu { get; set; }
 
-		public ICollection<CharacterAnimePairDto> CharacterAnimePairs { get; set; }
+		public ICollection<AnimeComparisonSubEntryDto> CharacterAnimePairs { get; set; }
 	}
 
-	public class CharacterAnimePairDto
+	public class AnimeComparisonSubEntryDto
 	{
-		public CharacterTableEntryDto Character { get; set; }
-
 		public AnimeTableEntryDto Anime { get; set; }
+
+		public ICollection<CharacterTableEntryDto> Characters { get; set; }
 	}
 }

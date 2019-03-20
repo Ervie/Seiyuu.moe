@@ -9,24 +9,27 @@ namespace SeiyuuMoe.Contracts.ComparisonEntities
 	{
 		public Seiyuu Seiyuu { get; set; }
 
-		public ICollection<CharacterAnimePair> CharacterAnimePairs { get; set; }
+		public ICollection<AnimeComparisonSubEntry> AnimeCharacters { get; set; }
 
 		public AnimeComparisonEntry()
 		{
-			CharacterAnimePairs = new List<CharacterAnimePair>();
+			AnimeCharacters = new List<AnimeComparisonSubEntry>();
 		}
 	}
 
-	public class CharacterAnimePair
+	public class AnimeComparisonSubEntry
 	{
-		public Character Character { get; set; }
-
 		public Anime Anime { get; set; }
 
-		public CharacterAnimePair(Character character, Anime anime)
+		public ICollection<Character> Characters { get; set; }
+
+		public AnimeComparisonSubEntry(Character character, Anime anime)
 		{
-			Character = character;
 			Anime = anime;
+			Characters = new List<Character>
+			{
+				character
+			};
 		}
 	}
 }
