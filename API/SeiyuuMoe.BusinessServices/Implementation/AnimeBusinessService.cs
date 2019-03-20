@@ -64,7 +64,7 @@ namespace SeiyuuMoe.BusinessServices
 			{
 				var roles = await roleRepository.GetAllAsync(x =>
 					x.AnimeId.Equals(searchCriteria.AnimeMalId.ToArray()[i]) &&
-					x.LanguageId.Equals(1),
+					x.LanguageId == 1,
 					roleRepository.IncludeExpression);
 
 				foreach (var role in roles)

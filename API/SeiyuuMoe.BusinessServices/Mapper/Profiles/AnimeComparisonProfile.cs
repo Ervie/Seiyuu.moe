@@ -10,7 +10,7 @@ namespace SeiyuuMoe.BusinessServices.Mapper.Profiles
 		{
 			CreateMap<AnimeComparisonEntry, AnimeComparisonEntryDto>()
 				.ForMember(dest => dest.Seiyuu, opt => opt.MapFrom(src => src.Seiyuu))
-				.ForMember(dest => dest.CharacterAnimePairs, opt => opt.MapFrom(src => src.AnimeCharacters));
+				.ForMember(dest => dest.AnimeCharacters, opt => opt.MapFrom(src => src.AnimeCharacters));
 
 			CreateMap<AnimeComparisonSubEntry, AnimeComparisonSubEntryDto>()
 				.ForMember(dest => dest.Anime, opt => opt.MapFrom(src => src.Anime))
