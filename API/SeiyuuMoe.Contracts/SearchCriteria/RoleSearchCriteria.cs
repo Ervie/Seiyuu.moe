@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace SeiyuuMoe.Contracts.SearchCriteria
 {
@@ -9,5 +7,7 @@ namespace SeiyuuMoe.Contracts.SearchCriteria
 		public ICollection<long> AnimeMalId { get; set; }
 
 		public ICollection<long> SeiyuuMalId { get; set; }
+
+		public bool? MainRolesOnly { get; set; }
 	}
 }

@@ -55,10 +55,23 @@ namespace SeiyuuMoe.SerBusinessServicesvices
 
 			for (int i = 0; i < searchCriteria.SeiyuuMalId.Count; i++)
 			{
-				var roles = await roleRepository.GetAllAsync(x =>
-					x.SeiyuuId.Equals(searchCriteria.SeiyuuMalId.ToArray()[i]) &&
-					x.LanguageId == 1,
-					roleRepository.IncludeExpression);
+				IReadOnlyCollection<Data.Model.Role> roles;
+
+				if (searchCriteria.MainRolesOnly.HasValue && searchCriteria.MainRolesOnly.Value)
+				{
+					roles = await roleRepository.GetAllAsync(x =>
+						x.SeiyuuId.Equals(searchCriteria.SeiyuuMalId.ToArray()[i]) &&
+						x.LanguageId == 1 &&
+						x.RoleTypeId == 1,
+						roleRepository.IncludeExpression);
+				}
+				else
+				{
+					roles = await roleRepository.GetAllAsync(x =>
+						x.SeiyuuId.Equals(searchCriteria.SeiyuuMalId.ToArray()[i]) &&
+						x.LanguageId == 1,
+						roleRepository.IncludeExpression);
+				}
 
 				foreach (var role in roles)
 				{

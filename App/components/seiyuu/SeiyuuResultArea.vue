@@ -126,6 +126,9 @@ export default {
         seiyuuIdPart += '&SearchCriteria.SeiyuuMalId=' + element;
       });
       
+      if (this.mainRolesOnly) {
+        seiyuuIdPart += '&SearchCriteria.MainRolesOnly=true';
+      }
 
       return process.env.apiUrl +
         '/api/seiyuu/Compare' +
