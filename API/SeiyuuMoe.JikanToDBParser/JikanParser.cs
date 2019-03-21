@@ -160,12 +160,15 @@ namespace SeiyuuMoe.JikanToDBParser
 
 					anime.Title = animeFullData.Title;
 					anime.About = animeFullData.Synopsis;
-					anime.ImageUrl = animeFullData.ImageURL;
 					anime.JapaneseTitle = animeFullData.TitleJapanese;
 					anime.Popularity = animeFullData.Members;
 
+					anime.ImageUrl = animeFullData.ImageURL.Equals("https://cdn.myanimelist.net/img/sp/icon/apple-touch-icon-256.png") ?
+						string.Empty :
+						animeFullData.ImageURL;
+
 					if (animeFullData.Aired.From.HasValue)
-						anime.AiringDate = animeFullData.Aired.From.ToString();
+						anime.AiringDate = animeFullData.Aired.From.Value.ToString("dd-MM-yyyy");
 
 					if (animeFullData.TitleSynonyms.Count > 0)
 						anime.TitleSynonyms = string.Join(';', animeFullData.TitleSynonyms);
@@ -231,6 +234,10 @@ namespace SeiyuuMoe.JikanToDBParser
 					character.ImageUrl = characterFullData.ImageURL;
 					character.NameKanji = characterFullData.NameKanji;
 					character.Popularity = characterFullData.MemberFavorites;
+
+					character.ImageUrl = characterFullData.ImageURL.Equals("https://cdn.myanimelist.net/img/sp/icon/apple-touch-icon-256.png") ?
+						string.Empty :
+						characterFullData.ImageURL;
 
 					if (characterFullData.Nicknames.Any())
 						character.Nicknames = string.Join(';', characterFullData.Nicknames.ToArray());
@@ -367,10 +374,13 @@ namespace SeiyuuMoe.JikanToDBParser
 					logger.Log($"Parsed id:{seiyuu.MalId}, {seiyuu.Name}");
 
 					seiyuu.Name = seiyuuFullData.Name;
-					seiyuu.ImageUrl = seiyuuFullData.ImageURL;
 					seiyuu.Popularity = seiyuuFullData.MemberFavorites;
 					seiyuu.About = seiyuuFullData.More;
-					seiyuu.Birthday = seiyuuFullData.Birthday.ToString();
+					seiyuu.Birthday = seiyuuFullData.Birthday.Value.ToString("dd-MM-yyyy");
+
+					seiyuu.ImageUrl = seiyuuFullData.ImageURL.Equals("https://cdn.myanimelist.net/img/sp/icon/apple-touch-icon-256.png") ? 
+						string.Empty :
+						seiyuuFullData.ImageURL;
 
 					if (!string.IsNullOrWhiteSpace(seiyuuFullData.FamilyName))
 						japaneseName += seiyuuFullData.FamilyName;
