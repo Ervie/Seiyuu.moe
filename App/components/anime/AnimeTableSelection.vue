@@ -80,9 +80,6 @@ export default {
     }
   },
   methods: {
-    computeResults () {
-      this.setTableHeaders();
-    },
     setTableHeaders () {
       this.headers = [];
 
@@ -110,7 +107,7 @@ export default {
   },
   watch: {
     counter: {
-      handler: 'computeResults',
+      handler: 'setTableHeaders',
       immediate: true
     },
     viewMode: {

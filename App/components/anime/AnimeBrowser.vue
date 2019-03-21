@@ -119,37 +119,35 @@ export default {
               }
             })
             .catch((error) => {
-              this.handleBrowsingError('tooManyRequests')
+              this.handleBrowsingError('serviceUnavailable')
               this.resetErrorSearch(error)
             })
         }
       }
     },
     resetSearch() {
-      this.loadingSearch = false
-      this.model = null
-      this.search = ''
+      this.loadingSearch = false;
+      this.model = null;
+      this.search = '';
     },
     resetErrorSearch(errorMessage) {
-      console.log(errorMessage)
-      this.loadingSearch = false
-      this.model = null
-      this.search = ''
+      console.log(errorMessage);
+      this.resetSearch();
     },
     loadDataFromLink () {
       if (this.shareLinkData.length > 1 && this.shareLinkData.length < 6) {
-        this.loading = true
+        this.loading = true;
         this.shareLinkData.forEach(element => {
           if (this.searchedId.indexOf(element) === -1  && Number.parseInt(element) !== 'NaN' && Number.parseInt(element) > 0) {
             axios.get(process.env.apiUrl + '/api/anime/'+ String(element))
               .then((response) => {
-                this.$emit('animeReturned', response.data.payload)
-                this.resetAlerts()
-                this.resetSearch()
+                this.$emit('animeReturned', response.data.payload);
+                this.resetAlerts();
+                this.resetSearch();
               })
               .catch((error) => {
-                this.handleBrowsingError('tooManyRequests')
-                this.loading = false
+                this.handleBrowsingError('serviceUnavailable');
+                this.loading = false;
               })
           }
         })
@@ -166,7 +164,7 @@ export default {
     emitRunImmediately () {
       if (this.searchedId != null && this.shareLinkData != null) {
         if (this.searchedId.length === this.shareLinkData.length) {
-          this.$emit('runImmediately')
+          this.$emit('runImmediately');
         }
       }
     },
@@ -178,46 +176,46 @@ export default {
     },
     resetAlerts () {
       this.alerts.forEach(alert => {
-        alert.value = false
+        alert.value = false;
       });
     }
   },
   watch: {
     search (val) {
         clearTimeout(this.timeout)
-        var self = this
+        var self = this;
         this.timeout = setTimeout(function() {
-          self.isLoading = true
+          self.isLoading = true;
 
           if (self.model != null || val === '' || val === null || val.length < 3) {
-            self.entries = []
-            return
+            self.entries = [];
+            return;
           }
 
           var requestUrl = process.env.apiUrl +
             '/api/anime/' +
             '?Page=0&PageSize=10&SortExpression=Popularity DESC' +
             '&SearchCriteria.Title=' +
-            String(val.replace('/', ' ')) 
+            String(val.replace('/', ' '));
 
           axios.get(requestUrl)
             .then(res => {
               if (res.data.payload.results.length > 0) {
-                self.entries = res.data.payload.results
-                self.excludeFromSearchResults()
+                self.entries = res.data.payload.results;
+                self.excludeFromSearchResults();
               }
-              self.isLoading = false
+              self.isLoading = false;
             })
             .catch(error => {
               console.log(error);
               this.handleBrowsingError('serviceUnavailable');
               self.isLoading = false;
             })
-        }, this.timeoutLimit)
+        }, this.timeoutLimit);
     },
     model (val) {
       if (val !== null)
-        this.sendAnimeRequest()
+        this.sendAnimeRequest();
     },
     searchedId: {
       handler: 'emitRunImmediately',
@@ -227,8 +225,8 @@ export default {
   mounted () {
     if (this.$route.query !== null && !this.isEmpty(this.$route.query)) {
       if (this.$route.query.animeIds != null) {
-        this.shareLinkData = this.$route.query.animeIds.split(';')
-        this.loadDataFromLink()
+        this.shareLinkData = this.$route.query.animeIds.split(';');
+        this.loadDataFromLink();
       }
     }
   },

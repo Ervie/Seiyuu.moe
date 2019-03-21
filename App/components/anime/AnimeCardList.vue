@@ -32,7 +32,7 @@ export default {
   },
   methods: {
     removeAnime: function (animeId) {
-      this.$emit('animeRemoved', animeId)
+      this.$emit('animeRemoved', animeId);
     }
   }
 }

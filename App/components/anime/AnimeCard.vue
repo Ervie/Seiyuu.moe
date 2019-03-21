@@ -84,13 +84,13 @@ export default {
   },
   methods: {
     removeAnime: function () {
-      this.$emit('animeRemoved', this.cardId)
+      this.$emit('animeRemoved', this.cardId);
     }
   },
   computed: {
     moreDetails () {
-      var detailsToEncode = String(this.animeData.about).replace(/\\n/g, '\n')
-      return detailsToEncode.replace(/\\n/g, '<br/>')
+      var detailsToEncode = String(this.animeData.about).replace(/\\n/g, '\n');
+      return detailsToEncode.replace(/\\n/g, '<br/>');
     },
     alternativeTitles () {
       if (this.animeData && this.animeData.titleSynonyms && this.animeData.titleSynonyms.length > 0) {

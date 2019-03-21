@@ -45,13 +45,13 @@ export default {
   },
   methods: {
     addAnime (animeData) {
-        this.animeToCompare.push(animeData)
+        this.animeToCompare.push(animeData);
     },
     resetList () {
-      this.animeToCompare = []
+      this.animeToCompare = [];
     },
     removeAnime (animeId) {
-      this.animeToCompare.splice(animeId, 1)
+      this.animeToCompare.splice(animeId, 1);
     }
   }
 }

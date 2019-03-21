@@ -57,7 +57,7 @@ export default {
       this.$emit('resetList')
     },
     computeResults () {
-      this.outputData = []
+      this.outputData = [];
 
       axios.get(this.getAnimeCompareRequest())
         .then((response) => {
@@ -67,7 +67,7 @@ export default {
           }
         })
         .catch((error) => {
-          this.handleBrowsingError('tooManyRequests')
+          this.handleBrowsingError('tooManyRequests');
         })
     },
     getAnimeCompareRequest() {
@@ -89,24 +89,24 @@ export default {
         idString += element + ';'
       });
       
-      idString = idString.slice(0, -1)
-      idString = this.encodeURL(idString)
+      idString = idString.slice(0, -1);
+      idString = this.encodeURL(idString);
 
-      var shareLink = process.env.baseUrl + $nuxt.$route.path.toLowerCase() + '?animeIds=' + idString
+      var shareLink = process.env.baseUrl + $nuxt.$route.path.toLowerCase() + '?animeIds=' + idString;
 
-      this.$copyText(shareLink)
-      this.snackbar = true
+      this.$copyText(shareLink);
+      this.snackbar = true;
     }
   },
   watch: {
     animeIds: function (newVal, oldVal) {
       if (this.animeIds.length === 0) {
-        this.showTables = false
+        this.showTables = false;
       }
     },
     runImmediately: function (val) {
       if (val === true) {
-        this.computeResults()
+        this.computeResults();
       }
     }
   }
