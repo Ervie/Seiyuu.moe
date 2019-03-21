@@ -12,7 +12,7 @@
         <template v-slot:items="props">
           <tr>
             <td>
-              <avatar-record-cell :items="seiyuuAsArray(props.item.seiyuu)" />
+              <avatar-record-cell :items="singleObjectToArray(props.item.seiyuu)" />
             </td>
             <td v-for="role in props.item.animeCharacters" :key="role.anime.malId">
               <avatar-record-cell :items="role.characters" />
@@ -46,11 +46,6 @@ export default {
             type: Array,
             required: true
         }
-    },
-    methods: {
-      seiyuuAsArray (seiyuu) {
-        return [ seiyuu ];
-      }
     }
 }
 </script>

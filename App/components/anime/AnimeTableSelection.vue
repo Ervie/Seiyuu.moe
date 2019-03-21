@@ -34,17 +34,17 @@
             />
           </v-tab-item>
           <v-tab-item :value="`tab-compact`" >
-            <!-- <anime-compact-table
+            <anime-compact-table
               :items="tableData" 
               :headers="headers"
-            /> -->
+            />
           </v-tab-item>
         </v-tabs-items>
     </v-container>
     <v-container hidden-lg-and-up>
-       <!-- <anime-data-iterator
+       <anime-data-iterator
           :items="tableData" 
-        /> -->
+        />
     </v-container>
   </div>
 </template>
@@ -58,8 +58,8 @@ import AnimeMixedTable from '@/components/anime/tables/AnimeMixedTable'
 export default {
   name: 'AnimeTableSelection',
   components: {
-    // 'anime-compact-table': AnimeCompactTable,
-    // 'anime-data-iterator': AnimeDataIterator,
+    'anime-compact-table': AnimeCompactTable,
+    'anime-data-iterator': AnimeDataIterator,
     'anime-expanded-table': AnimeExpandedTable,
     'anime-mixed-table': AnimeMixedTable
   },

@@ -1,7 +1,7 @@
 <template>
     <v-container>
-        <v-layout row v-for="entry in items" :key="entry.mal_id">
-            <v-card-text class="title textRow" > * {{ swapNameSurname(decodeHtml(entry.entry.name))}}</v-card-text>
+        <v-layout row v-for="entry in items" :key="entry.malId">
+            <v-card-text class="title textRow" > * {{ swapNameSurname(decodeHtml(entry.name))}}</v-card-text>
         </v-layout>
     </v-container>
 </template>

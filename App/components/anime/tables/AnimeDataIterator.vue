@@ -13,26 +13,26 @@
       >
         <v-card>
           <v-card-text 
-            v-for="seiyuuEntry in props.item.seiyuu" 
-            :key="seiyuuEntry.entry.mal_id"
+            v-for="seiyuuEntry in singleObjectToArray(props.item.seiyuu)" 
+            :key="seiyuuEntry.malId"
             class="primary title font-weight-bold"> 
-            {{ swapNameSurname(decodeHtml(seiyuuEntry.entry.name))}}
+            {{ swapNameSurname(decodeHtml(seiyuuEntry.name))}}
             </v-card-text>
           <v-container fluid grid-list-lg>
             <v-layout 
-              v-for="(role, i) in props.item.roles" 
+              v-for="(role, i) in props.item.animeCharacters" 
               :key="'i' + i"
               row>
               <v-flex xs6
                 class="body-2">
-                {{ role.anime }}
+                {{ role.anime.title }}
               </v-flex>
               <v-flex xs6>
                 <div
                 class="body-2"  
                 v-for="character in role.characters" 
-                :key="character.entry.mal_id">
-                  {{ swapNameSurname(decodeHtml(character.entry.name)) }}
+                :key="character.malId">
+                  {{ swapNameSurname(decodeHtml(character.name)) }}
                 </div>
               </v-flex>
             </v-layout>

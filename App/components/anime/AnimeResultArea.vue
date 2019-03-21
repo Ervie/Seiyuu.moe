@@ -59,7 +59,6 @@ export default {
     computeResults () {
       this.outputData = []
 
-
       axios.get(this.getAnimeCompareRequest())
         .then((response) => {
           if (response.data.payload !== null) {
@@ -70,51 +69,6 @@ export default {
         .catch((error) => {
           this.handleBrowsingError('tooManyRequests')
         })
-
-      // var filteredData = new Array(this.charactersData.length)
-      // var partialResults = new Array(this.charactersData.length)
-
-      // for (var i = 0; i < this.charactersData.length; i++) {
-      //   partialResults[i] = []
-      //   filteredData[i] = []
-      // }
-
-      // for (var k = 0; k < this.animeData.length; k++) {
-      //   for (i = 0; i < this.charactersData[k].length; i++) {
-      //     for (var j = 0; j < this.charactersData[k][i].voice_actors.length; j++) {
-      //       if (this.charactersData[k][i].voice_actors[j].language === 'Japanese') {
-      //         filteredData[k].push({
-      //           seiyuu: this.charactersData[k][i].voice_actors[j],
-      //           roles: [{
-      //             anime: this.animeData[k].title,
-      //             character: this.charactersData[k][i]
-      //           }]
-      //         })
-      //       }
-      //     }
-      //   }
-      // }
-
-      // partialResults[0] = filteredData[0]
-
-      // for (var animeIndex = 1; animeIndex < filteredData.length; animeIndex++) {
-      //   for (i = 0; i < filteredData[animeIndex].length; i++) {
-      //     for (j = 0; j < partialResults[animeIndex - 1].length; j++) {
-      //       if (partialResults[animeIndex - 1][j].seiyuu.mal_id === filteredData[animeIndex][i].seiyuu.mal_id) {
-      //         // Weird deep clone of object
-      //         var cloneObject = JSON.parse(JSON.stringify(partialResults[animeIndex - 1][j]))
-      //         partialResults[animeIndex].push(cloneObject)
-      //         partialResults[animeIndex][partialResults[animeIndex].length - 1].roles.push({
-      //           anime: this.animeData[animeIndex].title,
-      //           character: filteredData[animeIndex][i].roles[0].character
-      //         })
-      //       }
-      //     }
-      //   }
-      //   partialResults[animeIndex] = partialResults[animeIndex].filter(x => x.roles.length === (animeIndex + 1))
-      // }
-      // this.outputData = partialResults[this.charactersData.length - 1]
-      // this.counter++
     },
     getAnimeCompareRequest() {
       var animeIdPart = '';
@@ -136,7 +90,7 @@ export default {
       });
       
       idString = idString.slice(0, -1)
-      idString = this.encodeURL(animeIds)
+      idString = this.encodeURL(idString)
 
       var shareLink = process.env.baseUrl + $nuxt.$route.path.toLowerCase() + '?animeIds=' + idString
 

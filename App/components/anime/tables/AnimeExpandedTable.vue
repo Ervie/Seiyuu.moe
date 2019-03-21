@@ -12,7 +12,7 @@
         </template>
         <template v-slot:items="props">
           <expanded-panel
-              :mainColumnItems="seiyuuAsArray(props.item.seiyuu)" 
+              :mainColumnItems="singleObjectToArray(props.item.seiyuu)" 
               :subColumnsItems="props.item.animeCharacters" 
               :tableType="'Anime'"
               class="expandedRow"/>
@@ -45,11 +45,6 @@ export default {
             type: Array,
             required: false
         }
-    },
-    methods: {
-      seiyuuAsArray (seiyuu) {
-        return [ seiyuu ];
-      }
     }
 }
 </script>

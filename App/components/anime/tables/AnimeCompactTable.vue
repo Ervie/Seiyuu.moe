@@ -4,7 +4,7 @@
         :items="items" 
         :expand="true"
         hide-actions
-        item-key="seiyuu[0].entry.name"
+        item-key="seiyuu.malId"
         class="elevation-1">
         <template v-slot:headerCell="props">
           <table-header :imageUrl="props.header.image" :text="props.header.text" />
@@ -12,9 +12,9 @@
         <template v-slot:items="props">
           <tr>
             <td>
-              <text-record-cell :items="props.item.seiyuu" />
+              <text-record-cell :items="singleObjectToArray(props.item.seiyuu)" />
             </td>
-            <td v-for="role in props.item.roles" :key="role.anime">
+            <td v-for="role in props.item.animeCharacters" :key="role.anime.malId">
               <text-record-cell :items="role.characters" />
             </td>
             <td>
@@ -29,8 +29,8 @@
         </template>
         <template v-slot:expand="props">
             <expanded-panel 
-              :mainColumnItems="props.item.seiyuu" 
-              :subColumnsItems="props.item.roles" 
+              :mainColumnItems="singleObjectToArray(props.item.seiyuu)" 
+              :subColumnsItems="props.item.animeCharacters" 
               :tableType="'Anime'"
               class="expandedRow"/>
         </template>

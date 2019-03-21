@@ -33,6 +33,10 @@ Vue.mixin({
         }
         return JSON.stringify(obj) === JSON.stringify({});
     },
+    singleObjectToArray(obj)
+    {
+      return [ obj ];
+    },
     sleep (ms) {
       return new Promise(resolve => setTimeout(resolve, ms));
     }
