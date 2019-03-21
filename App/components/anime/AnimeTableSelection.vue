@@ -67,11 +67,7 @@ export default {
     tableData: {
       type: Array,
       required: false
-    },
-    counter: {
-      type: Number,
-      required: true
-    },
+    }
   },
   data () {
     return {
@@ -106,10 +102,6 @@ export default {
     }
   },
   watch: {
-    counter: {
-      handler: 'setTableHeaders',
-      immediate: true
-    },
     viewMode: {
       handler: 'setTableHeaders',
       immediate: false

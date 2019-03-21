@@ -72,10 +72,6 @@ export default {
       type: Array,
       required: false
     },
-    counter: {
-      type: Number,
-      required: true
-    },
     groupBySeries: {
       type: Boolean,
       required: true
@@ -88,77 +84,7 @@ export default {
     }
   },
   methods: {
-    selectComputeMethod () {
-      if (!this.groupBySeries) {
-        this.computeResultsSimple()
-      } else {
-        this.computeResultsSimple()
-      }
-    },
-    computeResultsSimple () {
-      this.setTableHeaders();
-    },
-    computeResultsSeries () {
-      // this.tableData = []
-      // var animeIndex = -1
-      // var charactersIndex = -1
-      // var franchiseIndex = -1
-
-      // for (var i = 0; i < this.inputData.length; i++) {
-      //   animeIndex = -1
-      //   charactersIndex = -1
-      //   if (this.tableData.length > 0) {
-      //     for (var j = 0; j < this.tableData.length && animeIndex === -1; j++) {
-      //       animeIndex = this.tableData[j].anime.map(x => x.entry.mal_id).indexOf(this.inputData[i].anime.mal_id)
-      //       franchiseIndex = j
-      //     }
-      //     if (animeIndex === -1) {
-      //       for (j = 0; j < this.tableData.length; j++) {
-      //         for (var k = 0; k < this.seiyuuData.length && charactersIndex === -1; k++) {
-      //           charactersIndex = this.tableData[j].roles[k].characters.map(x => x.entry.mal_id).indexOf(this.inputData[i].roles[k].character.mal_id)
-      //           franchiseIndex = j
-      //         }
-      //       }
-      //     }
-      //   }
-      //   if (charactersIndex === -1 && animeIndex === -1) {
-      //     this.tableData.push({
-      //       anime: [{
-      //         entry: {
-      //           name: decode(this.inputData[i].anime.name),
-      //           image_url: this.inputData[i].anime.image_url,
-      //           url: this.inputData[i].anime.url,
-      //           mal_id: this.inputData[i].anime.mal_id
-      //         }
-      //       }],
-      //       roles: []
-      //     })
-      //     for (var l = 0; l < this.seiyuuData.length; l++) {
-      //       this.tableData[this.tableData.length - 1].roles.push({
-      //         seiyuu: this.inputData[i].roles[l].seiyuu,
-      //         characters: [{
-      //           entry: this.inputData[i].roles[l].character
-      //         }]
-      //       })
-      //     }
-      //   } else if (animeIndex === -1) {
-      //     this.tableData[franchiseIndex].anime.push({
-      //       entry: {
-      //         name: decode(this.inputData[i].anime.name),
-      //         image_url: this.inputData[i].anime.image_url,
-      //         url: this.inputData[i].anime.url,
-      //         mal_id: this.inputData[i].anime.mal_id
-      //       }
-      //     })
-      //   } else {
-      //     for (var seiyuuIndex = 0; seiyuuIndex < this.seiyuuData.length; seiyuuIndex++) {
-      //       var roleIndex = this.tableData[franchiseIndex].roles[seiyuuIndex].characters.map(x => x.entry.mal_id).indexOf(this.inputData[i].roles[seiyuuIndex].character.mal_id)
-      //       if (roleIndex === -1) {
-      //         this.tableData[franchiseIndex].roles[seiyuuIndex].characters.push({ entry: this.inputData[i].roles[seiyuuIndex].character })
-      //       }
-      //     }
-      //   }
-      // }
+    computeResults () {
       this.setTableHeaders();
     },
     combinationCode (data) {
@@ -203,14 +129,6 @@ export default {
     }
   },
   watch: {
-    counter: {
-      handler: 'selectComputeMethod',
-      immediate: true
-    },
-    groupBySeries: {
-      handler: 'selectComputeMethod',
-      immediate: false
-    },
     viewMode: {
       handler: 'setTableHeaders',
       immediate: false
