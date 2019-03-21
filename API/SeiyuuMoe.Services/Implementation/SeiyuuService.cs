@@ -19,6 +19,15 @@ namespace SeiyuuMoe.Services
 			this.seiyuuBusinessService = seiyuuBusinessService;
 		}
 
+		public async Task<QueryResponse<SeiyuuCardDto>> GetSingleAsync(long id)
+		{
+			Ensure.That(id, nameof(id)).IsGte(1);
+
+			var payload = await seiyuuBusinessService.GetSingleAsync(id);
+
+			return new QueryResponse<SeiyuuCardDto>(payload);
+		}
+
 		public async Task<QueryResponse<PagedResult<SeiyuuSearchEntryDto>>> GetAsync(Query<SeiyuuSearchCriteria> query)
 		{
 			Ensure.That(query, nameof(query)).IsNotNull();

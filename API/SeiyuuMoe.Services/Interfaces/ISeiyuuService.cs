@@ -10,6 +10,8 @@ namespace SeiyuuMoe.Services
 {
 	public interface ISeiyuuService
 	{
+		Task<QueryResponse<SeiyuuCardDto>> GetSingleAsync(long id);
+
 		Task<QueryResponse<PagedResult<SeiyuuSearchEntryDto>>> GetAsync(Query<SeiyuuSearchCriteria> query);
 
 		Task<QueryResponse<ICollection<SeiyuuComparisonEntryDto>>> GetSeiyuuComparison(Query<RoleSearchCriteria> searchCriteria);

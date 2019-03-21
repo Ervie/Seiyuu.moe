@@ -19,6 +19,13 @@ namespace SeiyuuMoe.API.Controllers
 		}
 
 		[HttpGet]
+		[Route("{id}")]
+		public Task<IActionResult> GetCardInfo(long id)
+		{
+			return Handle(async () => HandleServiceResult(await seiyuuService.GetSingleAsync(id)));
+		}
+
+		[HttpGet]
 		public Task<IActionResult> Get([FromQuery] Query<SeiyuuSearchCriteria> query)
 		{
 			return Handle(async () => HandleServiceResult(await seiyuuService.GetAsync(query)));

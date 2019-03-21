@@ -42,6 +42,13 @@ namespace SeiyuuMoe.SerBusinessServicesvices
 			return mapper.Map<PagedResult<SeiyuuSearchEntryDto>>(entities);
 		}
 
+		public async Task<SeiyuuCardDto> GetSingleAsync(long id)
+		{
+			var entity = await seiyuuRepository.GetAsync(x => x.MalId.Equals(id));
+
+			return mapper.Map<SeiyuuCardDto>(entity);
+		}
+
 		public async Task<ICollection<SeiyuuComparisonEntryDto>> GetSeiyuuComparison(RoleSearchCriteria searchCriteria)
 		{
 			ICollection<SeiyuuComparisonEntry> partialResults = new List<SeiyuuComparisonEntry>();
