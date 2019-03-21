@@ -2,7 +2,7 @@
     <v-container fluid grid-list-xs>
         <v-layout v-for="entry in items" :key="entry.malId" row>
             <v-flex xs8 align-content-center>
-                <v-card-text class="subheading">{{ swapNameSurname(decodeHtml(entry.name)) }}</v-card-text>
+                <v-card-text class="subheading">{{ decodeHtml(getCaption(entry)) }}</v-card-text>
             </v-flex>
             <v-flex xs4>
             <a :href="entry.url" target="_blank">
@@ -24,11 +24,18 @@ export default {
     items: {
       type: Array,
       required: true
+    },
+    tableType: {
+      type: String,
+      required: true
     }
   },
   methods: {
     changeUrlToOriginalSize (inputString) {
       return inputString.replace('/r/23x32','')
+    },
+    getCaption(entry) {
+      return this.tableType === "Anime" ? entry.title : this.swapNameSurname(entry.name);
     }
   }
 }

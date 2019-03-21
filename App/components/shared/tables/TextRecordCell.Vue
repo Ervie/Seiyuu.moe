@@ -1,7 +1,7 @@
 <template>
     <v-container>
         <v-layout row v-for="entry in items" :key="entry.malId">
-            <v-card-text class="title textRow" > * {{ swapNameSurname(decodeHtml(entry.name))}}</v-card-text>
+            <v-card-text class="title textRow" > * {{ decodeHtml(getCaption(entry)) }}</v-card-text>
         </v-layout>
     </v-container>
 </template>
@@ -12,6 +12,15 @@ export default {
     items: {
       type: Array,
       required: true
+    },
+    tableType: {
+      type: String,
+      required: true
+    }
+  },
+  methods: {
+    getCaption(entry) {
+      return this.tableType === "Anime" ? entry.title : this.swapNameSurname(entry.name);
     }
   }
 }

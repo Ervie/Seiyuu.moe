@@ -1,7 +1,7 @@
 <template>
   <v-card v-if="seiyuuData">
     <v-card-text class="card-title"> {{ seiyuuData.name }}</v-card-text>
-    <v-img :src="pathToImage(this.seiyuuData.image_url)" :height="avatarHeight" v-on:click="showDialog = true" hidden-sm-and-down></v-img>
+    <v-img :src="pathToImage(this.seiyuuData.imageUrl)" :height="avatarHeight" v-on:click="showDialog = true" hidden-sm-and-down></v-img>
     <v-card-actions>
       <v-btn icon value="removeSeiyuu" v-on:click="removeSeiyuu()">
         <v-icon color="red">delete</v-icon>
@@ -19,7 +19,7 @@
                 <v-layout row>
                   <v-flex xs4>
                     <v-img
-                      :src="pathToImage(this.seiyuuData.image_url)"
+                      :src="pathToImage(this.seiyuuData.imageUrl)"
                       height="350px"
                       contain
                     ></v-img>
@@ -29,10 +29,10 @@
                       <div class="headline">{{ seiyuuData.name }}</div>
                       <v-card-text>
                         <p class="text-sm-left">
-                          <b>Given name:</b> {{ seiyuuData.given_name }}
+                          <b>Given name:</b> {{ seiyuuData.japaneseName }}
                         </p>
                         <p class="text-sm-left">
-                          <b>Birthday:</b> {{ dateOnlyBirthday }}
+                          <b>Birthday:</b> {{ seiyuuData.birthday }}
                         </p>
                         <p class="text-sm-left white-space-pre">
                           <b>More:</b> {{ decodeHtml(moreDetails) }}

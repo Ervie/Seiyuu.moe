@@ -25,7 +25,6 @@
             <seiyuu-expanded-table
               :items="tableData" 
               :headers="headers"
-              :seiyuuData="inputData" 
               :groupBySeries="groupBySeries"
             />
           </v-tab-item>
@@ -33,7 +32,6 @@
             <seiyuu-mixed-table
               :items="tableData" 
               :headers="headers"
-              :seiyuuData="inputData" 
               :groupBySeries="groupBySeries"
             />
           </v-tab-item>
@@ -41,7 +39,6 @@
             <seiyuu-compact-table
               :items="tableData" 
               :headers="headers"
-              :seiyuuData="inputData" 
               :groupBySeries="groupBySeries"
             />
           </v-tab-item>
@@ -71,7 +68,7 @@ export default {
     'seiyuu-mixed-table': SeiyuuMixedTable
   },
   props: {
-    inputData: {
+    tableData: {
       type: Array,
       required: false
     },
@@ -82,16 +79,11 @@ export default {
     groupBySeries: {
       type: Boolean,
       required: true
-    },
-    seiyuuData: {
-      type: Array,
-      required: false
     }
   },
   data () {
     return {
       headers: [],
-      tableData: [],
       viewMode: 'tab-expanded'
     }
   },
@@ -100,113 +92,73 @@ export default {
       if (!this.groupBySeries) {
         this.computeResultsSimple()
       } else {
-        this.computeResultsSeries()
+        this.computeResultsSimple()
       }
     },
     computeResultsSimple () {
-      this.tableData = []
-      var intersectAnime = []
-      var animeIndex = -1
-      var roleIndex = -1
-      var seiyuuIndex = -1
-
-      for (var i = 0; i < this.inputData.length; i++) {
-        if (intersectAnime.length > 0) {
-          animeIndex = intersectAnime.map(x => x.anime[0].entry.name).indexOf(this.inputData[i].anime.name)
-        }
-        if (animeIndex === -1) {
-          intersectAnime.push({
-            anime: [{
-              entry: {
-                name: decode(this.inputData[i].anime.name),
-                image_url: this.inputData[i].anime.image_url,
-                url: this.inputData[i].anime.url
-              }
-            }],
-            roles: []
-          })
-          for (var j = 0; j < this.inputData[i].roles.length; j++) {
-            intersectAnime[intersectAnime.length - 1].roles.push({
-              seiyuu: this.inputData[i].roles[j].seiyuu,
-              characters: [{
-                entry: this.inputData[i].roles[j].character
-              }]
-            })
-          }
-        } else {
-          for (seiyuuIndex = 0; seiyuuIndex < this.seiyuuData.length; seiyuuIndex++) {
-            roleIndex = intersectAnime[animeIndex].roles[seiyuuIndex].characters.map(x => x.entry.mal_id).indexOf(this.inputData[i].roles[seiyuuIndex].character.mal_id)
-            if (roleIndex === -1) {
-              intersectAnime[animeIndex].roles[seiyuuIndex].characters.push({ entry: this.inputData[i].roles[seiyuuIndex].character })
-            }
-          }
-        }
-      }
-
-      this.tableData = intersectAnime
       this.setTableHeaders();
     },
     computeResultsSeries () {
-      this.tableData = []
-      var animeIndex = -1
-      var charactersIndex = -1
-      var franchiseIndex = -1
+      // this.tableData = []
+      // var animeIndex = -1
+      // var charactersIndex = -1
+      // var franchiseIndex = -1
 
-      for (var i = 0; i < this.inputData.length; i++) {
-        animeIndex = -1
-        charactersIndex = -1
-        if (this.tableData.length > 0) {
-          for (var j = 0; j < this.tableData.length && animeIndex === -1; j++) {
-            animeIndex = this.tableData[j].anime.map(x => x.entry.mal_id).indexOf(this.inputData[i].anime.mal_id)
-            franchiseIndex = j
-          }
-          if (animeIndex === -1) {
-            for (j = 0; j < this.tableData.length; j++) {
-              for (var k = 0; k < this.seiyuuData.length && charactersIndex === -1; k++) {
-                charactersIndex = this.tableData[j].roles[k].characters.map(x => x.entry.mal_id).indexOf(this.inputData[i].roles[k].character.mal_id)
-                franchiseIndex = j
-              }
-            }
-          }
-        }
-        if (charactersIndex === -1 && animeIndex === -1) {
-          this.tableData.push({
-            anime: [{
-              entry: {
-                name: decode(this.inputData[i].anime.name),
-                image_url: this.inputData[i].anime.image_url,
-                url: this.inputData[i].anime.url,
-                mal_id: this.inputData[i].anime.mal_id
-              }
-            }],
-            roles: []
-          })
-          for (var l = 0; l < this.seiyuuData.length; l++) {
-            this.tableData[this.tableData.length - 1].roles.push({
-              seiyuu: this.inputData[i].roles[l].seiyuu,
-              characters: [{
-                entry: this.inputData[i].roles[l].character
-              }]
-            })
-          }
-        } else if (animeIndex === -1) {
-          this.tableData[franchiseIndex].anime.push({
-            entry: {
-              name: decode(this.inputData[i].anime.name),
-              image_url: this.inputData[i].anime.image_url,
-              url: this.inputData[i].anime.url,
-              mal_id: this.inputData[i].anime.mal_id
-            }
-          })
-        } else {
-          for (var seiyuuIndex = 0; seiyuuIndex < this.seiyuuData.length; seiyuuIndex++) {
-            var roleIndex = this.tableData[franchiseIndex].roles[seiyuuIndex].characters.map(x => x.entry.mal_id).indexOf(this.inputData[i].roles[seiyuuIndex].character.mal_id)
-            if (roleIndex === -1) {
-              this.tableData[franchiseIndex].roles[seiyuuIndex].characters.push({ entry: this.inputData[i].roles[seiyuuIndex].character })
-            }
-          }
-        }
-      }
+      // for (var i = 0; i < this.inputData.length; i++) {
+      //   animeIndex = -1
+      //   charactersIndex = -1
+      //   if (this.tableData.length > 0) {
+      //     for (var j = 0; j < this.tableData.length && animeIndex === -1; j++) {
+      //       animeIndex = this.tableData[j].anime.map(x => x.entry.mal_id).indexOf(this.inputData[i].anime.mal_id)
+      //       franchiseIndex = j
+      //     }
+      //     if (animeIndex === -1) {
+      //       for (j = 0; j < this.tableData.length; j++) {
+      //         for (var k = 0; k < this.seiyuuData.length && charactersIndex === -1; k++) {
+      //           charactersIndex = this.tableData[j].roles[k].characters.map(x => x.entry.mal_id).indexOf(this.inputData[i].roles[k].character.mal_id)
+      //           franchiseIndex = j
+      //         }
+      //       }
+      //     }
+      //   }
+      //   if (charactersIndex === -1 && animeIndex === -1) {
+      //     this.tableData.push({
+      //       anime: [{
+      //         entry: {
+      //           name: decode(this.inputData[i].anime.name),
+      //           image_url: this.inputData[i].anime.image_url,
+      //           url: this.inputData[i].anime.url,
+      //           mal_id: this.inputData[i].anime.mal_id
+      //         }
+      //       }],
+      //       roles: []
+      //     })
+      //     for (var l = 0; l < this.seiyuuData.length; l++) {
+      //       this.tableData[this.tableData.length - 1].roles.push({
+      //         seiyuu: this.inputData[i].roles[l].seiyuu,
+      //         characters: [{
+      //           entry: this.inputData[i].roles[l].character
+      //         }]
+      //       })
+      //     }
+      //   } else if (animeIndex === -1) {
+      //     this.tableData[franchiseIndex].anime.push({
+      //       entry: {
+      //         name: decode(this.inputData[i].anime.name),
+      //         image_url: this.inputData[i].anime.image_url,
+      //         url: this.inputData[i].anime.url,
+      //         mal_id: this.inputData[i].anime.mal_id
+      //       }
+      //     })
+      //   } else {
+      //     for (var seiyuuIndex = 0; seiyuuIndex < this.seiyuuData.length; seiyuuIndex++) {
+      //       var roleIndex = this.tableData[franchiseIndex].roles[seiyuuIndex].characters.map(x => x.entry.mal_id).indexOf(this.inputData[i].roles[seiyuuIndex].character.mal_id)
+      //       if (roleIndex === -1) {
+      //         this.tableData[franchiseIndex].roles[seiyuuIndex].characters.push({ entry: this.inputData[i].roles[seiyuuIndex].character })
+      //       }
+      //     }
+      //   }
+      // }
       this.setTableHeaders();
     },
     combinationCode (data) {
@@ -230,14 +182,15 @@ export default {
       this.headers.push({
         text: 'Anime',
         align: 'left',
-        value: 'anime[0].entry.name',
+        value: 'anime.title',
         image: ''
       });
-      for (var headerIndex = 0; headerIndex < this.seiyuuData.length; headerIndex++) {
+      for (var headerIndex = 0; headerIndex < this.tableData[0].seiyuuCharacters.length; headerIndex++) {
         this.headers.push({
-          text: this.seiyuuData[headerIndex].name,
+          text: this.tableData[0].seiyuuCharacters[headerIndex].seiyuu.name,
           sortable: false,
-          image: this.seiyuuData[headerIndex].image_url});
+          image: this.tableData[0].seiyuuCharacters[headerIndex].seiyuu.imageUrl
+        });
       };
       if (this.viewMode === 'tab-compact') {
         this.headers.push({
@@ -247,115 +200,6 @@ export default {
         });
       }
       this.showTables = true;
-    },
-    computeResultsSimpleNoGrouping () {
-      // Old code - might be useful in the future
-      this.tableData = []
-      this.headers = []
-
-      for (var i = 0; i < this.inputData.length; i++) {
-        this.tableData.push({
-          anime: [{
-            entry: {
-              name: decode(this.inputData[i].anime.name),
-              image_url: this.inputData[i].anime.image_url,
-              url: this.inputData[i].anime.url
-            }
-          }],
-          roles: []
-        })
-        for (var l = 0; l < this.seiyuuData.length; l++) {
-          this.tableData[this.tableData.length - 1].roles.push({
-            seiyuu: this.inputData[i].roles[l].seiyuu,
-            characters: [{
-              entry: this.inputData[i].roles[l].character
-            }]
-          })
-        }
-      }
-
-      this.headers.push({
-        text: 'Anime',
-        align: 'left',
-        value: 'anime[0].entry.name',
-        image: ''
-      })
-      for (var headerIndex = 0; headerIndex < this.seiyuuData.length; headerIndex++) {
-        this.headers.push({
-          text: this.seiyuuData[headerIndex].name,
-          value: 'roles[' + headerIndex + '].characters[0].entry.name',
-          image: this.seiyuuData[headerIndex].image_url})
-      }
-      this.headers.push({
-        text: '',
-        sortable: false,
-        value: 'name'
-      })
-      this.showTables = true
-    },
-    computeResultsCharactersGrouping () {
-      // Old code - might be useful in the future
-      this.tableData = []
-      this.headers = []
-      var combinationIndex = -1
-      var currentCombinationCode = -1
-
-      for (var i = 0; i < this.inputData.length; i++) {
-        currentCombinationCode = this.combinationCode(this.inputData[i].roles.map(x => x.character.mal_id))
-        if (this.tableData.length > 0) {
-          combinationIndex = this.tableData.map(x => x.combinationCode).indexOf(currentCombinationCode)
-        }
-        if (combinationIndex === -1) {
-          this.tableData.push({
-            anime: [{
-              entry: {
-                name: decode(this.inputData[i].anime.name),
-                image_url: this.inputData[i].anime.image_url,
-                url: this.inputData[i].anime.url
-              }
-            }],
-            roles: [],
-            combinationCode: currentCombinationCode
-          })
-          for (var l = 0; l < this.seiyuuData.length; l++) {
-            this.tableData[this.tableData.length - 1].roles.push({
-              seiyuu: this.inputData[i].roles[l].seiyuu,
-              characters: [{
-                entry: this.inputData[i].roles[l].character
-              }]
-            })
-          }
-        } else {
-          this.tableData[combinationIndex].anime.push({
-            entry: {
-              name: decode(this.inputData[i].anime.name),
-              image_url: this.inputData[i].anime.image_url,
-              url: this.inputData[i].anime.url
-            }
-          })
-        }
-      }
-
-      this.headers.push({
-        text: 'Anime',
-        align: 'left',
-        value: 'anime.length',
-        image: ''
-      })
-      for (var headerIndex = 0; headerIndex < this.seiyuuData.length; headerIndex++) {
-        this.headers.push({
-          text: this.seiyuuData[headerIndex].name,
-          value: 'roles[' + headerIndex + '].characters[0].entry.name',
-          image: this.seiyuuData[headerIndex].image_url})
-      }
-      if (this.viewMode === 'mixed') {
-        this.headers.push({
-          text: '',
-          sortable: false,
-          value: 'name'
-        })
-      }
-      this.showTables = true
     }
   },
   watch: {

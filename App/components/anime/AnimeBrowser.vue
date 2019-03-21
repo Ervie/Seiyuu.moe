@@ -71,11 +71,6 @@ export default {
           value: false
         },
         {
-          name: 'tooManyRequests',
-          text: 'There are has too many requests to send. Wait a few seconds and select anime again.',
-          value: false
-        },
-        {
           name: 'noResultsFound',
           text: 'No results found!',
           value: false

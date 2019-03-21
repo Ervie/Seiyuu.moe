@@ -20,6 +20,7 @@ namespace SeiyuuMoe.BusinessServices.Mapper.Profiles
 				.ForMember(dest => dest.MalId, opt => opt.MapFrom(src => src.MalId))
 				.ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl))
 				.ForMember(dest => dest.JapaneseName, opt => opt.MapFrom(src => src.JapaneseName))
+				.ForMember(dest => dest.Birthday, opt => opt.MapFrom(src => src.Birthday))
 				.ForMember(dest => dest.About, opt => opt.MapFrom(src => src.About));
 
 			CreateMap<Seiyuu, SeiyuuTableEntryDto>()

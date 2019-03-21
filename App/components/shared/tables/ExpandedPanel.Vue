@@ -15,7 +15,7 @@
                   :src="pathToImage(changeUrlToOriginalSize(entry.imageUrl))"
                   ></v-img>
               </a>
-              <v-card-text class="caption">{{ swapNameSurname(decodeHtml(entry.name)) }}</v-card-text>
+              <v-card-text class="caption">{{ swapNameSurname(decodeHtml(getMainColumnCaption(entry))) }}</v-card-text>
             </v-card>
           </v-layout>
         </v-flex>
@@ -80,6 +80,9 @@ export default {
   methods: {
     changeUrlToOriginalSize (inputString) {
       return inputString.replace('/r/23x32','')
+    },
+    getMainColumnCaption(entry) {
+      return this.tableType === "Anime" ? entry.name : entry.title;
     }
   }
 }

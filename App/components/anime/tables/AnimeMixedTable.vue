@@ -12,10 +12,10 @@
         <template v-slot:items="props">
           <tr>
             <td>
-              <avatar-record-cell :items="singleObjectToArray(props.item.seiyuu)" />
+              <avatar-record-cell :items="singleObjectToArray(props.item.seiyuu)" :tableType="'Seiyuu'" />
             </td>
             <td v-for="role in props.item.animeCharacters" :key="role.anime.malId">
-              <avatar-record-cell :items="role.characters" />
+              <avatar-record-cell :items="role.characters" :tableType="'Character'" />
             </td>
           </tr>
         </template>

@@ -10,6 +10,8 @@
 
 		public string JapaneseName { get; set; }
 
+		public string Birthday { get; set; }
+
 		public string About { get; set; }
 	}
 }

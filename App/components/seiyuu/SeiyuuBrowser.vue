@@ -74,11 +74,6 @@ export default {
           value: false
         },
         {
-          name: 'tooManyRequests',
-          text: 'There are has too many requests to send. Wait a few seconds and select seiyuu again.',
-          value: false
-        },
-        {
           name: 'dataUnobtainable',
           text: 'This data is currently not obtainable :(',
           value: false
@@ -101,6 +96,10 @@ export default {
       return process.env.apiUrl +
             '/api/Seiyuu/' +
             '?Page=0&PageSize=10&SortExpression=Popularity DESC'
+    },
+    cardInfoRequest () {
+      return process.env.apiUrl +
+            '/api/seiyuu/' + String(this.model);
     },
     items () {
       return this.entries.map(entry => {
@@ -127,13 +126,15 @@ export default {
             this.handleBrowsingError('alreadyOnTheList')
             this.loading = false
           } else {
-            axios.get(process.env.jikanUrl + 'person/' + String(this.model))
+            axios.get(this.cardInfoRequest)
               .then((response) => {
-                this.addToList(response.data)
+                if (response.data.payload !== null) {
+                  this.addToList(response.data.payload);
+                }
               })
               .catch((error) => {
                 console.log(error)
-                this.handleBrowsingError('tooManyRequests')
+                this.handleBrowsingError('serviceUnavailable')
                 this.loading = false
               })
           }
@@ -153,13 +154,15 @@ export default {
         this.shareLinkData.forEach(element => {
           if (!this.searchedId.includes(element) && Number.parseInt(element) !== 'NaN' && Number.parseInt(element) > 0) {
             this.loading = true
-            axios.get(process.env.jikanUrl + 'person/' + String(element))
+            axios.get(process.env.apiUrl + '/api/anime/' + String(element))
               .then((response) => {
-                this.addToList(response.data)
+                if (response.data.payload !== null) {
+                  this.addToList(response.data.payload);
+                }
               })
               .catch((error) => {
                 console.log(error)
-                this.handleBrowsingError('tooManyRequests')
+                this.handleBrowsingError('serviceUnavailable')
                 this.loading = false
               })
           }

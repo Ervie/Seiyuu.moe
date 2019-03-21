@@ -19,13 +19,13 @@
         <div>
           <v-btn raised large color="error" class="optionButton" 
             @click="resetList" 
-            :disabled="inputData.length < 1">Reset</v-btn>
+            :disabled="seiyuuIds.length < 1">Reset</v-btn>
           <v-btn depressed large color="primary" class="optionButton" 
             @click="computeResults" 
-            :disabled="inputData.length < 2">Compare</v-btn>
+            :disabled="seiyuuIds.length < 2">Compare</v-btn>
           <v-btn depressed large color="secondary" class="optionButton" 
             @click="generateShareLink" 
-            :disabled="!showTables || inputData.length < 2">Share Link</v-btn>
+            :disabled="!showTables || seiyuuIds.length < 2">Share Link</v-btn>
         </div>
         <v-tabs
           v-if="showTables"
@@ -49,16 +49,15 @@
         <v-tabs-items v-model="tabs" v-if="showTables">
           <v-tab-item :value="`tab-table`" >
             <seiyuu-table-selection 
-              :inputData="outputData" 
+              :tableData="outputData" 
               :counter="counter" 
-              :seiyuuData="inputData" 
               :groupBySeries="groupBySeries"
             />
           </v-tab-item>
           <v-tab-item :value="`tab-calendar`" >
-            <seiyuu-timeline-container
+            <!-- <seiyuu-timeline-container
               :showTimeline="showTables"
-              :timelineItems="outputData" />
+              :timelineItems="outputData" /> -->
           </v-tab-item>
         </v-tabs-items>
       </v-flex>
@@ -69,6 +68,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import SeiyuuTableSelection from '@/components/seiyuu/SeiyuuTableSelection.vue'
 import SeiyuuTimelineContainer from '@/components/seiyuu/timeline/SeiyuuTimelineContainer.vue'
 import ShareLinkSnackbar from '@/components/shared/ui-components/ShareLinkSnackbar.vue';
@@ -77,11 +77,11 @@ export default {
   name: 'SeiyuuResultArea',
   components: {
     'seiyuu-table-selection': SeiyuuTableSelection,
-    'share-link-snackbar': ShareLinkSnackbar,
-    'seiyuu-timeline-container': SeiyuuTimelineContainer
+    'share-link-snackbar': ShareLinkSnackbar
+    // 'seiyuu-timeline-container': SeiyuuTimelineContainer
   },
   props: {
-    inputData: {
+    seiyuuIds: {
       type: Array,
       required: false
     },
@@ -102,86 +102,54 @@ export default {
       snackbar: false
     }
   },
-  computed: {
-    seiyuuRoles () {
-      return this.inputData.map(x => x.voice_acting_roles)
-    }
-  },
   methods: {
     resetList () {
       this.$emit('resetList')
     },
-    generateShareLink () {
-      var seiyuuIds = ''
-      this.inputData.forEach(element => {
-        seiyuuIds += element.mal_id + ';'
+    computeResults () {
+      this.outputData = [];
+
+      axios.get(this.getSeiyuuCompareRequest())
+        .then((response) => {
+          if (response.data.payload !== null) {
+            this.outputData = response.data.payload;
+            this.showTables = true;
+          }
+        })
+        .catch((error) => {
+        })
+    },
+    getSeiyuuCompareRequest() {
+      var seiyuuIdPart = '';
+      
+      this.seiyuuIds.forEach(element => {
+        seiyuuIdPart += '&SearchCriteria.SeiyuuMalId=' + element;
       });
       
-      seiyuuIds = seiyuuIds.slice(0, -1)
-      seiyuuIds = this.encodeURL(seiyuuIds)
 
-      var shareLink = process.env.baseUrl + $nuxt.$route.path.toLowerCase() + '?seiyuuIds=' + seiyuuIds
+      return process.env.apiUrl +
+        '/api/seiyuu/Compare' +
+        '?Page=0&PageSize=1000&SortExpression=Popularity DESC' +
+        seiyuuIdPart;
+    },
+    generateShareLink () {
+      var idString = ''
+      this.seiyuuIds.forEach(element => {
+        idString += element + ';'
+      });
+      
+      idString = idString.slice(0, -1)
+      idString = this.encodeURL(seiyuuIds)
+
+      var shareLink = process.env.baseUrl + $nuxt.$route.path.toLowerCase() + '?seiyuuIds=' + idString
 
       this.$copyText(shareLink)
       this.snackbar = true
-    },
-    computeResults () {
-      this.outputData = []
-      var intersectAnime = []
-      var filteredData = new Array(this.inputData.length)
-      var partialResults = new Array(this.inputData.length)
-
-      for (var i = 0; i < this.inputData.length; i++) {
-        partialResults[i] = []
-        filteredData[i] = []
-      }
-
-      if (this.mainRolesOnly) {
-        for (i = 0; i < this.inputData.length; i++) {
-          filteredData[i] = this.seiyuuRoles[i].filter(x => x.role === 'Main')
-        }
-      } else {
-        for (i = 0; i < this.inputData.length; i++) {
-          filteredData[i] = this.seiyuuRoles[i]
-        }
-      }
-
-      for (i = 0; i < filteredData[0].length; i++) {
-        partialResults[0].push({
-          anime: filteredData[0][i].anime,
-          roles: [{
-            seiyuu: this.inputData[0].name,
-            character: filteredData[0][i].character
-          }]
-        })
-      }
-
-      for (var seiyuuIndex = 1; seiyuuIndex < filteredData.length; seiyuuIndex++) {
-        for (i = 0; i < filteredData[seiyuuIndex].length; i++) {
-          for (var j = 0; j < partialResults[seiyuuIndex - 1].length; j++) {
-            if (partialResults[seiyuuIndex - 1][j].anime.mal_id === filteredData[seiyuuIndex][i].anime.mal_id) {
-              // Weird deep clone of object
-              var cloneObject = JSON.parse(JSON.stringify(partialResults[seiyuuIndex - 1][j]))
-              partialResults[seiyuuIndex].push(cloneObject)
-              partialResults[seiyuuIndex][partialResults[seiyuuIndex].length - 1].roles.push({
-                seiyuu: this.inputData[seiyuuIndex].name,
-                character: filteredData[seiyuuIndex][i].character
-              })
-            }
-          }
-        }
-        partialResults[seiyuuIndex] = partialResults[seiyuuIndex].filter(x => x.roles.length === (seiyuuIndex + 1))
-      }
-      intersectAnime = partialResults[this.inputData.length - 1]
-
-      this.outputData = intersectAnime;
-      this.counter++;
-      this.showTables = true;
     }
   },
   watch: {
-    inputData: function (newVal, oldVal) {
-      if (this.inputData.length === 0) {
+    seiyuuIds: function (newVal, oldVal) {
+      if (this.seiyuuIds.length === 0) {
         this.showTables = false
       }
     },

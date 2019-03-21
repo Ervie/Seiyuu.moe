@@ -12,8 +12,8 @@
         </template>
         <template v-slot:items="props">
           <expanded-panel
-              :mainColumnItems="props.item.anime" 
-              :subColumnsItems="props.item.roles"
+              :mainColumnItems="singleObjectToArray(props.item.anime)" 
+              :subColumnsItems="props.item.seiyuuCharacters"
               :tableType="'Seiyuu'"
               class="expandedRow"/>
         </template>

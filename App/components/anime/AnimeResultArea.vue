@@ -31,10 +31,6 @@ export default {
     'share-link-snackbar': ShareLinkSnackbar
   },
   props: {
-    charactersData: {
-      type: Array,
-      required: false
-    },
     animeIds: {
       type: Array,
       required: false
@@ -67,7 +63,6 @@ export default {
           }
         })
         .catch((error) => {
-          this.handleBrowsingError('tooManyRequests');
         })
     },
     getAnimeCompareRequest() {

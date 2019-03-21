@@ -8,7 +8,7 @@
       :seiyuuToCompare="seiyuuToCompare" 
       @seiyuuRemoved="removeSeiyuu"/>
     <seiyuu-result-area 
-      :inputData="seiyuuToCompare" 
+      :seiyuuIds="searchedId" 
       @resetList="resetList" 
       :runImmediately="runImmediately"/>
   </v-container>
@@ -36,7 +36,7 @@ export default {
   computed: {
     searchedId () {
       if (this.seiyuuToCompare.length > 0) {
-        return this.seiyuuToCompare.map(seiyuu => seiyuu.mal_id)
+        return this.seiyuuToCompare.map(seiyuu => seiyuu.malId)
       } else {
         return []
       }
