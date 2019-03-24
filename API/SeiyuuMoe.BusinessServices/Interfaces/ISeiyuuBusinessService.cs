@@ -14,6 +14,6 @@ namespace SeiyuuMoe.BusinessServices
 
 		Task<PagedResult<SeiyuuSearchEntryDto>> GetAsync(Query<SeiyuuSearchCriteria> query);
 
-		Task<ICollection<SeiyuuComparisonEntryDto>> GetSeiyuuComparison(RoleSearchCriteria searchCriteria);
+		Task<ICollection<SeiyuuComparisonEntryDto>> GetSeiyuuComparison(SeiyuuComparisonSearchCriteria searchCriteria);
 	}
 }

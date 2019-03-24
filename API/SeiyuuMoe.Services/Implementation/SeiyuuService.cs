@@ -37,7 +37,7 @@ namespace SeiyuuMoe.Services
 			return new QueryResponse<PagedResult<SeiyuuSearchEntryDto>>(payload);
 		}
 
-		public async Task<QueryResponse<ICollection<SeiyuuComparisonEntryDto>>> GetSeiyuuComparison(Query<RoleSearchCriteria> query)
+		public async Task<QueryResponse<ICollection<SeiyuuComparisonEntryDto>>> GetSeiyuuComparison(Query<SeiyuuComparisonSearchCriteria> query)
 		{
 			Ensure.That(query, nameof(query)).IsNotNull();
 			Ensure.That(query.SearchCriteria, nameof(query.SearchCriteria)).IsNotNull();

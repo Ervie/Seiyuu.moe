@@ -46,7 +46,7 @@ namespace SeiyuuMoe.Services
 			return new QueryResponse<AnimeCardDto>(payload);
 		}
 
-		public async Task<QueryResponse<ICollection<AnimeComparisonEntryDto>>> GetAnimeComparison(Query<RoleSearchCriteria> query)
+		public async Task<QueryResponse<ICollection<AnimeComparisonEntryDto>>> GetAnimeComparison(Query<AnimeComparisonSearchCriteria> query)
 		{
 			Ensure.That(query, nameof(query)).IsNotNull();
 			Ensure.That(query.SearchCriteria, nameof(query.SearchCriteria)).IsNotNull();

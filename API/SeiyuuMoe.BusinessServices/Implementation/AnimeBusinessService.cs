@@ -56,7 +56,7 @@ namespace SeiyuuMoe.BusinessServices
 			return mapper.Map<AnimeCardDto>(entity);
 		}
 
-		public async Task<ICollection<AnimeComparisonEntryDto>> GetAnimeComparison(RoleSearchCriteria searchCriteria)
+		public async Task<ICollection<AnimeComparisonEntryDto>> GetAnimeComparison(AnimeComparisonSearchCriteria searchCriteria)
 		{
 			ICollection<AnimeComparisonEntry> partialResults = new List<AnimeComparisonEntry>();
 

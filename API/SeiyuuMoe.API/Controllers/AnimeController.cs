@@ -40,7 +40,7 @@ namespace SeiyuuMoe.API.Controllers
 
 		[HttpGet]
 		[Route("Compare")]
-		public Task<IActionResult> GetComparison([FromQuery] Query<RoleSearchCriteria> query)
+		public Task<IActionResult> GetComparison([FromQuery] Query<AnimeComparisonSearchCriteria> query)
 		{
 			return Handle(async () => HandleServiceResult(await animeService.GetAnimeComparison(query)));
 		}

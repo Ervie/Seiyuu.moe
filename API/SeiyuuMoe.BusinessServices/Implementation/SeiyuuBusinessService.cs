@@ -50,7 +50,7 @@ namespace SeiyuuMoe.SerBusinessServicesvices
 			return mapper.Map<SeiyuuCardDto>(entity);
 		}
 
-		public async Task<ICollection<SeiyuuComparisonEntryDto>> GetSeiyuuComparison(RoleSearchCriteria searchCriteria)
+		public async Task<ICollection<SeiyuuComparisonEntryDto>> GetSeiyuuComparison(SeiyuuComparisonSearchCriteria searchCriteria)
 		{
 			ICollection<SeiyuuComparisonEntry> partialResults = new List<SeiyuuComparisonEntry>();
 
