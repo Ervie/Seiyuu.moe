@@ -51,7 +51,6 @@
             <seiyuu-table-selection 
               :tableData="outputData" 
               :counter="counter" 
-              :groupBySeries="groupBySeries"
             />
           </v-tab-item>
           <v-tab-item :value="`tab-calendar`" >
@@ -107,7 +106,6 @@ export default {
       this.$emit('resetList')
     },
     computeResults () {
-      this.outputData = [];
 
       axios.get(this.getSeiyuuCompareRequest())
         .then((response) => {
@@ -120,20 +118,24 @@ export default {
         })
     },
     getSeiyuuCompareRequest() {
-      var seiyuuIdPart = '';
+
+      var requestIUrl = process.env.apiUrl +
+        '/api/seiyuu/Compare' +
+        '?Page=0&PageSize=1000&SortExpression=Popularity DESC';
       
       this.seiyuuIds.forEach(element => {
-        seiyuuIdPart += '&SearchCriteria.SeiyuuMalId=' + element;
+        requestIUrl += '&SearchCriteria.SeiyuuMalId=' + element;
       });
       
       if (this.mainRolesOnly) {
-        seiyuuIdPart += '&SearchCriteria.MainRolesOnly=true';
+        requestIUrl += '&SearchCriteria.MainRolesOnly=true';
       }
 
-      return process.env.apiUrl +
-        '/api/seiyuu/Compare' +
-        '?Page=0&PageSize=1000&SortExpression=Popularity DESC' +
-        seiyuuIdPart;
+      if (this.groupBySeries) {
+        requestIUrl += '&SearchCriteria.GroupByFranchise=true';
+      }
+
+      return requestIUrl;
     },
     generateShareLink () {
       var idString = ''
@@ -162,6 +164,10 @@ export default {
       }
     },
     mainRolesOnly: {
+      handler: 'computeResults',
+      immediate: false
+    },
+    groupBySeries: {
       handler: 'computeResults',
       immediate: false
     }

@@ -4,7 +4,7 @@
         :items="items" 
         :expand="true"
         hide-actions
-        item-key="anime.malId"
+        item-key="anime[0].malId"
         class="elevation-1">
         <template v-slot:headerCell="props">
           <table-header :imageUrl="props.header.image" :text="props.header.text" />

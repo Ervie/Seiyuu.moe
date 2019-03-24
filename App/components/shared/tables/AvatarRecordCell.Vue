@@ -8,7 +8,7 @@
             <a :href="entry.url" target="_blank">
                 <v-img
                 height="70px"
-                :src="changeUrlToOriginalSize(entry.imageUrl)"
+                :src="pathToImage(entry.imageUrl)"
                 contain
                 ></v-img>
             </a>
@@ -31,9 +31,6 @@ export default {
     }
   },
   methods: {
-    changeUrlToOriginalSize (inputString) {
-      return inputString.replace('/r/23x32','')
-    },
     getCaption(entry) {
       return this.tableType === "Anime" ? entry.title : this.swapNameSurname(entry.name);
     }

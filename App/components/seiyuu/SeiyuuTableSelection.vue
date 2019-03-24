@@ -25,21 +25,18 @@
             <seiyuu-expanded-table
               :items="tableData" 
               :headers="headers"
-              :groupBySeries="groupBySeries"
             />
           </v-tab-item>
           <v-tab-item :value="`tab-mixed`" >
             <seiyuu-mixed-table
               :items="tableData" 
               :headers="headers"
-              :groupBySeries="groupBySeries"
             />
           </v-tab-item>
           <v-tab-item :value="`tab-compact`" >
             <seiyuu-compact-table
               :items="tableData" 
               :headers="headers"
-              :groupBySeries="groupBySeries"
             />
           </v-tab-item>
         </v-tabs-items>
@@ -71,10 +68,6 @@ export default {
     tableData: {
       type: Array,
       required: false
-    },
-    groupBySeries: {
-      type: Boolean,
-      required: true
     }
   },
   data () {
@@ -84,27 +77,8 @@ export default {
     }
   },
   methods: {
-    computeResults () {
-      this.setTableHeaders();
-    },
-    combinationCode (data) {
-      var returnCode = ''
-      for (var index = 0; index < data.length; index++) {
-        returnCode += this.zeroFill(data[index], 7)
-      }
-
-      return returnCode
-    },
-    zeroFill (number, width) {
-      width -= number.toString().length
-      if (width > 0) {
-        return new Array(width + (/\./.test(number) ? 2 : 1)).join('0') + number
-      }
-      return number + ''
-    },
     setTableHeaders () {
       this.headers = [];
-
       this.headers.push({
         text: 'Anime',
         align: 'left',
@@ -125,13 +99,16 @@ export default {
           value: 'name'
         });
       }
-      this.showTables = true;
     }
   },
   watch: {
     viewMode: {
       handler: 'setTableHeaders',
       immediate: false
+    },
+    tableData: {
+      handler: 'setTableHeaders',
+      immediate: true
     }
   }
 }

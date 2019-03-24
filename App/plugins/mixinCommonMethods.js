@@ -17,7 +17,8 @@ Vue.mixin({
       }
     },
     pathToImage (path) {
-      if (path && path !== 'https://cdn.myanimelist.net/images/questionmark_23.gif') {
+      if (path && path !== 'https://cdn.myanimelist.net/images/questionmark_23.gif' 
+        && path !== 'https://cdn.myanimelist.net/img/sp/icon/apple-touch-icon-256.png') {
         return path;
       } else {
         return 'questionMark.png';
