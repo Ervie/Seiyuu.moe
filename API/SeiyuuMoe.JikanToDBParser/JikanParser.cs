@@ -578,7 +578,7 @@ namespace SeiyuuMoe.JikanToDBParser
 
 			try
 			{
-				character = await jikan.GetCharacter(malId);
+				character = jikan.GetCharacter(malId).Result;
 			}
 			catch (Exception ex)
 			{

@@ -6,7 +6,7 @@ namespace SeiyuuMoe.Contracts.Dtos.Other
 {
 	public class SeiyuuComparisonEntryDto
 	{
-		public AnimeTableEntryDto Anime { get; set; }
+		public ICollection<AnimeTableEntryDto> Anime { get; set; }
 
 		public ICollection<SeiyuuComparisonSubEntryDto> SeiyuuCharacters { get; set; }
 	}

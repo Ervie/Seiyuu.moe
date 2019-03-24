@@ -1,19 +1,30 @@
 ﻿using SeiyuuMoe.Data.Model;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace SeiyuuMoe.Contracts.ComparisonEntities
 {
 	public class SeiyuuComparisonEntry
 	{
-		public Anime Anime { get; set; }
+		public ICollection<Anime> Anime { get; set; }
 
 		public ICollection<SeiyuuComparisonSubEntry> SeiyuuCharacters { get; set; }
 
 		public SeiyuuComparisonEntry()
 		{
+			Anime = new List<Anime>();
 			SeiyuuCharacters = new List<SeiyuuComparisonSubEntry>();
+		}
+
+		public SeiyuuComparisonEntry(Anime anime, Character character, Seiyuu seiyuu)
+		{
+			Anime = new List<Anime>
+			{
+				anime
+			};
+			SeiyuuCharacters = new List<SeiyuuComparisonSubEntry>
+			{
+				new SeiyuuComparisonSubEntry(character, seiyuu)
+			};
 		}
 	}
 

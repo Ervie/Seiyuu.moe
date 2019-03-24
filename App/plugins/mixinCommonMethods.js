@@ -35,7 +35,11 @@ Vue.mixin({
     },
     singleObjectToArray(obj)
     {
-      return [ obj ];
+      if (Array.isArray(obj)) {
+        return obj;
+      } else {
+        return [ obj ];
+      }
     },
     sleep (ms) {
       return new Promise(resolve => setTimeout(resolve, ms));

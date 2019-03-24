@@ -9,5 +9,7 @@ namespace SeiyuuMoe.Contracts.SearchCriteria
 		public ICollection<long> SeiyuuMalId { get; set; }
 
 		public bool? MainRolesOnly { get; set; }
+
+		public bool? GroupByFranchise { get; set; }
 	}
 }

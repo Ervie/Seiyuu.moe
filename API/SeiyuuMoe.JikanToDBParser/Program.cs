@@ -8,8 +8,8 @@
 			//JikanParser.ParseAnime();
 			//JikanParser.ParseSeiyuu();
 			//JikanParser.ParseSeason();
-			jikanParser.ParseSeiyuuAdditional();
-			jikanParser.UpdateAnime();
+			//jikanParser.ParseSeiyuuAdditional();
+			//jikanParser.UpdateAnime();
 			jikanParser.UpdateCharacters();
 			//JikanParser.ParseAnimeAdditional();
 			//JikanParser.ParseSeasonAdditional();

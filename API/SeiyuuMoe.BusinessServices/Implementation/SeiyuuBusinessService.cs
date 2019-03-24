@@ -5,6 +5,7 @@ using SeiyuuMoe.Contracts.ComparisonEntities;
 using SeiyuuMoe.Contracts.Dtos;
 using SeiyuuMoe.Contracts.Dtos.Other;
 using SeiyuuMoe.Contracts.SearchCriteria;
+using SeiyuuMoe.Data.Model;
 using SeiyuuMoe.Repositories.Models;
 using SeiyuuMoe.Repositories.Repositories;
 using SeiyuuMoe.WebEssentials;
@@ -55,29 +56,13 @@ namespace SeiyuuMoe.SerBusinessServicesvices
 
 			for (int i = 0; i < searchCriteria.SeiyuuMalId.Count; i++)
 			{
-				IReadOnlyCollection<Data.Model.Role> roles;
-
-				if (searchCriteria.MainRolesOnly.HasValue && searchCriteria.MainRolesOnly.Value)
-				{
-					roles = await roleRepository.GetAllAsync(x =>
-						x.SeiyuuId.Equals(searchCriteria.SeiyuuMalId.ToArray()[i]) &&
-						x.LanguageId == 1 &&
-						x.RoleTypeId == 1,
-						roleRepository.IncludeExpression);
-				}
-				else
-				{
-					roles = await roleRepository.GetAllAsync(x =>
-						x.SeiyuuId.Equals(searchCriteria.SeiyuuMalId.ToArray()[i]) &&
-						x.LanguageId == 1,
-						roleRepository.IncludeExpression);
-				}
+				var roles = await GetSeiyuuRoles(searchCriteria.SeiyuuMalId.ToArray()[i], searchCriteria.MainRolesOnly);
 
 				foreach (var role in roles)
 				{
-					if (partialResults.Any(x => x.Anime.MalId.Equals(role.AnimeId)))
+					if (partialResults.Any(x => x.Anime.First().MalId.Equals(role.AnimeId)))
 					{
-						var foundAnime = partialResults.Single(x => x.Anime.MalId.Equals(role.AnimeId));
+						var foundAnime = partialResults.Single(x => x.Anime.First().MalId.Equals(role.AnimeId));
 
 						if (foundAnime.SeiyuuCharacters.Any(x => x.Seiyuu.MalId.Equals(role.SeiyuuId)))
 						{
@@ -91,11 +76,7 @@ namespace SeiyuuMoe.SerBusinessServicesvices
 					}
 					else
 					{
-						SeiyuuComparisonEntry newComparisonEntry = new SeiyuuComparisonEntry
-						{
-							Anime = role.Anime
-						};
-						newComparisonEntry.SeiyuuCharacters.Add(new SeiyuuComparisonSubEntry(role.Character, role.Seiyuu));
+						SeiyuuComparisonEntry newComparisonEntry = new SeiyuuComparisonEntry(role.Anime, role.Character, role.Seiyuu);
 						partialResults.Add(newComparisonEntry);
 					}
 				}
@@ -103,7 +84,67 @@ namespace SeiyuuMoe.SerBusinessServicesvices
 				partialResults = partialResults.Where(x => x.SeiyuuCharacters.Select(y => y.Seiyuu).ToList().Count >= i + 1).ToList();
 			}
 
+			partialResults = searchCriteria.GroupByFranchise.HasValue && searchCriteria.GroupByFranchise.Value ?
+				GroupByFranchise(partialResults) :
+				partialResults;
+
 			return mapper.Map<ICollection<SeiyuuComparisonEntryDto>>(partialResults);
+		}
+
+		private async Task<IReadOnlyCollection<Role>> GetSeiyuuRoles(long seiyuuMalId, bool? mainRolesOnly)
+		{
+			if (mainRolesOnly.HasValue && mainRolesOnly.Value)
+			{
+				return await roleRepository.GetAllAsync(x =>
+					x.SeiyuuId.Equals(seiyuuMalId) &&
+					x.LanguageId == 1 &&
+					x.RoleTypeId == 1,
+					roleRepository.IncludeExpression);
+			}
+			else
+			{
+				return await roleRepository.GetAllAsync(x =>
+					x.SeiyuuId.Equals(seiyuuMalId) &&
+					x.LanguageId == 1,
+					roleRepository.IncludeExpression);
+			}
+		}
+
+		private ICollection<SeiyuuComparisonEntry> GroupByFranchise(ICollection<SeiyuuComparisonEntry> nonGroupedResults)
+		{
+			ICollection<SeiyuuComparisonEntry> groupedResults = new List<SeiyuuComparisonEntry>();
+
+			foreach (SeiyuuComparisonEntry entry in nonGroupedResults)
+			{
+				// Todo: change it to use relation between anime (when it's implemented).
+				// Looks for characters in each comparison entry. Very confusing
+				var franchiseFound = groupedResults
+					.FirstOrDefault(x => x.SeiyuuCharacters.SelectMany(y => y.Characters.Select(z => z.MalId))
+					.Intersect(entry.SeiyuuCharacters.SelectMany(q => q.Characters.Select(w => w.MalId)))
+					.Any());
+
+				if (franchiseFound != null)
+				{
+					franchiseFound.Anime.Add(entry.Anime.First());
+					foreach (SeiyuuComparisonSubEntry seiyuuCharacters in entry.SeiyuuCharacters)
+					{
+						var foundSeiyuu = franchiseFound.SeiyuuCharacters.Single(x => x.Seiyuu.MalId.Equals(seiyuuCharacters.Seiyuu.MalId));
+						foreach (Character character in seiyuuCharacters.Characters)
+						{
+							if (!foundSeiyuu.Characters.Select(x => x.MalId).Contains(character.MalId))
+							{
+								foundSeiyuu.Characters.Add(character);
+							}
+						}
+					}
+				}
+				else
+				{
+					groupedResults.Add(entry);
+				}
+			}
+
+			return groupedResults;
 		}
 	}
 }
