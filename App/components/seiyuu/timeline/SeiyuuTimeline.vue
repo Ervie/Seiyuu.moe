@@ -19,26 +19,26 @@
         :key="i"
         color="accent"
       >
-        <span slot="opposite" class="title"> {{ anime.aired_date }} </span>
+        <span slot="opposite" class="title"> {{ anime.airedDate }} </span>
         <v-card>
           <v-layout align-center justify-center row fill-height v-if="i % 2 === 1">
             <v-flex xs8>
-              <div class="headline"> {{ anime.name }} </div>
+              <div class="headline"> {{ anime.title }} </div>
             </v-flex>
             <v-flex xs4>
               <v-layout align-center justify-center row fill-height>
-                <v-img :src="pathToImage(anime.image_url)" class="timeline-image"/>
+                <v-img :src="pathToImage(anime.imageUrl)" class="timeline-image"/>
               </v-layout>
             </v-flex>
           </v-layout>
           <v-layout align-center justify-center row fill-height v-else>
             <v-flex xs4>
               <v-layout align-center justify-center>
-               <v-img :src="pathToImage(anime.image_url)" class="timeline-image"/>
+               <v-img :src="pathToImage(anime.imageUrl)" class="timeline-image"/>
               </v-layout>
             </v-flex>
             <v-flex xs8>
-              <div class="headline"> {{ anime.name }} </div>
+              <div class="headline"> {{ anime.title }} </div>
             </v-flex>
           </v-layout>
         </v-card>
@@ -69,10 +69,10 @@
       >
         <v-layout align-center justify-center row fill-height >
             <v-flex xs4>
-        <div class="caption" > {{ anime.aired_date }} </div>
+        <div class="caption" > {{ anime.airedDate }} </div>
             </v-flex>
             <v-flex xs8>
-        <div class="subheading"> {{ anime.name }}  </div>
+        <div class="subheading"> {{ anime.title }}  </div>
             </v-flex>
         </v-layout>
       </v-timeline-item>

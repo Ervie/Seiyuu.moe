@@ -35,6 +35,7 @@ namespace SeiyuuMoe.ServBusinessServicesices.Mapper.Profiles
 				.ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
 				.ForMember(dest => dest.MalId, opt => opt.MapFrom(src => src.MalId))
 				.ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl))
+				.ForMember(dest => dest.AiringFrom, opt => opt.MapFrom(src => System.DateTime.Parse(src.AiringDate, null)))
 				.ForMember(dest => dest.Url, opt => opt.MapFrom(src => malAnimeBaseUrl + src.MalId));
 		}
 	}

@@ -1,4 +1,6 @@
-﻿namespace SeiyuuMoe.Contracts.Dtos
+﻿using System;
+
+namespace SeiyuuMoe.Contracts.Dtos
 {
 	public class AnimeTableEntryDto
 	{
@@ -9,5 +11,7 @@
 		public string Url { get; set; }
 
 		public long MalId { get; set; }
+
+		public DateTime? AiringFrom { get; set; }
 	}
 }

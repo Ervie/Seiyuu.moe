@@ -376,7 +376,9 @@ namespace SeiyuuMoe.JikanToDBParser
 					seiyuu.Name = seiyuuFullData.Name;
 					seiyuu.Popularity = seiyuuFullData.MemberFavorites;
 					seiyuu.About = seiyuuFullData.More;
-					seiyuu.Birthday = seiyuuFullData.Birthday.Value.ToString("dd-MM-yyyy");
+
+					if (seiyuuFullData.Birthday.HasValue)
+						seiyuu.Birthday = seiyuuFullData.Birthday.Value.ToString("dd-MM-yyyy");
 
 					seiyuu.ImageUrl = seiyuuFullData.ImageURL.Equals("https://cdn.myanimelist.net/img/sp/icon/apple-touch-icon-256.png") ? 
 						string.Empty :

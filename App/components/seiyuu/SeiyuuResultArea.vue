@@ -54,9 +54,8 @@
             />
           </v-tab-item>
           <v-tab-item :value="`tab-calendar`" >
-            <!-- <seiyuu-timeline-container
-              :showTimeline="showTables"
-              :timelineItems="outputData" /> -->
+            <seiyuu-timeline-container
+              :timelineItems="outputData" />
           </v-tab-item>
         </v-tabs-items>
       </v-flex>
@@ -76,8 +75,8 @@ export default {
   name: 'SeiyuuResultArea',
   components: {
     'seiyuu-table-selection': SeiyuuTableSelection,
-    'share-link-snackbar': ShareLinkSnackbar
-    // 'seiyuu-timeline-container': SeiyuuTimelineContainer
+    'share-link-snackbar': ShareLinkSnackbar,
+    'seiyuu-timeline-container': SeiyuuTimelineContainer
   },
   props: {
     seiyuuIds: {
