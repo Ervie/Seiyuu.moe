@@ -10,8 +10,8 @@
           flat icon
           @click="orderFromEldest = !orderFromEldest"
           slot="icon">
-          <font-awesome-icon v-if="orderFromEldest"  size="2x" :icon="['fas', 'arrow-circle-up']"/>
-          <font-awesome-icon v-else size="2x" :icon="['fas', 'arrow-circle-down']"/>
+          <font-awesome-icon v-if="orderFromEldest"  size="2x" :icon="['fas', 'arrow-circle-down']"/>
+          <font-awesome-icon v-else size="2x" :icon="['fas', 'arrow-circle-up']"/>
         </v-btn>
       </v-timeline-item>
       <v-timeline-item

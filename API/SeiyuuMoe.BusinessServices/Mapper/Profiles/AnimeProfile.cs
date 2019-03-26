@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using SeiyuuMoe.Contracts.Dtos;
 using SeiyuuMoe.Data.Model;
+using System;
 
 namespace SeiyuuMoe.ServBusinessServicesices.Mapper.Profiles
 {
@@ -20,7 +21,7 @@ namespace SeiyuuMoe.ServBusinessServicesices.Mapper.Profiles
 				.ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
 				.ForMember(dest => dest.MalId, opt => opt.MapFrom(src => src.MalId))
 				.ForMember(dest => dest.About, opt => opt.MapFrom(src => src.About))
-				.ForMember(dest => dest.AiringDate, opt => opt.MapFrom(src => System.DateTime.Parse(src.AiringDate, null)))
+				.ForMember(dest => dest.AiringDate, opt => opt.MapFrom(src => !string.IsNullOrWhiteSpace(src.AiringDate) ? DateTime.Parse(src.AiringDate, null) : (DateTime?)null))
 				.ForMember(dest => dest.JapaneseTitle, opt => opt.MapFrom(src => src.JapaneseTitle))
 				.ForMember(dest => dest.TitleSynonyms, opt => opt.MapFrom(src => src.TitleSynonyms))
 				.ForMember(dest => dest.Season, opt => opt.MapFrom(src => src.Season.Name + " " + src.Season.Year))
@@ -32,7 +33,7 @@ namespace SeiyuuMoe.ServBusinessServicesices.Mapper.Profiles
 				.ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
 				.ForMember(dest => dest.MalId, opt => opt.MapFrom(src => src.MalId))
 				.ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl))
-				.ForMember(dest => dest.AiringFrom, opt => opt.MapFrom(src => System.DateTime.Parse(src.AiringDate, null)))
+				.ForMember(dest => dest.AiringFrom, opt => opt.MapFrom(src => !string.IsNullOrWhiteSpace(src.AiringDate) ? DateTime.Parse(src.AiringDate, null) : (DateTime?)null))
 				.ForMember(dest => dest.Url, opt => opt.MapFrom(src => malAnimeBaseUrl + src.MalId));
 		}
 	}
