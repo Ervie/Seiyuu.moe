@@ -1,4 +1,6 @@
-﻿namespace SeiyuuMoe.Contracts.Dtos
+﻿using System;
+
+namespace SeiyuuMoe.Contracts.Dtos
 {
 	public class SeiyuuCardDto
 	{
@@ -10,7 +12,7 @@
 
 		public string JapaneseName { get; set; }
 
-		public string Birthday { get; set; }
+		public DateTime? Birthday { get; set; }
 
 		public string About { get; set; }
 	}

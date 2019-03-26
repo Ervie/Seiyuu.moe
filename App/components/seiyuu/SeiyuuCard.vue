@@ -32,7 +32,7 @@
                           <b>Given name:</b> {{ seiyuuData.japaneseName }}
                         </p>
                         <p class="text-sm-left">
-                          <b>Birthday:</b> {{ seiyuuData.birthday }}
+                          <b>Birthday:</b> {{ formatDate(seiyuuData.birthday) }}
                         </p>
                         <p class="text-sm-left white-space-pre">
                           <b>More:</b> {{ decodeHtml(moreDetails) }}

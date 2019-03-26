@@ -34,14 +34,6 @@ export default {
 
             return output.sort((a,b) => { return new Date(b.airedDate) - new Date(a.airedDate); });
         }
-    },
-    methods: {
-        formatDate(inputDate) {
-            var m = new Date(inputDate);
-            return m.getUTCFullYear() + "." +
-                ("0" + (m.getUTCMonth()+1)).slice(-2) + "." +
-                ("0" + m.getUTCDate()).slice(-2);
-        }
     }
 
 }

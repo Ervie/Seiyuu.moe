@@ -14,8 +14,6 @@ namespace SeiyuuMoe.BusinessServices
 
 		Task<PagedResult<AnimeSearchEntryDto>> GetAsync(Query<AnimeSearchCriteria> query);
 
-		Task<PagedResult<AnimeAiringDto>> GetDatesAsync(Query<AnimeSearchCriteria> query);
-
 		Task<ICollection<AnimeComparisonEntryDto>> GetAnimeComparison(AnimeComparisonSearchCriteria searchCriteria);
 	}
 }

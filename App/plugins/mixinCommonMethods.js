@@ -16,6 +16,16 @@ Vue.mixin({
         return parts[1] + ' ' + parts[0];
       }
     },
+    formatDate(inputDate) {
+      if (inputDate == null) {
+        return 'unknown';
+      } else {
+      var m = new Date(inputDate);
+      return m.getUTCFullYear() + "." +
+          ("0" + (m.getUTCMonth()+1)).slice(-2) + "." +
+          ("0" + m.getUTCDate()).slice(-2);
+      }
+    },
     pathToImage (path) {
       if (path && path !== 'https://cdn.myanimelist.net/images/questionmark_23.gif' 
         && path !== 'https://cdn.myanimelist.net/img/sp/icon/apple-touch-icon-256.png') {

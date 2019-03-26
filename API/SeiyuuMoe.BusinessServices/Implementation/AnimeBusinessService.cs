@@ -40,15 +40,6 @@ namespace SeiyuuMoe.BusinessServices
 			return mapper.Map<PagedResult<AnimeSearchEntryDto>>(entities);
 		}
 
-		public async Task<PagedResult<AnimeAiringDto>> GetDatesAsync(Query<AnimeSearchCriteria> query)
-		{
-			var expression = await animeSearchCriteriaService.BuildExpression(query.SearchCriteria);
-
-			var entities = await animeRepository.GetOrderedPageAsync(expression, query.SortExpression, query.Page, query.PageSize);
-
-			return mapper.Map<PagedResult<AnimeAiringDto>>(entities);
-		}
-
 		public async Task<AnimeCardDto> GetSingleAsync(long id)
 		{
 			var entity = await animeRepository.GetAsync(x => x.MalId.Equals(id), animeRepository.IncludeExpression);

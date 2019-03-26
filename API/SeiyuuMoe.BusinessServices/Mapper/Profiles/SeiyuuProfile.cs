@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using SeiyuuMoe.Contracts.Dtos;
 using SeiyuuMoe.Data.Model;
+using System;
 
 namespace SeiyuuMoe.BusinessServices.Mapper.Profiles
 {
@@ -20,7 +21,7 @@ namespace SeiyuuMoe.BusinessServices.Mapper.Profiles
 				.ForMember(dest => dest.MalId, opt => opt.MapFrom(src => src.MalId))
 				.ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl))
 				.ForMember(dest => dest.JapaneseName, opt => opt.MapFrom(src => src.JapaneseName))
-				.ForMember(dest => dest.Birthday, opt => opt.MapFrom(src => src.Birthday))
+				.ForMember(dest => dest.Birthday, opt => opt.MapFrom(src => !string.IsNullOrWhiteSpace(src.Birthday) ? DateTime.Parse(src.Birthday, null) : (DateTime?)null))
 				.ForMember(dest => dest.About, opt => opt.MapFrom(src => src.About));
 
 			CreateMap<Seiyuu, SeiyuuTableEntryDto>()

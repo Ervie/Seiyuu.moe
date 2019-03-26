@@ -32,13 +32,6 @@ namespace SeiyuuMoe.API.Controllers
 		}
 
 		[HttpGet]
-		[Route("AiringDates")]
-		public Task<IActionResult> GetDates([FromQuery] Query<AnimeSearchCriteria> query)
-		{
-			return Handle(async () => HandleServiceResult(await animeService.GetDatesAsync(query)));
-		}
-
-		[HttpGet]
 		[Route("Compare")]
 		public Task<IActionResult> GetComparison([FromQuery] Query<AnimeComparisonSearchCriteria> query)
 		{

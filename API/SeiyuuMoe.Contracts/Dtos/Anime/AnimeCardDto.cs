@@ -1,4 +1,6 @@
-﻿namespace SeiyuuMoe.Contracts.Dtos
+﻿using System;
+
+namespace SeiyuuMoe.Contracts.Dtos
 {
 	public class AnimeCardDto
 	{
@@ -14,7 +16,7 @@
 
 		public string About { get; set; }
 
-		public string AiringDate { get; set; }
+		public DateTime? AiringDate { get; set; }
 
 		public string Status { get; set; }
 

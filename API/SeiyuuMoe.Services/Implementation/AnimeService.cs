@@ -28,15 +28,6 @@ namespace SeiyuuMoe.Services
 			return new QueryResponse<PagedResult<AnimeSearchEntryDto>>(payload);
 		}
 
-		public async Task<QueryResponse<PagedResult<AnimeAiringDto>>> GetDatesAsync(Query<AnimeSearchCriteria> query)
-		{
-			Ensure.That(query, nameof(query)).IsNotNull();
-
-			var payload = await animeBusinessService.GetDatesAsync(query);
-
-			return new QueryResponse<PagedResult<AnimeAiringDto>>(payload);
-		}
-
 		public async Task<QueryResponse<AnimeCardDto>> GetSingleAsync(long id)
 		{
 			Ensure.That(id, nameof(id)).IsGte(1);

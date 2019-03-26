@@ -35,7 +35,7 @@
                           <b>Other titles:</b> <p class="alternativeTitle" v-for="(title, i) in alternativeTitles" :key="i"> {{ title }} </p>
                         </div>
                         <p class="text-sm-left">
-                          <b>Premiered:</b> {{ animeData.airingDate }}
+                          <b>Premiered:</b> {{ formatDate(animeData.airingDate) }}
                         </p>
                         <p class="text-sm-left">
                           <b>Type:</b> {{ animeData.type }}
