@@ -21,7 +21,7 @@ namespace SeiyuuMoe.BusinessServices.Mapper.Profiles
 				.ForMember(dest => dest.MalId, opt => opt.MapFrom(src => src.MalId))
 				.ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl))
 				.ForMember(dest => dest.JapaneseName, opt => opt.MapFrom(src => src.JapaneseName))
-				.ForMember(dest => dest.Birthday, opt => opt.MapFrom(src => !string.IsNullOrWhiteSpace(src.Birthday) ? DateTime.Parse(src.Birthday, null) : (DateTime?)null))
+				.ForMember(dest => dest.Birthday, opt => opt.MapFrom(src => !string.IsNullOrWhiteSpace(src.Birthday) ? DateTime.ParseExact(src.Birthday, "dd-MM-yyyy", null) : (DateTime?)null))
 				.ForMember(dest => dest.About, opt => opt.MapFrom(src => src.About));
 
 			CreateMap<Seiyuu, SeiyuuTableEntryDto>()
