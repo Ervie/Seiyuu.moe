@@ -16,7 +16,6 @@ namespace SeiyuuMoe.ServBusinessServicesices.Mapper.Profiles
 				.ForMember(dest => dest.MalId, opt => opt.MapFrom(src => src.MalId))
 				.ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl));
 
-
 			CreateMap<Anime, AnimeCardDto>()
 				.ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
 				.ForMember(dest => dest.MalId, opt => opt.MapFrom(src => src.MalId))
@@ -28,7 +27,7 @@ namespace SeiyuuMoe.ServBusinessServicesices.Mapper.Profiles
 				.ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.Name))
 				.ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.Name))
 				.ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl));
-			
+
 			CreateMap<Anime, AnimeTableEntryDto>()
 				.ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
 				.ForMember(dest => dest.MalId, opt => opt.MapFrom(src => src.MalId))

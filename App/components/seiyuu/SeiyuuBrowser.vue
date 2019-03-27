@@ -154,7 +154,7 @@ export default {
         this.shareLinkData.forEach(element => {
           if (!this.searchedId.includes(element) && Number.parseInt(element) !== 'NaN' && Number.parseInt(element) > 0) {
             this.loading = true
-            axios.get(process.env.apiUrl + '/api/anime/' + String(element))
+            axios.get(process.env.apiUrl + '/api/seiyuu/' + String(element))
               .then((response) => {
                 if (response.data.payload !== null) {
                   this.addToList(response.data.payload);
@@ -197,8 +197,8 @@ export default {
   mounted () {
     if (this.$route.query !== null && !this.isEmpty(this.$route.query)) {
       if (this.$route.query.seiyuuIds != null) {
-        this.shareLinkData = this.$route.query.seiyuuIds.split(';')
-        this.loadDataFromLink()
+        this.shareLinkData = this.$route.query.seiyuuIds.split(',');
+        this.loadDataFromLink();
       }
     }
   },

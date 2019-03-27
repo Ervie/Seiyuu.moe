@@ -139,14 +139,13 @@ export default {
     generateShareLink () {
       var idString = ''
       this.seiyuuIds.forEach(element => {
-        idString += element + ';'
+        idString += element + ',';
       });
       
-      idString = idString.slice(0, -1)
-      idString = this.encodeURL(seiyuuIds)
+      idString = idString.slice(0, -1);
+      idString = this.encodeURL(this.seiyuuIds)
 
       var shareLink = process.env.baseUrl + $nuxt.$route.path.toLowerCase() + '?seiyuuIds=' + idString
-
       this.$copyText(shareLink)
       this.snackbar = true
     }
