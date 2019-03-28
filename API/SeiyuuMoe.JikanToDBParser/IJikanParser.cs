@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿
 using System.Threading.Tasks;
 
 namespace SeiyuuMoe.JikanToDBParser
@@ -16,5 +14,7 @@ namespace SeiyuuMoe.JikanToDBParser
 		Task UpdateAnime();
 
 		Task UpdateSeasons();
+
+		Task UpdateSeiyuu();
 	}
 }

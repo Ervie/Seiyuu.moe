@@ -1,5 +1,7 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Hangfire;
+using Hangfire.MemoryStorage;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -8,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SeiyuuMoe.BusinessServices;
 using SeiyuuMoe.Data;
+using SeiyuuMoe.JikanToDBParser;
 using SeiyuuMoe.Logger;
 using SeiyuuMoe.Repositories;
 using SeiyuuMoe.Services;
@@ -35,6 +38,7 @@ namespace SeiyuuMoe.API
 		{
 			services.AddMvc().AddControllersAsServices();
 			services.AddSingleton<IConfiguration>(Configuration);
+			services.AddHangfire(x => x.UseMemoryStorage());
 			services.AddCors();
 
 			var builder = new ContainerBuilder();
@@ -46,6 +50,7 @@ namespace SeiyuuMoe.API
 			builder.RegisterModule(new BusinessServicesModule());
 			builder.RegisterModule(new ServicesModule());
 			builder.RegisterModule(new LoggerModule());
+			builder.RegisterModule(new JikanParserModule());
 
 			ApplicationContainer = builder.Build();
 
@@ -65,6 +70,10 @@ namespace SeiyuuMoe.API
 				ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
 			});
 
+			app.UseHangfireServer();
+			app.UseHangfireDashboard("/api/jobs");
+
+			SetupRecurringJobs();
 
 			app.UseCors(builder => builder
 			.AllowAnyOrigin()
@@ -73,6 +82,12 @@ namespace SeiyuuMoe.API
 			.AllowCredentials());
 
 			app.UseMvc();
+		}
+
+		public void SetupRecurringJobs()
+		{
+			// ToDo: Declare
+			RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.UpdateCharacters(), Cron.Monthly);
 		}
 	}
 }
