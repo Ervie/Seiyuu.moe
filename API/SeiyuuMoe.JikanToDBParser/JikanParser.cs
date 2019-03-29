@@ -59,20 +59,19 @@ namespace SeiyuuMoe.JikanToDBParser
 		{
 			logger.Log("Started InsertSeiyuu job.");
 
-			var allSeiyuu = await seiyuuRepository.GetAllAsync();
+			var lastSeiyuu = await seiyuuRepository.GetOrderedPageAsync(PredicateBuilder.True<Seiyuu>(), "MalId DESC", 0, 1);
 
-			long lastId = allSeiyuu.Max(x => x.MalId);
+			long lastId = lastSeiyuu.Results.First().MalId;
 
 			string japaneseName = string.Empty;
-			string imageUrl = string.Empty;
 
-			for (long malId = lastId; malId < lastId + 100; malId++)
+			for (long malId = lastId + 1; malId < lastId + 100; malId++)
 			{
 				Person seiyuu = await SendSinglePersonRequest(malId, 0);
 
 				if (seiyuu != null)
 				{
-					logger.Log($"Parsed id:{seiyuu.MalId}");
+					logger.Log($"Parsed id:{seiyuu.MalId}: {seiyuu.Name}");
 				}
 				else
 				{
@@ -80,7 +79,15 @@ namespace SeiyuuMoe.JikanToDBParser
 					continue;
 				}
 
-				if (string.IsNullOrWhiteSpace(seiyuu.GivenName) && string.IsNullOrWhiteSpace(seiyuu.FamilyName))
+				japaneseName = string.Empty;
+
+				if (!string.IsNullOrWhiteSpace(seiyuu.FamilyName))
+					japaneseName += seiyuu.FamilyName;
+
+				if (!string.IsNullOrWhiteSpace(seiyuu.GivenName))
+					japaneseName += string.IsNullOrEmpty(japaneseName) ? seiyuu.GivenName : " " + seiyuu.GivenName;
+
+				if (!IsJapanese(japaneseName))
 				{
 					logger.Log($"Omitted {seiyuu.Name} - not Japanese");
 					BlacklistId(malId, "Seiyuu", "Not Japanese");
@@ -94,30 +101,27 @@ namespace SeiyuuMoe.JikanToDBParser
 					continue;
 				}
 
-				if (!string.IsNullOrWhiteSpace(seiyuu.FamilyName))
-					japaneseName += seiyuu.FamilyName;
-
-				if (!string.IsNullOrWhiteSpace(seiyuu.GivenName))
-					japaneseName += string.IsNullOrEmpty(japaneseName) ? seiyuu.GivenName : " " + seiyuu.GivenName;
-
-				imageUrl = EmptyStringIfPlaceholder(seiyuu.ImageURL);
-
 				seiyuuRepository.Add(
 					new Seiyuu
 					{
 						Name = seiyuu.Name,
 						MalId = seiyuu.MalId,
-						ImageUrl = imageUrl,
+						ImageUrl = EmptyStringIfPlaceholder(seiyuu.ImageURL),
 						About = seiyuu.More,
-						Birthday = seiyuu.Birthday.ToString(),
+						Birthday = seiyuu.Birthday.HasValue ? seiyuu.Birthday.Value.ToString("dd-MM-yyyy") : string.Empty,
 						Popularity = seiyuu.MemberFavorites,
 						JapaneseName = japaneseName
 					}
 				);
 
-				seiyuuRepository.Commit();
+				await seiyuuRepository.CommitAsync();
 
 				logger.Log($"Inserted {seiyuu.Name} with MalId: {seiyuu.MalId}");
+
+				foreach (VoiceActingRole role in seiyuu.VoiceActingRoles)
+				{
+					await InsertRole(seiyuu.MalId, role, new List<Role>());
+				}
 			}
 
 			logger.Log("Finished InsertSeiyuu job.");
@@ -291,7 +295,9 @@ namespace SeiyuuMoe.JikanToDBParser
 		}
 
 		#endregion
+
 		#region Additional parsing methods
+
 		public async Task FilterNonJapanese()
 		{
 			IReadOnlyCollection<Seiyuu> seiyuuCollection = await seiyuuRepository.GetAllAsync();
