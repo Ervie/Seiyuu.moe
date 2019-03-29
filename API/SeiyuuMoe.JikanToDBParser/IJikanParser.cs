@@ -9,12 +9,12 @@ namespace SeiyuuMoe.JikanToDBParser
 
 		Task ParseRoles();
 
-		Task UpdateCharacters();
+		Task UpdateAllCharacters();
 
-		Task UpdateAnime();
+		Task UpdateAllAnime();
 
 		Task UpdateSeasons();
 
-		Task UpdateSeiyuu();
+		Task UpdateAllSeiyuu();
 	}
 }

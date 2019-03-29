@@ -4,6 +4,7 @@ using SeiyuuMoe.Data.Context;
 using SeiyuuMoe.Data.Model;
 using SeiyuuMoe.Logger;
 using SeiyuuMoe.Repositories.Repositories;
+using SeiyuuMoe.Repositories.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,6 +57,8 @@ namespace SeiyuuMoe.JikanToDBParser
 
 		public async Task InsertSeiyuu()
 		{
+			logger.Log("Started InsertSeiyuu job.");
+
 			var allSeiyuu = await seiyuuRepository.GetAllAsync();
 
 			long lastId = allSeiyuu.Max(x => x.MalId);
@@ -116,10 +119,14 @@ namespace SeiyuuMoe.JikanToDBParser
 
 				logger.Log($"Inserted {seiyuu.Name} with MalId: {seiyuu.MalId}");
 			}
+
+			logger.Log("Finished InsertSeiyuu job.");
 		}
 
 		public async Task ParseRoles()
 		{
+			logger.Log("Started ParseRoles job.");
+
 			ICollection<long> seiyuuIdCollection = (await seiyuuRepository.GetAllAsync()).Select(x => x.MalId).ToList();
 
 			foreach (long seiyuuMalId in seiyuuIdCollection)
@@ -143,53 +150,123 @@ namespace SeiyuuMoe.JikanToDBParser
 					continue;
 				}
 			}
+			logger.Log("Finished ParseRoles job.");
 		}
 
-		public async Task UpdateAnime()
+		public async Task UpdateAllAnime()
 		{
-			IReadOnlyCollection<Data.Model.Anime> animeCollection = await animeRepository.GetAllAsync();
+			logger.Log("Started UpdateAllAnime job.");
 
-			foreach (Data.Model.Anime anime in animeCollection.OrderBy(x => x.MalId))
+			int page = 0;
+			int pageSize = 100;
+			long totalAnimeCount = await animeRepository.CountAsync(x => true);
+
+			while (page * pageSize < totalAnimeCount)
 			{
-				JikanDotNet.Anime animeFullData = await SendSingleAnimeRequest(anime.MalId, 0);
+				var animeCollection = await animeRepository.GetOrderedPageAsync(PredicateBuilder.True<Data.Model.Anime>(), "MalId ASC", page, pageSize);
 
-				if (animeFullData != null)
+				foreach (Data.Model.Anime anime in animeCollection.Results)
 				{
-					logger.Log($"Parsed anime with id {anime.MalId}: {anime.Title}");
+					JikanDotNet.Anime animeFullData = await SendSingleAnimeRequest(anime.MalId, 0);
 
-					anime.Title = animeFullData.Title;
-					anime.About = animeFullData.Synopsis;
-					anime.JapaneseTitle = animeFullData.TitleJapanese;
-					anime.Popularity = animeFullData.Members;
+					if (animeFullData != null)
+					{
+						logger.Log($"Parsed anime with id {anime.MalId}: {anime.Title}");
 
-					anime.ImageUrl = EmptyStringIfPlaceholder(animeFullData.ImageURL);
-
-					if (animeFullData.Aired.From.HasValue)
-						anime.AiringDate = animeFullData.Aired.From.Value.ToString("dd-MM-yyyy");
-
-					if (animeFullData.TitleSynonyms.Count > 0)
-						anime.TitleSynonyms = string.Join(';', animeFullData.TitleSynonyms);
-
-					anime.TypeId = await MatchAnimeType(animeFullData.Type);
-					anime.StatusId = await MatchAnimeStatus(animeFullData.Status);
-					anime.SeasonId = string.IsNullOrEmpty(animeFullData.Premiered) ?
-						await MatchSeason(animeFullData.Aired.From) :
-						await MatchSeason(animeFullData.Premiered);
-
-					animeRepository.Update(anime);
-
-					await animeRepository.CommitAsync();
+						await UpdateAnime(anime, animeFullData);
+					}
+					else
+					{
+						logger.Log($"Error on {anime.MalId} - not found");
+						continue;
+					}
 				}
-				else
-				{
-					logger.Log($"Error on {anime.MalId} - not found");
-					continue;
-				}
+
+				page++;
 			}
+			logger.Log("Finished UpdateAllAnime job.");
+		}
+
+		public async Task UpdateAllCharacters()
+		{
+			try
+			{
+				logger.Log("Started UpdateAllCharacters job.");
+
+				int page = 0;
+				int pageSize = 100;
+				long totalCharacterCount = await characterRepository.CountAsync(x => true);
+
+
+				while (page * pageSize < totalCharacterCount)
+				{
+					var characterCollection = await characterRepository.GetOrderedPageAsync(PredicateBuilder.True<Data.Model.Character>(), "MalId ASC", page, pageSize);
+
+					foreach (Data.Model.Character character in characterCollection.Results)
+					{
+						JikanDotNet.Character characterFullData = await SendSingleCharacterRequest(character.MalId, 0);
+
+						if (characterFullData != null)
+						{
+							logger.Log($"Parsed character with id {character.MalId}: {character.Name}");
+
+							await UpdateCharacter(character, characterFullData);
+						}
+						else
+						{
+							logger.Log($"Error on {character.MalId} - not found");
+							continue;
+						}
+					}
+
+					page++;
+				}
+				logger.Log("Finished UpdateAllCharacters job.");
+			}
+			catch (Exception ex)
+			{
+				logger.Log($"Exception: {ex.Message}");
+			}
+		}
+
+		public async Task UpdateAllSeiyuu()
+		{
+			logger.Log("Started UpdateAllSeiyuu job.");
+
+			int page = 0;
+			int pageSize = 100;
+			long totalSeiyuuCount = await seiyuuRepository.CountAsync(x => true);
+
+			while (page * pageSize < totalSeiyuuCount)
+			{
+				var seiyuuCollection = await seiyuuRepository.GetOrderedPageAsync(PredicateBuilder.True<Data.Model.Seiyuu>(), "MalId ASC", page, pageSize);
+
+				foreach (Seiyuu seiyuu in seiyuuCollection.Results)
+				{
+					Person seiyuuFullData = await SendSinglePersonRequest(seiyuu.MalId, 0);
+
+					if (seiyuuFullData != null)
+					{
+						logger.Log($"Parsed id:{seiyuu.MalId}, {seiyuu.Name}");
+
+						await UpdateSeiyuu(seiyuu, seiyuuFullData);
+					}
+					else
+					{
+						logger.Error($"Error on {seiyuu.MalId} - not found");
+						continue;
+					}
+				}
+
+				page++;
+			}
+			logger.Log("Finished UpdateAllSeiyuu job.");
 		}
 
 		public async Task UpdateSeasons()
 		{
+			logger.Log("Started UpdateSeasons job.");
+
 			int YearinNextSixMonths = DateTime.Now.AddMonths(6).Year;
 
 			SeasonArchives seasonArchives = await jikan.GetSeasonArchive();
@@ -209,84 +286,8 @@ namespace SeiyuuMoe.JikanToDBParser
 					await seasonRepository.CommitAsync();
 				}
 			}
-		}
 
-		public async Task UpdateCharacters()
-		{
-			IReadOnlyCollection<Data.Model.Character> characterCollection = await characterRepository.GetAllAsync();
-
-			foreach (Data.Model.Character character in characterCollection.OrderBy(x => x.MalId))
-			{
-				JikanDotNet.Character characterFullData = await SendSingleCharacterRequest(character.MalId, 0);
-
-				if (characterFullData != null)
-				{
-					logger.Log($"Parsed character with id {character.MalId}: {character.Name}");
-
-					character.Name = characterFullData.Name;
-					character.About = characterFullData.About;
-					character.ImageUrl = characterFullData.ImageURL;
-					character.NameKanji = characterFullData.NameKanji;
-					character.Popularity = characterFullData.MemberFavorites;
-
-					character.ImageUrl = EmptyStringIfPlaceholder(characterFullData.ImageURL);
-
-					if (characterFullData.Nicknames.Any())
-						character.Nicknames = string.Join(';', characterFullData.Nicknames.ToArray());
-
-					characterRepository.Update(character);
-					
-					characterRepository.Commit();
-				}
-				else
-				{
-					logger.Log($"Error on {character.MalId} - not found");
-					continue;
-				}
-			}
-		}
-
-		public async Task UpdateSeiyuu()
-		{
-			IReadOnlyCollection<Seiyuu> seiyuuCollection = await seiyuuRepository.GetAllAsync();
-			string japaneseName = string.Empty;
-
-			foreach (Seiyuu seiyuu in seiyuuCollection)
-			{
-				Person seiyuuFullData = await SendSinglePersonRequest(seiyuu.MalId, 0);
-				japaneseName = string.Empty;
-
-				if (seiyuuFullData != null)
-				{
-					logger.Log($"Parsed id:{seiyuu.MalId}, {seiyuu.Name}");
-
-					seiyuu.Name = seiyuuFullData.Name;
-					seiyuu.Popularity = seiyuuFullData.MemberFavorites;
-					seiyuu.About = seiyuuFullData.More;
-
-					if (seiyuuFullData.Birthday.HasValue)
-						seiyuu.Birthday = seiyuuFullData.Birthday.Value.ToString("dd-MM-yyyy");
-
-					seiyuu.ImageUrl = EmptyStringIfPlaceholder(seiyuuFullData.ImageURL);
-
-					if (!string.IsNullOrWhiteSpace(seiyuuFullData.FamilyName))
-						japaneseName += seiyuuFullData.FamilyName;
-
-					if (!string.IsNullOrWhiteSpace(seiyuuFullData.GivenName))
-						japaneseName += string.IsNullOrEmpty(japaneseName) ? seiyuuFullData.GivenName : " " + seiyuuFullData.GivenName;
-
-					seiyuu.JapaneseName = japaneseName;
-
-					seiyuuRepository.Update(seiyuu);
-
-					await seiyuuRepository.CommitAsync();
-				}
-				else
-				{
-					logger.Error($"Error on {seiyuu.MalId} - not found");
-					continue;
-				}
-			}
+			logger.Log("Finished UpdateSeasons job.");
 		}
 
 		#endregion
@@ -319,6 +320,81 @@ namespace SeiyuuMoe.JikanToDBParser
 		}
 
 		#endregion
+
+		#region Updating Entities
+
+		private async Task UpdateAnime(Data.Model.Anime anime, JikanDotNet.Anime animeParsedData)
+		{
+			anime.Title = animeParsedData.Title;
+			anime.About = animeParsedData.Synopsis;
+			anime.JapaneseTitle = animeParsedData.TitleJapanese;
+			anime.Popularity = animeParsedData.Members;
+
+			anime.ImageUrl = EmptyStringIfPlaceholder(animeParsedData.ImageURL);
+
+			if (animeParsedData.Aired.From.HasValue)
+				anime.AiringDate = animeParsedData.Aired.From.Value.ToString("dd-MM-yyyy");
+
+			if (animeParsedData.TitleSynonyms.Count > 0)
+				anime.TitleSynonyms = string.Join(';', animeParsedData.TitleSynonyms);
+
+			anime.TypeId = await MatchAnimeType(animeParsedData.Type);
+			anime.StatusId = await MatchAnimeStatus(animeParsedData.Status);
+			anime.SeasonId = string.IsNullOrEmpty(animeParsedData.Premiered) ?
+				await MatchSeason(animeParsedData.Aired.From) :
+				await MatchSeason(animeParsedData.Premiered);
+
+			animeRepository.Update(anime);
+
+			await animeRepository.CommitAsync();
+		}
+
+		private async Task UpdateCharacter(Data.Model.Character character, JikanDotNet.Character characterParsedData)
+		{
+			character.Name = characterParsedData.Name;
+			character.About = characterParsedData.About;
+			character.ImageUrl = characterParsedData.ImageURL;
+			character.NameKanji = characterParsedData.NameKanji;
+			character.Popularity = characterParsedData.MemberFavorites;
+
+			character.ImageUrl = EmptyStringIfPlaceholder(characterParsedData.ImageURL);
+
+			if (characterParsedData.Nicknames.Any())
+				character.Nicknames = string.Join(';', characterParsedData.Nicknames.ToArray());
+
+			characterRepository.Update(character);
+
+			await characterRepository.CommitAsync();
+		}
+
+		private async Task UpdateSeiyuu(Seiyuu seiyuu, Person seiyuuParsedData)
+		{
+			string japaneseName = string.Empty;
+
+			seiyuu.Name = seiyuuParsedData.Name;
+			seiyuu.Popularity = seiyuuParsedData.MemberFavorites;
+			seiyuu.About = seiyuuParsedData.More;
+
+			if (seiyuuParsedData.Birthday.HasValue)
+				seiyuu.Birthday = seiyuuParsedData.Birthday.Value.ToString("dd-MM-yyyy");
+
+			seiyuu.ImageUrl = EmptyStringIfPlaceholder(seiyuuParsedData.ImageURL);
+
+			if (!string.IsNullOrWhiteSpace(seiyuuParsedData.FamilyName))
+				japaneseName += seiyuuParsedData.FamilyName;
+
+			if (!string.IsNullOrWhiteSpace(seiyuuParsedData.GivenName))
+				japaneseName += string.IsNullOrEmpty(japaneseName) ? seiyuuParsedData.GivenName : " " + seiyuuParsedData.GivenName;
+
+			seiyuu.JapaneseName = japaneseName;
+
+			seiyuuRepository.Update(seiyuu);
+
+			await seiyuuRepository.CommitAsync();
+		}
+
+		#endregion
+
 		#region Requests
 
 		private async Task<JikanDotNet.Anime> SendSingleAnimeRequest(long malId, short retryCount)
