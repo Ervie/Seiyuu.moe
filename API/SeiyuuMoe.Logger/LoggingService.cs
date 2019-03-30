@@ -18,8 +18,6 @@ namespace SeiyuuMoe.Logger
 				Directory.CreateDirectory(logDirectory);
 
 			logger = LogManager.GetCurrentClassLogger();
-
-			logger.Info("Logger init");
 		}
 
 		public void Info(string message)
