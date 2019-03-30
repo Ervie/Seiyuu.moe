@@ -58,15 +58,14 @@ Require .Net Core 2.2 installed.
 
 ## Changelog
 
-### Version 1.5 - 11th March 2019 (latest)
+### Version 2.0 - 30th March 2019 
 
-* The amount of data transferred has been reduced.
-* Less "Too much requests" errors.
-* Performance improvement on anime searching
-* Fixes
-    * Loading images (for most most).
-    * Handling error 503 (service not available).
-    * Added sample placeholder for search controls.
+* Instead sending requests to external API, all data is requested to backend.
+* Reduced amount of data transferred.
+* Massive speed boost to searching anime/seiyuu.
+* Removed "Too much requests" issue altogether.
+* Added logger.
+* Database frequently updated by background workers.
 
 **[Read More](https://github.com/Ervie/Seiyuu.moe/blob/master/Changelog.md)**
 

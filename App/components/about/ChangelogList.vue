@@ -50,6 +50,15 @@
             return {
                 items: [
                     {
+                      title: 'Version 2.0 - Performance improvement',
+                      date: '30th March 2019',
+                      items: [
+                          { isFeature: true, title: 'Instead sending requests to external API, all data is requested to backend.' },
+                          { isFeature: false, title: 'Reduced amount of data transferred.' },
+                          { isFeature: false, title: 'Massive speed boost to searching anime/seiyuu.' },
+                          { isFeature: false, title: 'Removed "Too much requests" issue altogether.' }
+                      ]},
+                    {
                       title: 'Version 1.5 - Performance improvement',
                       date: '11th March 2019',
                       items: [

@@ -1,4 +1,13 @@
-### Version 1.5 - 11th March 2019 (latest)
+### Version 2.0 - 30th March 2019 (latest)
+
+* Instead sending requests to external API, all data is requested to backend
+* Reduced amount of data transferred
+* Massive speed boost to searching anime/seiyuu.
+* Removed "Too much requests" issue altogether.
+* Added logger.
+* Database frequently updated by background workers.
+
+### Version 1.5 - 11th March 2019
 
 * The amount of data transferred has been reduced.
 * Less "Too much requests" errors.
@@ -11,7 +20,7 @@
 ### Version 1.4 - 22th February 2019
 
 * Features
-    * Three possbile table views.
+    * Three available table views.
     * Timeline view for seiyuu comparison.
     * New about and home pages.
     * Changelog in about page.
