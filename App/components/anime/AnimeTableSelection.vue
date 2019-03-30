@@ -86,18 +86,21 @@ export default {
         image: ''
       });
       
-      for (var headerIndex = 0; headerIndex < this.tableData[0].animeCharacters.length; headerIndex++) {
-        this.headers.push({
-          text: this.tableData[0].animeCharacters[headerIndex].anime.title,
-          sortable: false,
-          image: this.tableData[0].animeCharacters[headerIndex].anime.imageUrl});
-      }
-      if (this.viewMode === 'tab-compact') {
-        this.headers.push({
-          text: '',
-          sortable: false,
-          value: 'name'
-        });
+      if (this.tableData != null && this.tableData.length > 0)
+      {
+        for (var headerIndex = 0; headerIndex < this.tableData[0].animeCharacters.length; headerIndex++) {
+          this.headers.push({
+            text: this.tableData[0].animeCharacters[headerIndex].anime.title,
+            sortable: false,
+            image: this.tableData[0].animeCharacters[headerIndex].anime.imageUrl});
+        }
+        if (this.viewMode === 'tab-compact') {
+          this.headers.push({
+            text: '',
+            sortable: false,
+            value: 'name'
+          });
+        }
       }
     }
   },

@@ -85,19 +85,23 @@ export default {
         value: 'anime.title',
         image: ''
       });
-      for (var headerIndex = 0; headerIndex < this.tableData[0].seiyuuCharacters.length; headerIndex++) {
-        this.headers.push({
-          text: this.tableData[0].seiyuuCharacters[headerIndex].seiyuu.name,
-          sortable: false,
-          image: this.tableData[0].seiyuuCharacters[headerIndex].seiyuu.imageUrl
-        });
-      };
-      if (this.viewMode === 'tab-compact') {
-        this.headers.push({
-          text: '',
-          sortable: false,
-          value: 'name'
-        });
+
+      if (this.tableData != null && this.tableData.length > 0)
+      {
+        for (var headerIndex = 0; headerIndex < this.tableData[0].seiyuuCharacters.length; headerIndex++) {
+          this.headers.push({
+            text: this.tableData[0].seiyuuCharacters[headerIndex].seiyuu.name,
+            sortable: false,
+            image: this.tableData[0].seiyuuCharacters[headerIndex].seiyuu.imageUrl
+          });
+        };
+        if (this.viewMode === 'tab-compact') {
+          this.headers.push({
+            text: '',
+            sortable: false,
+            value: 'name'
+          });
+        }
       }
     }
   },

@@ -21,7 +21,7 @@
             @click="resetList" 
             :disabled="seiyuuIds.length < 1">Reset</v-btn>
           <v-btn depressed large color="primary" class="optionButton" 
-            @click="computeResults" 
+            @click="showResults" 
             :disabled="seiyuuIds.length < 2">Compare</v-btn>
           <v-btn depressed large color="secondary" class="optionButton" 
             @click="generateShareLink" 
@@ -104,17 +104,22 @@ export default {
     resetList () {
       this.$emit('resetList')
     },
+    showResults () {
+      this.showTables = true;
+      this.computeResults();
+    },
     computeResults () {
-
-      axios.get(this.getSeiyuuCompareRequest())
-        .then((response) => {
-          if (response.data.payload !== null) {
-            this.outputData = response.data.payload;
-            this.showTables = true;
-          }
-        })
-        .catch((error) => {
-        })
+      if (this.seiyuuIds.length >= 2 && this.showTables)
+      {
+        axios.get(this.getSeiyuuCompareRequest())
+          .then((response) => {
+            if (response.data.payload !== null) {
+              this.outputData = response.data.payload;
+            }
+          })
+          .catch((error) => {
+          })
+      }
     },
     getSeiyuuCompareRequest() {
 
@@ -143,22 +148,22 @@ export default {
       });
       
       idString = idString.slice(0, -1);
-      idString = this.encodeURL(this.seiyuuIds)
+      idString = this.encodeURL(this.seiyuuIds);
 
-      var shareLink = process.env.baseUrl + $nuxt.$route.path.toLowerCase() + '?seiyuuIds=' + idString
-      this.$copyText(shareLink)
-      this.snackbar = true
+      var shareLink = process.env.baseUrl + $nuxt.$route.path.toLowerCase() + '?seiyuuIds=' + idString;
+      this.$copyText(shareLink);
+      this.snackbar = true;
     }
   },
   watch: {
     seiyuuIds: function (newVal, oldVal) {
       if (this.seiyuuIds.length === 0) {
-        this.showTables = false
+        this.showTables = false;
       }
     },
     runImmediately: function (val) {
       if (val === true) {
-        this.computeResults()
+        this.showResults();
       }
     },
     mainRolesOnly: {
