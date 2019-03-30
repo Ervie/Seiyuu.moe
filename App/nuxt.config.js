@@ -31,8 +31,8 @@ module.exports = {
   },
 
   env: {
-    baseUrl: process.env.BASE_URL || "http://localhost:3000",
-    apiUrl: process.env.API_URL || "http://localhost:5000",
+    baseUrl: process.env.BASE_URL || "https://seiyuu.moe",
+    apiUrl: process.env.API_URL || "https://seiyuu.moe:9000",
   },
 
   /*
