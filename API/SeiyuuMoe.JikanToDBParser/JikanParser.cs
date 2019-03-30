@@ -1,6 +1,5 @@
 ﻿using JikanDotNet;
 using JikanDotNet.Exceptions;
-using SeiyuuMoe.Data.Context;
 using SeiyuuMoe.Data.Model;
 using SeiyuuMoe.Logger;
 using SeiyuuMoe.Repositories.Repositories;
@@ -8,12 +7,11 @@ using SeiyuuMoe.Repositories.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace SeiyuuMoe.JikanToDBParser
 {
-	public class JikanParser: IJikanParser
+	public class JikanParser : IJikanParser
 	{
 		private ILoggingService logger;
 
@@ -201,7 +199,6 @@ namespace SeiyuuMoe.JikanToDBParser
 				int pageSize = 100;
 				long totalCharacterCount = await characterRepository.CountAsync(x => true);
 
-
 				while (page * pageSize < totalCharacterCount)
 				{
 					var characterCollection = await characterRepository.GetOrderedPageAsync(PredicateBuilder.True<Data.Model.Character>(), "MalId ASC", page, pageSize);
@@ -274,7 +271,7 @@ namespace SeiyuuMoe.JikanToDBParser
 			int YearinNextSixMonths = DateTime.Now.AddMonths(6).Year;
 
 			SeasonArchives seasonArchives = await jikan.GetSeasonArchive();
-			
+
 			foreach (var season in seasonArchives.Archives.First(x => x.Year.Equals(YearinNextSixMonths)).Season)
 			{
 				var insertedSeason = await seasonRepository.GetAsync(x => x.Name.Equals(season.ToString()) &&
@@ -294,7 +291,7 @@ namespace SeiyuuMoe.JikanToDBParser
 			logger.Log("Finished UpdateSeasons job.");
 		}
 
-		#endregion
+		#endregion Interface Implementation
 
 		#region Additional parsing methods
 
@@ -325,7 +322,7 @@ namespace SeiyuuMoe.JikanToDBParser
 			}
 		}
 
-		#endregion
+		#endregion Additional parsing methods
 
 		#region Updating Entities
 
@@ -399,14 +396,14 @@ namespace SeiyuuMoe.JikanToDBParser
 			await seiyuuRepository.CommitAsync();
 		}
 
-		#endregion
+		#endregion Updating Entities
 
 		#region Requests
 
 		private async Task<JikanDotNet.Anime> SendSingleAnimeRequest(long malId, short retryCount)
 		{
 			JikanDotNet.Anime anime = null;
-			Thread.Sleep(3000 + retryCount * 10000);
+			await Task.Delay(3000 + retryCount * 10000);
 
 			try
 			{
@@ -430,7 +427,7 @@ namespace SeiyuuMoe.JikanToDBParser
 		private async Task<JikanDotNet.AnimeCharactersStaff> SendSingleAnimeCharactersStaffRequest(long malId, short retryCount)
 		{
 			JikanDotNet.AnimeCharactersStaff animeCharactersStaff = null;
-			Thread.Sleep(3000 + retryCount * 10000);
+			await Task.Delay(3000 + retryCount * 10000);
 
 			try
 			{
@@ -454,7 +451,7 @@ namespace SeiyuuMoe.JikanToDBParser
 		private async Task<Person> SendSinglePersonRequest(long malId, short retryCount)
 		{
 			Person seiyuu = null;
-			Thread.Sleep(3000 + retryCount * 10000);
+			await Task.Delay(3000 + retryCount * 10000);
 
 			try
 			{
@@ -480,12 +477,15 @@ namespace SeiyuuMoe.JikanToDBParser
 								case (System.Net.HttpStatusCode.NotFound):
 									BlacklistId(malId, "Seiyuu", "404 Not Found");
 									break;
+
 								case (System.Net.HttpStatusCode.InternalServerError):
-								//	BlacklistId(malId, "Seiyuu", "Not exist");
+									//	BlacklistId(malId, "Seiyuu", "Not exist");
 									break;
+
 								case (System.Net.HttpStatusCode.TooManyRequests):
 									BlacklistId(malId, "Seiyuu", "429 Too much request");
 									break;
+
 								default:
 									BlacklistId(malId, "Seiyuu", "Other");
 									break;
@@ -501,7 +501,7 @@ namespace SeiyuuMoe.JikanToDBParser
 		private async Task<JikanDotNet.Character> SendSingleCharacterRequest(long malId, short retryCount)
 		{
 			JikanDotNet.Character character = null;
-			Thread.Sleep(3000 + retryCount * 10000);
+			await Task.Delay(3000 + retryCount * 10000);
 
 			try
 			{
@@ -527,12 +527,15 @@ namespace SeiyuuMoe.JikanToDBParser
 								case (System.Net.HttpStatusCode.NotFound):
 									BlacklistId(malId, "Character", "404 Not Found");
 									break;
+
 								case (System.Net.HttpStatusCode.InternalServerError):
 									BlacklistId(malId, "Character", "Not exist");
 									break;
+
 								case (System.Net.HttpStatusCode.TooManyRequests):
 									BlacklistId(malId, "Character", "429 Too much request");
 									break;
+
 								default:
 									BlacklistId(malId, "Character", "Other");
 									break;
@@ -548,7 +551,7 @@ namespace SeiyuuMoe.JikanToDBParser
 		private async Task<JikanDotNet.Season> SendSingleSeasonRequest(int year, Seasons seasonName, short retryCount)
 		{
 			JikanDotNet.Season season = null;
-			Thread.Sleep(3000 + retryCount * 10000);
+			await Task.Delay(3000 + retryCount * 10000);
 
 			try
 			{
@@ -641,7 +644,6 @@ namespace SeiyuuMoe.JikanToDBParser
 						yearOfSeason++;
 
 					return await MatchSeason(yearOfSeason, seasonEnumValue);
-
 				}
 				else
 					return null;
@@ -666,7 +668,7 @@ namespace SeiyuuMoe.JikanToDBParser
 			}
 		}
 
-		#endregion
+		#endregion ForeignKeyMatching
 
 		#region InsertingRoleRelatedEntities
 
@@ -725,7 +727,6 @@ namespace SeiyuuMoe.JikanToDBParser
 					{
 						logger.Log($"Parsed anime with id:{animeFullData.MalId}");
 
-
 						if (animeFullData.TitleSynonyms.Any())
 							titleSynonym = string.Join(';', animeFullData.TitleSynonyms.ToArray());
 
@@ -774,7 +775,6 @@ namespace SeiyuuMoe.JikanToDBParser
 					{
 						logger.Log($"Parsed id:{characterFullData.MalId}");
 
-
 						if (characterFullData.Nicknames.Any())
 							nicknames = string.Join(';', characterFullData.Nicknames.ToArray());
 
@@ -805,7 +805,7 @@ namespace SeiyuuMoe.JikanToDBParser
 				return true; //already inserted
 		}
 
-		#endregion
+		#endregion InsertingRoleRelatedEntities
 
 		private void BlacklistId(long id, string type, string reason = null)
 		{

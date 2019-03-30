@@ -92,7 +92,7 @@ namespace SeiyuuMoe.API
 			RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.UpdateAllSeiyuu(), "0 0 1 * *");
 			RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.UpdateAllAnime(), "0 0 8 * *");
 			RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.UpdateAllCharacters(), "0 0 15 * *");
-			RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.InsertSeiyuu(), "0 20 * * *");
+			RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.InsertSeiyuu(), "0 0 */3 * *");
 		}
 	}
 }
