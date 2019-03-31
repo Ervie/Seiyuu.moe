@@ -88,11 +88,11 @@ namespace SeiyuuMoe.API
 		{
 			// ToDo: Declare
 			RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.UpdateSeasons(), Cron.Monthly);
-			RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.ParseRoles(), "* * * * 7");
+			RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.ParseRoles(), "0 0 * * 7");
 			RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.UpdateAllSeiyuu(), "0 0 1 * *");
 			RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.UpdateAllAnime(), "0 0 8 * *");
 			RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.UpdateAllCharacters(), "0 0 15 * *");
-			RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.InsertSeiyuu(), "0 0 */3 * *");
+			RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.InsertSeiyuu(), "0 0 * * 3");
 		}
 	}
 }
