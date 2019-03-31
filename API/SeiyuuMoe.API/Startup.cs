@@ -89,6 +89,9 @@ namespace SeiyuuMoe.API
 
 		public void SetupRecurringJobs()
 		{
+			// Workaround for to never run automatically - set to run on 31st February. Expression for jobs on demand (run only manually).
+			string runNeverCronExpression = "0 0 31 2 1";
+
 			RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.UpdateSeasons(), Cron.Monthly);
 			RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.ParseRoles(), "0 0 * * 7");
 			RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.UpdateAllSeiyuu(), "0 0 1 * *");
@@ -97,6 +100,7 @@ namespace SeiyuuMoe.API
 			RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.InsertSeiyuu(), "0 0 * * 3");
 
 			RecurringJob.AddOrUpdate<IDatabaseBackupService>(databaseBackupService => databaseBackupService.BackupDatabase(), "0 12 3 * *");
+			RecurringJob.AddOrUpdate<IDatabaseBackupService>(databaseBackupService => databaseBackupService.RestoreDatabase(), runNeverCronExpression);
 		}
 	}
 }

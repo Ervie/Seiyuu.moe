@@ -1,13 +1,10 @@
 ﻿using Autofac;
 using JikanDotNet;
-using System;
-using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 
 namespace SeiyuuMoe.JikanToDBParser
 {
-	public class JikanParserModule: Autofac.Module
+	public class JikanParserModule : Autofac.Module
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
