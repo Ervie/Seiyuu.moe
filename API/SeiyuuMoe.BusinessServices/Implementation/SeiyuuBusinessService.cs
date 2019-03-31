@@ -36,7 +36,7 @@ namespace SeiyuuMoe.SerBusinessServicesvices
 
 		public async Task<PagedResult<SeiyuuSearchEntryDto>> GetAsync(Query<SeiyuuSearchCriteria> query)
 		{
-			var expression = await seiyuuSearchCriteriaService.BuildExpression(query.SearchCriteria);
+			var expression = seiyuuSearchCriteriaService.BuildExpression(query.SearchCriteria);
 
 			var entities = await seiyuuRepository.GetOrderedPageAsync(expression, query.SortExpression, query.Page, query.PageSize);
 

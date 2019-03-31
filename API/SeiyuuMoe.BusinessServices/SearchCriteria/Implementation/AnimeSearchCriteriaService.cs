@@ -3,7 +3,6 @@ using SeiyuuMoe.Data.Model;
 using SeiyuuMoe.Repositories.Utilities;
 using System;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 
 namespace SeiyuuMoe.BusinessServices.SearchCriteria
 {
@@ -13,7 +12,7 @@ namespace SeiyuuMoe.BusinessServices.SearchCriteria
 		{
 		}
 
-		public async Task<Expression<Func<Anime, bool>>> BuildExpression(AnimeSearchCriteria searchCriteria)
+		public Expression<Func<Anime, bool>> BuildExpression(AnimeSearchCriteria searchCriteria)
 		{
 			var predicate = PredicateBuilder.True<Anime>();
 			return searchCriteria != null ? ExtendExpressionWithSearchCriteria(predicate, searchCriteria) : predicate;

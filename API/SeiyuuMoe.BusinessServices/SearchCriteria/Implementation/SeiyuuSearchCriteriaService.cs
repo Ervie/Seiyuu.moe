@@ -4,17 +4,16 @@ using SeiyuuMoe.Data.Model;
 using SeiyuuMoe.Repositories.Utilities;
 using System;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 
 namespace SeiyuuMoe.BusinessServices.SearchCriteria
 {
-	class SeiyuuSearchCriteriaService : ISeiyuuSearchCriteriaService
+	internal class SeiyuuSearchCriteriaService : ISeiyuuSearchCriteriaService
 	{
 		public SeiyuuSearchCriteriaService()
 		{
 		}
 
-		public async Task<Expression<Func<Seiyuu, bool>>> BuildExpression(SeiyuuSearchCriteria searchCriteria)
+		public Expression<Func<Seiyuu, bool>> BuildExpression(SeiyuuSearchCriteria searchCriteria)
 		{
 			var predicate = PredicateBuilder.True<Seiyuu>();
 			return searchCriteria != null ? ExtendExpressionWithSearchCriteria(predicate, searchCriteria) : predicate;

@@ -8,6 +8,6 @@ namespace SeiyuuMoe.BusinessServices.SearchCriteria
 {
 	public interface ISeiyuuSearchCriteriaService
 	{
-		Task<Expression<Func<Seiyuu, bool>>> BuildExpression(SeiyuuSearchCriteria searchCriteria);
+		Expression<Func<Seiyuu, bool>> BuildExpression(SeiyuuSearchCriteria searchCriteria);
 	}
 }

@@ -33,7 +33,7 @@ namespace SeiyuuMoe.BusinessServices
 
 		public async Task<PagedResult<AnimeSearchEntryDto>> GetAsync(Query<AnimeSearchCriteria> query)
 		{
-			var expression = await animeSearchCriteriaService.BuildExpression(query.SearchCriteria);
+			var expression = animeSearchCriteriaService.BuildExpression(query.SearchCriteria);
 
 			var entities = await animeRepository.GetOrderedPageAsync(expression, query.SortExpression, query.Page, query.PageSize);
 
