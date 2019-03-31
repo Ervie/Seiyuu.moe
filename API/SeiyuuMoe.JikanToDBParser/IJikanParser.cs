@@ -5,7 +5,7 @@ namespace SeiyuuMoe.JikanToDBParser
 {
 	public interface IJikanParser
 	{
-		Task InsertSeiyuu();
+		Task InsertNewSeiyuu();
 
 		Task ParseRoles();
 
@@ -16,5 +16,7 @@ namespace SeiyuuMoe.JikanToDBParser
 		Task UpdateSeasons();
 
 		Task UpdateAllSeiyuu();
+
+		Task InsertOldSeiyuu();
 	}
 }
