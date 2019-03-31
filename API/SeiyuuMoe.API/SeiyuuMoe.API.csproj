@@ -44,6 +44,7 @@
   <ItemGroup>
     <ProjectReference Include="..\SeiyuuMoe.Contracts\SeiyuuMoe.Contracts.csproj" />
     <ProjectReference Include="..\SeiyuuMoe.Data\SeiyuuMoe.Data.csproj" />
+    <ProjectReference Include="..\SeiyuuMoe.FileHandler\SeiyuuMoe.FileHandler.csproj" />
     <ProjectReference Include="..\SeiyuuMoe.JikanToDBParser\SeiyuuMoe.JikanToDBParser.csproj" />
     <ProjectReference Include="..\SeiyuuMoe.Logger\SeiyuuMoe.Logger.csproj" />
     <ProjectReference Include="..\SeiyuuMoe.Repositories\SeiyuuMoe.Repositories.csproj" />

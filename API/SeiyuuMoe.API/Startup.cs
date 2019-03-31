@@ -10,6 +10,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SeiyuuMoe.BusinessServices;
 using SeiyuuMoe.Data;
+using SeiyuuMoe.FileHandler;
+using SeiyuuMoe.FileHandler.DatabaseBackupService;
 using SeiyuuMoe.JikanToDBParser;
 using SeiyuuMoe.Logger;
 using SeiyuuMoe.Repositories;
@@ -51,6 +53,7 @@ namespace SeiyuuMoe.API
 			builder.RegisterModule(new ServicesModule());
 			builder.RegisterModule(new LoggerModule());
 			builder.RegisterModule(new JikanParserModule());
+			builder.RegisterModule(new FileHandlerModule(Configuration["Config:pathToDB"], Configuration["Config:pathToBackupDB"]));
 
 			ApplicationContainer = builder.Build();
 
@@ -86,13 +89,14 @@ namespace SeiyuuMoe.API
 
 		public void SetupRecurringJobs()
 		{
-			// ToDo: Declare
 			RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.UpdateSeasons(), Cron.Monthly);
 			RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.ParseRoles(), "0 0 * * 7");
 			RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.UpdateAllSeiyuu(), "0 0 1 * *");
 			RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.UpdateAllAnime(), "0 0 8 * *");
 			RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.UpdateAllCharacters(), "0 0 15 * *");
 			RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.InsertSeiyuu(), "0 0 * * 3");
+
+			RecurringJob.AddOrUpdate<IDatabaseBackupService>(databaseBackupService => databaseBackupService.BackupDatabase(), "0 12 3 * *");
 		}
 	}
 }
