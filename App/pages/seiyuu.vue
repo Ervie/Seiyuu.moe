@@ -52,6 +52,14 @@ export default {
     resetList () {
       this.seiyuuToCompare = []
     }
+  },
+  head () {
+    return {
+      title: "Seiyuu.moe - Seiyuu comparison",
+      meta: [
+        { hid: 'description', name: 'description', content: 'Select up to 6 seiyuu (voice actors) and compare them. This site will display all the anime they have been working on together.' }
+      ]
+    }
   }
 }
 </script>

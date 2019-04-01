@@ -53,6 +53,14 @@ export default {
     removeAnime (animeId) {
       this.animeToCompare.splice(animeId, 1);
     }
+  },
+  head () {
+    return {
+      title: "Seiyuu.moe - Anime comparison",
+      meta: [
+        { hid: 'description', name: 'description', content: 'Select up to 6 anime and compare them. This site will find and list all voice actors who have had the opportunity to work on the series you selected.' }
+      ]
+    }
   }
 }
 </script>

@@ -18,10 +18,19 @@ import Footer from '@/components/about/Footer'
     export default {
       name:"AboutPage",
       components: {
-            'link-footer': Footer,
-            'about-cards-list': AboutCardsList,
-            'changelog-list': ChangelogList
+          'link-footer': Footer,
+          'about-cards-list': AboutCardsList,
+          'changelog-list': ChangelogList
+      },
+      head () {
+        return {
+          title: "Seiyuu.moe - About Seiyuu.moe",
+          meta: [
+            { hid: 'description', name: 'description', content: 'Quick rundown on the last features implemented and additional information about Seiyuu.moe project.' }
+          ]
         }
+      }
+
     }
 </script>
 
