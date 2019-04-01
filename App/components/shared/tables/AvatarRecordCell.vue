@@ -1,5 +1,5 @@
 <template>
-    <v-container fluid grid-list-xs>
+    <v-container fluid grid-list-xs class="recordCell">
         <v-layout v-for="entry in items" :key="entry.malId" row>
             <v-flex xs8 align-content-center>
                 <v-card-text class="subheading">{{ decodeHtml(getCaption(entry)) }}</v-card-text>
@@ -37,3 +37,9 @@ export default {
   }
 }
 </script>
+
+<style>
+  .recordCell {
+    padding: 4px;
+  }
+</style>
