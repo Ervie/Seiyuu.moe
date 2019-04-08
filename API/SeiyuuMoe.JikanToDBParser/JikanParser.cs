@@ -27,7 +27,7 @@ namespace SeiyuuMoe.JikanToDBParser
 		private ICharacterRepository characterRepository;
 
 		public JikanParser(
-			IJikan jikan,
+			string endpointUrl,
 			ILoggingService loggingService,
 			IAnimeRepository animeRepository,
 			IAnimeStatusRepository animeStatusRepository,
@@ -39,7 +39,7 @@ namespace SeiyuuMoe.JikanToDBParser
 			ISeiyuuRepository seiyuuRepository
 			)
 		{
-			this.jikan = jikan;
+			this.jikan = new Jikan(endpointUrl);
 			this.logger = loggingService;
 			this.animeRepository = animeRepository;
 			this.seasonRepository = seasonRepository;

@@ -55,7 +55,7 @@ namespace SeiyuuMoe.API
 			builder.RegisterModule(new BusinessServicesModule());
 			builder.RegisterModule(new ServicesModule());
 			builder.RegisterModule(new LoggerModule());
-			builder.RegisterModule(new JikanParserModule());
+			builder.RegisterModule(new JikanParserModule(Configuration["Config:jikanREST"]));
 			builder.RegisterModule(new FileHandlerModule(Configuration["Config:pathToDB"], Configuration["Config:pathToBackupDB"]));
 
 			ApplicationContainer = builder.Build();
