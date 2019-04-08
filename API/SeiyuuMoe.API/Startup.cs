@@ -40,7 +40,10 @@ namespace SeiyuuMoe.API
 		{
 			services.AddMvc().AddControllersAsServices();
 			services.AddSingleton<IConfiguration>(Configuration);
-			services.AddHangfire(x => x.UseMemoryStorage());
+			services.AddHangfire(x => x.UseMemoryStorage(new MemoryStorageOptions
+			{
+				FetchNextJobTimeout = TimeSpan.FromDays(7)
+			}));
 			services.AddCors();
 
 			var builder = new ContainerBuilder();
@@ -93,11 +96,11 @@ namespace SeiyuuMoe.API
 			string runNeverCronExpression = "0 0 31 2 1";
 
 			RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.UpdateSeasons(), Cron.Monthly);
-			RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.ParseRoles(), "0 0 * * 7");
+			RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.ParseRoles(), "0 12 * * 7");
 			RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.UpdateAllSeiyuu(), "0 0 1 * *");
 			RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.UpdateAllAnime(), "0 0 8 * *");
 			RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.UpdateAllCharacters(), "0 0 15 * *");
-			RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.InsertNewSeiyuu(), "0 0 * * 3");
+			RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.InsertNewSeiyuu(), "0 0 * * 7");
 			RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.InsertOldSeiyuu(), runNeverCronExpression);
 
 			RecurringJob.AddOrUpdate<IDatabaseBackupService>(databaseBackupService => databaseBackupService.BackupDatabase(), "0 12 3 * *");
