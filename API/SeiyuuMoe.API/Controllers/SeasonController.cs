@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SeiyuuMoe.API.Controllers
 {
-	[Route("api/anime")]
+	[Route("api/season")]
 	public class SeasonController : BaseController
 	{
 		private readonly ISeasonService seasonService;
@@ -20,6 +20,7 @@ namespace SeiyuuMoe.API.Controllers
 		}
 
 		[HttpGet]
+		[Route("Summary")]
 		public Task<IActionResult> GetSeasonSummary([FromQuery] Query<SeasonSearchCriteria> query)
 		{
 			return Handle(async () => HandleServiceResult(await seasonService.GetSeasonSummary(query)));

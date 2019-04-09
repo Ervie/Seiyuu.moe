@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SeiyuuMoe.Contracts.Dtos.Season;
 using SeiyuuMoe.Contracts.SearchCriteria;
 using SeiyuuMoe.WebEssentials;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SeiyuuMoe.Services.Interfaces
 {
 	public interface ISeasonService
 	{
-		Task<QueryResponse<object>> GetSeasonSummary(Query<SeasonSearchCriteria> query);
+		Task<QueryResponse<ICollection<SeasonSummaryEntryDto>>> GetSeasonSummary(Query<SeasonSearchCriteria> query);
 	}
 }

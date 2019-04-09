@@ -5,8 +5,8 @@ using System.Linq.Expressions;
 
 namespace SeiyuuMoe.BusinessServices.SearchCriteria
 {
-	public interface ISeasonSearchCriteriaService
+	public interface IRoleSearchCriteriaService
 	{
-		Expression<Func<Season, bool>> BuildExpression(SeasonSearchCriteria searchCriteria);
+		Expression<Func<Role, bool>> BuildExpression(RoleSearchCriteria searchCriteria);
 	}
 }
