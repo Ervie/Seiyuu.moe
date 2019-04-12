@@ -4,9 +4,9 @@
          <v-autocomplete
           :items="items"
           :search-input.sync="search"
-          :loading="loadingSearch"
+          :loading="loadingEntry"
           v-model="model"
-          hide-no-data
+          :hide-no-data="(search === null || search === '' || search.length < 3) || loadingSearch"
           no-filter
           label="Search anime by title... (e.g. Death Note)"
           item-text="title"
@@ -53,8 +53,9 @@ export default {
     return {
       entries: [],
       model: null,
-      search: null,
+      search: '',
       searchResults: [],
+      loadingEntry: false,
       loadingSearch: false,
       timeout: null,
       timeoutLimit: 300,
@@ -99,11 +100,11 @@ export default {
       if (this.searchedId.length >= this.maximumAnimeNumber) {
         this.handleBrowsingError('tooMuchRecords')
       } else {
-        this.loadingSearch = true
+        this.loadingEntry = true
         if (this.searchedId.includes(parseInt(this.model))) {
           this.handleBrowsingError('alreadyOnTheList')
           this.model = null
-          this.loadingSearch = false
+          this.loadingEntry = false
         } else {
           axios.get(this.cardInfoRequest)
             .then((response) => {
@@ -121,7 +122,7 @@ export default {
       }
     },
     resetSearch() {
-      this.loadingSearch = false;
+      this.loadingEntry = false;
       this.model = null;
       this.search = '';
     },
@@ -180,7 +181,7 @@ export default {
         clearTimeout(this.timeout)
         var self = this;
         this.timeout = setTimeout(function() {
-          self.isLoading = true;
+          self.loadingSearch = true;
 
           if (self.model != null || val === '' || val === null || val.length < 3) {
             self.entries = [];
@@ -199,12 +200,12 @@ export default {
                 self.entries = res.data.payload.results;
                 self.excludeFromSearchResults();
               }
-              self.isLoading = false;
+              self.loadingSearch = false;
             })
             .catch(error => {
               console.log(error);
               this.handleBrowsingError('serviceUnavailable');
-              self.isLoading = false;
+              self.loadingSearch = false;
             })
         }, this.timeoutLimit);
     },

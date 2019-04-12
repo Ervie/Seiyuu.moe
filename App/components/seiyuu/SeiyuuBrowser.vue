@@ -4,11 +4,11 @@
         <v-autocomplete
           :items="items"
           :search-input.sync="search"
-          :loading="loading"
+          :loading="loadingEntry"
           :filter="customFilter"
           v-model="model"
           dark
-          hide-no-data
+          :hide-no-data="(search === null || search === '' || search.length < 3) || loadingSearch"
           label="Search by Seiyuu Name... (e.g. Kana Hanazawa)"
           item-text="name"
           item-value="malId"
@@ -55,7 +55,8 @@ export default {
   data () {
     return {
       entries: [],
-      loading: false,
+      loadingEntry: false,
+      loadingSearch: false,
       model: null,
       search: null,
       timeout: null,
@@ -121,10 +122,10 @@ export default {
         if (this.searchedId.length >= this.maximumSeiyuuNumber) {
           this.handleBrowsingError('tooMuchRecords')
         } else {
-          this.loading = true
+          this.loadingEntry = true
           if (this.searchedId.includes(parseInt(this.model))) {
             this.handleBrowsingError('alreadyOnTheList')
-            this.loading = false
+            this.loadingEntry = false
           } else {
             axios.get(this.cardInfoRequest)
               .then((response) => {
@@ -135,7 +136,7 @@ export default {
               .catch((error) => {
                 console.log(error)
                 this.handleBrowsingError('serviceUnavailable')
-                this.loading = false
+                this.loadingEntry = false
               })
           }
         }
@@ -153,7 +154,7 @@ export default {
       if (this.shareLinkData.length > 1 && this.shareLinkData.length < 6) {
         this.shareLinkData.forEach(element => {
           if (!this.searchedId.includes(element) && Number.parseInt(element) !== 'NaN' && Number.parseInt(element) > 0) {
-            this.loading = true
+            this.loadingEntry = true
             axios.get(process.env.apiUrl + '/api/seiyuu/' + String(element))
               .then((response) => {
                 if (response.data.payload !== null) {
@@ -163,7 +164,7 @@ export default {
               .catch((error) => {
                 console.log(error)
                 this.handleBrowsingError('serviceUnavailable')
-                this.loading = false
+                this.loadingEntry = false
               })
           }
         })
@@ -189,7 +190,7 @@ export default {
     },
     addToList (returnedData) {
       this.$emit('seiyuuReturned', returnedData);
-      this.loading = false;
+      this.loadingEntry = false;
       this.model = null;
       this.resetAlerts();
     }
@@ -215,7 +216,7 @@ export default {
       clearTimeout(this.timeout)
       var self = this
       this.timeout = setTimeout(function() {
-        self.isLoading = true
+        self.loadingSearch = true
 
         if (self.model != null || val === '' || val === null || val.length < 3) {
           self.entries = []
@@ -234,12 +235,12 @@ export default {
               self.entries = res.data.payload.results
               self.excludeFromSearchResults()
             }
-            self.isLoading = false
+            self.loadingSearch = false
           })
           .catch(error => {
             console.log(error);
             this.handleBrowsingError('serviceUnavailable');
-            self.isLoading = false;
+            self.loadingSearch = false;
           })
       }, this.timeoutLimit)
     }
