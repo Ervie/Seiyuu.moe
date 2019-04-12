@@ -50,7 +50,8 @@
           <v-tab-item :value="`tab-table`" >
             <seiyuu-table-selection 
               :tableData="outputData" 
-              :counter="counter" 
+              :counter="counter"
+              :loadingComparison="loadingComparison"
             />
           </v-tab-item>
           <v-tab-item :value="`tab-calendar`" >
@@ -94,6 +95,7 @@ export default {
       counter: 0,
       tabs: 'tab-table',
       outputData: [],
+      loadingComparison: false,
       timelineDates: [],
       groupBySeries: true,
       mainRolesOnly: false,
@@ -111,13 +113,17 @@ export default {
     computeResults () {
       if (this.seiyuuIds.length >= 2 && this.showTables)
       {
+        this.loadingComparison = true;
+        this.outputData = [];
         axios.get(this.getSeiyuuCompareRequest())
           .then((response) => {
             if (response.data.payload !== null) {
               this.outputData = response.data.payload;
+              this.loadingComparison = false;
             }
           })
           .catch((error) => {
+            this.loadingComparison = false;
           })
       }
     },

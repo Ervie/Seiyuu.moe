@@ -35,9 +35,9 @@
               class="expandedRow"/>
         </template>
         <template slot="no-data">
-          <v-alert :value="true" color="error" icon="warning">
-            Sorry, nothing to display here :(
-          </v-alert>
+          <no-data-placeholder
+            :isLoadingData="loadingComparison"
+          />  
         </template>
       </v-data-table>
 </template>
@@ -46,13 +46,15 @@
 import ExpandedPanel from '@/components/shared/tables/ExpandedPanel'
 import TableHeader from '@/components/shared/tables/TableHeader'
 import TextRecordCell from '@/components/shared/tables/TextRecordCell'
+import NoDataPlaceholder from '@/components/shared/tables/NoDataPlaceholder'
 
 export default {
     name: 'AnimeCompactTable',
     components: {
         'table-header': TableHeader,
         'expanded-panel': ExpandedPanel,
-        'text-record-cell': TextRecordCell
+        'text-record-cell': TextRecordCell,
+        'no-data-placeholder': NoDataPlaceholder
     },
     props: {
         headers: {
@@ -62,6 +64,10 @@ export default {
         items: {
             type: Array,
             required: true
+        },
+        loadingComparison: {
+          type: Boolean,
+          required: true
         }
     }
 }

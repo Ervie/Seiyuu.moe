@@ -10,6 +10,7 @@
           <anime-table-selection 
             v-if="showTables" 
             :tableData="outputData" 
+            :loadingComparison="loadingComparison"
             :counter="counter"/>
         </div>
       </v-flex>
@@ -45,6 +46,7 @@ export default {
       showTables: false,
       counter: 0,
       outputData: [],
+      loadingComparison: false,
       snackbar: false
     }
   },
@@ -54,15 +56,18 @@ export default {
     },
     computeResults () {
       this.outputData = [];
+      this.showTables = true;
+      this.loadingComparison = true;
 
       axios.get(this.getAnimeCompareRequest())
         .then((response) => {
           if (response.data.payload !== null) {
             this.outputData = response.data.payload;
-            this.showTables = true;
+            this.loadingComparison = false;
           }
         })
         .catch((error) => {
+          this.loadingComparison = false;
         })
     },
     getAnimeCompareRequest() {

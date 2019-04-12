@@ -25,18 +25,21 @@
             <anime-expanded-table
               :items="tableData" 
               :headers="headers"
+              :loadingComparison="loadingComparison"
             />
           </v-tab-item>
           <v-tab-item :value="`tab-mixed`" >
             <anime-mixed-table
               :items="tableData" 
               :headers="headers"
+              :loadingComparison="loadingComparison"
             />
           </v-tab-item>
           <v-tab-item :value="`tab-compact`" >
             <anime-compact-table
               :items="tableData" 
               :headers="headers"
+              :loadingComparison="loadingComparison"
             />
           </v-tab-item>
         </v-tabs-items>
@@ -67,6 +70,10 @@ export default {
     tableData: {
       type: Array,
       required: false
+    },
+    loadingComparison: {
+      type: Boolean,
+      required: true
     }
   },
   data () {

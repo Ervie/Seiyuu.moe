@@ -25,18 +25,21 @@
             <seiyuu-expanded-table
               :items="tableData" 
               :headers="headers"
+              :loadingComparison="loadingComparison"
             />
           </v-tab-item>
           <v-tab-item :value="`tab-mixed`" >
             <seiyuu-mixed-table
               :items="tableData" 
               :headers="headers"
+              :loadingComparison="loadingComparison"
             />
           </v-tab-item>
           <v-tab-item :value="`tab-compact`" >
             <seiyuu-compact-table
               :items="tableData" 
               :headers="headers"
+              :loadingComparison="loadingComparison"
             />
           </v-tab-item>
         </v-tabs-items>
@@ -68,6 +71,10 @@ export default {
     tableData: {
       type: Array,
       required: false
+    },
+    loadingComparison: {
+      type: Boolean,
+      required: true
     }
   },
   data () {
@@ -79,15 +86,16 @@ export default {
   methods: {
     setTableHeaders () {
       this.headers = [];
-      this.headers.push({
-        text: 'Anime',
-        align: 'left',
-        value: 'anime.title',
-        image: ''
-      });
+      
 
       if (this.tableData != null && this.tableData.length > 0)
       {
+        this.headers.push({
+          text: 'Anime',
+          align: 'left',
+          value: 'anime.title',
+          image: ''
+        });
         for (var headerIndex = 0; headerIndex < this.tableData[0].seiyuuCharacters.length; headerIndex++) {
           this.headers.push({
             text: this.tableData[0].seiyuuCharacters[headerIndex].seiyuu.name,

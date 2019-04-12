@@ -20,9 +20,9 @@
           </tr>
         </template>
         <template slot="no-data">
-          <v-alert :value="true" color="error" icon="warning">
-            Sorry, nothing to display here :(
-          </v-alert>
+          <no-data-placeholder
+            :isLoadingData="loadingComparison"
+          />  
         </template>
       </v-data-table>
 </template>
@@ -30,12 +30,14 @@
 <script>
 import TableHeader from '@/components/shared/tables/TableHeader'
 import AvatarRecordCell from '@/components/shared/tables/AvatarRecordCell'
+import NoDataPlaceholder from '@/components/shared/tables/NoDataPlaceholder'
 
 export default {
     name: 'SeiyuuMixedTable',
     components: {
         'table-header': TableHeader,
-        'avatar-record-cell': AvatarRecordCell
+        'avatar-record-cell': AvatarRecordCell,
+        'no-data-placeholder': NoDataPlaceholder
     },
     props: {
         headers: {
@@ -45,6 +47,10 @@ export default {
         items: {
             type: Array,
             required: true
+        },
+        loadingComparison: {
+          type: Boolean,
+          required: true
         }
     }
 }
