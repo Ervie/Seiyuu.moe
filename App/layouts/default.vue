@@ -62,6 +62,7 @@
           { iconPrefix: 'fa', icon: 'home', title: 'Home', to: '/' },
           { iconPrefix: 'fa', icon: 'users', title: 'Compare Seiyuu', to: '/seiyuu' },
           { iconPrefix: 'fa', icon: 'tv', title: 'Compare Anime', to: '/anime' },
+          { iconPrefix: 'fa', icon: 'calendar', title: 'Season Summary', to: '/season' },
           { iconPrefix: 'fa', icon: 'info-circle', title: 'About', to: '/about' }
         ],
         miniVariant: false,
