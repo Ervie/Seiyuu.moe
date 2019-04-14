@@ -5,7 +5,7 @@
           :items="items"
           :search-input.sync="search"
           :loading="loadingEntry"
-          :filter="customFilter"
+          no-filter
           v-model="model"
           dark
           :hide-no-data="(search === null || search === '' || search.length < 3) || loadingSearch"

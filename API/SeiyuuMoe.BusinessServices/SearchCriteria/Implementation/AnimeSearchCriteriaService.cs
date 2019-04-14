@@ -22,7 +22,10 @@ namespace SeiyuuMoe.BusinessServices.SearchCriteria
 		{
 			return predicate
 				.And(searchCriteria.MalId != null && searchCriteria.MalId.Count > 0, () => anime => searchCriteria.MalId.Contains(anime.MalId))
-				.And(!string.IsNullOrWhiteSpace(searchCriteria.Title), () => anime => anime.Title.Contains(searchCriteria.Title, StringComparison.InvariantCultureIgnoreCase));
+				.And(!string.IsNullOrWhiteSpace(searchCriteria.Title), () => anime => 
+					anime.Title.Contains(searchCriteria.Title, StringComparison.InvariantCultureIgnoreCase) ||
+					(!string.IsNullOrWhiteSpace(anime.JapaneseTitle) && anime.JapaneseTitle.Contains(searchCriteria.Title, StringComparison.InvariantCultureIgnoreCase)) ||
+					(!string.IsNullOrWhiteSpace(anime.TitleSynonyms) && anime.TitleSynonyms.Contains(searchCriteria.Title, StringComparison.InvariantCultureIgnoreCase)));
 		}
 	}
 }
