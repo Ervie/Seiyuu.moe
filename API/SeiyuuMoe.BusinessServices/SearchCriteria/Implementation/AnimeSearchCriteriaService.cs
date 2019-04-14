@@ -25,6 +25,7 @@ namespace SeiyuuMoe.BusinessServices.SearchCriteria
 				.And(!string.IsNullOrWhiteSpace(searchCriteria.Title), () => anime => 
 					anime.Title.Contains(searchCriteria.Title, StringComparison.InvariantCultureIgnoreCase) ||
 					(!string.IsNullOrWhiteSpace(anime.JapaneseTitle) && anime.JapaneseTitle.Contains(searchCriteria.Title, StringComparison.InvariantCultureIgnoreCase)) ||
+					(!string.IsNullOrWhiteSpace(anime.EnglishTitle) && anime.EnglishTitle.Contains(searchCriteria.Title, StringComparison.InvariantCultureIgnoreCase)) ||
 					(!string.IsNullOrWhiteSpace(anime.TitleSynonyms) && anime.TitleSynonyms.Contains(searchCriteria.Title, StringComparison.InvariantCultureIgnoreCase)));
 		}
 	}

@@ -406,6 +406,7 @@ namespace SeiyuuMoe.JikanToDBParser
 		{
 			anime.Title = animeParsedData.Title;
 			anime.About = animeParsedData.Synopsis;
+			anime.EnglishTitle = animeParsedData.TitleEnglish;
 			anime.JapaneseTitle = animeParsedData.TitleJapanese;
 			anime.Popularity = animeParsedData.Members;
 
@@ -815,6 +816,7 @@ namespace SeiyuuMoe.JikanToDBParser
 								Popularity = animeFullData.Members,
 								About = animeFullData.Synopsis,
 								JapaneseTitle = animeFullData.TitleJapanese,
+								EnglishTitle = animeFullData.TitleEnglish,
 								AiringDate = animeFullData.Aired.From.HasValue ? animeFullData.Aired.From.Value.ToString() : null,
 								StatusId = await MatchAnimeStatus(animeFullData.Status),
 								TypeId = await MatchAnimeType(animeFullData.Type),
