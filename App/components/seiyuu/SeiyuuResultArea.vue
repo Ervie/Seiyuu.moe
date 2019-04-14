@@ -22,7 +22,8 @@
             :disabled="seiyuuIds.length < 1">Reset</v-btn>
           <v-btn depressed large color="primary" class="optionButton" 
             @click="showResults" 
-            :disabled="seiyuuIds.length < 2">Compare</v-btn>
+            :disabled="seiyuuIds.length < 2 || loadingComparison"
+            :loading="loadingComparison">Compare</v-btn>
           <v-btn depressed large color="secondary" class="optionButton" 
             @click="generateShareLink" 
             :disabled="!showTables || seiyuuIds.length < 2">Share Link</v-btn>

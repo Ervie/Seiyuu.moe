@@ -3,7 +3,7 @@
       <v-flex>
         <div>
           <v-btn raised large color="error" class="optionButton" v-on:click="resetList" :disabled="animeIds.length < 1">Reset</v-btn>
-          <v-btn depressed large color="primary" class="optionButton" v-on:click="computeResults" :disabled="animeIds.length < 2">Compare</v-btn>
+          <v-btn depressed large color="primary" class="optionButton" v-on:click="computeResults" :disabled="animeIds.length < 2 || loadingComparison" :loading="loadingComparison">Compare</v-btn>
           <v-btn depressed large color="secondary" class="optionButton" v-on:click="generateShareLink" :disabled="!showTables || animeIds.length < 2">Share Link</v-btn>
         </div>
         <div>
