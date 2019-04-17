@@ -59,7 +59,7 @@
                 paragraphs: [
                 'Project uses Jikan API, an unofficial MyAnimeList API, courtesy of Nekomata (Irfan Dahir). Project can be found on the footer.',
                 'Website icon made by Icon Monk from www.flaticon.com is licensed by CC 3.0 BY.',
-                'Art used on the main page were made by haimerejzero and プシュケー respectively - you can find them on pixiv.'
+                'Art used on the main page were made by haimerejzero, プシュケー and dingyiyi respectively - you can find them on pixiv.'
                 ]
             }
             ]

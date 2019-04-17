@@ -43,6 +43,27 @@
           </v-card>
           </router-link>
         </v-flex>
+        <v-flex xs12>
+          <router-link		
+              to="/season"		
+              tag="span"		
+              class="display-2"		
+              style="cursor: pointer"		
+              >	
+          <v-card 
+            class="linkCard">
+            <v-img
+              src="/fourSeasons.jpg"
+              alt="Check season summary"
+              :aspect-ratio="21/9" />
+            <v-card-title primary-title>
+            <div>
+              <h3 class="headline mb-0">Check season summary</h3>
+            </div>
+          </v-card-title>
+          </v-card>
+          </router-link>
+        </v-flex>
       </v-layout>
     </v-container>
 </template>
