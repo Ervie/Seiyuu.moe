@@ -15,9 +15,14 @@
           </v-toolbar>
 
           <v-list two-line >
-            <template v-for="(item, index) in seasonSummaryData">
+            <v-list-group
+              v-for="(item, index) in seasonSummaryData"
+              :key="index"
+              no-action
+              class="season-summary-group"
+            >
+            <template v-slot:activator>
               <v-list-tile
-                :key="index"
                 avatar
                 class="season-summary-ranking"
               >
@@ -32,8 +37,14 @@
                   <v-list-tile-sub-title> {{item.animeCharacterPairs.length}} roles</v-list-tile-sub-title>
                 </v-list-tile-content>
               </v-list-tile>
-              <v-divider :key="index"></v-divider>
             </template>
+
+              <v-list-tile>
+                <v-list-tile-content>
+                  <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                </v-list-tile-content>
+              </v-list-tile>
+            </v-list-group>
           </v-list>
         </v-card>
       </v-flex>
@@ -68,10 +79,12 @@ export default {
 
 <style scoped>
 
+.season-summary-group {
+  border-bottom: silver 1px solid;
+}
+
 .season-summary-ranking {
   padding: 8px 0 0 0;
-  border-bottom-color: aliceblue;
-  border-bottom-width: 10px;
   height: 100px;
 }
 
