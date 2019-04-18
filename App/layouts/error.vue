@@ -5,7 +5,7 @@
         <v-card>
         <v-img
         id="error-image"
-          src="404.png"
+          src="/404.png"
         ></v-img>
           <v-card-title class="primary white--text subheading" primary-title>
             <span class="title">Oops!</span>
