@@ -1,6 +1,6 @@
 <template>
     <v-layout row>
-      <v-flex xs12 v-if="$vuetify.breakpoint.mdAndUp">
+      <v-flex xs12 v-if="$vuetify.breakpoint.smAndUp">
         <v-card v-if="seasonSummaryData">
           <v-toolbar color="primary" class="styledHeader" dark>
 
@@ -16,13 +16,15 @@
 
           <v-list two-line >
             <template v-for="(item, index) in seasonSummaryData">
-
               <v-list-tile
                 :key="index"
                 avatar
                 class="season-summary-ranking"
               >
-                <v-list-tile-avatar size="100px">
+                <v-list-tile-action>
+                  <v-list-tile-title class='styledHeader'> {{ index + 1}}</v-list-tile-title>
+                </v-list-tile-action>
+                <v-list-tile-avatar size="5em">
                   <img class="dropdownAvatar" :src="pathToImage(item.seiyuu.imageUrl)"/>
                 </v-list-tile-avatar>
                 <v-list-tile-content class="season-summary-content">
@@ -30,6 +32,7 @@
                   <v-list-tile-sub-title> {{item.animeCharacterPairs.length}} roles</v-list-tile-sub-title>
                 </v-list-tile-content>
               </v-list-tile>
+              <v-divider :key="index"></v-divider>
             </template>
           </v-list>
         </v-card>
@@ -49,7 +52,7 @@ export default {
     },
     async asyncData ({ params, error }) {
       return axios.get(process.env.apiUrl + '/api/season/Summary' + 
-          '?Page=0&PageSize=10&SortExpression=Popularity DESC' +
+          '?Page=0&PageSize=25&SortExpression=Popularity DESC' +
           '&SearchCriteria.Season=' + params.season +
           '&SearchCriteria.Year=' + params.year)
       .then((response) => {
@@ -66,14 +69,18 @@ export default {
 <style scoped>
 
 .season-summary-ranking {
-  padding: 8px 0 0 4px;
+  padding: 8px 0 0 0;
   border-bottom-color: aliceblue;
-  border-bottom-width: 1px;
-  height: 120px;
+  border-bottom-width: 10px;
+  height: 100px;
 }
 
 .season-summary-content {
   padding: 0 0 0 16px;
+}
+
+.ordinal-number {
+  font-size: 32px;
 }
 
 </style>
