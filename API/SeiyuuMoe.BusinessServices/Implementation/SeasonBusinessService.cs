@@ -6,6 +6,7 @@ using SeiyuuMoe.Contracts.Dtos.Season;
 using SeiyuuMoe.Contracts.SearchCriteria;
 using SeiyuuMoe.Data.Model;
 using SeiyuuMoe.Repositories.Repositories;
+using SeiyuuMoe.WebEssentials;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,9 +39,11 @@ namespace SeiyuuMoe.BusinessServices
 			this.roleSearchCriteriaService = roleSearchCriteriaService;
 		}
 
-		public async Task<ICollection<SeasonSummaryEntryDto>> GetSeasonRolesSummary(SeasonSearchCriteria seasonSearchCriteria)
+		public async Task<ICollection<SeasonSummaryEntryDto>> GetSeasonRolesSummary(Query<SeasonSearchCriteria> query)
 		{
-			var foundSeason = await seasonRepository.GetAsync(x => x.Name.Equals(seasonSearchCriteria.Season) && x.Year.Equals(seasonSearchCriteria.Year));
+			var foundSeason = await seasonRepository.GetAsync(x => 
+				x.Name.Equals(query.SearchCriteria.Season, StringComparison.CurrentCultureIgnoreCase) && 
+				x.Year.Equals(query.SearchCriteria.Year));
 
 			if (foundSeason != null)
 			{
@@ -55,7 +58,7 @@ namespace SeiyuuMoe.BusinessServices
 
 				IReadOnlyCollection<Role> allRolesInSeason = await roleRepository.GetAllAsync(rolePredicate, roleRepository.IncludeExpression);
 
-				return mapper.Map<ICollection<SeasonSummaryEntryDto>>(GroupRoles(allRolesInSeason));
+				return mapper.Map<ICollection<SeasonSummaryEntryDto>>(GroupRoles(allRolesInSeason).Take(query.PageSize));
 			}
 			else
 			{

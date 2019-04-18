@@ -2,7 +2,7 @@
 {
 	public class SeasonSearchCriteria
 	{
-		public int Year { get; set; }
+		public long Year { get; set; }
 
 		public string Season { get; set; }
 	}

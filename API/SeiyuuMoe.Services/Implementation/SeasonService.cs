@@ -25,7 +25,7 @@ namespace SeiyuuMoe.Services.Implementation
 			Ensure.That(query.SearchCriteria.Year).IsGte(1916);
 			Ensure.That(query.SearchCriteria.Season).IsNotEmptyOrWhitespace();
 
-			return new QueryResponse<ICollection<SeasonSummaryEntryDto>>(await seasonBusinessService.GetSeasonRolesSummary(query.SearchCriteria));
+			return new QueryResponse<ICollection<SeasonSummaryEntryDto>>(await seasonBusinessService.GetSeasonRolesSummary(query));
 		}
 	}
 }
