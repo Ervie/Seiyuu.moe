@@ -5,6 +5,7 @@ using SeiyuuMoe.Contracts.ComparisonEntities;
 using SeiyuuMoe.Contracts.Dtos.Season;
 using SeiyuuMoe.Contracts.SearchCriteria;
 using SeiyuuMoe.Data.Model;
+using SeiyuuMoe.Repositories.Models;
 using SeiyuuMoe.Repositories.Repositories;
 using SeiyuuMoe.WebEssentials;
 using System;
@@ -39,7 +40,7 @@ namespace SeiyuuMoe.BusinessServices
 			this.roleSearchCriteriaService = roleSearchCriteriaService;
 		}
 
-		public async Task<ICollection<SeasonSummaryEntryDto>> GetSeasonRolesSummary(Query<SeasonSearchCriteria> query)
+		public async Task<PagedResult<SeasonSummaryEntryDto>> GetSeasonRolesSummary(Query<SeasonSearchCriteria> query)
 		{
 			var foundSeason = await seasonRepository.GetAsync(x => 
 				x.Name.Equals(query.SearchCriteria.Season, StringComparison.CurrentCultureIgnoreCase) && 
@@ -58,7 +59,7 @@ namespace SeiyuuMoe.BusinessServices
 
 				IReadOnlyCollection<Role> allRolesInSeason = await roleRepository.GetAllAsync(rolePredicate, roleRepository.IncludeExpression);
 
-				return mapper.Map<ICollection<SeasonSummaryEntryDto>>(GroupRoles(allRolesInSeason).Take(query.PageSize));
+				return mapper.Map<PagedResult<SeasonSummaryEntryDto>>(GroupRoles(allRolesInSeason, query));
 			}
 			else
 			{
@@ -66,7 +67,7 @@ namespace SeiyuuMoe.BusinessServices
 			}
 		}
 
-		public ICollection<SeasonSummaryEntry> GroupRoles(IReadOnlyCollection<Role> roles)
+		public PagedResult<SeasonSummaryEntry> GroupRoles(IReadOnlyCollection<Role> roles, Query<SeasonSearchCriteria> query)
 		{
 			ICollection<SeasonSummaryEntry> groupedEntities = new List<SeasonSummaryEntry>();
 
@@ -84,7 +85,17 @@ namespace SeiyuuMoe.BusinessServices
 				}
 			}
 
-			return groupedEntities.OrderByDescending(x => x.AnimeCharacterPairs.Count).ToList();
+			return new PagedResult<SeasonSummaryEntry>()
+			{
+				Results = groupedEntities
+					.OrderByDescending(x => x.AnimeCharacterPairs.Count)
+					.Skip(query.Page * query.PageSize)
+					.Take(query.PageSize)
+					.ToList(),
+				Page = query.Page,
+				PageSize = query.PageSize,
+				TotalCount = groupedEntities.Count()
+			};
 		}
 	}
 }

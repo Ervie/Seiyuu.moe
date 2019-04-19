@@ -1,5 +1,5 @@
 <template>
-    <v-layout row>
+    <v-layout row align-center justify-center fill-height>
       <v-flex xs12 v-if="$vuetify.breakpoint.smAndUp">
         <v-card v-if="seasonSummaryData">
           <v-toolbar color="primary" class="styledHeader" dark>
@@ -7,9 +7,8 @@
             <v-toolbar-title>Seiyuu with most roles in {{ $route.params.season }} {{ $route.params.year }}</v-toolbar-title>
 
             <v-spacer></v-spacer>
-
-            <!--  Maybe use search bar for bigger data set?
-              <v-btn icon>
+              <!-- Maybe use search bar for bigger data set? -->
+             <!-- <v-btn icon>
               <v-icon>search</v-icon>
             </v-btn> -->
           </v-toolbar>
@@ -27,7 +26,7 @@
                 class="season-summary-ranking"
               >
                 <v-list-tile-action>
-                  <v-list-tile-title class='styledHeader'> {{ index + 1}}</v-list-tile-title>
+                  <v-list-tile-title class='styledHeader'> {{ (page - 1) * pageSize + index + 1}}</v-list-tile-title>
                 </v-list-tile-action>
                 <v-list-tile-avatar size="5em">
                   <img class="dropdownAvatar" :src="pathToImage(item.seiyuu.imageUrl)"/>
@@ -46,6 +45,15 @@
               </v-list-tile>
             </v-list-group>
           </v-list>
+          <v-card-text>
+            <div class="text-xs-center">
+              <v-pagination
+                v-model="page"
+                :length="totalPages"
+                :total-visible="7"
+              ></v-pagination>
+            </div>
+            </v-card-text>
         </v-card>
       </v-flex>
     </v-layout>
@@ -58,21 +66,50 @@ export default {
     name: 'SeasonSummary',
     data () {
       return {
-        seasonSummaryData: null
+        seasonSummaryData: null,
+        page: 1,
+        pageSize: 25,
+        totalPages: 1
+      }
+    },
+    methods: {
+      sendNewRequest() {
+        axios.get(process.env.apiUrl + '/api/season/Summary' + 
+          '?Page=' + (this.page - 1) +
+          '&PageSize=' + this.pageSize +
+          '&SearchCriteria.Season=' + this.$route.params.season  +
+          '&SearchCriteria.Year=' + this.$route.params.year)
+        .then((response) => {
+          this.seasonSummaryData = response.data.payload.results;
+          this.totalPages = Math.ceil(response.data.payload.totalCount / this.pageSize);
+        })
+        .catch((e) => {
+          console.log(e);
+        })
       }
     },
     async asyncData ({ params, error }) {
       return axios.get(process.env.apiUrl + '/api/season/Summary' + 
-          '?Page=0&PageSize=25&SortExpression=Popularity DESC' +
+          '?Page=0' +
+          '&PageSize=25' +
           '&SearchCriteria.Season=' + params.season +
           '&SearchCriteria.Year=' + params.year)
       .then((response) => {
-        return { seasonSummaryData: response.data.payload }
+        return { 
+          seasonSummaryData: response.data.payload.results,
+          totalPages: Math.ceil(response.data.payload.totalCount / response.data.payload.pageSize)
+        }
       })
       .catch((e) => {
         console.log(e);
         error({ statusCode: 404, message: 'Post not found' })
       })
+    },
+    watch: {
+      page: {
+        handler: 'sendNewRequest',
+        immediate: false
+      }
     }
 }
 </script>
