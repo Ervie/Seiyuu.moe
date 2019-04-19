@@ -9,6 +9,6 @@ namespace SeiyuuMoe.Services.Interfaces
 {
 	public interface ISeasonService
 	{
-		Task<QueryResponse<PagedResult<SeasonSummaryEntryDto>>> GetSeasonSummary(Query<SeasonSearchCriteria> query);
+		Task<QueryResponse<PagedResult<SeasonSummaryEntryDto>>> GetSeasonSummary(Query<SeasonSummarySearchCriteria> query);
 	}
 }

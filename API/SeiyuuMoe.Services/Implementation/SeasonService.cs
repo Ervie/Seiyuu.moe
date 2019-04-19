@@ -19,7 +19,7 @@ namespace SeiyuuMoe.Services.Implementation
 			this.seasonBusinessService = seasonBusinessService;
 		}
 
-		public async Task<QueryResponse<PagedResult<SeasonSummaryEntryDto>>> GetSeasonSummary(Query<SeasonSearchCriteria> query)
+		public async Task<QueryResponse<PagedResult<SeasonSummaryEntryDto>>> GetSeasonSummary(Query<SeasonSummarySearchCriteria> query)
 		{
 			Ensure.That(query, nameof(query)).IsNotNull();
 			Ensure.That(query.SearchCriteria, nameof(query.SearchCriteria)).IsNotNull();

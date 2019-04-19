@@ -5,5 +5,7 @@ namespace SeiyuuMoe.Contracts.SearchCriteria
 	public class RoleSearchCriteria
 	{
 		public ICollection<long> AnimeId { get; set; }
+
+		public long? RoleTypeId { get; set; }
 	}
 }

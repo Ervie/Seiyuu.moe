@@ -40,7 +40,7 @@ namespace SeiyuuMoe.BusinessServices
 			this.roleSearchCriteriaService = roleSearchCriteriaService;
 		}
 
-		public async Task<PagedResult<SeasonSummaryEntryDto>> GetSeasonRolesSummary(Query<SeasonSearchCriteria> query)
+		public async Task<PagedResult<SeasonSummaryEntryDto>> GetSeasonRolesSummary(Query<SeasonSummarySearchCriteria> query)
 		{
 			var foundSeason = await seasonRepository.GetAsync(x => 
 				x.Name.Equals(query.SearchCriteria.Season, StringComparison.CurrentCultureIgnoreCase) && 
@@ -67,7 +67,7 @@ namespace SeiyuuMoe.BusinessServices
 			}
 		}
 
-		public PagedResult<SeasonSummaryEntry> GroupRoles(IReadOnlyCollection<Role> roles, Query<SeasonSearchCriteria> query)
+		public PagedResult<SeasonSummaryEntry> GroupRoles(IReadOnlyCollection<Role> roles, Query<SeasonSummarySearchCriteria> query)
 		{
 			ICollection<SeasonSummaryEntry> groupedEntities = new List<SeasonSummaryEntry>();
 

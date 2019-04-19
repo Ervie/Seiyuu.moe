@@ -17,7 +17,8 @@ namespace SeiyuuMoe.BusinessServices.SearchCriteria
 		private Expression<Func<Role, bool>> ExtendExpressionWithSearchCriteria(Expression<Func<Role, bool>> predicate, RoleSearchCriteria searchCriteria)
 		{
 			return predicate
-				.And(searchCriteria.AnimeId != null && searchCriteria.AnimeId.Count > 0, () => role => searchCriteria.AnimeId.Contains(role.AnimeId.Value));
+				.And(searchCriteria.AnimeId != null && searchCriteria.AnimeId.Count > 0, () => role => searchCriteria.AnimeId.Contains(role.AnimeId.Value))
+				.And(searchCriteria.RoleTypeId.HasValue, () => role => searchCriteria.RoleTypeId.Equals(role.RoleTypeId.Value));
 		}
 	}
 }

@@ -8,6 +8,6 @@ namespace SeiyuuMoe.BusinessServices
 {
 	public interface ISeasonBusinessService
 	{
-		Task<PagedResult<SeasonSummaryEntryDto>> GetSeasonRolesSummary(Query<SeasonSearchCriteria> seasonSearchCriteria);
+		Task<PagedResult<SeasonSummaryEntryDto>> GetSeasonRolesSummary(Query<SeasonSummarySearchCriteria> seasonSearchCriteria);
 	}
 }

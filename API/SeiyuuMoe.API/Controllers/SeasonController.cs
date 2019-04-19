@@ -21,7 +21,7 @@ namespace SeiyuuMoe.API.Controllers
 
 		[HttpGet]
 		[Route("Summary")]
-		public Task<IActionResult> GetSeasonSummary([FromQuery] Query<SeasonSearchCriteria> query)
+		public Task<IActionResult> GetSeasonSummary([FromQuery] Query<SeasonSummarySearchCriteria> query)
 		{
 			return Handle(async () => HandleServiceResult(await seasonService.GetSeasonSummary(query)));
 		}
