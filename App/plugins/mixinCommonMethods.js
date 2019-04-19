@@ -31,7 +31,7 @@ Vue.mixin({
         && path !== 'https://cdn.myanimelist.net/img/sp/icon/apple-touch-icon-256.png') {
         return path;
       } else {
-        return 'questionMark.png';
+        return process.env.baseUrl +'/questionMark.png';
       }
     },
     encodeURL (inputURL) {

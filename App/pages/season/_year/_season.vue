@@ -29,7 +29,7 @@
                   <v-list-tile-title class='styledHeader'> {{ (page - 1) * pageSize + index + 1}}</v-list-tile-title>
                 </v-list-tile-action>
                 <v-list-tile-avatar size="5em">
-                  <img class="dropdownAvatar" :src="pathToImage(item.seiyuu.imageUrl)"/>
+                  <img class="ranking-avatar" :src="pathToImage(item.seiyuu.imageUrl)"/>
                 </v-list-tile-avatar>
                 <v-list-tile-content class="season-summary-content">
                   <v-list-tile-title> {{ item.seiyuu.name }}</v-list-tile-title>
@@ -131,6 +131,11 @@ export default {
 
 .ordinal-number {
   font-size: 32px;
+}
+
+.ranking-avatar {
+  object-fit: cover;
+  object-position: 100% 30%;
 }
 
 </style>
