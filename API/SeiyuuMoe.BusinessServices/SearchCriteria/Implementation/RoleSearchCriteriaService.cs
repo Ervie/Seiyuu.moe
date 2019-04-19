@@ -18,7 +18,7 @@ namespace SeiyuuMoe.BusinessServices.SearchCriteria
 		{
 			return predicate
 				.And(searchCriteria.AnimeId != null && searchCriteria.AnimeId.Count > 0, () => role => searchCriteria.AnimeId.Contains(role.AnimeId.Value))
-				.And(searchCriteria.RoleTypeId.HasValue, () => role => searchCriteria.RoleTypeId.Equals(role.RoleTypeId.Value));
+				.And(searchCriteria.RoleTypeId.HasValue && searchCriteria.RoleTypeId.Value > 0, () => role => searchCriteria.RoleTypeId.Equals(role.RoleTypeId.Value));
 		}
 	}
 }

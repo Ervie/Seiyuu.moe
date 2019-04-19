@@ -23,6 +23,8 @@ namespace SeiyuuMoe.BusinessServices
 		private readonly IAnimeRepository animeRepository;
 		private readonly IRoleRepository roleRepository;
 		private readonly IRoleSearchCriteriaService roleSearchCriteriaService;
+		private readonly IAnimeSearchCriteriaService animeSearchCriteriaService;
+		private readonly ISeasonSearchCriteriaService seasonSearchCriteriaService;
 
 
 		public SeasonBusinessService(
@@ -30,7 +32,9 @@ namespace SeiyuuMoe.BusinessServices
 			ISeasonRepository seasonRepository,
 			IAnimeRepository animeRepository,
 			IRoleRepository roleRepository,
-			IRoleSearchCriteriaService roleSearchCriteriaService
+			IRoleSearchCriteriaService roleSearchCriteriaService,
+			IAnimeSearchCriteriaService animeSearchCriteriaService,
+			ISeasonSearchCriteriaService seasonSearchCriteriaService
 		)
 		{
 			this.mapper = mapper;
@@ -38,24 +42,25 @@ namespace SeiyuuMoe.BusinessServices
 			this.animeRepository = animeRepository;
 			this.roleRepository = roleRepository;
 			this.roleSearchCriteriaService = roleSearchCriteriaService;
+			this.animeSearchCriteriaService = animeSearchCriteriaService;
+			this.seasonSearchCriteriaService = seasonSearchCriteriaService;
 		}
 
 		public async Task<PagedResult<SeasonSummaryEntryDto>> GetSeasonRolesSummary(Query<SeasonSummarySearchCriteria> query)
 		{
-			var foundSeason = await seasonRepository.GetAsync(x => 
-				x.Name.Equals(query.SearchCriteria.Season, StringComparison.CurrentCultureIgnoreCase) && 
-				x.Year.Equals(query.SearchCriteria.Year));
+			var seasonPredicate = seasonSearchCriteriaService.BuildExpression(mapper.Map<SeasonSearchCriteria>(query.SearchCriteria));
+
+			var foundSeason = await seasonRepository.GetAsync(seasonPredicate);
 
 			if (foundSeason != null)
 			{
-				var animeInSeason = await animeRepository.GetAllAsync(x => x.SeasonId.Equals(foundSeason.Id) && x.TypeId == 1); //TV Only for now
+				query.SearchCriteria.Id = foundSeason.Id;
+				var animePredicate = animeSearchCriteriaService.BuildExpression(mapper.Map<AnimeSearchCriteria>(query.SearchCriteria));
 
-				RoleSearchCriteria roleSearchCriteria = new RoleSearchCriteria()
-				{
-					AnimeId = animeInSeason.Select(x => x.MalId).ToList()
-				};
+				var animeInSeason = await animeRepository.GetAllAsync(animePredicate);
+				query.SearchCriteria.AnimeId = animeInSeason.Select(x => x.MalId).ToList();
 
-				var rolePredicate = roleSearchCriteriaService.BuildExpression(roleSearchCriteria);
+				var rolePredicate = roleSearchCriteriaService.BuildExpression(mapper.Map<RoleSearchCriteria>(query.SearchCriteria));
 
 				IReadOnlyCollection<Role> allRolesInSeason = await roleRepository.GetAllAsync(rolePredicate, roleRepository.IncludeExpression);
 

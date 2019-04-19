@@ -28,7 +28,7 @@ namespace SeiyuuMoe.BusinessServices.SearchCriteria
 					(!string.IsNullOrWhiteSpace(anime.EnglishTitle) && anime.EnglishTitle.Contains(searchCriteria.Title, StringComparison.InvariantCultureIgnoreCase)) ||
 					(!string.IsNullOrWhiteSpace(anime.TitleSynonyms) && anime.TitleSynonyms.Contains(searchCriteria.Title, StringComparison.InvariantCultureIgnoreCase)))
 				.And(searchCriteria.SeasonId.HasValue, () => anime => searchCriteria.SeasonId.Equals(anime.SeasonId.Value))
-				.And(searchCriteria.AnimeTypeId.HasValue, () => anime => searchCriteria.AnimeTypeId.Equals(anime.TypeId.Value));
+				.And(searchCriteria.AnimeTypeId.HasValue && searchCriteria.AnimeTypeId.Value > 0, () => anime => searchCriteria.AnimeTypeId.Equals(anime.TypeId.Value));
 		}
 	}
 }

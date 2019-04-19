@@ -52,6 +52,9 @@ Vue.mixin({
         return [ obj ];
       }
     },
+    capitalizeFirstLetter(inputString) {
+        return inputString.charAt(0).toUpperCase() + inputString.slice(1);
+    },
     sleep (ms) {
       return new Promise(resolve => setTimeout(resolve, ms));
     }

@@ -11,12 +11,16 @@ namespace SeiyuuMoe.BusinessServices.Mapper.Profiles
 		public SearchCriteriaProfile()
 		{
 			CreateMap<SeasonSummarySearchCriteria, RoleSearchCriteria>()
-				.ForMember(dest => dest.RoleTypeId, opt => opt.MapFrom(src => (src.MainRolesOnly ? RoleTypeDictionary.Main : RoleTypeDictionary.Supporting)));
+				.ForMember(dest => dest.RoleTypeId, opt => opt.MapFrom(src => (src.MainRolesOnly ? (long) RoleTypeDictionary.Main : (long) RoleTypeDictionary.Supporting)))
+				.ForMember(dest => dest.AnimeId, opt => opt.MapFrom(src => src.AnimeId));
 
 			CreateMap<SeasonSummarySearchCriteria, AnimeSearchCriteria>()
-				.ForMember(dest => dest.AnimeTypeId, opt => opt.Condition(src => src.TVSeriesOnly))
-				.ForMember(dest => dest.AnimeTypeId, opt => opt.MapFrom(src => AnimeTypeDictionary.TV))
+				.ForMember(dest => dest.AnimeTypeId, opt => opt.MapFrom(src => (src.TVSeriesOnly ? (long) AnimeTypeDictionary.TV : (long) AnimeTypeDictionary.AllTypes)))
 				.ForMember(dest => dest.SeasonId, opt => opt.MapFrom(src => src.Id));
+
+			CreateMap<SeasonSummarySearchCriteria, SeasonSearchCriteria>()
+				.ForMember(dest => dest.Year, opt => opt.MapFrom(src => src.Year))
+				.ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Season));
 		}
 	}
 }

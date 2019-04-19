@@ -4,13 +4,15 @@
         <v-card v-if="seasonSummaryData">
           <v-toolbar color="primary" class="styledHeader" dark>
 
-            <v-toolbar-title>Seiyuu with most roles in {{ $route.params.season }} {{ $route.params.year }}</v-toolbar-title>
+            <v-toolbar-title>{{ capitalizeFirstLetter($route.params.season) }} {{ $route.params.year }} - Most roles</v-toolbar-title>
 
             <v-spacer></v-spacer>
               <!-- Maybe use search bar for bigger data set? -->
              <!-- <v-btn icon>
               <v-icon>search</v-icon>
             </v-btn> -->
+                  <v-switch label="TV series only" v-model="tvSeriesOnly" color="error"></v-switch>
+                  <v-switch label="Main roles only" v-model="mainRolesOnly" color="error"></v-switch>
           </v-toolbar>
 
           <v-list two-line >
@@ -69,16 +71,24 @@ export default {
         seasonSummaryData: null,
         page: 1,
         pageSize: 25,
-        totalPages: 1
+        totalPages: 1,
+        tvSeriesOnly: true,
+        mainRolesOnly: false
       }
     },
     methods: {
       sendNewRequest() {
+        this.page = 1;
+        this.changePage();
+      },
+      changePage() {
         axios.get(process.env.apiUrl + '/api/season/Summary' + 
           '?Page=' + (this.page - 1) +
           '&PageSize=' + this.pageSize +
           '&SearchCriteria.Season=' + this.$route.params.season  +
-          '&SearchCriteria.Year=' + this.$route.params.year)
+          '&SearchCriteria.Year=' + this.$route.params.year +
+          '&SearchCriteria.MainRolesOnly=' + this.mainRolesOnly +
+          '&SearchCriteria.TVSeriesOnly=' + this.tvSeriesOnly)
         .then((response) => {
           this.seasonSummaryData = response.data.payload.results;
           this.totalPages = Math.ceil(response.data.payload.totalCount / this.pageSize);
@@ -107,6 +117,14 @@ export default {
     },
     watch: {
       page: {
+        handler: 'changePage',
+        immediate: false
+      },
+      tvSeriesOnly: {
+        handler: 'sendNewRequest',
+        immediate: false
+      },
+      mainRolesOnly: {
         handler: 'sendNewRequest',
         immediate: false
       }
