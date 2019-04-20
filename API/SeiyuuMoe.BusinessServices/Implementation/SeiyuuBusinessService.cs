@@ -84,7 +84,7 @@ namespace SeiyuuMoe.SerBusinessServicesvices
 				partialResults = partialResults.Where(x => x.SeiyuuCharacters.Select(y => y.Seiyuu).ToList().Count >= i + 1).ToList();
 			}
 
-			partialResults = searchCriteria.GroupByFranchise.HasValue && searchCriteria.GroupByFranchise.Value ?
+			partialResults = searchCriteria.GroupByFranchise ?
 				GroupByFranchise(partialResults) :
 				partialResults;
 

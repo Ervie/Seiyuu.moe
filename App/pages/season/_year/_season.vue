@@ -58,6 +58,26 @@
             </v-card-text>
         </v-card>
       </v-flex>
+      <v-dialog
+        v-model="loading"
+        hide-overlay
+        persistent
+        width="300"
+      >
+        <v-card
+          color="secondary"
+          dark
+        >
+          <v-card-text>
+            Loading data, please stand by
+            <v-progress-linear
+              indeterminate
+              color="white"
+              class="mb-0"
+            ></v-progress-linear>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
     </v-layout>
 </template>
 
@@ -73,7 +93,8 @@ export default {
         pageSize: 25,
         totalPages: 1,
         tvSeriesOnly: true,
-        mainRolesOnly: false
+        mainRolesOnly: false,
+        loading: false
       }
     },
     methods: {
@@ -82,6 +103,7 @@ export default {
         this.changePage();
       },
       changePage() {
+        this.loading = true;
         axios.get(process.env.apiUrl + '/api/season/Summary' + 
           '?Page=' + (this.page - 1) +
           '&PageSize=' + this.pageSize +
@@ -92,9 +114,11 @@ export default {
         .then((response) => {
           this.seasonSummaryData = response.data.payload.results;
           this.totalPages = Math.ceil(response.data.payload.totalCount / this.pageSize);
+          this.loading = false;
         })
         .catch((e) => {
           console.log(e);
+          this.loading = false;
         })
       }
     },
