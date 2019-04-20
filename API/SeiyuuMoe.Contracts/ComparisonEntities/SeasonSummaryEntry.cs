@@ -8,19 +8,19 @@ namespace SeiyuuMoe.Contracts.ComparisonEntities
 	{
 		public Seiyuu Seiyuu { get; set; }
 
-		public ICollection<Tuple<Anime, Character>> AnimeCharacterPairs { get; set; }
+		public ICollection<(Anime anime, Character character)> AnimeCharacterPairs { get; set; }
 
 		public SeasonSummaryEntry()
 		{
-			AnimeCharacterPairs = new List<Tuple<Anime, Character>>();
+			AnimeCharacterPairs = new List<(Anime anime, Character character)>();
 		}
 
 		public SeasonSummaryEntry(Seiyuu seiyuu, Anime anime, Character character)
 		{
 			Seiyuu = seiyuu;
-			AnimeCharacterPairs = new List<Tuple<Anime, Character>>()
+			AnimeCharacterPairs = new List<(Anime anime, Character character)>()
 			{
-				new Tuple<Anime, Character>(anime, character)
+				(anime: anime, character: character)
 			};
 		}
 	}

@@ -86,7 +86,7 @@ namespace SeiyuuMoe.BusinessServices
 				{
 					groupedEntities
 						.Single(x => x.Seiyuu.MalId.Equals(role.SeiyuuId.Value))
-						.AnimeCharacterPairs.Add(new Tuple<Anime, Character>(role.Anime, role.Character));
+						.AnimeCharacterPairs.Add((role.Anime, role.Character));
 				}
 			}
 
