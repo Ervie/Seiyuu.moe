@@ -58,34 +58,20 @@
             </v-card-text>
         </v-card>
       </v-flex>
-      <v-dialog
-        v-model="loading"
-        hide-overlay
-        persistent
-        width="300"
-      >
-        <v-card
-          color="secondary"
-          dark
-        >
-          <v-card-text>
-            Loading data, please stand by
-            <v-progress-linear
-              indeterminate
-              color="white"
-              class="mb-0"
-            ></v-progress-linear>
-          </v-card-text>
-        </v-card>
-      </v-dialog>
+      <loading-dialog
+        :isLoading="loading"/>
     </v-layout>
 </template>
 
 <script>
 import axios from 'axios';
+import LoadingDialog from '@/components/shared/ui-components/LoadingDialog.vue';
 
 export default {
     name: 'SeasonSummary',
+    components: {
+      'loading-dialog': LoadingDialog
+    },
     data () {
       return {
         seasonSummaryData: null,

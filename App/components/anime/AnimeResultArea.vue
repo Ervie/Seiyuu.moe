@@ -17,6 +17,8 @@
       <share-link-snackbar
         :showSnackbar="snackbar"
         @hideSnackBar="snackbar = false"/>
+      <loading-dialog
+        :isLoading="loadingComparison"/>
     </v-layout>
 </template>
 
@@ -24,12 +26,14 @@
 import axios from 'axios'
 import AnimeTableSelection from '@/components/anime/AnimeTableSelection.vue'
 import ShareLinkSnackbar from '@/components/shared/ui-components/ShareLinkSnackbar.vue';
+import LoadingDialog from '@/components/shared/ui-components/LoadingDialog.vue';
 
 export default {
   name: 'AnimeResultArea',
   components: {
     'anime-table-selection': AnimeTableSelection,
-    'share-link-snackbar': ShareLinkSnackbar
+    'share-link-snackbar': ShareLinkSnackbar,
+    'loading-dialog': LoadingDialog
   },
   props: {
     animeIds: {

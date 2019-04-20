@@ -64,6 +64,8 @@
       <share-link-snackbar
         :showSnackbar="snackbar"
         @hideSnackBar="snackbar = false"/>
+      <loading-dialog
+        :isLoading="loadingComparison"/>
     </v-layout>
 </template>
 
@@ -72,13 +74,15 @@ import axios from 'axios'
 import SeiyuuTableSelection from '@/components/seiyuu/SeiyuuTableSelection.vue'
 import SeiyuuTimelineContainer from '@/components/seiyuu/timeline/SeiyuuTimelineContainer.vue'
 import ShareLinkSnackbar from '@/components/shared/ui-components/ShareLinkSnackbar.vue';
+import LoadingDialog from '@/components/shared/ui-components/LoadingDialog.vue';
 
 export default {
   name: 'SeiyuuResultArea',
   components: {
     'seiyuu-table-selection': SeiyuuTableSelection,
     'share-link-snackbar': ShareLinkSnackbar,
-    'seiyuu-timeline-container': SeiyuuTimelineContainer
+    'seiyuu-timeline-container': SeiyuuTimelineContainer,
+    'loading-dialog': LoadingDialog
   },
   props: {
     seiyuuIds: {
