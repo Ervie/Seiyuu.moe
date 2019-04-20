@@ -39,12 +39,31 @@
                 </v-list-tile-content>
               </v-list-tile>
             </template>
-
-              <v-list-tile>
-                <v-list-tile-content>
-                  <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-                </v-list-tile-content>
-              </v-list-tile>
+              <v-container grid-list-md text-xs-left>
+                <v-layout row wrap>
+                  <v-flex xs12 lg6 v-for="(animeCharacterPair, i) in item.animeCharacterPairs" :key="i">
+                    <v-card dark>
+                      <v-layout>
+                        <v-flex xs2>
+                          <v-img
+                            :src="animeCharacterPair.item2.imageUrl"
+                            height="125px"
+                            contain
+                          ></v-img>
+                        </v-flex>
+                        <v-flex xs10>
+                          <v-card-title primary-title>
+                            <div>
+                              <div class="headline">{{ animeCharacterPair.item2.name }}</div>
+                              <div>{{ animeCharacterPair.item1.title }}</div>
+                            </div>
+                          </v-card-title>
+                        </v-flex>
+                      </v-layout>
+                    </v-card>
+                  </v-flex>
+                </v-layout>
+              </v-container>
             </v-list-group>
           </v-list>
           <v-card-text>
@@ -55,7 +74,7 @@
                 :total-visible="7"
               ></v-pagination>
             </div>
-            </v-card-text>
+          </v-card-text>
         </v-card>
       </v-flex>
       <loading-dialog
