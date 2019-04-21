@@ -3,18 +3,11 @@
       <v-flex xs12 v-if="$vuetify.breakpoint.smAndUp">
         <v-card v-if="seasonSummaryData">
           <v-toolbar color="primary" class="styledHeader" dark>
-
             <v-toolbar-title>{{ capitalizeFirstLetter($route.params.season) }} {{ $route.params.year }} - Most roles</v-toolbar-title>
-
             <v-spacer></v-spacer>
-              <!-- Maybe use search bar for bigger data set? -->
-             <!-- <v-btn icon>
-              <v-icon>search</v-icon>
-            </v-btn> -->
                   <v-switch label="TV series only" v-model="tvSeriesOnly" color="error"></v-switch>
                   <v-switch label="Main roles only" v-model="mainRolesOnly" color="error"></v-switch>
           </v-toolbar>
-
           <v-list two-line >
             <v-list-group
               v-for="(item, index) in seasonSummaryData"
@@ -23,47 +16,12 @@
               class="season-summary-group"
             >
             <template v-slot:activator>
-              <v-list-tile
-                avatar
-                class="season-summary-ranking"
-              >
-                <v-list-tile-action>
-                  <v-list-tile-title class='styledHeader'> {{ (page - 1) * pageSize + index + 1}}</v-list-tile-title>
-                </v-list-tile-action>
-                <v-list-tile-avatar size="5em">
-                  <img class="ranking-avatar" :src="pathToImage(item.seiyuu.imageUrl)"/>
-                </v-list-tile-avatar>
-                <v-list-tile-content class="season-summary-content">
-                  <v-list-tile-title> {{ item.seiyuu.name }}</v-list-tile-title>
-                  <v-list-tile-sub-title> {{item.animeCharacterPairs.length}} roles</v-list-tile-sub-title>
-                </v-list-tile-content>
-              </v-list-tile>
+              <ranking-list-record 
+                :rankingItem="item"
+                :rankingPosition="(page - 1) * pageSize + index + 1"/>
             </template>
-              <v-container grid-list-md text-xs-left>
-                <v-layout row wrap>
-                  <v-flex xs12 lg6 v-for="(animeCharacterPair, i) in item.animeCharacterPairs" :key="i">
-                    <v-card dark>
-                      <v-layout>
-                        <v-flex xs2>
-                          <v-img
-                            :src="animeCharacterPair.item2.imageUrl"
-                            height="125px"
-                            contain
-                          ></v-img>
-                        </v-flex>
-                        <v-flex xs10>
-                          <v-card-title primary-title>
-                            <div>
-                              <div class="headline">{{ animeCharacterPair.item2.name }}</div>
-                              <div>{{ animeCharacterPair.item1.title }}</div>
-                            </div>
-                          </v-card-title>
-                        </v-flex>
-                      </v-layout>
-                    </v-card>
-                  </v-flex>
-                </v-layout>
-              </v-container>
+              <ranking-list-panel
+                :rankingItem="item" />
             </v-list-group>
           </v-list>
           <v-card-text>
@@ -85,11 +43,15 @@
 <script>
 import axios from 'axios';
 import LoadingDialog from '@/components/shared/ui-components/LoadingDialog.vue';
+import RankingListPanel from '@/components/season/RankingListPanel.vue';
+import RankingListRecord from '@/components/season/RankingListRecord.vue';
 
 export default {
     name: 'SeasonSummary',
     components: {
-      'loading-dialog': LoadingDialog
+      'loading-dialog': LoadingDialog,
+      'ranking-list-panel': RankingListPanel,
+      'ranking-list-record': RankingListRecord
     },
     data () {
       return {
@@ -132,7 +94,8 @@ export default {
           '?Page=0' +
           '&PageSize=25' +
           '&SearchCriteria.Season=' + params.season +
-          '&SearchCriteria.Year=' + params.year)
+          '&SearchCriteria.Year=' + params.year +
+          '&SearchCriteria.TVSeriesOnly=true')
       .then((response) => {
         return { 
           seasonSummaryData: response.data.payload.results,
@@ -161,7 +124,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 
 .season-summary-group {
   border-bottom: silver 1px solid;
