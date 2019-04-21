@@ -1,5 +1,5 @@
 <template>
-  <v-container grid-list-md text-xs-left>
+  <v-container grid-list-md text-xs-center text-sm-left>
     <v-layout row wrap>
       <v-flex xs12 lg6 v-for="(animeCharacterPair, i) in rankingItem.animeCharacterPairs" :key="i">
         <ranking-list-panel-card 

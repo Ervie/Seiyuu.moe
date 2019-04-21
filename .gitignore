@@ -17,3 +17,4 @@ dist
 sw.*
 todo\.txt
 API/SeiyuuMoe.API/SeiyuuMoeDB.db
+App/.vscode/settings.json

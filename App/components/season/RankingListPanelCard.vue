@@ -1,14 +1,14 @@
 <template>
   <v-card dark>
     <v-layout>
-      <v-flex xs2>
+      <v-flex xs5 sm2 >
         <v-img
           :src="animeCharacterPair.item2.imageUrl"
           height="125px"
           contain
         ></v-img>
       </v-flex>
-      <v-flex xs10>
+      <v-flex xs7 sm10>
         <v-card-title primary-title>
           <div>
             <div class="headline">{{ animeCharacterPair.item2.name }}</div>

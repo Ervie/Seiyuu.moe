@@ -1,24 +1,32 @@
 <template>
     <v-layout row align-center justify-center fill-height>
-      <v-flex xs12 v-if="$vuetify.breakpoint.smAndUp">
+      <v-flex xs12>
         <v-card v-if="seasonSummaryData">
-          <v-toolbar color="primary" class="styledHeader" dark>
+          <v-toolbar color="primary" class="styledHeader"
+            :prominent="isMobile"
+            :extended="isMobile"
+            dark>
             <v-toolbar-title>{{ capitalizeFirstLetter($route.params.season) }} {{ $route.params.year }} - Most roles</v-toolbar-title>
-            <v-spacer></v-spacer>
-                  <v-switch label="TV series only" v-model="tvSeriesOnly" color="error"></v-switch>
-                  <v-switch label="Main roles only" v-model="mainRolesOnly" color="error"></v-switch>
+            <template v-if="isMobile" v-slot:extension>
+              <v-switch label="TV series only" v-model="tvSeriesOnly" color="error"></v-switch>
+              <v-switch label="Main roles only" v-model="mainRolesOnly" color="error"></v-switch>
+            </template>
+            <v-spacer v-if="!isMobile"/>
+            <v-switch v-if="!isMobile" label="TV series only" v-model="tvSeriesOnly" color="error"></v-switch>
+            <v-switch v-if="!isMobile" label="Main roles only" v-model="mainRolesOnly" color="error"></v-switch>
           </v-toolbar>
           <v-list two-line >
             <v-list-group
               v-for="(item, index) in seasonSummaryData"
               :key="index"
               no-action
-              class="season-summary-group"
+              v-bind:class="{ 'season-summary-group': !isMobile }"
             >
             <template v-slot:activator>
               <ranking-list-record 
                 :rankingItem="item"
-                :rankingPosition="(page - 1) * pageSize + index + 1"/>
+                :rankingPosition="(page - 1) * pageSize + index + 1"
+                :isMobile="isMobile"/>
             </template>
               <ranking-list-panel
                 :rankingItem="item" />
@@ -29,7 +37,7 @@
               <v-pagination
                 v-model="page"
                 :length="totalPages"
-                :total-visible="7"
+                :total-visible="isMobile ? 5 : 7"
               ></v-pagination>
             </div>
           </v-card-text>
@@ -62,6 +70,11 @@ export default {
         tvSeriesOnly: true,
         mainRolesOnly: false,
         loading: false
+      }
+    },
+    computed: {
+      isMobile() {
+        return this.$vuetify.breakpoint.xsOnly;
       }
     },
     methods: {
