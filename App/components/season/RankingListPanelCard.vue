@@ -3,7 +3,7 @@
     <v-layout>
       <v-flex xs5 sm2 >
         <v-img
-          :src="animeCharacterPair.item2.imageUrl"
+          :src="pathToImage(animeCharacterPair.item2.imageUrl)"
           height="125px"
           contain
         ></v-img>
