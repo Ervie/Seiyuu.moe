@@ -47,7 +47,7 @@
                           <b>Season:</b> {{ animeData.season }}
                         </p>
                         <p class="text-sm-left white-space-pre">
-                          <b>Synopsis:</b> {{ decodeHtml(moreDetails) }}
+                          <b>Synopsis:</b> {{ moreDetails }}
                         </p>
                       </v-card-text>
                     </div>
@@ -89,8 +89,12 @@ export default {
   },
   computed: {
     moreDetails () {
-      var detailsToEncode = String(this.animeData.about).replace(/\\n/g, '\n');
-      return detailsToEncode.replace(/\\n/g, '<br/>');
+      if (this.animeData.about != null) {
+        var detailsToEncode = String(this.animeData.about).replace(/\\n/g, '\n');
+        return this.decodeHtml(detailsToEncode.replace(/\\n/g, '<br/>'));
+      } else {
+        return 'Nothing yet.';
+      }
     },
     alternativeTitles () {
       if (this.animeData && this.animeData.titleSynonyms && this.animeData.titleSynonyms.length > 0) {

@@ -35,7 +35,7 @@
                           <b>Birthday:</b> {{ formatDate(seiyuuData.birthday) }}
                         </p>
                         <p class="text-sm-left white-space-pre">
-                          <b>More:</b> {{ decodeHtml(moreDetails) }}
+                          <b>More:</b> {{ moreDetails }}
                         </p>
                       </v-card-text>
                     </div>
@@ -77,14 +77,11 @@ export default {
   },
   computed: {
     moreDetails () {
-      var detailsToEncode = String(this.seiyuuData.about).replace(/\\n/g, '')
-      return detailsToEncode
-    },
-    dateOnlyBirthday () {
-      if (this.seiyuuData.birthday !== null) {
-        return this.seiyuuData.birthday.slice(0,10)
+      if (this.seiyuuData.about != null) {
+        var detailsToEncode = String(this.seiyuuData.about).replace(/\\n/g, '');
+        return this.decodeHtml(detailsToEncode);
       } else {
-        return 'unknown.'
+        return "Nothing yet.";
       }
     }
   }
