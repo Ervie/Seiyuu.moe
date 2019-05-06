@@ -42,7 +42,7 @@ namespace SeiyuuMoe.API
 			services.AddSingleton<IConfiguration>(Configuration);
 			services.AddHangfire(x => x.UseMemoryStorage(new MemoryStorageOptions
 			{
-				FetchNextJobTimeout = TimeSpan.FromDays(7)
+				FetchNextJobTimeout = TimeSpan.FromDays(14)
 			}));
 			services.AddCors();
 
