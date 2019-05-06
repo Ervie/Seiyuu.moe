@@ -15,14 +15,17 @@
       label="Season"
       required
     ></v-select>
-    <!-- <nuxt-link :to="selectedSeasonPath"
-      :disabled="!valid"> -->
-      <v-btn color="secondary" 
-        :disabled="!valid"
-        :nuxt="selectedSeasonPath">
-      Go
+      <nuxt-link :to="selectedSeasonPath"
+      :disabled="!valid">
+        <v-btn nuxt color="secondary" 
+          :disabled="!valid">
+        Go
+        </v-btn>
+      </nuxt-link>
+      <v-btn color="success" 
+        @click="resetForm">
+        Current
       </v-btn>
-    <!-- </nuxt-link> -->
   </v-form>
 </template>
 
@@ -53,11 +56,14 @@ export default {
     }
   },
   methods: {
-    submit () {
-      if (this.$refs.form.validate()) {
-        this.$router.push(this.selectedSeasonPath);
-      }
+    resetForm() {
+      var currentDate = new Date();
+      this.season = this.seasonItems[Math.floor(currentDate.getMonth() / 3)];
+      this.year = currentDate.getFullYear();
     }
+  },
+  mounted () {
+    this.resetForm();
   },
 }
 </script>
