@@ -94,6 +94,7 @@ namespace SeiyuuMoe.BusinessServices
 			{
 				Results = groupedEntities
 					.OrderByDescending(x => x.AnimeCharacterPairs.Count)
+					.ThenByDescending(x => x.TotalSignificanceValue)
 					.Skip(query.Page * query.PageSize)
 					.Take(query.PageSize)
 					.ToList(),

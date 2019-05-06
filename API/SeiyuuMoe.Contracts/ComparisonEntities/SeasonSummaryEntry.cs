@@ -23,5 +23,18 @@ namespace SeiyuuMoe.Contracts.ComparisonEntities
 				(anime: anime, character: character)
 			};
 		}
+
+		public decimal TotalSignificanceValue
+		{
+			get
+			{
+				decimal total = 0m;
+				foreach (var animeCharacterPair in AnimeCharacterPairs)
+				{
+					total += (animeCharacterPair.anime.Popularity.Value / 1000m) * animeCharacterPair.character.Popularity.Value;
+				}
+				return total;
+			}
+		}
 	}
 }
