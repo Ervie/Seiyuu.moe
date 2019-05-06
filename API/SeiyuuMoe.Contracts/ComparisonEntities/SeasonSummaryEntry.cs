@@ -31,7 +31,9 @@ namespace SeiyuuMoe.Contracts.ComparisonEntities
 				decimal total = 0m;
 				foreach (var animeCharacterPair in AnimeCharacterPairs)
 				{
-					total += (animeCharacterPair.anime.Popularity.Value / 1000m) * animeCharacterPair.character.Popularity.Value;
+					decimal animePopularityFactor = animeCharacterPair.anime.Popularity.Value / 1000m;
+					decimal characterPopularityFactor = animeCharacterPair.character.Popularity.Value != 0 ? animeCharacterPair.character.Popularity.Value : 1;
+					total += animePopularityFactor * characterPopularityFactor;
 				}
 				return total;
 			}
