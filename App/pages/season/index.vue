@@ -10,7 +10,7 @@
       required
     ></v-text-field>
     <v-select
-      v-model="season"
+      v-model="selectedSeason"
       :items="seasonItems"
       label="Season"
       required
@@ -41,7 +41,7 @@ export default {
         v => (v && Number.isInteger(Number(v))) || 'Year must be a number between 1917 and ' + new Date().getFullYear(),
         v => (Number(v) <= new Date().getFullYear() && Number(v) >= 1917) || 'Year must be a number between 1917 and ' + new Date().getFullYear()
       ],
-      season: 'Winter',
+      selectedSeason: 'Winter',
       seasonItems: [
         'Winter',
         'Spring',
@@ -52,18 +52,18 @@ export default {
   },
   computed: {
     selectedSeasonPath() {
-      return 'season/' + this.year + '/' + this.season.toLowerCase(); 
+      return 'season/' + this.year + '/' + this.selectedSeason.toLowerCase(); 
     }
   },
   methods: {
     resetForm() {
       var currentDate = new Date();
-      this.season = this.seasonItems[Math.floor(currentDate.getMonth() / 3)];
+      this.selectedSeason = this.seasonItems[Math.floor(currentDate.getMonth() / 3)];
       this.year = currentDate.getFullYear();
     }
   },
-  mounted () {
+  mounted() {
     this.resetForm();
-  },
+  }
 }
 </script>

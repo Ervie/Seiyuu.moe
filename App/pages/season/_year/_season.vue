@@ -55,85 +55,117 @@ import RankingListPanel from '@/components/season/RankingListPanel.vue';
 import RankingListRecord from '@/components/season/RankingListRecord.vue';
 
 export default {
-    name: 'SeasonSummary',
-    components: {
-      'loading-dialog': LoadingDialog,
-      'ranking-list-panel': RankingListPanel,
-      'ranking-list-record': RankingListRecord
+  name: 'SeasonSummary',
+  components: {
+    'loading-dialog': LoadingDialog,
+    'ranking-list-panel': RankingListPanel,
+    'ranking-list-record': RankingListRecord
+  },
+  data () {
+    return {
+      seasonSummaryData: null,
+      season: 'Winter',
+      year: 2019,
+      page: 1,
+      pageSize: 25,
+      totalPages: 1,
+      tvSeriesOnly: true,
+      mainRolesOnly: false,
+      loading: false,
+      seasonItems: [
+        'Winter',
+        'Spring',
+        'Summer',
+        'Fall'
+      ]
+    }
+  },
+  computed: {
+    isMobile() {
+      return this.$vuetify.breakpoint.xsOnly;
     },
-    data () {
-      return {
-        seasonSummaryData: null,
-        page: 1,
-        pageSize: 25,
-        totalPages: 1,
-        tvSeriesOnly: true,
-        mainRolesOnly: false,
-        loading: false
+    previousSeason() {
+      if (this.year !== null && this.season !== null) {
+        var previousSeasonYear = this.capitalizeFirstLetter(this.season) === 'Winter' ? 
+          this.year - 1 :
+          this.year;
+        var previousSeasonName = this.seasonItems[this.mod(this.seasonItems.indexOf(this.capitalizeFirstLetter(this.season)) - 1, 4)];
+        return {season: previousSeasonName, year: previousSeasonYear};
+      } else {
+        return null;
       }
     },
-    computed: {
-      isMobile() {
-        return this.$vuetify.breakpoint.xsOnly;
+    nextSeason() {
+      if (this.year !== null && this.season !== null) {
+        var nextSeasonYear = this.capitalizeFirstLetter(this.season) === 'Fall' ? 
+          this.year + 1 :
+          this.year;
+        var nextSeasonName = this.seasonItems[(this.seasonItems.indexOf(this.capitalizeFirstLetter(this.season)) + 1) % 4];
+        return {season: nextSeasonName, year: nextSeasonYear};
+      } else {
+        return null;
       }
+    }
+  },
+  methods: {
+    sendNewRequest() {
+      this.page = 1;
+      this.changePage();
     },
-    methods: {
-      sendNewRequest() {
-        this.page = 1;
-        this.changePage();
-      },
-      changePage() {
-        this.loading = true;
-        axios.get(process.env.apiUrl + '/api/season/Summary' + 
-          '?Page=' + (this.page - 1) +
-          '&PageSize=' + this.pageSize +
-          '&SearchCriteria.Season=' + this.$route.params.season  +
-          '&SearchCriteria.Year=' + this.$route.params.year +
-          '&SearchCriteria.MainRolesOnly=' + this.mainRolesOnly +
-          '&SearchCriteria.TVSeriesOnly=' + this.tvSeriesOnly)
-        .then((response) => {
-          this.seasonSummaryData = response.data.payload.results;
-          this.totalPages = Math.ceil(response.data.payload.totalCount / this.pageSize);
-          this.loading = false;
-        })
-        .catch((e) => {
-          console.log(e);
-          this.loading = false;
-        })
-      }
-    },
-    async asyncData ({ params, error }) {
-      return axios.get(process.env.apiUrl + '/api/season/Summary' + 
-          '?Page=0' +
-          '&PageSize=25' +
-          '&SearchCriteria.Season=' + params.season +
-          '&SearchCriteria.Year=' + params.year +
-          '&SearchCriteria.TVSeriesOnly=true')
+    changePage() {
+      this.loading = true;
+      axios.get(process.env.apiUrl + '/api/season/Summary' + 
+        '?Page=' + (this.page - 1) +
+        '&PageSize=' + this.pageSize +
+        '&SearchCriteria.Season=' + this.$route.params.season  +
+        '&SearchCriteria.Year=' + this.$route.params.year +
+        '&SearchCriteria.MainRolesOnly=' + this.mainRolesOnly +
+        '&SearchCriteria.TVSeriesOnly=' + this.tvSeriesOnly)
       .then((response) => {
-        return { 
-          seasonSummaryData: response.data.payload.results,
-          totalPages: Math.ceil(response.data.payload.totalCount / response.data.payload.pageSize)
-        }
+        this.seasonSummaryData = response.data.payload.results;
+        this.totalPages = Math.ceil(response.data.payload.totalCount / this.pageSize);
+        this.loading = false;
       })
       .catch((e) => {
         console.log(e);
-        error({ statusCode: 404, message: 'Post not found' })
+        this.loading = false;
       })
-    },
-    watch: {
-      page: {
-        handler: 'changePage',
-        immediate: false
-      },
-      tvSeriesOnly: {
-        handler: 'sendNewRequest',
-        immediate: false
-      },
-      mainRolesOnly: {
-        handler: 'sendNewRequest',
-        immediate: false
-      }
     }
+  },
+  async asyncData ({ params, error }) {
+    return axios.get(process.env.apiUrl + '/api/season/Summary' + 
+        '?Page=0' +
+        '&PageSize=25' +
+        '&SearchCriteria.Season=' + params.season +
+        '&SearchCriteria.Year=' + params.year +
+        '&SearchCriteria.TVSeriesOnly=true')
+    .then((response) => {
+      return { 
+        seasonSummaryData: response.data.payload.results,
+        totalPages: Math.ceil(response.data.payload.totalCount / response.data.payload.pageSize),
+        season: params.season,
+        year: Number(params.year)
+      }
+    })
+    .catch((e) => {
+      console.log(e);
+      error({ statusCode: 404, message: 'Post not found' })
+    })
+  },
+  watch: {
+    page: {
+      handler: 'changePage',
+      immediate: false
+    },
+    tvSeriesOnly: {
+      handler: 'sendNewRequest',
+      immediate: false
+    },
+    mainRolesOnly: {
+      handler: 'sendNewRequest',
+      immediate: false
+    }
+  }
 }
 </script>
 
