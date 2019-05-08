@@ -17,12 +17,12 @@
     ></v-select>
       <nuxt-link :to="selectedSeasonPath"
       :disabled="!valid">
-        <v-btn nuxt color="secondary" 
+        <v-btn nuxt color="primary" 
           :disabled="!valid">
         Go
         </v-btn>
       </nuxt-link>
-      <v-btn color="success" 
+      <v-btn color="error" 
         @click="resetForm">
         Current
       </v-btn>

@@ -74,6 +74,10 @@
 
 <style>
 
+a {
+  text-decoration: none;
+}
+
 .styledHeader {
   font-family: 'Merienda', Georgia, 'Times New Roman', Times, cursive, serif;
   font-size: 34px;

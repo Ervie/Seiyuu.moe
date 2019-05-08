@@ -42,6 +42,18 @@
             </div>
           </v-card-text>
         </v-card>
+        <v-layout row wrap justify-space-around>
+        <link-button
+          :seasonName="previousSeason.season"
+          :seasonYear="previousSeason.year"
+          :isNext="false"
+        />
+        <link-button
+          :seasonName="nextSeason.season"
+          :seasonYear="nextSeason.year"
+          :isNext="true"
+        />
+        </v-layout>
       </v-flex>
       <loading-dialog
         :isLoading="loading"/>
@@ -52,6 +64,7 @@
 import axios from 'axios';
 import LoadingDialog from '@/components/shared/ui-components/LoadingDialog.vue';
 import RankingListPanel from '@/components/season/RankingListPanel.vue';
+import LinkButton from '@/components/season/LinkButton.vue';
 import RankingListRecord from '@/components/season/RankingListRecord.vue';
 
 export default {
@@ -59,7 +72,8 @@ export default {
   components: {
     'loading-dialog': LoadingDialog,
     'ranking-list-panel': RankingListPanel,
-    'ranking-list-record': RankingListRecord
+    'ranking-list-record': RankingListRecord,
+    'link-button': LinkButton
   },
   data () {
     return {
@@ -72,6 +86,7 @@ export default {
       tvSeriesOnly: true,
       mainRolesOnly: false,
       loading: false,
+      loadingAnotherSeason: false,
       seasonItems: [
         'Winter',
         'Spring',
