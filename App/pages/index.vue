@@ -2,14 +2,14 @@
     <v-container grid-list-xl text-xs-center style="min-height: 0;">
       <v-layout row wrap fill-height>
         <v-flex xs12 xl6>
-          <router-link		
+          <nuxt-link		
               to="/seiyuu"		
               tag="span"		
               class="display-2"		
               style="cursor: pointer"		
               >	
           <v-card 
-            class="linkCard">
+            class="link-card">
             <v-img
               src="/kayano.jpg"
               alt="Compare Seiyuu"
@@ -20,17 +20,17 @@
             </div>
           </v-card-title>
           </v-card>
-          </router-link>
+          </nuxt-link>
         </v-flex>
         <v-flex s12 xl6>
-          <router-link		
+          <nuxt-link		
               to="/anime"		
               tag="span"		
               class="display-2"		
               style="cursor: pointer"		
               >	
           <v-card 
-            class="linkCard">
+            class="link-card">
             <v-img
               src="/gochuuMosaic.jpg"
               alt="Compare Anime"
@@ -41,17 +41,17 @@
             </div>
           </v-card-title>
           </v-card>
-          </router-link>
+          </nuxt-link>
         </v-flex>
         <v-flex xs12>
-          <router-link		
+          <nuxt-link		
               to="/season"		
               tag="span"		
               class="display-2"		
               style="cursor: pointer"		
               >	
           <v-card 
-            class="linkCard">
+            class="link-card">
             <v-img
               src="/fourSeasons.jpg"
               alt="Check season summary"
@@ -62,7 +62,7 @@
             </div>
           </v-card-title>
           </v-card>
-          </router-link>
+          </nuxt-link>
         </v-flex>
       </v-layout>
     </v-container>
@@ -76,11 +76,11 @@ export default {
 </script>
 
 <style>
-  .linkCard:hover .v-image {
+  .link-card:hover .v-image {
       filter: contrast(60%);
   }
 
-  .linkCard:hover .v-card__title {
+  .link-card:hover .v-card__title {
       background-color: deepskyblue;
   }
 </style>
