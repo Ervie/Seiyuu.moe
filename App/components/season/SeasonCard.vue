@@ -1,5 +1,4 @@
 <template>
-  <v-flex md6 lg3>
     <nuxt-link		
       :to="'/season/' + season.year + '/' + season.name.toLowerCase()"
       tag="span"		
@@ -7,19 +6,18 @@
       style="cursor: pointer"		
       >	
         <v-card class="season-card">
-          <v-card-title primary-title>
-            <div>
-              <h3 class="headline mb-0">{{ season.year }} {{ season.name}}</h3>
-            </div>
+          <v-card-title class="season-card-title">
+            
+              <!-- <div class="subheading"> -->
+                {{ season.name}} {{ season.year }}
+                <!-- </div> -->
           </v-card-title>
           <v-img
             :src="'/' + season.name.toLowerCase() + '.jpg'"
-            aspect-ratio="0.8"
-            height="300px"
+            :height="$vuetify.breakpoint.mdAndDown ? 300 : 600"
           ></v-img>
         </v-card>
     </nuxt-link>
-  </v-flex>
 </template>
 
 <script>
@@ -47,4 +45,16 @@ export default {
   .season-card:hover .v-card__title {
     background-color: deepskyblue;
   }
+
+  .season-card-title {
+  justify-content: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  font-weight: bold;
+  position: relative;
+  font-size: 18px;
+  padding: 2px;
+}    
+
 </style>

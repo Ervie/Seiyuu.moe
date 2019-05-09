@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container grid-list-md text-xs-center>
     <v-form
       ref="form"
       v-model="valid">
@@ -28,10 +28,12 @@
         Current
       </v-btn>
     </v-form>
-    <v-layout>
-      <season-card v-for="(cardSeason, i) in cardSeasons" :key="i"
-        :season="cardSeason"
-      />
+    <v-layout align-center justify-center fill-height row wrap>
+      <v-flex xs6 sm3 v-for="(cardSeason, i) in cardSeasons" :key="i">
+        <season-card 
+          :season="cardSeason"
+        />
+      </v-flex>
     </v-layout>
   </v-container>
 </template>
