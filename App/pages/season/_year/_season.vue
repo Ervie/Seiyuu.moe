@@ -1,5 +1,6 @@
 <template>
-    <v-layout row align-center justify-center fill-height>
+  <v-layout row align-center justify-center fill-height>
+    <no-ssr>
       <v-flex xs12>
         <v-card v-if="seasonSummaryData">
           <v-toolbar color="primary" class="styledHeader"
@@ -57,9 +58,10 @@
         />
         </v-layout>
       </v-flex>
-      <loading-dialog
-        :isLoading="loading || loadingAnotherSeason"/>
-    </v-layout>
+    </no-ssr>
+    <loading-dialog
+      :isLoading="loading || loadingAnotherSeason"/>
+  </v-layout>
 </template>
 
 <script>
