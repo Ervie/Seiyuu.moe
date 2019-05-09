@@ -45,6 +45,7 @@ export default {
   methods: {
     loadAnotherSeason() {
       this.loadingAnotherSeason = true;
+      this.$emit('loadingAnotherSeason');
     }
   },
 }

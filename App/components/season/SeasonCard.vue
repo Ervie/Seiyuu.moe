@@ -41,10 +41,10 @@ export default {
   }
 
   .season-card:hover .v-image {
-      filter: contrast(60%);
+    filter: contrast(60%);
   }
 
   .season-card:hover .v-card__title {
-      background-color: deepskyblue;
+    background-color: deepskyblue;
   }
 </style>

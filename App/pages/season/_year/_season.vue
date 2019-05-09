@@ -47,16 +47,18 @@
           :seasonName="previousSeason.season"
           :seasonYear="previousSeason.year"
           :isNext="false"
+          @loadingAnotherSeason="loadingAnotherSeason = true"
         />
         <link-button
           :seasonName="nextSeason.season"
           :seasonYear="nextSeason.year"
           :isNext="true"
+          @loadingAnotherSeason="loadingAnotherSeason = true"
         />
         </v-layout>
       </v-flex>
       <loading-dialog
-        :isLoading="loading"/>
+        :isLoading="loading || loadingAnotherSeason"/>
     </v-layout>
 </template>
 
