@@ -87,8 +87,8 @@ export default {
       page: 1,
       pageSize: 25,
       totalPages: 1,
-      tvSeriesOnly: true,
-      mainRolesOnly: false,
+      // tvSeriesOnly: true,
+      // mainRolesOnly: false,
       loading: false,
       loadingAnotherSeason: false,
       seasonItems: [
@@ -100,6 +100,24 @@ export default {
     }
   },
   computed: {
+    mainRolesOnly: {
+      get() {
+        return this.$store.getters.getSeasonSummaryMainRolesOnly;
+      },
+      set(val) {
+        this.$store.dispatch('setSeasonSummaryMainRolesOnly', val);
+        this.sendNewRequest();
+      }
+    },
+    tvSeriesOnly: {
+      get() {
+        return this.$store.getters.getSeasonSummaryTVSeriesOnly;
+      },
+      set(val) {
+        this.$store.dispatch('setSeasonSummaryTVSeriesOnly', val);
+        this.sendNewRequest();
+      }
+    },
     isMobile() {
       return this.$vuetify.breakpoint.xsOnly;
     },
@@ -127,6 +145,14 @@ export default {
     }
   },
   methods: {
+    // mainRolesOnlyChanged() {
+    //   this.$store.dispatch('setSeasonSummaryMainRolesOnly', this.mainRolesOnly);
+    //   this.sendNewRequest();
+    // },
+    // tvSeriesOnlyChanged() {
+    //   this.$store.dispatch('setSeasonSummaryTVSeriesOnly', this.tvSeriesOnly);
+    //   this.sendNewRequest();
+    // },
     sendNewRequest() {
       this.page = 1;
       this.changePage();
@@ -151,13 +177,14 @@ export default {
       })
     }
   },
-  async asyncData ({ params, error }) {
+  async asyncData ({ store, params }) {
     return axios.get(process.env.apiUrl + '/api/season/Summary' + 
         '?Page=0' +
         '&PageSize=25' +
         '&SearchCriteria.Season=' + params.season +
         '&SearchCriteria.Year=' + params.year +
-        '&SearchCriteria.TVSeriesOnly=true')
+        '&SearchCriteria.MainRolesOnly=' + store.getters.getSeasonSummaryMainRolesOnly +
+        '&SearchCriteria.TVSeriesOnly=' + store.getters.getSeasonSummaryTVSeriesOnly)
     .then((response) => {
       return { 
         seasonSummaryData: response.data.payload.results,
@@ -168,20 +195,16 @@ export default {
     })
     .catch((e) => {
       console.log(e);
-      error({ statusCode: 404, message: 'Post not found' })
+      //error({ statusCode: 404, message: 'Post not found' })
     })
   },
+  // mounted() {
+  //   this.mainRolesOnly = this.$store.getSeasonSummaryMainRolesOnly;
+  //   this.tvSeriesOnly = this.$store.getSeasonSummaryTVSeriesOnly;
+  // },
   watch: {
     page: {
       handler: 'changePage',
-      immediate: false
-    },
-    tvSeriesOnly: {
-      handler: 'sendNewRequest',
-      immediate: false
-    },
-    mainRolesOnly: {
-      handler: 'sendNewRequest',
       immediate: false
     }
   }
