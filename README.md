@@ -55,17 +55,26 @@ Require .Net Core 2.2 installed.
 * Searching common seiyuu between anime (up to 6 titles at once).
     * Three separate display modes.
     * Details cards for extra information.
+* Season summary
+    * Showing seiyuu with most roles in season.
+    * Pagination support.
+    * Filtering by main roles and TV series only.
 
 ## Changelog
 
-### Version 2.0 - 30th March 2019 
+### Version 2.1 - 11 May 2019
 
-* Instead sending requests to external API, all data is requested to backend.
-* Reduced amount of data transferred.
-* Massive speed boost to searching anime/seiyuu.
-* Removed "Too much requests" issue altogether.
-* Added logger.
-* Database frequently updated by background workers.
+* Job for database backup.
+* Update jobs running on own Jikan instance.
+* No result placeholder with loading indication.
+* Modal window with loading indication.
+* Custom error page.
+* Season summary page
+    * Shows seiyuu with the most roles in selected season.
+    * TV series only and main roles only filtering.
+    * Pagination support.
+    * Navigation arrows.
+* Added Vuex store to project
 
 **[Read More](https://github.com/Ervie/Seiyuu.moe/blob/master/Changelog.md)**
 

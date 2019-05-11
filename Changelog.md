@@ -1,4 +1,18 @@
-### Version 2.0 - 30th March 2019 (latest)
+### Version 2.1 - 11 May 2019 (latest)
+
+* Job for database backup.
+* Update jobs running on own Jikan instance.
+* No result placeholder with loading indication.
+* Modal window with loading indication.
+* Custom error page.
+* Season summary page
+    * Shows seiyuu with the most roles in selected season.
+    * TV series only and main roles only filtering.
+    * Pagination support.
+    * Navigation arrows.
+* Added Vuex store to project
+
+### Version 2.0 - 30th March 2019
 
 * Instead sending requests to external API, all data is requested to backend
 * Reduced amount of data transferred
