@@ -58,18 +58,20 @@ namespace SeiyuuMoe.BusinessServices
 				var animePredicate = animeSearchCriteriaService.BuildExpression(mapper.Map<AnimeSearchCriteria>(query.SearchCriteria));
 
 				var animeInSeason = await animeRepository.GetAllAsync(animePredicate);
-				query.SearchCriteria.AnimeId = animeInSeason.Select(x => x.MalId).ToList();
 
-				var rolePredicate = roleSearchCriteriaService.BuildExpression(mapper.Map<RoleSearchCriteria>(query.SearchCriteria));
+				if (animeInSeason.Count > 0)
+				{
+					query.SearchCriteria.AnimeId = animeInSeason.Select(x => x.MalId).ToList();
 
-				IReadOnlyCollection<Role> allRolesInSeason = await roleRepository.GetAllAsync(rolePredicate, roleRepository.IncludeExpression);
+					var rolePredicate = roleSearchCriteriaService.BuildExpression(mapper.Map<RoleSearchCriteria>(query.SearchCriteria));
 
-				return mapper.Map<PagedResult<SeasonSummaryEntryDto>>(GroupRoles(allRolesInSeason, query));
+					IReadOnlyCollection<Role> allRolesInSeason = await roleRepository.GetAllAsync(rolePredicate, roleRepository.IncludeExpression);
+
+					return mapper.Map<PagedResult<SeasonSummaryEntryDto>>(GroupRoles(allRolesInSeason, query));
+				}
 			}
-			else
-			{
-				return null;
-			}
+
+			return null;
 		}
 
 		public PagedResult<SeasonSummaryEntry> GroupRoles(IReadOnlyCollection<Role> roles, Query<SeasonSummarySearchCriteria> query)

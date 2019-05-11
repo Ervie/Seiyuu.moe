@@ -11,7 +11,7 @@
             <span class="title">Oops!</span>
           </v-card-title>
           <v-card-text>
-            Looks like you're in uncharted territory. We don't know about this page yet.
+            Looks like you're in uncharted territory. We don't know about this page yet. Maybe there's no data here.
             Luckily, we know the way back.
           </v-card-text>
           <v-card-actions>

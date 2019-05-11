@@ -87,8 +87,6 @@ export default {
       page: 1,
       pageSize: 25,
       totalPages: 1,
-      // tvSeriesOnly: true,
-      // mainRolesOnly: false,
       loading: false,
       loadingAnotherSeason: false,
       seasonItems: [
@@ -145,14 +143,6 @@ export default {
     }
   },
   methods: {
-    // mainRolesOnlyChanged() {
-    //   this.$store.dispatch('setSeasonSummaryMainRolesOnly', this.mainRolesOnly);
-    //   this.sendNewRequest();
-    // },
-    // tvSeriesOnlyChanged() {
-    //   this.$store.dispatch('setSeasonSummaryTVSeriesOnly', this.tvSeriesOnly);
-    //   this.sendNewRequest();
-    // },
     sendNewRequest() {
       this.page = 1;
       this.changePage();
@@ -177,7 +167,7 @@ export default {
       })
     }
   },
-  async asyncData ({ store, params }) {
+  async asyncData ({ error, store, params }) {
     return axios.get(process.env.apiUrl + '/api/season/Summary' + 
         '?Page=0' +
         '&PageSize=25' +
@@ -195,13 +185,9 @@ export default {
     })
     .catch((e) => {
       console.log(e);
-      //error({ statusCode: 404, message: 'Post not found' })
+      error({ statusCode: 404, message: 'Post not found' })
     })
   },
-  // mounted() {
-  //   this.mainRolesOnly = this.$store.getSeasonSummaryMainRolesOnly;
-  //   this.tvSeriesOnly = this.$store.getSeasonSummaryTVSeriesOnly;
-  // },
   watch: {
     page: {
       handler: 'changePage',
