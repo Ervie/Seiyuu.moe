@@ -1,22 +1,22 @@
 export const state = () => ({
-  seasonSummaryMainRolesOnly: false,
-  seasonSummaryTVSeriesOnly: true
+  mainRolesOnly: false,
+  tvSeriesOnly: true
 })
 
 export const getters = {
-  getSeasonSummaryMainRolesOnly(state) {
-    return state.seasonSummaryMainRolesOnly;
+  getMainRolesOnly(state) {
+    return state.mainRolesOnly;
   },
-  getSeasonSummaryTVSeriesOnly(state) {
-    return state.seasonSummaryTVSeriesOnly;
+  getTvSeriesOnly(state) {
+    return state.tvSeriesOnly;
   }
 }
 
 export const mutations = {
-  setSeasonSummaryMainRolesOnly(state, mainRolesOnly) {
-    state.seasonSummaryMainRolesOnly = mainRolesOnly;
+  setMainRolesOnly(state, mainRolesOnly) {
+    state.mainRolesOnly = mainRolesOnly;
   },
-  setSeasonSummaryTVSeriesOnly(state, TVSeriesOnly) {
-    state.seasonSummaryTVSeriesOnly = TVSeriesOnly;
+  setTvSeriesOnly(state, TVSeriesOnly) {
+    state.tvSeriesOnly = TVSeriesOnly;
   }
 }

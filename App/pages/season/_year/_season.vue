@@ -101,19 +101,19 @@ export default {
   computed: {
     mainRolesOnly: {
       get() {
-        return this.$store.getters['season/getSeasonSummaryMainRolesOnly'];
+        return this.$store.getters['season/getMainRolesOnly'];
       },
       set(val) {
-        this.$store.commit('season/setSeasonSummaryMainRolesOnly', val);
+        this.$store.commit('season/setMainRolesOnly', val);
         this.sendNewRequest();
       }
     },
     tvSeriesOnly: {
       get() {
-        return this.$store.getters['season/getSeasonSummaryTVSeriesOnly'];
+        return this.$store.getters['season/getTvSeriesOnly'];
       },
       set(val) {
-        this.$store.commit('season/setSeasonSummaryTVSeriesOnly', val);
+        this.$store.commit('season/setTvSeriesOnly', val);
         this.sendNewRequest();
       }
     },
@@ -174,8 +174,8 @@ export default {
         '&PageSize=25' +
         '&SearchCriteria.Season=' + params.season +
         '&SearchCriteria.Year=' + params.year +
-        '&SearchCriteria.MainRolesOnly=' + store.getters['season/getSeasonSummaryMainRolesOnly'] +
-        '&SearchCriteria.TVSeriesOnly=' + store.getters['season/getSeasonSummaryTVSeriesOnly'])
+        '&SearchCriteria.MainRolesOnly=' + store.getters['season/getMainRolesOnly'] +
+        '&SearchCriteria.TVSeriesOnly=' + store.getters['season/getTvSeriesOnly'])
     .then((response) => {
       return { 
         seasonSummaryData: response.data.payload.results,
