@@ -3,7 +3,7 @@
     <no-ssr>
       <v-flex xs12>
         <v-card v-if="seasonSummaryData">
-          <v-toolbar color="primary" class="styledHeader"
+          <v-toolbar color="primary" class="styled-header"
             :prominent="isMobile"
             :extended="isMobile"
             dark>

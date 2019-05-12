@@ -17,14 +17,14 @@
           </v-expansion-panel-content>
         </v-expansion-panel>
         <div>
-          <v-btn raised large color="error" class="optionButton" 
+          <v-btn raised large color="error" class="option-button" 
             @click="resetList" 
             :disabled="seiyuuIds.length < 1">Reset</v-btn>
-          <v-btn depressed large color="primary" class="optionButton" 
+          <v-btn depressed large color="primary" class="option-button" 
             @click="showResults" 
             :disabled="seiyuuIds.length < 2 || loadingComparison"
             :loading="loadingComparison">Compare</v-btn>
-          <v-btn depressed large color="secondary" class="optionButton" 
+          <v-btn depressed large color="secondary" class="option-button" 
             @click="generateShareLink" 
             :disabled="!showTables || seiyuuIds.length < 2">Share Link</v-btn>
         </div>

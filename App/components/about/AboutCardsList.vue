@@ -7,7 +7,7 @@
                 :alt="item.imageAltText"
                 height="300px"/>
               <v-card-actions>
-              <v-card-title primary-title class="styledHeader" v-html="item.header">>
+              <v-card-title primary-title class="styled-header" v-html="item.header">>
               </v-card-title>
               <v-spacer></v-spacer>
               <v-btn icon @click.native="item.expanded = !item.expanded" :aria-label="item.expanded ? 'Hide text' : 'Show text'">

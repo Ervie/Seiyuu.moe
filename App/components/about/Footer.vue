@@ -1,5 +1,5 @@
 <template>
-    <v-layout height="auto" class="styledFooter">
+    <v-layout height="auto" class="styled-footer">
       <v-card flat tile class="flex primary">
         <v-card-text class="primary white--text">
           <v-layout hidden-sm-and-down>

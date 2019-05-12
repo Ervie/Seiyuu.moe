@@ -17,6 +17,7 @@
       required
     ></v-select>
       <nuxt-link :to="selectedSeasonPath"
+      :class="{ 'disabled-link': !valid }"
       :disabled="!valid">
         <v-btn nuxt color="primary" 
           :disabled="!valid">

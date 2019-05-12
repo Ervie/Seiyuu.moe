@@ -1,8 +1,7 @@
 <template>
   <nuxt-link
   :to="anotherSeasonPath"
-  :class="{'isDisabled': isDisabled}"
-  :event="isDisabled ? '' : 'click'">
+  :class="{'disabled-link': isDisabled}">
     <v-btn
       large
       :loading="loadingAnotherSeason"
@@ -56,9 +55,3 @@ export default {
   },
 }
 </script>
-
-<style>
-  .isDisabled {
-    cursor: default !important;
-  }
-</style>

@@ -34,7 +34,7 @@
                   ></v-img>
               </a>
               <div class="body-2">{{ swapNameSurname(decodeHtml(entry.characterName)) }}</div>
-              <div class="body-2 accentedText">{{ decodeHtml(entry.extraData) }}</div>
+              <div class="body-2 accented-text">{{ decodeHtml(entry.extraData) }}</div>
             </v-card>
           </v-layout>
         </v-flex>

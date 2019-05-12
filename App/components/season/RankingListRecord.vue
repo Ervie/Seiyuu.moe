@@ -4,7 +4,7 @@
     class="season-summary-ranking"
   >
     <v-list-tile-action v-if="!isMobile">
-      <v-list-tile-title v-bind:class="{'styledHeader': !isMobile}">{{ rankingPosition }}</v-list-tile-title>
+      <v-list-tile-title v-bind:class="{'styled-header': !isMobile}">{{ rankingPosition }}</v-list-tile-title>
     </v-list-tile-action>
     <v-list-tile-avatar :size="isMobile ? '3em' : '5em'">
       <img class="ranking-avatar" :src="pathToImage(rankingItem.seiyuu.imageUrl)"/>

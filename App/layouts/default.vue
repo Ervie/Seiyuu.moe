@@ -10,7 +10,7 @@
       >
         <v-icon v-html="miniVariant ? 'chevron_right' : 'chevron_left'"></v-icon>
       </v-btn>
-      <v-toolbar-title v-text="title" class="styledHeader"></v-toolbar-title>
+      <v-toolbar-title v-text="title" class="styled-header"></v-toolbar-title>
     </v-toolbar>
     <v-content>
       <v-container>
@@ -40,7 +40,7 @@
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
-    <v-footer height="auto" app fixed class="styledFooter" v-show="$vuetify.breakpoint.mdAndUp">
+    <v-footer height="auto" app fixed class="styled-footer" v-show="$vuetify.breakpoint.mdAndUp">
        <v-card flat tile class="flex primary" height="40px">
         <span class="primary justify-center ">
           &copy;2018 — 2019 -
@@ -78,26 +78,26 @@ a {
   text-decoration: none;
 }
 
-.styledHeader {
+.styled-header {
   font-family: 'Merienda', Georgia, 'Times New Roman', Times, cursive, serif;
   font-size: 34px;
 }
 
-.styledFooter {
+.styled-footer {
   display: flex;
   text-align: center;
 }
 
-.optionButton {
+.option-button {
   width: 100px;
 }
 
- .dropdownAvatar {
+ .dropdown-avatar {
    object-fit: cover;
    object-position: 100% 20%;
  }
 
-.accentedText {
+.accented-text {
   font-style: italic;
   color: #B2DFDB;
 }
@@ -111,5 +111,10 @@ a {
   height: 36px;
   position: relative;
 }    
+
+.disabled-link {
+    pointer-events:none; 
+    opacity:0.6;        
+ }
 
 </style>
