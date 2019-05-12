@@ -66,6 +66,7 @@
 
 <script>
 import axios from 'axios';
+
 import LoadingDialog from '@/components/shared/ui-components/LoadingDialog.vue';
 import RankingListPanel from '@/components/season/RankingListPanel.vue';
 import LinkButton from '@/components/season/LinkButton.vue';
@@ -100,19 +101,19 @@ export default {
   computed: {
     mainRolesOnly: {
       get() {
-        return this.$store.getters.getSeasonSummaryMainRolesOnly;
+        return this.$store.getters['season/getSeasonSummaryMainRolesOnly'];
       },
       set(val) {
-        this.$store.dispatch('setSeasonSummaryMainRolesOnly', val);
+        this.$store.commit('season/setSeasonSummaryMainRolesOnly', val);
         this.sendNewRequest();
       }
     },
     tvSeriesOnly: {
       get() {
-        return this.$store.getters.getSeasonSummaryTVSeriesOnly;
+        return this.$store.getters['season/getSeasonSummaryTVSeriesOnly'];
       },
       set(val) {
-        this.$store.dispatch('setSeasonSummaryTVSeriesOnly', val);
+        this.$store.commit('season/setSeasonSummaryTVSeriesOnly', val);
         this.sendNewRequest();
       }
     },
@@ -173,8 +174,8 @@ export default {
         '&PageSize=25' +
         '&SearchCriteria.Season=' + params.season +
         '&SearchCriteria.Year=' + params.year +
-        '&SearchCriteria.MainRolesOnly=' + store.getters.getSeasonSummaryMainRolesOnly +
-        '&SearchCriteria.TVSeriesOnly=' + store.getters.getSeasonSummaryTVSeriesOnly)
+        '&SearchCriteria.MainRolesOnly=' + store.getters['season/getSeasonSummaryMainRolesOnly'] +
+        '&SearchCriteria.TVSeriesOnly=' + store.getters['season/getSeasonSummaryTVSeriesOnly'])
     .then((response) => {
       return { 
         seasonSummaryData: response.data.payload.results,
