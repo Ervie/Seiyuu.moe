@@ -102,9 +102,27 @@ export default {
       outputData: [],
       loadingComparison: false,
       timelineDates: [],
-      groupBySeries: true,
-      mainRolesOnly: false,
       snackbar: false
+    }
+  },
+  computed: {
+    mainRolesOnly: {
+      get() {
+        return this.$store.getters['seiyuu/getMainRolesOnly'];
+      },
+      set(val) {
+        this.$store.commit('seiyuu/setMainRolesOnly', val);
+        this.computeResults();
+      }
+    },
+    groupBySeries: {
+      get() {
+        return this.$store.getters['seiyuu/getGroupBySeries'];
+      },
+      set(val) {
+        this.$store.commit('seiyuu/setGroupBySeries', val);
+        this.computeResults();
+      }
     }
   },
   methods: {
@@ -176,14 +194,6 @@ export default {
       if (val === true) {
         this.showResults();
       }
-    },
-    mainRolesOnly: {
-      handler: 'computeResults',
-      immediate: false
-    },
-    groupBySeries: {
-      handler: 'computeResults',
-      immediate: false
     }
   }
 }
