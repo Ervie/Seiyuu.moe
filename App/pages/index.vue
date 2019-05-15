@@ -3,7 +3,7 @@
       <v-layout row wrap fill-height>
         <v-flex xs12 xl6>
           <nuxt-link		
-              to="/seiyuu"		
+              to="/seiyuu/compare"		
               tag="span"		
               class="display-2"		
               style="cursor: pointer"		

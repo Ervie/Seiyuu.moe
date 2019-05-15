@@ -27,6 +27,7 @@
       <v-list>
         <v-list-tile
           router
+          exact 
           :to="item.to"
           :key="i"
           v-for="(item, i) in items"
@@ -55,12 +56,11 @@
   export default {
     data() {
       return {
-        clipped: false,
         drawer: false,
-        fixed: false,
         items: [
           { iconPrefix: 'fa', icon: 'home', title: 'Home', to: '/' },
-          { iconPrefix: 'fa', icon: 'users', title: 'Compare Seiyuu', to: '/seiyuu' },
+          { iconPrefix: 'fa', icon: 'user', title: 'Search Seiyuu', to: '/seiyuu' },
+          { iconPrefix: 'fa', icon: 'users', title: 'Compare Seiyuu', to: '/seiyuu/compare' },
           { iconPrefix: 'fa', icon: 'tv', title: 'Compare Anime', to: '/anime' },
           { iconPrefix: 'fa', icon: 'calendar', title: 'Season Summary', to: '/season' },
           { iconPrefix: 'fa', icon: 'info-circle', title: 'About', to: '/about' }
