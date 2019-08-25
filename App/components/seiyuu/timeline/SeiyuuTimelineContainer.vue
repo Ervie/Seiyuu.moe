@@ -32,7 +32,7 @@ export default {
                 });
             });
 
-            return output.sort((a,b) => { return new Date(a.airedDate) < new Date(b.airedDate); });
+            return output.sort((a,b) => { return new Date(b.airedDate) - new Date(a.airedDate); });
         }
     }
 
