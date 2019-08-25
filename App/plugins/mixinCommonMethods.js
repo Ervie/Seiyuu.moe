@@ -21,8 +21,8 @@ Vue.mixin({
         return 'unknown';
       } else {
       var m = new Date(inputDate);
-      return m.getUTCFullYear() + "." +
-          ("0" + (m.getUTCMonth()+1)).slice(-2) + "." +
+      return m.getUTCFullYear() + "-" +
+          ("0" + (m.getUTCMonth()+1)).slice(-2) + "-" +
           ("0" + m.getUTCDate()).slice(-2);
       }
     },
