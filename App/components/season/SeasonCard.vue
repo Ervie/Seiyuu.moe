@@ -7,10 +7,7 @@
       >	
         <v-card class="season-card">
           <v-card-title class="season-card-title">
-            
-              <!-- <div class="subheading"> -->
                 {{ season.name}} {{ season.year }}
-                <!-- </div> -->
           </v-card-title>
           <v-img
             :src="'/' + season.name.toLowerCase() + '.jpg'"
