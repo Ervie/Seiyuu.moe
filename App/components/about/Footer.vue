@@ -64,8 +64,8 @@ export default {
               {
                 iconPrefix: 'fa',
                 icon: 'envelope',
-                text: 'bbuchala93@gmail.com',
-                link: 'mailto:bbuchala93@gmail.com'
+                text: 'kontakt@bartlomiejbuchala.com',
+                link: 'mailto:kontakt@bartlomiejbuchala.com'
               },
               {
                 iconPrefix: 'fab',
@@ -75,9 +75,9 @@ export default {
               },
               {
                 iconPrefix: 'fab',
-                icon: 'reddit',
-                text: 'Ervelan',
-                link: 'https://www.reddit.com/message/compose/?to=Ervelan'
+                icon: 'twitter',
+                text: 'ErvieBB',
+                link: 'https://twitter.com/ErvieBB'
               }
             ]
           }
