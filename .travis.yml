@@ -1,0 +1,12 @@
+os: linux
+dist: xenial
+language: node_js
+node_js:
+  - lts/*
+
+jobs:
+  include:
+    - stage: install
+      script: cd App && npm install
+    - stage: lint
+      script: cd App && npm install && npm run lint
