@@ -51,8 +51,8 @@ export default {
   data() {
     return {
       valid: true,
-      selectedYear: '2019',
-      currentYear: '2019',
+      selectedYear: '2020',
+      currentYear: '2020',
       yearErrors: [
         v => !!v || 'Year is required.',
         v => (v && Number.isInteger(Number(v))) || 'Year must be a number between 1917 and ' + new Date().getFullYear(),
