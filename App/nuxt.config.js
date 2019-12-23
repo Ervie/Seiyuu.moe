@@ -44,7 +44,7 @@ module.exports = {
   ** Global CSS
   */
   css: [
-    'vuetify/src/stylus/main.styl',
+    '@node_modules/vuetify/src/stylus/main.styl',
     '@fortawesome/fontawesome-svg-core/styles.css'
   ],
 
