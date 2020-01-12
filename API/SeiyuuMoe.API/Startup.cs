@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using SeiyuuMoe.BusinessServices;
 using SeiyuuMoe.Data;
 using SeiyuuMoe.FileHandler;
@@ -22,9 +21,9 @@ namespace SeiyuuMoe.API
 {
 	public class Startup
 	{
-		public IContainer ApplicationContainer { get; private set; }
+		private IContainer ApplicationContainer { get; set; }
 
-		public IConfigurationRoot Configuration { get; }
+		private IConfigurationRoot Configuration { get; }
 
 		public Startup()
 		{
@@ -90,10 +89,10 @@ namespace SeiyuuMoe.API
 			app.UseMvc();
 		}
 
-		public void SetupRecurringJobs()
+		private static void SetupRecurringJobs()
 		{
 			// Workaround for to never run automatically - set to run on 31st February. Expression for jobs on demand (run only manually).
-			string runNeverCronExpression = "0 0 31 2 1";
+			var runNeverCronExpression = "0 0 31 2 1";
 
 			RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.UpdateSeasons(), Cron.Monthly);
 			RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.ParseRoles(), "0 12 * * 7");
