@@ -21,9 +21,9 @@ Vue.mixin({
         return 'unknown';
       } else {
       var m = new Date(inputDate);
-      return m.getUTCFullYear() + "-" +
-          ("0" + (m.getUTCMonth()+1)).slice(-2) + "-" +
-          ("0" + m.getUTCDate()).slice(-2);
+      return m.getFullYear() + "-" +
+          ("0" + (m.getMonth() + 1)).slice(-2) + "-" +
+          ("0" + m.getDate()).slice(-2);
       }
     },
     pathToImage (path) {
