@@ -5,15 +5,15 @@ namespace SeiyuuMoe.FileHandler.DatabaseBackupService
 {
 	internal class DatabaseBackupService : IDatabaseBackupService
 	{
-		private ILoggingService logger;
+		private readonly ILoggingService logger;
 
-		private readonly string pathToDB;
-		private readonly string pathToBackupDB;
+		private readonly string pathToDb;
+		private readonly string pathToBackupDb;
 
-		public DatabaseBackupService(string pathToDB, string pathToBackupDB, ILoggingService loggingService)
+		public DatabaseBackupService(string pathToDb, string pathToBackupDb, ILoggingService loggingService)
 		{
-			this.pathToDB = pathToDB;
-			this.pathToBackupDB = pathToBackupDB;
+			this.pathToDb = pathToDb;
+			this.pathToBackupDb = pathToBackupDb;
 			logger = loggingService;
 		}
 
@@ -21,8 +21,8 @@ namespace SeiyuuMoe.FileHandler.DatabaseBackupService
 		{
 			logger.Log("Started BackupDatabase job.");
 
-			using (var source = new SqliteConnection($"Data Source={pathToDB};"))
-			using (var destination = new SqliteConnection($"Data Source={pathToBackupDB};"))
+			using (var source = new SqliteConnection($"Data Source={pathToDb};"))
+			using (var destination = new SqliteConnection($"Data Source={pathToBackupDb};"))
 			{
 				source.Open();
 				destination.Open();
@@ -36,8 +36,8 @@ namespace SeiyuuMoe.FileHandler.DatabaseBackupService
 		{
 			logger.Log("Started RestoreDatabase job.");
 
-			using (var source = new SqliteConnection($"Data Source={pathToBackupDB};"))
-			using (var destination = new SqliteConnection($"Data Source={pathToDB};"))
+			using (var source = new SqliteConnection($"Data Source={pathToBackupDb};"))
+			using (var destination = new SqliteConnection($"Data Source={pathToDb};"))
 			{
 				source.Open();
 				destination.Open();

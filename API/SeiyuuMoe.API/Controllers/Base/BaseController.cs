@@ -26,7 +26,7 @@ namespace SeiyuuMoe.API.Controllers.Base
 			}
 			catch (Exception ex) when (EnsureExceptionFilter(ex))
 			{
-				ApiResult<string> result = new ApiResult<string>
+				var result = new ApiResult<string>
 				{
 					Payload = null,
 					ValidationErrors = new Dictionary<string, string>
@@ -58,17 +58,12 @@ namespace SeiyuuMoe.API.Controllers.Base
 				return NotFound();
 			}
 
-			if (serviceResponse.ValidationErrors.Any())
-			{
-				return StatusCode(400, MapFromServiceResponse(serviceResponse));
-			}
-
-			return Ok(MapFromServiceResponse(serviceResponse));
+			return serviceResponse.ValidationErrors.Any() ? StatusCode(400, MapFromServiceResponse(serviceResponse)) : Ok(MapFromServiceResponse(serviceResponse));
 		}
 
-		protected bool EnsureExceptionFilter(Exception ex) => ex is ArgumentException || ex is ArgumentNullException || ex is ArgumentOutOfRangeException;
+		private bool EnsureExceptionFilter(Exception ex) => ex is ArgumentException || ex is ArgumentNullException || ex is ArgumentOutOfRangeException;
 
-		protected ApiResult<TEntity> MapFromServiceResponse<TEntity>(QueryResponse<TEntity> response)
+		private ApiResult<TEntity> MapFromServiceResponse<TEntity>(QueryResponse<TEntity> response)
 			where TEntity : class
 		{
 			return new ApiResult<TEntity>

@@ -92,7 +92,7 @@ namespace SeiyuuMoe.API
 		private static void SetupRecurringJobs()
 		{
 			// Workaround for to never run automatically - set to run on 31st February. Expression for jobs on demand (run only manually).
-			var runNeverCronExpression = "0 0 31 2 1";
+			const string runNeverCronExpression = "0 0 31 2 1";
 
 			RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.UpdateSeasons(), Cron.Monthly);
 			RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.ParseRoles(), "0 12 * * 7");
