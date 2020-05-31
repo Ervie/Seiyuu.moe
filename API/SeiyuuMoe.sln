@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27428.2037
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeiyuuMoe.API", "SeiyuuMoe.API\SeiyuuMoe.API.csproj", "{063A78DC-5608-4795-A2CF-5C095D065744}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -31,7 +31,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeiyuuMoe.Logger", "SeiyuuM
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeiyuuMoe.Common", "SeiyuuMoe.Common\SeiyuuMoe.Common.csproj", "{3215DAE2-C14D-4F1E-A139-7F5C33D1D0A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeiyuuMoe.FileHandler", "SeiyuuMoe.FileHandler\SeiyuuMoe.FileHandler.csproj", "{3A514EEA-F468-499F-A295-8C3ED86DD913}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeiyuuMoe.FileHandler", "SeiyuuMoe.FileHandler\SeiyuuMoe.FileHandler.csproj", "{3A514EEA-F468-499F-A295-8C3ED86DD913}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

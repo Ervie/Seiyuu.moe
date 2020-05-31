@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
 using Hangfire;
 using Hangfire.MemoryStorage;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using SeiyuuMoe.BusinessServices;
 using SeiyuuMoe.Data;
 using SeiyuuMoe.FileHandler;
@@ -21,9 +23,9 @@ namespace SeiyuuMoe.API
 {
 	public class Startup
 	{
-		private IContainer ApplicationContainer { get; set; }
-
 		private IConfigurationRoot Configuration { get; }
+
+		public ILifetimeScope AutofacContainer { get; private set; }
 
 		public Startup()
 		{
@@ -35,20 +37,20 @@ namespace SeiyuuMoe.API
 		}
 
 		// This method gets called by the runtime. Use this method to add services to the container.
-		public IServiceProvider ConfigureServices(IServiceCollection services)
+		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddMvc().AddControllersAsServices();
+			services.AddOptions();
+			services.AddControllers();
 			services.AddSingleton<IConfiguration>(Configuration);
 			services.AddHangfire(x => x.UseMemoryStorage(new MemoryStorageOptions
 			{
 				FetchNextJobTimeout = TimeSpan.FromDays(14)
 			}));
 			services.AddCors();
+		}
 
-			var builder = new ContainerBuilder();
-
-			builder.Populate(services);
-
+		public void ConfigureContainer(ContainerBuilder builder)
+		{
 			builder.RegisterModule(new ContextModule(Configuration["Config:pathToDB"]));
 			builder.RegisterModule(new RepositoriesModule());
 			builder.RegisterModule(new BusinessServicesModule());
@@ -56,25 +58,25 @@ namespace SeiyuuMoe.API
 			builder.RegisterModule(new LoggerModule());
 			builder.RegisterModule(new JikanParserModule(Configuration["Config:jikanREST"]));
 			builder.RegisterModule(new FileHandlerModule(Configuration["Config:pathToDB"], Configuration["Config:pathToBackupDB"]));
-
-			ApplicationContainer = builder.Build();
-
-			return new AutofacServiceProvider(this.ApplicationContainer);
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 		{
 			if (env.IsDevelopment())
 			{
 				app.UseDeveloperExceptionPage();
 			}
+			app.UseHttpsRedirection();
+
+			app.UseRouting();
 
 			app.UseForwardedHeaders(new ForwardedHeadersOptions
 			{
 				ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
 			});
 
+			AutofacContainer = app.ApplicationServices.GetAutofacRoot();
 			app.UseHangfireServer();
 			app.UseHangfireDashboard("/api/jobs");
 
@@ -83,10 +85,12 @@ namespace SeiyuuMoe.API
 			app.UseCors(builder => builder
 			.AllowAnyOrigin()
 			.AllowAnyMethod()
-			.AllowAnyHeader()
-			.AllowCredentials());
+			.AllowAnyHeader());
 
-			app.UseMvc();
+			app.UseEndpoints(endpoints =>
+			{
+				endpoints.MapControllers();
+			});
 		}
 
 		private static void SetupRecurringJobs()
