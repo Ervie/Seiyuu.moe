@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using SeiyuuMoe.FileHandler.DatabaseBackupService;
-using System.Reflection;
 
 namespace SeiyuuMoe.FileHandler
 {
@@ -17,8 +16,6 @@ namespace SeiyuuMoe.FileHandler
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			var module = Assembly.GetAssembly(this.GetType());
-
 			builder.RegisterType<DatabaseBackupService.DatabaseBackupService>()
 				.As<IDatabaseBackupService>()
 				.WithParameter("pathToDB", pathToDb)

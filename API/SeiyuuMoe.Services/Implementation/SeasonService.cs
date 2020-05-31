@@ -24,7 +24,7 @@ namespace SeiyuuMoe.Services.Implementation
 			Ensure.That(query, nameof(query)).IsNotNull();
 			Ensure.That(query.SearchCriteria, nameof(query.SearchCriteria)).IsNotNull();
 			Ensure.That(query.SearchCriteria.Year).IsGte(1916);
-			Ensure.That(query.SearchCriteria.Season).IsNotEmptyOrWhitespace();
+			Ensure.That(query.SearchCriteria.Season).IsNotEmptyOrWhiteSpace();
 
 			return new QueryResponse<PagedResult<SeasonSummaryEntryDto>>(await seasonBusinessService.GetSeasonRolesSummary(query));
 		}
