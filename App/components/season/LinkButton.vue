@@ -1,8 +1,7 @@
 <template>
   <nuxt-link
-  :to="anotherSeasonPath"
-  :class="{'isDisabled': isDisabled}"
-  :event="isDisabled ? '' : 'click'">
+  :to="'/season/' + seasonYear + '/' + seasonName.toLowerCase()"
+  :class="{'isDisabled': isDisabled}">
     <v-btn
       large
       :loading="loadingAnotherSeason"
@@ -45,7 +44,7 @@ export default {
     },
     isDisabled() {
       // for now; Think about better solution
-      return this.loadingAnotherSeason || this.seasonYear >= 2020 || this.seasonYear <= 1916;
+      return this.loadingAnotherSeason || this.seasonYear >= 2022|| this.seasonYear <= 1916;
     }
   },
   methods: {

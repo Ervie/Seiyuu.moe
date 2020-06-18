@@ -5,18 +5,17 @@ using SeiyuuMoe.Contracts.SearchCriteria;
 using SeiyuuMoe.Repositories.Models;
 using SeiyuuMoe.Services.Interfaces;
 using SeiyuuMoe.WebEssentials;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SeiyuuMoe.Services.Implementation
 {
 	internal class SeasonService : ISeasonService
 	{
-		private ISeasonBusinessService seasonBusinessService;
+		private readonly ISeasonBusinessService _seasonBusinessService;
 
 		public SeasonService(ISeasonBusinessService seasonBusinessService)
 		{
-			this.seasonBusinessService = seasonBusinessService;
+			_seasonBusinessService = seasonBusinessService;
 		}
 
 		public async Task<QueryResponse<PagedResult<SeasonSummaryEntryDto>>> GetSeasonSummary(Query<SeasonSummarySearchCriteria> query)
@@ -26,7 +25,7 @@ namespace SeiyuuMoe.Services.Implementation
 			Ensure.That(query.SearchCriteria.Year).IsGte(1916);
 			Ensure.That(query.SearchCriteria.Season).IsNotEmptyOrWhiteSpace();
 
-			return new QueryResponse<PagedResult<SeasonSummaryEntryDto>>(await seasonBusinessService.GetSeasonRolesSummary(query));
+			return new QueryResponse<PagedResult<SeasonSummaryEntryDto>>(await _seasonBusinessService.GetSeasonRolesSummary(query));
 		}
 	}
 }

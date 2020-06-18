@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
 using Hangfire;
 using Hangfire.MemoryStorage;
@@ -39,6 +38,7 @@ namespace SeiyuuMoe.API
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
+			services.AddCors();
 			services.AddOptions();
 			services.AddControllers();
 			services.AddSingleton<IConfiguration>(Configuration);
@@ -46,7 +46,6 @@ namespace SeiyuuMoe.API
 			{
 				FetchNextJobTimeout = TimeSpan.FromDays(14)
 			}));
-			services.AddCors();
 		}
 
 		public void ConfigureContainer(ContainerBuilder builder)
@@ -67,9 +66,10 @@ namespace SeiyuuMoe.API
 			{
 				app.UseDeveloperExceptionPage();
 			}
-			app.UseHttpsRedirection();
-
-			app.UseRouting();
+			else
+			{
+				app.UseHttpsRedirection();
+			}
 
 			app.UseForwardedHeaders(new ForwardedHeadersOptions
 			{
@@ -86,6 +86,8 @@ namespace SeiyuuMoe.API
 			.AllowAnyOrigin()
 			.AllowAnyMethod()
 			.AllowAnyHeader());
+
+			app.UseRouting();
 
 			app.UseEndpoints(endpoints =>
 			{
