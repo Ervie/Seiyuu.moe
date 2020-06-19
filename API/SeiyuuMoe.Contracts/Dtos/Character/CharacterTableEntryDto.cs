@@ -1,17 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SeiyuuMoe.Contracts.Dtos
+﻿namespace SeiyuuMoe.Contracts.Dtos
 {
 	public class CharacterTableEntryDto
 	{
-		public string Name { get; set; }
+		public string Name { get; }
 
-		public string ImageUrl { get; set; }
+		public string ImageUrl { get; }
 
-		public string Url { get; set; }
+		public string Url { get; }
 
-		public long MalId { get; set; }
+		public long MalId { get; }
+
+		public CharacterTableEntryDto(long malId, string name, string imageUrl, string url)
+		{
+			MalId = malId;
+			Name = name;
+			ImageUrl = imageUrl;
+			Url = url;
+		}
 	}
 }

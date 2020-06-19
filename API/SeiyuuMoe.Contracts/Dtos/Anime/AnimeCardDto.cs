@@ -4,24 +4,49 @@ namespace SeiyuuMoe.Contracts.Dtos
 {
 	public class AnimeCardDto
 	{
-		public string Title { get; set; }
+		public string Title { get; }
 
-		public string ImageUrl { get; set; }
+		public string ImageUrl { get; }
 
-		public long MalId { get; set; }
+		public long MalId { get; }
 
-		public string JapaneseTitle { get; set; }
+		public string JapaneseTitle { get; }
 
-		public string TitleSynonyms { get; set; }
+		public string TitleSynonyms { get; }
 
-		public string About { get; set; }
+		public string About { get; }
 
-		public DateTime? AiringDate { get; set; }
+		public DateTime? AiringDate { get; }
 
-		public string Status { get; set; }
+		public string Status { get; }
 
-		public string Type { get; set; }
+		public string Type { get; }
 
-		public string Season { get; set; }
+		public string Season { get; }
+
+		public AnimeCardDto(
+			string title,
+			string imageUrl,
+			long malId,
+			string japaneseTitle,
+			string titleSynonyms,
+			string about,
+			DateTime? airingDate,
+			string status,
+			string type,
+			string season
+		)
+		{
+			Title = title;
+			ImageUrl = imageUrl;
+			MalId = malId;
+			JapaneseTitle = japaneseTitle;
+			TitleSynonyms = titleSynonyms;
+			About = about;
+			AiringDate = airingDate;
+			Status = status;
+			Type = type;
+			Season = season;
+		}
 	}
 }

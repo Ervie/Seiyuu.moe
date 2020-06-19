@@ -21,11 +21,13 @@ namespace SeiyuuMoe.BusinessServices.SearchCriteria
 
 		private Expression<Func<Seiyuu, bool>> ExtendExpressionWithSearchCriteria(Expression<Func<Seiyuu, bool>> predicate, SeiyuuSearchCriteria searchCriteria)
 		{
+			var swappedNameSurname = searchCriteria.Name.SwapNameSurname();
+
 			return predicate
 				.And(!string.IsNullOrWhiteSpace(searchCriteria.Name), () => seiyuu =>
-					seiyuu.Name.Contains(searchCriteria.Name, StringComparison.InvariantCultureIgnoreCase) ||
-					seiyuu.Name.SwapNameSurname().Contains(searchCriteria.Name, StringComparison.InvariantCultureIgnoreCase) ||
-					seiyuu.JapaneseName.Contains(searchCriteria.Name, StringComparison.InvariantCultureIgnoreCase));
+					seiyuu.Name.ToLower().Contains(searchCriteria.Name.ToLower()) ||
+					seiyuu.Name.ToLower().Contains(swappedNameSurname.ToLower()) ||
+					seiyuu.JapaneseName.ToLower().Contains(searchCriteria.Name.ToLower()));
 		}
 	}
 }

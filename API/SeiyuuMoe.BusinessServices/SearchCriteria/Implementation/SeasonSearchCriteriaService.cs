@@ -21,7 +21,7 @@ namespace SeiyuuMoe.BusinessServices.SearchCriteria
 		private Expression<Func<Season, bool>> ExtendExpressionWithSearchCriteria(Expression<Func<Season, bool>> predicate, SeasonSearchCriteria searchCriteria)
 		{
 			return predicate
-				.And(!string.IsNullOrWhiteSpace(searchCriteria.Name), () => season => season.Name.Contains(searchCriteria.Name, StringComparison.InvariantCultureIgnoreCase))
+				.And(!string.IsNullOrWhiteSpace(searchCriteria.Name), () => season => season.Name.ToLower().Contains(searchCriteria.Name.ToLower()))
 				.And(searchCriteria.Year.HasValue, () => season => season.Year.Equals(searchCriteria.Year));
 		}
 	}

@@ -1,6 +1,6 @@
 ﻿using Autofac.Extensions.DependencyInjection;
-using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 
 namespace SeiyuuMoe.API
 {
@@ -8,16 +8,17 @@ namespace SeiyuuMoe.API
 	{
 		public static void Main(string[] args)
 		{
-			BuildWebHost(args).Run();
+			CreateHostBuilder(args).Build().Run();
 		}
 
-		public static IWebHost BuildWebHost(string[] args) =>
-			WebHost.CreateDefaultBuilder(args)
-				.UseKestrel()
-				.UseIISIntegration()
-				.ConfigureServices(services => services.AddAutofac())
-				.UseStartup<Startup>()
-				.UseUrls("http://localhost:5000/")
-				.Build();
+		public static IHostBuilder CreateHostBuilder(string[] args) =>
+			Host.CreateDefaultBuilder(args)
+				.UseServiceProviderFactory(new AutofacServiceProviderFactory())
+				.ConfigureWebHostDefaults(webBuilder =>
+				{
+					webBuilder.UseIISIntegration();
+					webBuilder.UseStartup<Startup>();
+					webBuilder.UseUrls("http://localhost:5000/");
+				});
 	}
 }

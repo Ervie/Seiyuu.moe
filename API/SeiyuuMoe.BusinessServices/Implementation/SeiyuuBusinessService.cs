@@ -1,5 +1,5 @@
-﻿using AutoMapper;
-using SeiyuuMoe.BusinessServices;
+﻿using SeiyuuMoe.BusinessServices;
+using SeiyuuMoe.BusinessServices.Extensions;
 using SeiyuuMoe.BusinessServices.SearchCriteria;
 using SeiyuuMoe.Contracts.ComparisonEntities;
 using SeiyuuMoe.Contracts.Dtos;
@@ -17,37 +17,34 @@ namespace SeiyuuMoe.SerBusinessServicesvices
 {
 	internal class SeiyuuBusinessService : ISeiyuuBusinessService
 	{
-		private readonly IMapper mapper;
-		private readonly ISeiyuuRepository seiyuuRepository;
-		private readonly ISeiyuuSearchCriteriaService seiyuuSearchCriteriaService;
-		private readonly IRoleRepository roleRepository;
+		private readonly ISeiyuuRepository _seiyuuRepository;
+		private readonly ISeiyuuSearchCriteriaService _seiyuuSearchCriteriaService;
+		private readonly IRoleRepository _roleRepository;
 
 		public SeiyuuBusinessService(
-			IMapper mapper,
 			ISeiyuuRepository seiyuuRepository,
 			ISeiyuuSearchCriteriaService seiyuuSearchCriteriaService,
 			IRoleRepository roleRepository)
 		{
-			this.mapper = mapper;
-			this.seiyuuRepository = seiyuuRepository;
-			this.seiyuuSearchCriteriaService = seiyuuSearchCriteriaService;
-			this.roleRepository = roleRepository;
+			_seiyuuRepository = seiyuuRepository;
+			_seiyuuSearchCriteriaService = seiyuuSearchCriteriaService;
+			_roleRepository = roleRepository;
 		}
 
 		public async Task<PagedResult<SeiyuuSearchEntryDto>> GetAsync(Query<SeiyuuSearchCriteria> query)
 		{
-			var expression = seiyuuSearchCriteriaService.BuildExpression(query.SearchCriteria);
+			var expression = _seiyuuSearchCriteriaService.BuildExpression(query.SearchCriteria);
 
-			var entities = await seiyuuRepository.GetOrderedPageAsync(expression, query.SortExpression, query.Page, query.PageSize);
+			var entities = await _seiyuuRepository.GetOrderedPageAsync(expression, query.SortExpression, query.Page, query.PageSize);
 
-			return mapper.Map<PagedResult<SeiyuuSearchEntryDto>>(entities);
+			return entities.Map<Seiyuu, SeiyuuSearchEntryDto>(entities.Results.Select(x => x.ToSeiyuuSearchEntryDto()));
 		}
 
 		public async Task<SeiyuuCardDto> GetSingleAsync(long id)
 		{
-			var entity = await seiyuuRepository.GetAsync(x => x.MalId.Equals(id));
+			var entity = await _seiyuuRepository.GetAsync(x => x.MalId.Equals(id));
 
-			return mapper.Map<SeiyuuCardDto>(entity);
+			return entity.ToSeiyuuCardDto();
 		}
 
 		public async Task<ICollection<SeiyuuComparisonEntryDto>> GetSeiyuuComparison(SeiyuuComparisonSearchCriteria searchCriteria)
@@ -88,25 +85,25 @@ namespace SeiyuuMoe.SerBusinessServicesvices
 				GroupByFranchise(partialResults) :
 				partialResults;
 
-			return mapper.Map<ICollection<SeiyuuComparisonEntryDto>>(partialResults);
+			return partialResults.Select(x => x.ToSeiyuuComparisonEntryDto()).ToList();
 		}
 
 		private async Task<IReadOnlyCollection<Role>> GetSeiyuuRoles(long seiyuuMalId, bool? mainRolesOnly)
 		{
 			if (mainRolesOnly.HasValue && mainRolesOnly.Value)
 			{
-				return await roleRepository.GetAllAsync(x =>
+				return await _roleRepository.GetAllAsync(x =>
 					x.SeiyuuId.Equals(seiyuuMalId) &&
 					x.LanguageId == 1 &&
 					x.RoleTypeId == 1,
-					roleRepository.IncludeExpression);
+					_roleRepository.IncludeExpression);
 			}
 			else
 			{
-				return await roleRepository.GetAllAsync(x =>
+				return await _roleRepository.GetAllAsync(x =>
 					x.SeiyuuId.Equals(seiyuuMalId) &&
 					x.LanguageId == 1,
-					roleRepository.IncludeExpression);
+					_roleRepository.IncludeExpression);
 			}
 		}
 

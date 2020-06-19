@@ -20,7 +20,7 @@ namespace SeiyuuMoe.Contracts.ComparisonEntities
 			Seiyuu = seiyuu;
 			AnimeCharacterPairs = new List<(Anime anime, Character character)>()
 			{
-				(anime: anime, character: character)
+				(anime, character)
 			};
 		}
 

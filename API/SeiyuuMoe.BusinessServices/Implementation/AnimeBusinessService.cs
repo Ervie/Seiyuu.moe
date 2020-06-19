@@ -1,8 +1,9 @@
-﻿using AutoMapper;
+﻿using SeiyuuMoe.BusinessServices.Extensions;
 using SeiyuuMoe.BusinessServices.SearchCriteria;
 using SeiyuuMoe.Contracts.ComparisonEntities;
 using SeiyuuMoe.Contracts.Dtos;
 using SeiyuuMoe.Contracts.SearchCriteria;
+using SeiyuuMoe.Data.Model;
 using SeiyuuMoe.Repositories.Models;
 using SeiyuuMoe.Repositories.Repositories;
 using SeiyuuMoe.WebEssentials;
@@ -14,37 +15,34 @@ namespace SeiyuuMoe.BusinessServices
 {
 	internal class AnimeBusinessService : IAnimeBusinessService
 	{
-		private readonly IMapper mapper;
-		private readonly IAnimeRepository animeRepository;
-		private readonly IAnimeSearchCriteriaService animeSearchCriteriaService;
-		private readonly IRoleRepository roleRepository;
+		private readonly IAnimeRepository _animeRepository;
+		private readonly IAnimeSearchCriteriaService _animeSearchCriteriaService;
+		private readonly IRoleRepository _roleRepository;
 
 		public AnimeBusinessService(
-			IMapper mapper,
 			IAnimeRepository animeRepository,
 			IAnimeSearchCriteriaService animeSearchCriteriaService,
 			IRoleRepository roleRepository)
 		{
-			this.mapper = mapper;
-			this.animeRepository = animeRepository;
-			this.animeSearchCriteriaService = animeSearchCriteriaService;
-			this.roleRepository = roleRepository;
+			_animeRepository = animeRepository;
+			_animeSearchCriteriaService = animeSearchCriteriaService;
+			_roleRepository = roleRepository;
 		}
 
 		public async Task<PagedResult<AnimeSearchEntryDto>> GetAsync(Query<AnimeSearchCriteria> query)
 		{
-			var expression = animeSearchCriteriaService.BuildExpression(query.SearchCriteria);
+			var expression = _animeSearchCriteriaService.BuildExpression(query.SearchCriteria);
 
-			var entities = await animeRepository.GetOrderedPageAsync(expression, query.SortExpression, query.Page, query.PageSize);
+			var entities = await _animeRepository.GetOrderedPageAsync(expression, query.SortExpression, query.Page, query.PageSize);
 
-			return mapper.Map<PagedResult<AnimeSearchEntryDto>>(entities);
+			return entities.Map<Anime, AnimeSearchEntryDto>(entities.Results.Select(x => x.ToAnimeSearchEntryDto()));
 		}
 
 		public async Task<AnimeCardDto> GetSingleAsync(long id)
 		{
-			var entity = await animeRepository.GetAsync(x => x.MalId.Equals(id), animeRepository.IncludeExpression);
+			var entity = await _animeRepository.GetAsync(x => x.MalId.Equals(id), _animeRepository.IncludeExpression);
 
-			return mapper.Map<AnimeCardDto>(entity);
+			return entity.ToAnimeCardDto();
 		}
 
 		public async Task<ICollection<AnimeComparisonEntryDto>> GetAnimeComparison(AnimeComparisonSearchCriteria searchCriteria)
@@ -53,10 +51,10 @@ namespace SeiyuuMoe.BusinessServices
 
 			for (int i = 0; i < searchCriteria.AnimeMalId.Count; i++)
 			{
-				var roles = await roleRepository.GetAllAsync(x =>
+				var roles = await _roleRepository.GetAllAsync(x =>
 					x.AnimeId.Equals(searchCriteria.AnimeMalId.ToArray()[i]) &&
 					x.LanguageId == 1,
-					roleRepository.IncludeExpression);
+					_roleRepository.IncludeExpression);
 
 				foreach (var role in roles)
 				{
@@ -88,7 +86,7 @@ namespace SeiyuuMoe.BusinessServices
 				partialResults = partialResults.Where(x => x.AnimeCharacters.Select(y => y.Anime).ToList().Count >= i + 1).ToList();
 			}
 
-			return mapper.Map<ICollection<AnimeComparisonEntryDto>>(partialResults);
+			return partialResults.Select(x => x.ToAnimeComparisonEntryDto()).ToList();
 		}
 	}
 }

@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using SeiyuuMoe.BusinessServices;
+﻿using SeiyuuMoe.BusinessServices.Extensions;
 using SeiyuuMoe.BusinessServices.SearchCriteria;
 using SeiyuuMoe.Contracts.ComparisonEntities;
 using SeiyuuMoe.Contracts.Dtos.Season;
@@ -11,14 +10,12 @@ using SeiyuuMoe.WebEssentials;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SeiyuuMoe.BusinessServices
 {
-	class SeasonBusinessService: ISeasonBusinessService
+	internal class SeasonBusinessService : ISeasonBusinessService
 	{
-		private readonly IMapper mapper;
 		private readonly ISeasonRepository seasonRepository;
 		private readonly IAnimeRepository animeRepository;
 		private readonly IRoleRepository roleRepository;
@@ -26,9 +23,7 @@ namespace SeiyuuMoe.BusinessServices
 		private readonly IAnimeSearchCriteriaService animeSearchCriteriaService;
 		private readonly ISeasonSearchCriteriaService seasonSearchCriteriaService;
 
-
 		public SeasonBusinessService(
-			IMapper mapper,
 			ISeasonRepository seasonRepository,
 			IAnimeRepository animeRepository,
 			IRoleRepository roleRepository,
@@ -37,7 +32,6 @@ namespace SeiyuuMoe.BusinessServices
 			ISeasonSearchCriteriaService seasonSearchCriteriaService
 		)
 		{
-			this.mapper = mapper;
 			this.seasonRepository = seasonRepository;
 			this.animeRepository = animeRepository;
 			this.roleRepository = roleRepository;
@@ -48,14 +42,14 @@ namespace SeiyuuMoe.BusinessServices
 
 		public async Task<PagedResult<SeasonSummaryEntryDto>> GetSeasonRolesSummary(Query<SeasonSummarySearchCriteria> query)
 		{
-			var seasonPredicate = seasonSearchCriteriaService.BuildExpression(mapper.Map<SeasonSearchCriteria>(query.SearchCriteria));
+			var seasonPredicate = seasonSearchCriteriaService.BuildExpression(query.SearchCriteria.ToSeasonSearchCriteria());
 
 			var foundSeason = await seasonRepository.GetAsync(seasonPredicate);
 
 			if (foundSeason != null)
 			{
 				query.SearchCriteria.Id = foundSeason.Id;
-				var animePredicate = animeSearchCriteriaService.BuildExpression(mapper.Map<AnimeSearchCriteria>(query.SearchCriteria));
+				var animePredicate = animeSearchCriteriaService.BuildExpression(query.SearchCriteria.ToAnimeSearchCriteria());
 
 				var animeInSeason = await animeRepository.GetAllAsync(animePredicate);
 
@@ -63,11 +57,13 @@ namespace SeiyuuMoe.BusinessServices
 				{
 					query.SearchCriteria.AnimeId = animeInSeason.Select(x => x.MalId).ToList();
 
-					var rolePredicate = roleSearchCriteriaService.BuildExpression(mapper.Map<RoleSearchCriteria>(query.SearchCriteria));
+					var rolePredicate = roleSearchCriteriaService.BuildExpression(query.SearchCriteria.ToRoleSearchCriteria());
 
 					IReadOnlyCollection<Role> allRolesInSeason = await roleRepository.GetAllAsync(rolePredicate, roleRepository.IncludeExpression);
 
-					return mapper.Map<PagedResult<SeasonSummaryEntryDto>>(GroupRoles(allRolesInSeason, query));
+					var groupedRoles = GroupRoles(allRolesInSeason, query);
+
+					return groupedRoles.Map<SeasonSummaryEntry, SeasonSummaryEntryDto>(groupedRoles.Results.Select(x => x.ToSeasonSummaryEntryDto()));
 				}
 			}
 

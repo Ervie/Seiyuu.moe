@@ -1,28 +1,25 @@
 ﻿using Autofac;
 using SeiyuuMoe.FileHandler.DatabaseBackupService;
-using System.Reflection;
 
 namespace SeiyuuMoe.FileHandler
 {
 	public class FileHandlerModule : Autofac.Module
 	{
-		private readonly string pathToDB;
-		private readonly string pathToBackupDB;
+		private readonly string pathToDb;
+		private readonly string pathToBackupDb;
 
-		public FileHandlerModule(string pathToDB, string pathToBackupDB)
+		public FileHandlerModule(string pathToDb, string pathToBackupDb)
 		{
-			this.pathToDB = pathToDB;
-			this.pathToBackupDB = pathToBackupDB;
+			this.pathToDb = pathToDb;
+			this.pathToBackupDb = pathToBackupDb;
 		}
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			var module = Assembly.GetAssembly(this.GetType());
-
 			builder.RegisterType<DatabaseBackupService.DatabaseBackupService>()
 				.As<IDatabaseBackupService>()
-				.WithParameter("pathToDB", pathToDB)
-				.WithParameter("pathToBackupDB", pathToBackupDB);
+				.WithParameter("pathToDB", pathToDb)
+				.WithParameter("pathToBackupDB", pathToBackupDb);
 
 			base.Load(builder);
 		}

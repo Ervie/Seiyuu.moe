@@ -4,14 +4,23 @@ namespace SeiyuuMoe.Contracts.Dtos
 {
 	public class AnimeTableEntryDto
 	{
-		public string Title { get; set; }
+		public long MalId { get; }
 
-		public string ImageUrl { get; set; }
+		public string Title { get; }
 
-		public string Url { get; set; }
+		public string ImageUrl { get; }
 
-		public long MalId { get; set; }
+		public string Url { get; }
 
-		public DateTime? AiringFrom { get; set; }
+		public DateTime? AiringFrom { get; }
+
+		public AnimeTableEntryDto(long malId, string title, string imageUrl, string url, DateTime? airingDate)
+		{
+			MalId = malId;
+			Title = title;
+			ImageUrl = imageUrl;
+			Url = url;
+			AiringFrom = airingDate;
+		}
 	}
 }

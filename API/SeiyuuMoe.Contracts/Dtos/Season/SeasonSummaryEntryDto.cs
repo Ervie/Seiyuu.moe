@@ -5,8 +5,17 @@ namespace SeiyuuMoe.Contracts.Dtos.Season
 {
 	public class SeasonSummaryEntryDto
 	{
-		public SeiyuuTableEntryDto Seiyuu { get; set; }
+		public SeiyuuTableEntryDto Seiyuu { get; }
 
-		public ICollection<(AnimeTableEntryDto anime, CharacterTableEntryDto character)> AnimeCharacterPairs { get; set; }
+		public ICollection<Tuple<AnimeTableEntryDto, CharacterTableEntryDto>> AnimeCharacterPairs { get; }
+
+		public SeasonSummaryEntryDto(
+			SeiyuuTableEntryDto seiyuuTableEntryDto,
+			ICollection<Tuple<AnimeTableEntryDto, CharacterTableEntryDto>> animeCharacterPairs
+		)
+		{
+			Seiyuu = seiyuuTableEntryDto;
+			AnimeCharacterPairs = animeCharacterPairs;
+		}
 	}
 }
