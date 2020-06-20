@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using SeiyuuMoe.API.Controllers.Base;
 using SeiyuuMoe.Contracts.SearchCriteria;
-using SeiyuuMoe.Logger;
+using SeiyuuMoe.Domain.WebEssentials;
+using SeiyuuMoe.Infrastructure.Logger;
 using SeiyuuMoe.Services;
-using SeiyuuMoe.WebEssentials;
 using System.Threading.Tasks;
 
 namespace SeiyuuMoe.API.Controllers
@@ -13,7 +13,7 @@ namespace SeiyuuMoe.API.Controllers
 	{
 		private readonly IAnimeService animeService;
 
-		public AnimeController(IAnimeService animeService, ILoggingService loggingService): base(loggingService)
+		public AnimeController(IAnimeService animeService, ILoggingService loggingService) : base(loggingService)
 		{
 			this.animeService = animeService;
 		}

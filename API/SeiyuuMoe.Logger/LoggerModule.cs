@@ -1,7 +1,7 @@
 ﻿using Autofac;
 namespace SeiyuuMoe.Logger
 {
-	public class LoggerModule : Autofac.Module
+	public class InfrastructureModule : Autofac.Module
 	{
 		protected override void Load(ContainerBuilder builder)
 		{

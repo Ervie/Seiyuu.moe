@@ -1,8 +1,6 @@
-﻿using SeiyuuMoe.Contracts.ComparisonEntities;
-using SeiyuuMoe.Contracts.Dtos;
+﻿using SeiyuuMoe.Contracts.Dtos;
 using SeiyuuMoe.Contracts.SearchCriteria;
-using SeiyuuMoe.Repositories.Models;
-using SeiyuuMoe.WebEssentials;
+using SeiyuuMoe.Domain.WebEssentials;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

@@ -1,7 +1,5 @@
-﻿using SeiyuuMoe.Data.Model;
-using System;
+﻿using SeiyuuMoe.Domain.Entities;
 using System.Collections.Generic;
-using System.Text;
 
 namespace SeiyuuMoe.Contracts.ComparisonEntities
 {

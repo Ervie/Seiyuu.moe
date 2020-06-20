@@ -1,8 +1,7 @@
 ﻿using SeiyuuMoe.Contracts.SearchCriteria;
-using SeiyuuMoe.Data.Model;
+using SeiyuuMoe.Domain.Entities;
 using System;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 
 namespace SeiyuuMoe.BusinessServices.SearchCriteria
 {

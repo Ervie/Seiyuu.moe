@@ -3,10 +3,10 @@ using SeiyuuMoe.BusinessServices.SearchCriteria;
 using SeiyuuMoe.Contracts.ComparisonEntities;
 using SeiyuuMoe.Contracts.Dtos.Season;
 using SeiyuuMoe.Contracts.SearchCriteria;
-using SeiyuuMoe.Data.Model;
-using SeiyuuMoe.Repositories.Models;
+using SeiyuuMoe.Domain.Entities;
+using SeiyuuMoe.Domain.Repositories;
+using SeiyuuMoe.Domain.WebEssentials;
 using SeiyuuMoe.Repositories.Repositories;
-using SeiyuuMoe.WebEssentials;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,50 +16,51 @@ namespace SeiyuuMoe.BusinessServices
 {
 	internal class SeasonBusinessService : ISeasonBusinessService
 	{
-		private readonly ISeasonRepository seasonRepository;
-		private readonly IAnimeRepository animeRepository;
-		private readonly IRoleRepository roleRepository;
-		private readonly IRoleSearchCriteriaService roleSearchCriteriaService;
-		private readonly IAnimeSearchCriteriaService animeSearchCriteriaService;
-		private readonly ISeasonSearchCriteriaService seasonSearchCriteriaService;
+		private readonly ISeasonRepository _seasonRepository;
+		private readonly IAnimeRepository _animeRepository;
+		private readonly ISeasonRoleRepository _roleRepository;
+		private readonly IRoleSearchCriteriaService _roleSearchCriteriaService;
+		private readonly IAnimeSearchCriteriaService _animeSearchCriteriaService;
+		private readonly ISeasonSearchCriteriaService _seasonSearchCriteriaService;
 
 		public SeasonBusinessService(
 			ISeasonRepository seasonRepository,
 			IAnimeRepository animeRepository,
-			IRoleRepository roleRepository,
+			ISeasonRoleRepository roleRepository,
 			IRoleSearchCriteriaService roleSearchCriteriaService,
 			IAnimeSearchCriteriaService animeSearchCriteriaService,
 			ISeasonSearchCriteriaService seasonSearchCriteriaService
 		)
 		{
-			this.seasonRepository = seasonRepository;
-			this.animeRepository = animeRepository;
-			this.roleRepository = roleRepository;
-			this.roleSearchCriteriaService = roleSearchCriteriaService;
-			this.animeSearchCriteriaService = animeSearchCriteriaService;
-			this.seasonSearchCriteriaService = seasonSearchCriteriaService;
+			_seasonRepository = seasonRepository;
+			_animeRepository = animeRepository;
+			_roleRepository = roleRepository;
+			_roleSearchCriteriaService = roleSearchCriteriaService;
+			_animeSearchCriteriaService = animeSearchCriteriaService;
+			_seasonSearchCriteriaService = seasonSearchCriteriaService;
 		}
 
 		public async Task<PagedResult<SeasonSummaryEntryDto>> GetSeasonRolesSummary(Query<SeasonSummarySearchCriteria> query)
 		{
-			var seasonPredicate = seasonSearchCriteriaService.BuildExpression(query.SearchCriteria.ToSeasonSearchCriteria());
+			var seasonPredicate = _seasonSearchCriteriaService.BuildExpression(query.SearchCriteria.ToSeasonSearchCriteria());
 
-			var foundSeason = await seasonRepository.GetAsync(seasonPredicate);
+			var foundSeason = await _seasonRepository.GetAsync(seasonPredicate);
 
 			if (foundSeason != null)
 			{
 				query.SearchCriteria.Id = foundSeason.Id;
-				var animePredicate = animeSearchCriteriaService.BuildExpression(query.SearchCriteria.ToAnimeSearchCriteria());
+				var animePredicate = _animeSearchCriteriaService.BuildExpression(query.SearchCriteria.ToAnimeSearchCriteria());
 
-				var animeInSeason = await animeRepository.GetAllAsync(animePredicate);
+				var animeInSeason = await _animeRepository.GetAllAsync(animePredicate);
 
-				if (animeInSeason.Count > 0)
+				if (animeInSeason.Any())
 				{
-					query.SearchCriteria.AnimeId = animeInSeason.Select(x => x.MalId).ToList();
+					var animeInSeasonIds = animeInSeason.Select(x => x.MalId).ToList();
 
-					var rolePredicate = roleSearchCriteriaService.BuildExpression(query.SearchCriteria.ToRoleSearchCriteria());
-
-					IReadOnlyCollection<Role> allRolesInSeason = await roleRepository.GetAllAsync(rolePredicate, roleRepository.IncludeExpression);
+					IReadOnlyCollection<Role> allRolesInSeason = await _roleRepository.GetAllRolesInSeason(
+						animeInSeasonIds,
+						query.SearchCriteria.MainRolesOnly
+					);
 
 					var groupedRoles = GroupRoles(allRolesInSeason, query);
 
@@ -70,7 +71,7 @@ namespace SeiyuuMoe.BusinessServices
 			return null;
 		}
 
-		public PagedResult<SeasonSummaryEntry> GroupRoles(IReadOnlyCollection<Role> roles, Query<SeasonSummarySearchCriteria> query)
+		private PagedResult<SeasonSummaryEntry> GroupRoles(IReadOnlyCollection<Role> roles, Query<SeasonSummarySearchCriteria> query)
 		{
 			ICollection<SeasonSummaryEntry> groupedEntities = new List<SeasonSummaryEntry>();
 

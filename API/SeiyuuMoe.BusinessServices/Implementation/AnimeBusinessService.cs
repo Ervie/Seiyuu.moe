@@ -3,10 +3,9 @@ using SeiyuuMoe.BusinessServices.SearchCriteria;
 using SeiyuuMoe.Contracts.ComparisonEntities;
 using SeiyuuMoe.Contracts.Dtos;
 using SeiyuuMoe.Contracts.SearchCriteria;
-using SeiyuuMoe.Data.Model;
-using SeiyuuMoe.Repositories.Models;
+using SeiyuuMoe.Domain.Entities;
+using SeiyuuMoe.Domain.WebEssentials;
 using SeiyuuMoe.Repositories.Repositories;
-using SeiyuuMoe.WebEssentials;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,12 +16,12 @@ namespace SeiyuuMoe.BusinessServices
 	{
 		private readonly IAnimeRepository _animeRepository;
 		private readonly IAnimeSearchCriteriaService _animeSearchCriteriaService;
-		private readonly IRoleRepository _roleRepository;
+		private readonly IAnimeRoleRepository _roleRepository;
 
 		public AnimeBusinessService(
 			IAnimeRepository animeRepository,
 			IAnimeSearchCriteriaService animeSearchCriteriaService,
-			IRoleRepository roleRepository)
+			IAnimeRoleRepository roleRepository)
 		{
 			_animeRepository = animeRepository;
 			_animeSearchCriteriaService = animeSearchCriteriaService;
@@ -33,14 +32,14 @@ namespace SeiyuuMoe.BusinessServices
 		{
 			var expression = _animeSearchCriteriaService.BuildExpression(query.SearchCriteria);
 
-			var entities = await _animeRepository.GetOrderedPageAsync(expression, query.SortExpression, query.Page, query.PageSize);
+			var entities = await _animeRepository.GetOrderedPageAsync(expression, query.Page, query.PageSize);
 
 			return entities.Map<Anime, AnimeSearchEntryDto>(entities.Results.Select(x => x.ToAnimeSearchEntryDto()));
 		}
 
 		public async Task<AnimeCardDto> GetSingleAsync(long id)
 		{
-			var entity = await _animeRepository.GetAsync(x => x.MalId.Equals(id), _animeRepository.IncludeExpression);
+			var entity = await _animeRepository.GetAsync(id);
 
 			return entity.ToAnimeCardDto();
 		}
@@ -51,10 +50,7 @@ namespace SeiyuuMoe.BusinessServices
 
 			for (int i = 0; i < searchCriteria.AnimeMalId.Count; i++)
 			{
-				var roles = await _roleRepository.GetAllAsync(x =>
-					x.AnimeId.Equals(searchCriteria.AnimeMalId.ToArray()[i]) &&
-					x.LanguageId == 1,
-					_roleRepository.IncludeExpression);
+				var roles = await _roleRepository.GetAllRolesInAnimeAsync(searchCriteria.AnimeMalId.ElementAt(i));
 
 				foreach (var role in roles)
 				{

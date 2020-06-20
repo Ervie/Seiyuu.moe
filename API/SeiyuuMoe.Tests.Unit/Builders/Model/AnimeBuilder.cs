@@ -1,4 +1,4 @@
-﻿using SeiyuuMoe.Data.Model;
+﻿using SeiyuuMoe.Domain.Entities;
 using System;
 
 namespace SeiyuuMoe.Tests.Unit.Builders.Model

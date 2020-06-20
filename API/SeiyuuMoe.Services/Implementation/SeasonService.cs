@@ -2,9 +2,8 @@
 using SeiyuuMoe.BusinessServices;
 using SeiyuuMoe.Contracts.Dtos.Season;
 using SeiyuuMoe.Contracts.SearchCriteria;
-using SeiyuuMoe.Repositories.Models;
+using SeiyuuMoe.Domain.WebEssentials;
 using SeiyuuMoe.Services.Interfaces;
-using SeiyuuMoe.WebEssentials;
 using System.Threading.Tasks;
 
 namespace SeiyuuMoe.Services.Implementation

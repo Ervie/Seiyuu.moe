@@ -1,4 +1,4 @@
-﻿using SeiyuuMoe.Data.Model;
+﻿using SeiyuuMoe.Domain.Entities;
 using System.Collections.Generic;
 
 namespace SeiyuuMoe.Contracts.ComparisonEntities

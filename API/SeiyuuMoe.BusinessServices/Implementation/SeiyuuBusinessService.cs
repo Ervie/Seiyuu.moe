@@ -5,10 +5,10 @@ using SeiyuuMoe.Contracts.ComparisonEntities;
 using SeiyuuMoe.Contracts.Dtos;
 using SeiyuuMoe.Contracts.Dtos.Other;
 using SeiyuuMoe.Contracts.SearchCriteria;
-using SeiyuuMoe.Data.Model;
-using SeiyuuMoe.Repositories.Models;
+using SeiyuuMoe.Domain.Entities;
+using SeiyuuMoe.Domain.Repositories;
+using SeiyuuMoe.Domain.WebEssentials;
 using SeiyuuMoe.Repositories.Repositories;
-using SeiyuuMoe.WebEssentials;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,12 +19,12 @@ namespace SeiyuuMoe.SerBusinessServicesvices
 	{
 		private readonly ISeiyuuRepository _seiyuuRepository;
 		private readonly ISeiyuuSearchCriteriaService _seiyuuSearchCriteriaService;
-		private readonly IRoleRepository _roleRepository;
+		private readonly ISeiyuuRoleRepository _roleRepository;
 
 		public SeiyuuBusinessService(
 			ISeiyuuRepository seiyuuRepository,
 			ISeiyuuSearchCriteriaService seiyuuSearchCriteriaService,
-			IRoleRepository roleRepository)
+			ISeiyuuRoleRepository roleRepository)
 		{
 			_seiyuuRepository = seiyuuRepository;
 			_seiyuuSearchCriteriaService = seiyuuSearchCriteriaService;
@@ -35,14 +35,14 @@ namespace SeiyuuMoe.SerBusinessServicesvices
 		{
 			var expression = _seiyuuSearchCriteriaService.BuildExpression(query.SearchCriteria);
 
-			var entities = await _seiyuuRepository.GetOrderedPageAsync(expression, query.SortExpression, query.Page, query.PageSize);
+			var entities = await _seiyuuRepository.GetOrderedPageAsync(expression, query.Page, query.PageSize);
 
 			return entities.Map<Seiyuu, SeiyuuSearchEntryDto>(entities.Results.Select(x => x.ToSeiyuuSearchEntryDto()));
 		}
 
 		public async Task<SeiyuuCardDto> GetSingleAsync(long id)
 		{
-			var entity = await _seiyuuRepository.GetAsync(x => x.MalId.Equals(id));
+			var entity = await _seiyuuRepository.GetAsync(id);
 
 			return entity.ToSeiyuuCardDto();
 		}
@@ -89,23 +89,7 @@ namespace SeiyuuMoe.SerBusinessServicesvices
 		}
 
 		private async Task<IReadOnlyCollection<Role>> GetSeiyuuRoles(long seiyuuMalId, bool? mainRolesOnly)
-		{
-			if (mainRolesOnly.HasValue && mainRolesOnly.Value)
-			{
-				return await _roleRepository.GetAllAsync(x =>
-					x.SeiyuuId.Equals(seiyuuMalId) &&
-					x.LanguageId == 1 &&
-					x.RoleTypeId == 1,
-					_roleRepository.IncludeExpression);
-			}
-			else
-			{
-				return await _roleRepository.GetAllAsync(x =>
-					x.SeiyuuId.Equals(seiyuuMalId) &&
-					x.LanguageId == 1,
-					_roleRepository.IncludeExpression);
-			}
-		}
+			=> await _roleRepository.GetAllSeiyuuRolesAsync(seiyuuMalId, mainRolesOnly ?? false);
 
 		private ICollection<SeiyuuComparisonEntry> GroupByFranchise(ICollection<SeiyuuComparisonEntry> nonGroupedResults)
 		{

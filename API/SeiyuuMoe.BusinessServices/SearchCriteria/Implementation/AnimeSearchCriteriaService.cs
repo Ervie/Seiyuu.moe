@@ -1,6 +1,6 @@
 ﻿using SeiyuuMoe.Contracts.SearchCriteria;
-using SeiyuuMoe.Data.Model;
-using SeiyuuMoe.Repositories.Utilities;
+using SeiyuuMoe.Domain.Entities;
+using SeiyuuMoe.Infrastructure.Utilities;
 using System;
 using System.Linq.Expressions;
 

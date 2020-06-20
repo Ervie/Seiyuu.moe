@@ -1,12 +1,12 @@
 ﻿using SeiyuuMoe.Contracts.SearchCriteria;
-using SeiyuuMoe.Data.Model;
-using SeiyuuMoe.Repositories.Utilities;
+using SeiyuuMoe.Domain.Entities;
+using SeiyuuMoe.Infrastructure.Utilities;
 using System;
 using System.Linq.Expressions;
 
 namespace SeiyuuMoe.BusinessServices.SearchCriteria
 {
-	class RoleSearchCriteriaService: IRoleSearchCriteriaService
+	internal class RoleSearchCriteriaService : IRoleSearchCriteriaService
 	{
 		public Expression<Func<Role, bool>> BuildExpression(RoleSearchCriteria searchCriteria)
 		{

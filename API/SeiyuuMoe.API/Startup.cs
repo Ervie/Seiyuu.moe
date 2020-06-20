@@ -9,12 +9,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SeiyuuMoe.BusinessServices;
-using SeiyuuMoe.Data;
 using SeiyuuMoe.FileHandler;
 using SeiyuuMoe.FileHandler.DatabaseBackupService;
+using SeiyuuMoe.Infrastructure;
+using SeiyuuMoe.Infrastructure.Configuration;
 using SeiyuuMoe.JikanToDBParser;
-using SeiyuuMoe.Logger;
-using SeiyuuMoe.Repositories;
 using SeiyuuMoe.Services;
 using System;
 
@@ -50,11 +49,13 @@ namespace SeiyuuMoe.API
 
 		public void ConfigureContainer(ContainerBuilder builder)
 		{
-			builder.RegisterModule(new ContextModule(Configuration["Config:pathToDB"]));
-			builder.RegisterModule(new RepositoriesModule());
+			var seiyuuMoeConfig = Configuration.GetSection("Config").Get<SeiyuuMoeConfiguration>();
+			builder.RegisterInstance(seiyuuMoeConfig).As<SeiyuuMoeConfiguration>();
+
+			builder.RegisterModule(new InfrastructureModule());
+			builder.RegisterModule(new DomainModule());
 			builder.RegisterModule(new BusinessServicesModule());
 			builder.RegisterModule(new ServicesModule());
-			builder.RegisterModule(new LoggerModule());
 			builder.RegisterModule(new JikanParserModule(Configuration["Config:jikanREST"]));
 			builder.RegisterModule(new FileHandlerModule(Configuration["Config:pathToDB"], Configuration["Config:pathToBackupDB"]));
 		}

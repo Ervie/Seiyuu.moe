@@ -1,7 +1,7 @@
-﻿using SeiyuuMoe.Common.Extensions;
-using SeiyuuMoe.Contracts.SearchCriteria;
-using SeiyuuMoe.Data.Model;
-using SeiyuuMoe.Repositories.Utilities;
+﻿using SeiyuuMoe.Contracts.SearchCriteria;
+using SeiyuuMoe.Domain.Entities;
+using SeiyuuMoe.Infrastructure.Extensions;
+using SeiyuuMoe.Infrastructure.Utilities;
 using System;
 using System.Linq.Expressions;
 
@@ -21,7 +21,7 @@ namespace SeiyuuMoe.BusinessServices.SearchCriteria
 
 		private Expression<Func<Seiyuu, bool>> ExtendExpressionWithSearchCriteria(Expression<Func<Seiyuu, bool>> predicate, SeiyuuSearchCriteria searchCriteria)
 		{
-			var swappedNameSurname = searchCriteria.Name.SwapNameSurname();
+			var swappedNameSurname = searchCriteria.Name.SwapWords();
 
 			return predicate
 				.And(!string.IsNullOrWhiteSpace(searchCriteria.Name), () => seiyuu =>

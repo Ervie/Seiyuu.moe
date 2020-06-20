@@ -9,12 +9,12 @@
 
   <ItemGroup>
     <PackageReference Include="Autofac" Version="5.2.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.5" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SeiyuuMoe.Logger\SeiyuuMoe.Logger.csproj" />
+    <ProjectReference Include="..\SeiyuuMoe.Infrastructure\SeiyuuMoe.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

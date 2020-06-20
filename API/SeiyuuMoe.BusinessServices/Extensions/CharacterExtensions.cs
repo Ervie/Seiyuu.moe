@@ -1,5 +1,5 @@
 ﻿using SeiyuuMoe.Contracts.Dtos;
-using SeiyuuMoe.Data.Model;
+using SeiyuuMoe.Domain.Entities;
 
 namespace SeiyuuMoe.BusinessServices.Extensions
 {

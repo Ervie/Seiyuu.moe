@@ -1,5 +1,5 @@
 ﻿using SeiyuuMoe.Contracts.Dtos;
-using SeiyuuMoe.Data.Model;
+using SeiyuuMoe.Domain.Entities;
 using System;
 
 namespace SeiyuuMoe.BusinessServices.Extensions
@@ -24,7 +24,7 @@ namespace SeiyuuMoe.BusinessServices.Extensions
 					: (DateTime?)null,
 				anime.Status?.Name ?? string.Empty,
 				anime.Type?.Name ?? string.Empty,
-				anime.Season != null 
+				anime.Season != null
 					? anime.Season.Name + anime.Season.Year
 					: string.Empty
 			);

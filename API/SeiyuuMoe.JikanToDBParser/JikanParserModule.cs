@@ -16,11 +16,8 @@ namespace SeiyuuMoe.JikanToDBParser
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			var module = Assembly.GetAssembly(this.GetType());
-
 			builder.RegisterType<JikanParser>()
-				.As<IJikanParser>()
-				.WithParameter("endpointUrl", endpointUrl);
+				.As<IJikanParser>();
 
 			base.Load(builder);
 		}

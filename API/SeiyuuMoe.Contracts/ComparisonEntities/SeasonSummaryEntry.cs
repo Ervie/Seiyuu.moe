@@ -1,5 +1,4 @@
-﻿using SeiyuuMoe.Data.Model;
-using System;
+﻿using SeiyuuMoe.Domain.Entities;
 using System.Collections.Generic;
 
 namespace SeiyuuMoe.Contracts.ComparisonEntities
@@ -29,10 +28,10 @@ namespace SeiyuuMoe.Contracts.ComparisonEntities
 			get
 			{
 				decimal total = 0m;
-				foreach (var animeCharacterPair in AnimeCharacterPairs)
+				foreach (var (anime, character) in AnimeCharacterPairs)
 				{
-					decimal animePopularityFactor = animeCharacterPair.anime.Popularity.Value / 1000m;
-					decimal characterPopularityFactor = animeCharacterPair.character.Popularity.Value != 0 ? animeCharacterPair.character.Popularity.Value : 1;
+					decimal animePopularityFactor = anime.Popularity.Value / 1000m;
+					decimal characterPopularityFactor = character.Popularity.Value != 0 ? character.Popularity.Value : 1;
 					total += animePopularityFactor * characterPopularityFactor;
 				}
 				return total;
