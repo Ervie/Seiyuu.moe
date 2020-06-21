@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SeiyuuMoe.Domain.Repositories;
 using SeiyuuMoe.Domain.WebEssentials;
 using SeiyuuMoe.Infrastructure.Context;
-using SeiyuuMoe.Repositories.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,13 +33,14 @@ namespace SeiyuuMoe.Infrastructure.Repositories
 		public Task<Domain.Entities.Seiyuu> GetAsync(long seiyuuMalId)
 			=> _dbContext.Seiyuu.FirstOrDefaultAsync(x => x.MalId == seiyuuMalId);
 
-		public async Task<PagedResult<Domain.Entities.Seiyuu>> GetOrderedPageAsync(Expression<Func<Domain.Entities.Seiyuu, bool>> predicate, int page, int pageSize)
+		public async Task<PagedResult<Domain.Entities.Seiyuu>> GetOrderedPageAsync(Expression<Func<Domain.Entities.Seiyuu, bool>> predicate, int page = 0, int pageSize = 10)
 		{
 			var entities = _dbContext.Seiyuu.Where(predicate);
 			var totalCount = await entities.CountAsync();
 			var results = await entities
 				.Skip(page * pageSize)
 				.Take(pageSize)
+				.OrderByDescending(x => x.Popularity)
 				.ToListAsync();
 
 			return new PagedResult<Domain.Entities.Seiyuu>

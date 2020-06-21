@@ -1,7 +1,9 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
+using SeiyuuMoe.Application.Anime.Extensions;
 using SeiyuuMoe.BusinessServices.Extensions;
 using SeiyuuMoe.Contracts.Dtos;
+using SeiyuuMoe.Domain.ComparisonEntities;
 using SeiyuuMoe.Tests.Unit.Builders.Model;
 using System;
 using Xunit;
@@ -244,13 +246,13 @@ namespace SeiyuuMoe.Tests.Unit.Tests
 		}
 
 		[Fact]
-		public void ToAnimeTableEntryDto_GivenEmptyAnime_ShouldReturnEmptyAnimeTableEntryDto()
+		public void ToAnimeTableEntry_GivenEmptyAnime_ShouldReturnEmptyAnimeTableEntryDto()
 		{
 			// Given
 			var anime = new AnimeBuilder().Build();
 
 			// When
-			var dto = anime.ToAnimeTableEntryDto();
+			var dto = anime.ToAnimeTableEntry();
 
 			// Then
 			using (new AssertionScope())
@@ -271,7 +273,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests
 		[InlineData("This is very pecular")]
 		[InlineData("Zażółć gęślą jaźń")]
 		[InlineData("\n\n \t        \t\n")]
-		public void ToAnimeTableEntryDto_GivenVariousTitleAnime_ShouldReturnEmptyAnimeTableEntryDtoWithTitle(string title)
+		public void ToAnimeTableEntry_GivenVariousTitleAnime_ShouldReturnEmptyAnimeTableEntryDtoWithTitle(string title)
 		{
 			// Given
 			var anime = new AnimeBuilder()
@@ -293,7 +295,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests
 		[InlineData(null)]
 		[InlineData("")]
 		[InlineData("\n\n \t        \t\n")]
-		public void ToAnimeTableEntryDto_GivenAnimeWithNullOrWhitespaceAiringFrom_ShouldReturnAnimeTableEntryDtoWithNullAiringFrom(string date)
+		public void ToAnimeTableEntry_GivenAnimeWithNullOrWhitespaceAiringFrom_ShouldReturnAnimeTableEntryDtoWithNullAiringFrom(string date)
 		{
 			// Given
 			var anime = new AnimeBuilder()
@@ -301,7 +303,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests
 				.Build();
 
 			// When
-			var dto = anime.ToAnimeTableEntryDto();
+			var dto = anime.ToAnimeTableEntry();
 
 			// Then
 			using (new AssertionScope())
@@ -318,7 +320,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests
 		[InlineData("10-10-2020")]
 		[InlineData("31-12-2020")]
 		[InlineData("29-02-2020")]
-		public void ToAnimeTableEntryDto_GivenAnimeWithValidAiringDate_ShouldReturnAnimeCardDtoWithAiringFrom(string date)
+		public void ToAnimeTableEntry_GivenAnimeWithValidAiringDate_ShouldReturnAnimeCardDtoWithAiringFrom(string date)
 		{
 			// Given
 			var anime = new AnimeBuilder()
@@ -326,7 +328,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests
 				.Build();
 
 			// When
-			var dto = anime.ToAnimeTableEntryDto();
+			var dto = anime.ToAnimeTableEntry();
 
 			// Then
 			using (new AssertionScope())
@@ -342,7 +344,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests
 		[InlineData("Zażółć gęślą jaźń")]
 		[InlineData("01/01/1999")]
 		[InlineData("1th sept 1999")]
-		public void ToAnimeTableEntryDto_GivenAnimeWithInvalidAiringDate_ShouldThrowException(string date)
+		public void ToAnimeTableEntry_GivenAnimeWithInvalidAiringDate_ShouldThrowException(string date)
 		{
 			// Given
 			var anime = new AnimeBuilder()
@@ -350,14 +352,14 @@ namespace SeiyuuMoe.Tests.Unit.Tests
 				.Build();
 
 			// When
-			Func<AnimeTableEntryDto> func = () => anime.ToAnimeTableEntryDto();
+			Func<AnimeTableEntry> func = () => anime.ToAnimeTableEntry();
 
 			// Then
 			func.Should().Throw<Exception>();
 		}
 
 		[Fact]
-		public void ToAnimeTableEntryDto_GivenAnimeWithValues_ShouldReturnEmptyAnimeSearchEntryDtoWithValues()
+		public void ToAnimeTableEntry_GivenAnimeWithValues_ShouldReturnEmptyAnimeSearchEntryDtoWithValues()
 		{
 			// Given
 			const string expectedTitle = "ExpectedTitle";
@@ -372,7 +374,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests
 				.Build();
 
 			// When
-			var dto = anime.ToAnimeTableEntryDto();
+			var dto = anime.ToAnimeTableEntry();
 
 			// Then
 			using (new AssertionScope())

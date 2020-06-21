@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SeiyuuMoe.API.Controllers.Base;
-using SeiyuuMoe.Contracts.SearchCriteria;
-using SeiyuuMoe.Domain.WebEssentials;
+using SeiyuuMoe.Application.Season.GetSeasonSummaries;
 using SeiyuuMoe.Infrastructure.Logger;
-using SeiyuuMoe.Services.Interfaces;
 using System.Threading.Tasks;
 
 namespace SeiyuuMoe.API.Controllers
@@ -11,18 +9,18 @@ namespace SeiyuuMoe.API.Controllers
 	[Route("api/season")]
 	public class SeasonController : BaseController
 	{
-		private readonly ISeasonService seasonService;
+		private readonly GetSeasonSummariesQueryHandler _getSeasonSummariesQueryHandler;
 
-		public SeasonController(ISeasonService seasonService, ILoggingService loggingService) : base(loggingService)
+		public SeasonController(GetSeasonSummariesQueryHandler getSeasonSummariesQueryHandler, ILoggingService loggingService) : base(loggingService)
 		{
-			this.seasonService = seasonService;
+			_getSeasonSummariesQueryHandler = getSeasonSummariesQueryHandler;
 		}
 
 		[HttpGet]
 		[Route("Summary")]
-		public Task<IActionResult> GetSeasonSummary([FromQuery] Query<SeasonSummarySearchCriteria> query)
+		public Task<IActionResult> GetSeasonSummary([FromQuery] GetSeasonSummariesQuery query)
 		{
-			return Handle(async () => HandleServiceResult(await seasonService.GetSeasonSummary(query)));
+			return Handle(async () => HandleServiceResult(await _getSeasonSummariesQueryHandler.HandleAsync(query)));
 		}
 	}
 }

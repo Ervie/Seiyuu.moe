@@ -190,8 +190,7 @@ export default {
 
           var requestUrl = process.env.apiUrl +
             '/api/anime/' +
-            '?Page=0&PageSize=10&SortExpression=Popularity DESC' +
-            '&SearchCriteria.Title=' +
+            '?Title=' +
             String(val.replace('/', ' '));
 
           axios.get(requestUrl)

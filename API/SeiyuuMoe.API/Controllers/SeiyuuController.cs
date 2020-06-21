@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SeiyuuMoe.API.Controllers.Base;
-using SeiyuuMoe.Contracts.SearchCriteria;
-using SeiyuuMoe.Domain.WebEssentials;
+using SeiyuuMoe.Application.Seiyuu.GetSeiyuuCardInfo;
+using SeiyuuMoe.Application.Seiyuu.SearchSeiyuu;
+using SeiyuuMoe.Application.SeiyuuComparison.CompareSeiyuu;
 using SeiyuuMoe.Infrastructure.Logger;
-using SeiyuuMoe.Services;
 using System.Threading.Tasks;
 
 namespace SeiyuuMoe.API.Controllers
@@ -11,31 +11,41 @@ namespace SeiyuuMoe.API.Controllers
 	[Route("api/seiyuu")]
 	public class SeiyuuController : BaseController
 	{
-		private readonly ISeiyuuService seiyuuService;
+		private readonly GetSeiyuuCardInfoQueryHandler _getSeiyuuCardInfoQueryHandler;
+		private readonly SearchSeiyuuQueryHandler _searchSeiyuuQueryHandler;
+		private readonly CompareSeiyuuQueryHandler _compareSeiyuuQueryHandler;
 
-		public SeiyuuController(ISeiyuuService seiyuuService, ILoggingService loggingService) : base(loggingService)
+		public SeiyuuController(
+			ILoggingService loggingService,
+			GetSeiyuuCardInfoQueryHandler getSeiyuuCardInfoQueryHandler,
+			SearchSeiyuuQueryHandler searchSeiyuuQueryHandler,
+			CompareSeiyuuQueryHandler compareSeiyuuQueryHandler
+		) : base(loggingService)
 		{
-			this.seiyuuService = seiyuuService;
+			_getSeiyuuCardInfoQueryHandler = getSeiyuuCardInfoQueryHandler;
+			_searchSeiyuuQueryHandler = searchSeiyuuQueryHandler;
+			_compareSeiyuuQueryHandler = compareSeiyuuQueryHandler;
 		}
 
 		[HttpGet]
 		[Route("{id}")]
 		public Task<IActionResult> GetCardInfo(long id)
 		{
-			return Handle(async () => HandleServiceResult(await seiyuuService.GetSingleAsync(id)));
+			var query = new GetSeiyuuCardInfoQuery(id);
+			return Handle(async () => HandleServiceResult(await _getSeiyuuCardInfoQueryHandler.HandleAsync(query)));
 		}
 
 		[HttpGet]
-		public Task<IActionResult> Get([FromQuery] Query<SeiyuuSearchCriteria> query)
+		public Task<IActionResult> Get([FromQuery] SearchSeiyuuQuery query)
 		{
-			return Handle(async () => HandleServiceResult(await seiyuuService.GetAsync(query)));
+			return Handle(async () => HandleServiceResult(await _searchSeiyuuQueryHandler.HandleAsync(query)));
 		}
 
 		[HttpGet]
 		[Route("Compare")]
-		public Task<IActionResult> GetComparison([FromQuery] Query<SeiyuuComparisonSearchCriteria> query)
+		public Task<IActionResult> GetComparison([FromQuery] CompareSeiyuuQuery query)
 		{
-			return Handle(async () => HandleServiceResult(await seiyuuService.GetSeiyuuComparison(query)));
+			return Handle(async () => HandleServiceResult(await _compareSeiyuuQueryHandler.HandleAsync(query)));
 		}
 	}
 }

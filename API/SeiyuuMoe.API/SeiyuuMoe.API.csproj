@@ -43,11 +43,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SeiyuuMoe.Contracts\SeiyuuMoe.Contracts.csproj" />
+    <ProjectReference Include="..\SeiyuuMoe.Application\SeiyuuMoe.Application.csproj" />
     <ProjectReference Include="..\SeiyuuMoe.FileHandler\SeiyuuMoe.FileHandler.csproj" />
     <ProjectReference Include="..\SeiyuuMoe.Infrastructure\SeiyuuMoe.Infrastructure.csproj" />
     <ProjectReference Include="..\SeiyuuMoe.JikanToDBParser\SeiyuuMoe.JikanToDBParser.csproj" />
-    <ProjectReference Include="..\SeiyuuMoe.Services\SeiyuuMoe.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>

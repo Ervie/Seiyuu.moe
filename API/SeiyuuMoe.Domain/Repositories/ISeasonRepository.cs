@@ -3,7 +3,7 @@ using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace SeiyuuMoe.Repositories.Repositories
+namespace SeiyuuMoe.Domain.Repositories
 {
 	public interface ISeasonRepository
 	{

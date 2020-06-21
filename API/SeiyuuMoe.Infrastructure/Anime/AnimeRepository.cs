@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SeiyuuMoe.Domain.Entities;
+using SeiyuuMoe.Domain.Repositories;
 using SeiyuuMoe.Domain.WebEssentials;
 using SeiyuuMoe.Infrastructure.Context;
 using System;
@@ -8,7 +9,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace SeiyuuMoe.Repositories.Repositories
+namespace SeiyuuMoe.Infrastructure.Repositories
 {
 	public class AnimeRepository : IAnimeRepository
 	{
@@ -48,11 +49,12 @@ namespace SeiyuuMoe.Repositories.Repositories
 			.Include(x => x.Status)
 			.FirstOrDefaultAsync(x => x.MalId == animeMalId);
 
-		public async Task<PagedResult<Anime>> GetOrderedPageAsync(Expression<Func<Anime, bool>> predicate, int page, int pageSize)
+		public async Task<PagedResult<Anime>> GetOrderedPageAsync(Expression<Func<Anime, bool>> predicate, int page = 0, int pageSize = 10)
 		{
 			var entities = _dbContext.Anime.Where(predicate);
 			var totalCount = await entities.CountAsync();
 			var results = await entities
+				.OrderByDescending(x => x.Popularity)
 				.Skip(page * pageSize)
 				.Take(pageSize)
 				.ToListAsync();

@@ -21,5 +21,5 @@ namespace SeiyuuMoe.Domain.Entities
         public string Nicknames { get; set; }
 
         public virtual ICollection<Role> Role { get; set; }
-    }
+	}
 }

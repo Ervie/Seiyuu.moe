@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace SeiyuuMoe.Repositories.Repositories
+namespace SeiyuuMoe.Domain.Repositories
 {
 	public interface IAnimeRepository
 	{
@@ -19,7 +19,7 @@ namespace SeiyuuMoe.Repositories.Repositories
 
 		Task<IReadOnlyList<Anime>> GetAllAsync(Expression<Func<Anime, bool>> predicate);
 
-		Task<PagedResult<Anime>> GetOrderedPageAsync(Expression<Func<Anime, bool>> predicate, int page, int pageSize);
+		Task<PagedResult<Anime>> GetOrderedPageAsync(Expression<Func<Anime, bool>> predicate, int page = 0, int pageSize = 10);
 
 		Task<int> GetAnimeCountAsync();
 	}

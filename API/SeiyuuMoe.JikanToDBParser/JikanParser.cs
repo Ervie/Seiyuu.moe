@@ -4,6 +4,7 @@ using SeiyuuMoe.Domain.Entities;
 using SeiyuuMoe.Domain.Repositories;
 using SeiyuuMoe.Infrastructure.Configuration;
 using SeiyuuMoe.Infrastructure.Logger;
+using SeiyuuMoe.Infrastructure.Repositories;
 using SeiyuuMoe.Infrastructure.Utilities;
 using SeiyuuMoe.Repositories.Repositories;
 using System;
