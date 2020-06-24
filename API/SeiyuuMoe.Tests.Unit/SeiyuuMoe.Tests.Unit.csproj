@@ -26,4 +26,9 @@
     <ProjectReference Include="..\SeiyuuMoe.Infrastructure\SeiyuuMoe.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Tests\Domain\" />
+    <Folder Include="Tests\Infrastructure\" />
+  </ItemGroup>
+
 </Project>

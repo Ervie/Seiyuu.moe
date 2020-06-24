@@ -1,14 +1,13 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
 using SeiyuuMoe.Application.Anime.Extensions;
-using SeiyuuMoe.BusinessServices.Extensions;
 using SeiyuuMoe.Contracts.Dtos;
 using SeiyuuMoe.Domain.ComparisonEntities;
 using SeiyuuMoe.Tests.Unit.Builders.Model;
 using System;
 using Xunit;
 
-namespace SeiyuuMoe.Tests.Unit.Tests
+namespace SeiyuuMoe.Tests.Unit.Tests.Application.Extensions
 {
 	public class AnimeExtensionsTests
 	{
@@ -359,7 +358,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests
 		}
 
 		[Fact]
-		public void ToAnimeTableEntry_GivenAnimeWithValues_ShouldReturnEmptyAnimeSearchEntryDtoWithValues()
+		public void ToAnimeTableEntry_GivenAnimeWithValues_ShouldReturnAnimeSearchEntryDtoWithValues()
 		{
 			// Given
 			const string expectedTitle = "ExpectedTitle";
