@@ -2,7 +2,7 @@
 
 namespace SeiyuuMoe.Tests.Unit.Builders.Model
 {
-	internal class AnimeStatusBuilder
+	public class AnimeStatusBuilder
 	{
 		private string _name = string.Empty;
 

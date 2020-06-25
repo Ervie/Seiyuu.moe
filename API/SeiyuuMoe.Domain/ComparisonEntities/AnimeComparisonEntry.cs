@@ -29,5 +29,9 @@ namespace SeiyuuMoe.Domain.ComparisonEntities
 				character
 			};
 		}
+
+		public AnimeComparisonSubEntry()
+		{
+		}
 	}
 }

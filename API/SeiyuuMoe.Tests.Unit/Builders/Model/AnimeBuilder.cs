@@ -3,7 +3,7 @@ using System;
 
 namespace SeiyuuMoe.Tests.Unit.Builders.Model
 {
-	internal class AnimeBuilder
+	public class AnimeBuilder
 	{
 		private string _title = string.Empty;
 		private string _imageUrl = string.Empty;
