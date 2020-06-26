@@ -33,7 +33,6 @@ namespace SeiyuuMoe.Tests.Unit.Builders.ComparisonEntities
 			return this;
 		}
 
-
 		public AnimeComparisonSubEntryBuilder WithCharacters(ICollection<Character> characters)
 		{
 			_characters = characters;

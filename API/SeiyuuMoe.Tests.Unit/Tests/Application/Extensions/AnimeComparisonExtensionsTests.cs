@@ -80,7 +80,6 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Application.Extensions
 		public void ToAnimeComparisonEntryDto_GivenAnimeComparisonEntryWithSingleSubEntry_ShouldReturnAnimeComparisonEntryDtoWithSubEntry()
 		{
 			// Given
-
 			var animeCharacterPairs = new List<AnimeComparisonSubEntry>
 			{
 				new AnimeComparisonSubEntryBuilder().Build()
@@ -107,7 +106,6 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Application.Extensions
 		public void ToAnimeComparisonEntryDto_GivenAnimeComparisonEntryWithMultipleSubEntries_ShouldReturnAnimeComparisonEntryDtoWithMultipleSubEntries()
 		{
 			// Given
-
 			var animeCharacterPairs = new List<AnimeComparisonSubEntry>
 			{
 				new AnimeComparisonSubEntryBuilder().Build(),
