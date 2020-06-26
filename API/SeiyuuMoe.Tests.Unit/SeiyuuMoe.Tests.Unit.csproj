@@ -27,7 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Tests\Domain\" />
     <Folder Include="Tests\Infrastructure\" />
   </ItemGroup>
 

@@ -41,7 +41,7 @@ dotnet build --configuration Release
 dotnet SeiyuuMoe.API.dll
 ```
 
-Require .Net Core 2.2 installed.
+Require .Net Core 3.1 installed.
 
 ## Features
 
@@ -62,6 +62,7 @@ Require .Net Core 2.2 installed.
 
 ## Changelog
 
+
 ### Version 2.1 - 11 May 2019
 
 * Job for database backup.
@@ -79,6 +80,8 @@ Require .Net Core 2.2 installed.
 **[Read More](https://github.com/Ervie/Seiyuu.moe/blob/master/Changelog.md)**
 
 ### Roadmap
+
+Currently - rewriting backend to more DDD approach and adding unit tests
 
 Most planned features can be found in [Projects](https://github.com/Ervie/Seiyuu.moe/projects) page.
   
