@@ -87,7 +87,7 @@ namespace SeiyuuMoe.Application.Season.GetSeasonSummaries
 			{
 				Results = groupedEntities
 					.OrderByDescending(x => x.AnimeCharacterPairs.Count)
-					.ThenByDescending(x => x.TotalSignificanceValue)
+					.ThenByDescending(x => x.GetTotalSignificanceValue())
 					.Skip(query.Page * query.PageSize)
 					.Take(query.PageSize)
 					.ToList(),

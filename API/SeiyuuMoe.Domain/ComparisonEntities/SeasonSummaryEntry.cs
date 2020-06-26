@@ -23,19 +23,16 @@ namespace SeiyuuMoe.Domain.ComparisonEntities
 			};
 		}
 
-		public decimal TotalSignificanceValue
+		public decimal GetTotalSignificanceValue()
 		{
-			get
+			decimal total = 0m;
+			foreach (var (anime, character) in AnimeCharacterPairs)
 			{
-				decimal total = 0m;
-				foreach (var (anime, character) in AnimeCharacterPairs)
-				{
-					decimal animePopularityFactor = anime.Popularity.Value / 1000m;
-					decimal characterPopularityFactor = character.Popularity.Value != 0 ? character.Popularity.Value : 1;
-					total += animePopularityFactor * characterPopularityFactor;
-				}
-				return total;
+				decimal animePopularityFactor = anime.Popularity.Value / 1000m;
+				decimal characterPopularityFactor = character.Popularity.Value != 0 ? character.Popularity.Value : 1;
+				total += animePopularityFactor * characterPopularityFactor;
 			}
+			return total;
 		}
 	}
 }

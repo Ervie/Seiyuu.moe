@@ -11,6 +11,9 @@ namespace SeiyuuMoe.Tests.Unit.Builders.Model
 		private string _japaneseTitle = string.Empty;
 		private string _titleSynonyms = string.Empty;
 		private string _about = string.Empty;
+
+		private int _popularity;
+
 		private long _malId;
 
 		private AnimeType _animeType;
@@ -28,6 +31,7 @@ namespace SeiyuuMoe.Tests.Unit.Builders.Model
 			JapaneseTitle = _japaneseTitle,
 			TitleSynonyms = _titleSynonyms,
 			About = _about,
+			Popularity = _popularity,
 			Status = _animeStatusBuilder?.Build() ?? _animeStatus,
 			Type = _animeTypeBuilder?.Build() ?? _animeType
 		};
@@ -71,6 +75,12 @@ namespace SeiyuuMoe.Tests.Unit.Builders.Model
 		public AnimeBuilder WithAbout(string about)
 		{
 			_about = about;
+			return this;
+		}
+
+		public AnimeBuilder WithPopularity(int popularity)
+		{
+			_popularity = popularity;
 			return this;
 		}
 
