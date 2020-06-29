@@ -645,14 +645,14 @@ namespace SeiyuuMoe.JikanToDBParser
 
 		private async Task<long?> MatchAnimeType(string typeName)
 		{
-			var foundType = await animeTypeRepository.GetByName(typeName);
+			var foundType = await animeTypeRepository.GetByNameAsync(typeName);
 
 			return foundType?.Id;
 		}
 
 		private async Task<long?> MatchAnimeStatus(string statusName)
 		{
-			var foundStatus = await animeStatusRepository.GetByName(statusName);
+			var foundStatus = await animeStatusRepository.GetByNameAsync(statusName);
 
 			return foundStatus?.Id;
 		}

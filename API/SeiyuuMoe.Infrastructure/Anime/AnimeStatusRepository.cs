@@ -14,7 +14,7 @@ namespace SeiyuuMoe.Repositories.Repositories
 			_dbContext = dbContext;
 		}
 
-		public Task<AnimeStatus> GetByName(string typeName)
+		public Task<AnimeStatus> GetByNameAsync(string typeName)
 			=> _dbContext.AnimeStatus.FirstOrDefaultAsync(x => x.Name == typeName);
 	}
 }

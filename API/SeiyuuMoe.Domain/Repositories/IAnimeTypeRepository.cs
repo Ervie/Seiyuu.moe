@@ -5,6 +5,6 @@ namespace SeiyuuMoe.Repositories.Repositories
 {
 	public interface IAnimeTypeRepository
 	{
-		Task<AnimeType> GetByName(string typeName);
+		Task<AnimeType> GetByNameAsync(string typeName);
 	}
 }

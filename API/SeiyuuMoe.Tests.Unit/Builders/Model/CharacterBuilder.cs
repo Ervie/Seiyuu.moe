@@ -2,7 +2,7 @@
 
 namespace SeiyuuMoe.Tests.Unit.Builders.Model
 {
-	internal class CharacterBuilder
+	public class CharacterBuilder
 	{
 		private string _name = string.Empty;
 		private string _imageUrl = string.Empty;

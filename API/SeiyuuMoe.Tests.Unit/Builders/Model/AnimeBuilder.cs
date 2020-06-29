@@ -18,9 +18,11 @@ namespace SeiyuuMoe.Tests.Unit.Builders.Model
 
 		private AnimeType _animeType;
 		private AnimeStatus _animeStatus;
+		private Season _season;
 
 		private AnimeTypeBuilder _animeTypeBuilder;
 		private AnimeStatusBuilder _animeStatusBuilder;
+		private SeasonBuilder _seasonBuilder;
 
 		public Anime Build() => new Anime
 		{
@@ -33,7 +35,8 @@ namespace SeiyuuMoe.Tests.Unit.Builders.Model
 			About = _about,
 			Popularity = _popularity,
 			Status = _animeStatusBuilder?.Build() ?? _animeStatus,
-			Type = _animeTypeBuilder?.Build() ?? _animeType
+			Type = _animeTypeBuilder?.Build() ?? _animeType,
+			Season = _seasonBuilder?.Build() ?? _season
 		};
 
 		public AnimeBuilder WithTitle(string title)
@@ -107,6 +110,19 @@ namespace SeiyuuMoe.Tests.Unit.Builders.Model
 		public AnimeBuilder WithAnimeStatus(AnimeStatus animeStatus)
 		{
 			_animeStatus = animeStatus;
+			return this;
+		}
+
+		public AnimeBuilder WithSeason(Season season)
+		{
+			_season = season;
+			return this;
+		}
+
+		public AnimeBuilder WithSeason(Action<SeasonBuilder> builderAction)
+		{
+			_seasonBuilder = new SeasonBuilder();
+			builderAction(_seasonBuilder);
 			return this;
 		}
 	}
