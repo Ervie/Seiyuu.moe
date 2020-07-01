@@ -25,9 +25,9 @@ namespace SeiyuuMoe.Repositories.Repositories
 		public Task<Character> GetAsync(long characterMalId)
 			=> _dbContext.Character.FirstOrDefaultAsync(x => x.MalId == characterMalId);
 
-		public Task<int> GetCharactersCountAsync() => _dbContext.Character.CountAsync();
+		public Task<int> GetCountAsync() => _dbContext.Character.CountAsync();
 
-		public async Task<PagedResult<Character>> GetPageAsync(int page, int pageSize)
+		public async Task<PagedResult<Character>> GetPageAsync(int page = 0, int pageSize = 100)
 		{
 			var totalCount = await _dbContext.Character.CountAsync();
 			var results = await _dbContext.Character

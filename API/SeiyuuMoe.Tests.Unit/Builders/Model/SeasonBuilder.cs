@@ -6,11 +6,13 @@ namespace SeiyuuMoe.Tests.Unit.Builders.Model
 	{
 		private string _name;
 		private int _year;
+		private long _id;
 
 		public Season Build() => new Season
 		{
 			Name = _name,
-			Year = _year
+			Year = _year,
+			Id = _id
 		};
 
 		public SeasonBuilder WithName(string name)
@@ -24,6 +26,12 @@ namespace SeiyuuMoe.Tests.Unit.Builders.Model
 
 		{
 			_year = year;
+			return this;
+		}
+
+		public SeasonBuilder WithId(long id)
+		{
+			_id = id;
 			return this;
 		}
 	}

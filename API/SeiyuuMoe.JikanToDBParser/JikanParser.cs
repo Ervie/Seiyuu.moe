@@ -231,7 +231,7 @@ namespace SeiyuuMoe.JikanToDBParser
 
 				var page = 0;
 				var pageSize = 100;
-				var totalCharacterCount = await characterRepository.GetCharactersCountAsync();
+				var totalCharacterCount = await characterRepository.GetCountAsync();
 
 				while (page * pageSize < totalCharacterCount)
 				{

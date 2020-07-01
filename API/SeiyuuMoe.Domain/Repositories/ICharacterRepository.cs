@@ -12,8 +12,8 @@ namespace SeiyuuMoe.Repositories.Repositories
 
 		Task UpdateAsync(Character character);
 
-		Task<PagedResult<Character>> GetPageAsync(int page, int pageSize);
+		Task<PagedResult<Character>> GetPageAsync(int page = 0, int pageSize = 100);
 
-		Task<int> GetCharactersCountAsync();
+		Task<int> GetCountAsync();
 	}
 }
