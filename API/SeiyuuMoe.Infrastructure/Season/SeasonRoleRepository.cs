@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SeiyuuMoe.Infrastructure.Season
 {
-	internal class SeasonRoleRepository : ISeasonRoleRepository
+	public class SeasonRoleRepository : ISeasonRoleRepository
 	{
 		private readonly SeiyuuMoeContext _dbContext;
 
