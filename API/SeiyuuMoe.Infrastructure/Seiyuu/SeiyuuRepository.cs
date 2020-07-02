@@ -28,7 +28,7 @@ namespace SeiyuuMoe.Infrastructure.Repositories
 		public async Task<ICollection<long>> GetAllIdsAsync()
 			=> await _dbContext.Seiyuu.Select(x => x.MalId).ToListAsync();
 
-		public Task<int> GetAnimeCountAsync() => _dbContext.Seiyuu.CountAsync();
+		public Task<int> GetSeiyuuCountAsync() => _dbContext.Seiyuu.CountAsync();
 
 		public Task<Domain.Entities.Seiyuu> GetAsync(long seiyuuMalId)
 			=> _dbContext.Seiyuu.FirstOrDefaultAsync(x => x.MalId == seiyuuMalId);

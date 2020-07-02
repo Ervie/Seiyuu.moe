@@ -270,7 +270,7 @@ namespace SeiyuuMoe.JikanToDBParser
 
 			var page = 0;
 			var pageSize = 100;
-			var totalSeiyuuCount = await seiyuuRepository.GetAnimeCountAsync();
+			var totalSeiyuuCount = await seiyuuRepository.GetSeiyuuCountAsync();
 
 			while (page * pageSize < totalSeiyuuCount)
 			{
