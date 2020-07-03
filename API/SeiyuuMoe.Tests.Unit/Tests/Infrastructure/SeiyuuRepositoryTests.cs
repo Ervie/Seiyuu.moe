@@ -217,7 +217,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 		{
 			// Given
 			var dbContext = InMemoryDbProvider.GetDbContext();
-			var repository = new AnimeRepository(dbContext);
+			var repository = new SeiyuuRepository(dbContext);
 			var seiyuu1 = new SeiyuuBuilder().WithMalId(1).Build();
 			var seiyuu2 = new SeiyuuBuilder().WithMalId(2).Build();
 			var seiyuu3 = new SeiyuuBuilder().WithMalId(3).Build();
@@ -339,6 +339,170 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 
 			// Then
 			result.Should().HaveCount(5);
+		}
+
+		[Fact]
+		public async Task GetOrderedPageAsync_GivenNoSeiyuu_ShouldReturnEmpty()
+		{
+			// Given
+			var dbContext = InMemoryDbProvider.GetDbContext();
+			var repository = new SeiyuuRepository(dbContext);
+
+			// When
+			var result = await repository.GetOrderedPageAsync(x => true);
+
+			// Then
+			using (new AssertionScope())
+			{
+				result.TotalCount.Should().Be(0);
+				result.Results.Should().BeEmpty();
+			}
+		}
+
+		[Fact]
+		public async Task GetOrderedPageAsync_GivenMultipleSeiyuu_ShouldReturnAll()
+		{
+			// Given
+			var dbContext = InMemoryDbProvider.GetDbContext();
+			var repository = new SeiyuuRepository(dbContext);
+			var seiyuu1 = new SeiyuuBuilder().WithName("Test1").Build();
+			var seiyuu2 = new SeiyuuBuilder().WithName("Test2").Build();
+			var seiyuu3 = new SeiyuuBuilder().WithName("Test3").Build();
+
+			await dbContext.Seiyuu.AddAsync(seiyuu1);
+			await dbContext.Seiyuu.AddAsync(seiyuu2);
+			await dbContext.Seiyuu.AddAsync(seiyuu3);
+			await dbContext.SaveChangesAsync();
+
+			// When
+			var result = await repository.GetOrderedPageAsync(x => true);
+
+			// Then
+			using (new AssertionScope())
+			{
+				result.TotalCount.Should().Be(3);
+				result.Results.Should().HaveCount(3);
+			}
+		}
+
+		[Fact]
+		public async Task GetOrderedPageAsync_GivenMultipleWithPagesize_ShouldReturnOnlyOnePage()
+		{
+			// Given
+			const int pageSize = 2;
+
+			var dbContext = InMemoryDbProvider.GetDbContext();
+			var repository = new SeiyuuRepository(dbContext);
+			var seiyuu1 = new SeiyuuBuilder().WithName("Test1").Build();
+			var seiyuu2 = new SeiyuuBuilder().WithName("Test2").Build();
+			var seiyuu3 = new SeiyuuBuilder().WithName("Test3").Build();
+
+			await dbContext.Seiyuu.AddAsync(seiyuu1);
+			await dbContext.Seiyuu.AddAsync(seiyuu2);
+			await dbContext.Seiyuu.AddAsync(seiyuu3);
+			await dbContext.SaveChangesAsync();
+
+			// When
+			var result = await repository.GetOrderedPageAsync(x => true, 0, pageSize);
+
+			// Then// Then
+			using (new AssertionScope())
+			{
+				result.TotalCount.Should().Be(3);
+				result.Results.Should().HaveCount(pageSize);
+				result.PageSize.Should().Be(2);
+			}
+		}
+
+		[Fact]
+		public async Task GetOrderedPageAsync_GivenMultipleWithPagesizeAndPage_ShouldReturnOnlyOnePage()
+		{
+			// Given
+			const int pageSize = 2;
+			const int pageNumber = 1;
+
+			var dbContext = InMemoryDbProvider.GetDbContext();
+			var repository = new SeiyuuRepository(dbContext);
+			var seiyuu1 = new SeiyuuBuilder().WithName("Test1").Build();
+			var seiyuu2 = new SeiyuuBuilder().WithName("Test2").Build();
+			var seiyuu3 = new SeiyuuBuilder().WithName("Test3").Build();
+
+			await dbContext.Seiyuu.AddAsync(seiyuu1);
+			await dbContext.Seiyuu.AddAsync(seiyuu2);
+			await dbContext.Seiyuu.AddAsync(seiyuu3);
+			await dbContext.SaveChangesAsync();
+
+			// When
+			var result = await repository.GetOrderedPageAsync(x => true, pageNumber, pageSize);
+
+			// Then// Then
+			using (new AssertionScope())
+			{
+				result.TotalCount.Should().Be(3);
+				result.Results.Should().HaveCount(1);
+				result.PageSize.Should().Be(pageSize);
+				result.Page.Should().Be(pageNumber);
+			}
+		}
+
+		[Fact]
+		public async Task GetOrderedPageAsync_GivenMultipleWithPredicate_ShouldReturnOnlyOnePage()
+		{
+			// Given
+			const int pageSize = 2;
+
+			var dbContext = InMemoryDbProvider.GetDbContext();
+			var repository = new SeiyuuRepository(dbContext);
+			var seiyuu1 = new SeiyuuBuilder().WithName("Test1").Build();
+			var seiyuu2 = new SeiyuuBuilder().WithName("Test2").Build();
+			var seiyuu3 = new SeiyuuBuilder().WithName("Test3").Build();
+
+			await dbContext.Seiyuu.AddAsync(seiyuu1);
+			await dbContext.Seiyuu.AddAsync(seiyuu2);
+			await dbContext.Seiyuu.AddAsync(seiyuu3);
+			await dbContext.SaveChangesAsync();
+
+			// When
+			var result = await repository.GetOrderedPageAsync(x => x.Name.EndsWith("1"), 0, pageSize);
+
+			// Then// Then
+			using (new AssertionScope())
+			{
+				result.TotalCount.Should().Be(1);
+				result.Results.Should().HaveCount(1);
+				result.PageSize.Should().Be(pageSize);
+			}
+		}
+
+		[Fact]
+		public async Task GetOrderedPageAsync_GivenMultipleWithPredicate_ShouldReturnEmpty()
+		{
+			// Given
+			const int pageSize = 2;
+			const int pageNumber = 2;
+
+			var dbContext = InMemoryDbProvider.GetDbContext();
+			var repository = new SeiyuuRepository(dbContext);
+			var seiyuu1 = new SeiyuuBuilder().WithName("Test1").Build();
+			var seiyuu2 = new SeiyuuBuilder().WithName("Test2").Build();
+			var seiyuu3 = new SeiyuuBuilder().WithName("Test3").Build();
+
+			await dbContext.Seiyuu.AddAsync(seiyuu1);
+			await dbContext.Seiyuu.AddAsync(seiyuu2);
+			await dbContext.Seiyuu.AddAsync(seiyuu3);
+			await dbContext.SaveChangesAsync();
+
+			// When
+			var result = await repository.GetOrderedPageAsync(x => x.Name.EndsWith("1"), pageNumber, pageSize);
+
+			// Then// Then
+			using (new AssertionScope())
+			{
+				result.TotalCount.Should().Be(1);
+				result.Results.Should().BeEmpty();
+				result.Page.Should().Be(pageNumber);
+				result.PageSize.Should().Be(pageSize);
+			}
 		}
 	}
 }

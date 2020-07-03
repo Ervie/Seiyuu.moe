@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SeiyuuMoe.Infrastructure.Seiyuu
 {
-	internal class SeiyuuRoleRepository : ISeiyuuRoleRepository
+	public class SeiyuuRoleRepository : ISeiyuuRoleRepository
 	{
 		private readonly SeiyuuMoeContext _dbContext;
 
@@ -17,13 +17,13 @@ namespace SeiyuuMoe.Infrastructure.Seiyuu
 			_dbContext = dbContext;
 		}
 
-		public async Task<IReadOnlyList<Role>> GetAllSeiyuuRolesAsync(long animeMalId, bool mainRolesOnly)
+		public async Task<IReadOnlyList<Role>> GetAllSeiyuuRolesAsync(long seiyuuMalId, bool mainRolesOnly)
 			=> await _dbContext.Role
 			.Include(a => a.Anime)
 			.Include(a => a.Character)
 			.Include(a => a.Seiyuu)
 			.Where(x => x.LanguageId == 1
-				&& x.SeiyuuId == animeMalId
+				&& x.SeiyuuId == seiyuuMalId
 				&& (!mainRolesOnly || x.RoleTypeId == 1))
 			.ToListAsync();
 	}
