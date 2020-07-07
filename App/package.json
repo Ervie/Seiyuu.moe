@@ -24,7 +24,7 @@
     "@nuxtjs/google-analytics": "^2.2.0",
     "axios": "^0.18.1",
     "decode-html": "^2.0.0",
-    "npm": "^6.13.4",
+    "npm": "^6.14.6",
     "nuxt": "^2.9.1",
     "nuxt-clipboard2": "^0.2.1",
     "vuelidate": "^0.7.4",
