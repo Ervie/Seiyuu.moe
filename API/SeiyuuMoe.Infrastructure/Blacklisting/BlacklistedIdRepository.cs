@@ -1,8 +1,9 @@
 ﻿using SeiyuuMoe.Domain.Entities;
+using SeiyuuMoe.Domain.Repositories;
 using SeiyuuMoe.Infrastructure.Context;
 using System.Threading.Tasks;
 
-namespace SeiyuuMoe.Repositories.Repositories
+namespace SeiyuuMoe.Infrastructure.Blacklisting
 {
 	public class BlacklistedIdRepository : IBlacklistedIdRepository
 	{

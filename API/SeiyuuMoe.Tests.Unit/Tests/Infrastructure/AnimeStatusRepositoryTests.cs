@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using SeiyuuMoe.Repositories.Repositories;
+using SeiyuuMoe.Infrastructure.Animes;
 using SeiyuuMoe.Tests.Unit.Builders.Model;
 using SeiyuuMoe.Tests.Unit.Helpers;
 using System.Threading.Tasks;

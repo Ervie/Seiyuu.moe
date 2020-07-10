@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.EntityFrameworkCore;
-using SeiyuuMoe.Repositories.Repositories;
+using SeiyuuMoe.Infrastructure.Blacklisting;
 using SeiyuuMoe.Tests.Unit.Builders.Model;
 using SeiyuuMoe.Tests.Unit.Helpers;
 using System;

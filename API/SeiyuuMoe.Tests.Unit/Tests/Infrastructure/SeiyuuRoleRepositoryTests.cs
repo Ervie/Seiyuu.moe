@@ -1,11 +1,9 @@
 ﻿using FluentAssertions;
 using SeiyuuMoe.Domain.Entities;
-using SeiyuuMoe.Infrastructure.Seiyuu;
+using SeiyuuMoe.Infrastructure.Seiyuus;
 using SeiyuuMoe.Tests.Unit.Builders.Model;
 using SeiyuuMoe.Tests.Unit.Helpers;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 

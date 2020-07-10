@@ -1,12 +1,10 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.EntityFrameworkCore;
-using SeiyuuMoe.Repositories.Repositories;
+using SeiyuuMoe.Infrastructure.Characters;
 using SeiyuuMoe.Tests.Unit.Builders.Model;
 using SeiyuuMoe.Tests.Unit.Helpers;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 

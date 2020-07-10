@@ -1,7 +1,7 @@
 ﻿using SeiyuuMoe.Domain.Entities;
 using System.Threading.Tasks;
 
-namespace SeiyuuMoe.Repositories.Repositories
+namespace SeiyuuMoe.Domain.Repositories
 {
 	public interface IBlacklistedIdRepository
 	{

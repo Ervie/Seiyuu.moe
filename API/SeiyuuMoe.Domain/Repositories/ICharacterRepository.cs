@@ -2,7 +2,7 @@
 using SeiyuuMoe.Domain.WebEssentials;
 using System.Threading.Tasks;
 
-namespace SeiyuuMoe.Repositories.Repositories
+namespace SeiyuuMoe.Domain.Repositories
 {
 	public interface ICharacterRepository
 	{

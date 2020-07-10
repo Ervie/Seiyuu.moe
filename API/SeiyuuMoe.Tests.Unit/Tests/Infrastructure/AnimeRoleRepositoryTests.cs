@@ -2,7 +2,7 @@
 using FluentAssertions.Execution;
 using Microsoft.EntityFrameworkCore;
 using SeiyuuMoe.Domain.Entities;
-using SeiyuuMoe.Repositories.Repositories;
+using SeiyuuMoe.Infrastructure.Animes;
 using SeiyuuMoe.Tests.Unit.Builders.Model;
 using SeiyuuMoe.Tests.Unit.Helpers;
 using System;
