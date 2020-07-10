@@ -442,7 +442,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var repository = new AnimeRepository(dbContext);
 
 			// When
-			var result = await repository.GetOrderedPageAsync(x => true);
+			var result = await repository.GetOrderedPageByAsync(x => true);
 
 			// Then
 			using (new AssertionScope())
@@ -468,7 +468,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			await dbContext.SaveChangesAsync();
 
 			// When
-			var result = await repository.GetOrderedPageAsync(x => true);
+			var result = await repository.GetOrderedPageByAsync(x => true);
 
 			// Then
 			using (new AssertionScope())
@@ -496,7 +496,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			await dbContext.SaveChangesAsync();
 
 			// When
-			var result = await repository.GetOrderedPageAsync(x => true, 0, pageSize);
+			var result = await repository.GetOrderedPageByAsync(x => true, 0, pageSize);
 
 			// Then// Then
 			using (new AssertionScope())
@@ -526,7 +526,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			await dbContext.SaveChangesAsync();
 
 			// When
-			var result = await repository.GetOrderedPageAsync(x => true, pageNumber, pageSize);
+			var result = await repository.GetOrderedPageByAsync(x => true, pageNumber, pageSize);
 
 			// Then// Then
 			using (new AssertionScope())
@@ -556,7 +556,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			await dbContext.SaveChangesAsync();
 
 			// When
-			var result = await repository.GetOrderedPageAsync(x => x.Title.EndsWith("1"), 0, pageSize);
+			var result = await repository.GetOrderedPageByAsync(x => x.Title.EndsWith("1"), 0, pageSize);
 
 			// Then// Then
 			using (new AssertionScope())
@@ -586,7 +586,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			await dbContext.SaveChangesAsync();
 
 			// When
-			var result = await repository.GetOrderedPageAsync(x => x.Title.EndsWith("1"), pageNumber, pageSize);
+			var result = await repository.GetOrderedPageByAsync(x => x.Title.EndsWith("1"), pageNumber, pageSize);
 
 			// Then// Then
 			using (new AssertionScope())
@@ -595,6 +595,204 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 				result.Results.Should().BeEmpty();
 				result.Page.Should().Be(pageNumber);
 				result.PageSize.Should().Be(pageSize);
+			}
+		}
+
+		[Fact]
+		public async Task GetOrderedPageByPopularityAsync_GivenNoAnime_ShouldReturnEmpty()
+		{
+			// Given
+			var dbContext = InMemoryDbProvider.GetDbContext();
+			var repository = new AnimeRepository(dbContext);
+
+			// When
+			var result = await repository.GetOrderedPageByPopularityAsync(x => true);
+
+			// Then
+			using (new AssertionScope())
+			{
+				result.TotalCount.Should().Be(0);
+				result.Results.Should().BeEmpty();
+			}
+		}
+
+		[Fact]
+		public async Task GetOrderedPageByPopularityAsync_GivenMultipleAnime_ShouldReturnAll()
+		{
+			// Given
+			var dbContext = InMemoryDbProvider.GetDbContext();
+			var repository = new AnimeRepository(dbContext);
+			var anime1 = new AnimeBuilder().WithTitle("Test1").Build();
+			var anime2 = new AnimeBuilder().WithTitle("Test2").Build();
+			var anime3 = new AnimeBuilder().WithTitle("Test3").Build();
+
+			await dbContext.Anime.AddAsync(anime1);
+			await dbContext.Anime.AddAsync(anime2);
+			await dbContext.Anime.AddAsync(anime3);
+			await dbContext.SaveChangesAsync();
+
+			// When
+			var result = await repository.GetOrderedPageByPopularityAsync(x => true);
+
+			// Then
+			using (new AssertionScope())
+			{
+				result.TotalCount.Should().Be(3);
+				result.Results.Should().HaveCount(3);
+			}
+		}
+
+		[Fact]
+		public async Task GetOrderedPageByPopularityAsync_GivenMultipleWithPagesize_ShouldReturnOnlyOnePage()
+		{
+			// Given
+			const int pageSize = 2;
+
+			var dbContext = InMemoryDbProvider.GetDbContext();
+			var repository = new AnimeRepository(dbContext);
+			var anime1 = new AnimeBuilder().WithTitle("Test1").Build();
+			var anime2 = new AnimeBuilder().WithTitle("Test2").Build();
+			var anime3 = new AnimeBuilder().WithTitle("Test3").Build();
+
+			await dbContext.Anime.AddAsync(anime1);
+			await dbContext.Anime.AddAsync(anime2);
+			await dbContext.Anime.AddAsync(anime3);
+			await dbContext.SaveChangesAsync();
+
+			// When
+			var result = await repository.GetOrderedPageByPopularityAsync(x => true, 0, pageSize);
+
+			// Then// Then
+			using (new AssertionScope())
+			{
+				result.TotalCount.Should().Be(3);
+				result.Results.Should().HaveCount(pageSize);
+				result.PageSize.Should().Be(2);
+			}
+		}
+
+		[Fact]
+		public async Task GetOrderedPageByPopularityAsync_GivenMultipleWithPagesizeAndPage_ShouldReturnOnlyOnePage()
+		{
+			// Given
+			const int pageSize = 2;
+			const int pageNumber = 1;
+
+			var dbContext = InMemoryDbProvider.GetDbContext();
+			var repository = new AnimeRepository(dbContext);
+			var anime1 = new AnimeBuilder().WithTitle("Test1").Build();
+			var anime2 = new AnimeBuilder().WithTitle("Test2").Build();
+			var anime3 = new AnimeBuilder().WithTitle("Test3").Build();
+
+			await dbContext.Anime.AddAsync(anime1);
+			await dbContext.Anime.AddAsync(anime2);
+			await dbContext.Anime.AddAsync(anime3);
+			await dbContext.SaveChangesAsync();
+
+			// When
+			var result = await repository.GetOrderedPageByPopularityAsync(x => true, pageNumber, pageSize);
+
+			// Then// Then
+			using (new AssertionScope())
+			{
+				result.TotalCount.Should().Be(3);
+				result.Results.Should().HaveCount(1);
+				result.PageSize.Should().Be(pageSize);
+				result.Page.Should().Be(pageNumber);
+			}
+		}
+
+		[Fact]
+		public async Task GetOrderedPageByPopularityAsync_GivenMultipleWithPredicate_ShouldReturnOnlyOnePage()
+		{
+			// Given
+			const int pageSize = 2;
+
+			var dbContext = InMemoryDbProvider.GetDbContext();
+			var repository = new AnimeRepository(dbContext);
+			var anime1 = new AnimeBuilder().WithTitle("Test1").Build();
+			var anime2 = new AnimeBuilder().WithTitle("Test2").Build();
+			var anime3 = new AnimeBuilder().WithTitle("Test3").Build();
+
+			await dbContext.Anime.AddAsync(anime1);
+			await dbContext.Anime.AddAsync(anime2);
+			await dbContext.Anime.AddAsync(anime3);
+			await dbContext.SaveChangesAsync();
+
+			// When
+			var result = await repository.GetOrderedPageByPopularityAsync(x => x.Title.EndsWith("1"), 0, pageSize);
+
+			// Then// Then
+			using (new AssertionScope())
+			{
+				result.TotalCount.Should().Be(1);
+				result.Results.Should().HaveCount(1);
+				result.PageSize.Should().Be(pageSize);
+			}
+		}
+
+		[Fact]
+		public async Task GetOrderedPageByPopularityAsync_GivenMultipleWithPredicate_ShouldReturnEmpty()
+		{
+			// Given
+			const int pageSize = 2;
+			const int pageNumber = 2;
+
+			var dbContext = InMemoryDbProvider.GetDbContext();
+			var repository = new AnimeRepository(dbContext);
+			var anime1 = new AnimeBuilder().WithTitle("Test1").Build();
+			var anime2 = new AnimeBuilder().WithTitle("Test2").Build();
+			var anime3 = new AnimeBuilder().WithTitle("Test3").Build();
+
+			await dbContext.Anime.AddAsync(anime1);
+			await dbContext.Anime.AddAsync(anime2);
+			await dbContext.Anime.AddAsync(anime3);
+			await dbContext.SaveChangesAsync();
+
+			// When
+			var result = await repository.GetOrderedPageByPopularityAsync(x => x.Title.EndsWith("1"), pageNumber, pageSize);
+
+			// Then// Then
+			using (new AssertionScope())
+			{
+				result.TotalCount.Should().Be(1);
+				result.Results.Should().BeEmpty();
+				result.Page.Should().Be(pageNumber);
+				result.PageSize.Should().Be(pageSize);
+			}
+		}
+
+		[Fact]
+		public async Task GetOrderedPageByPopularityAsync_GivenMultipleWithDifferentPopularityWithPagesize_ShouldReturnOnlyOnePageByPopularity()
+		{
+			// Given
+			const int pageSize = 2;
+
+			var dbContext = InMemoryDbProvider.GetDbContext();
+			var repository = new AnimeRepository(dbContext);
+			var anime1 = new AnimeBuilder().WithTitle("Test1").WithPopularity(10).Build();
+			var anime2 = new AnimeBuilder().WithTitle("Test2").WithPopularity(50).Build();
+			var anime3 = new AnimeBuilder().WithTitle("Test3").WithPopularity(30).Build();
+
+			await dbContext.Anime.AddAsync(anime1);
+			await dbContext.Anime.AddAsync(anime2);
+			await dbContext.Anime.AddAsync(anime3);
+			await dbContext.SaveChangesAsync();
+
+			// When
+			var result = await repository.GetOrderedPageByPopularityAsync(x => true, 0, pageSize);
+
+			// Then// Then
+			using (new AssertionScope())
+			{
+				result.TotalCount.Should().Be(3);
+				result.Results.Should().HaveCount(2);
+				result.PageSize.Should().Be(pageSize);
+
+				result.Results.First().Title.Should().Be("Test2");
+				result.Results.First().Popularity.Should().Be(50);
+				result.Results.Last().Title.Should().Be("Test3");
+				result.Results.Last().Popularity.Should().Be(30);
 			}
 		}
 	}

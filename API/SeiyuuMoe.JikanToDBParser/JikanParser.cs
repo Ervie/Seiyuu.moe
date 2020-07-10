@@ -96,10 +96,9 @@ namespace SeiyuuMoe.JikanToDBParser
 		{
 			_logger.Log("Started InsertNewSeiyuu job.");
 
-			var lastSeiyuu =
-				await _seiyuuRepository.GetOrderedPageAsync(PredicateBuilder.True<Seiyuu>(), 0, 1);
+			var lastSeiyuu = await _seiyuuRepository.GetLastSeiyuuMalId();
 
-			var lastId = lastSeiyuu.Results.First().MalId;
+			var lastId = lastSeiyuu ?? 0;
 
 			for (var malId = lastId + 1; malId < lastId + 100; malId++)
 			{
@@ -107,32 +106,38 @@ namespace SeiyuuMoe.JikanToDBParser
 
 				if (seiyuu != null)
 				{
-					_logger.Log($"Parsed id:{seiyuu.MalId}: {seiyuu.Name}");
+					_logger.Log($"Parsed person id: {seiyuu.MalId}: {seiyuu.Name}");
 				}
 				else
 				{
-					_logger.Log($"Omitted {malId} - not found");
+					_logger.Log($"Omitted person {malId} - not found");
 					continue;
 				}
 
 				var japaneseName = string.Empty;
 
 				if (!string.IsNullOrWhiteSpace(seiyuu.FamilyName))
+				{
 					japaneseName += seiyuu.FamilyName;
+				}
 
 				if (!string.IsNullOrWhiteSpace(seiyuu.GivenName))
-					japaneseName += string.IsNullOrEmpty(japaneseName) ? seiyuu.GivenName : " " + seiyuu.GivenName;
+				{
+					japaneseName += string.IsNullOrEmpty(japaneseName)
+						? seiyuu.GivenName
+						: " " + seiyuu.GivenName;
+				}
 
 				if (!IsJapanese(japaneseName))
 				{
-					_logger.Log($"Omitted {seiyuu.Name} - not Japanese");
+					_logger.Log($"Omitted person {seiyuu.Name} - not Japanese");
 					BlacklistId(malId, "Seiyuu", "Not Japanese");
 					continue;
 				}
 
-				if (seiyuu.VoiceActingRoles.Count <= 0)
+				if (seiyuu.VoiceActingRoles.Any())
 				{
-					_logger.Log($"Omitted {seiyuu.Name} - not a seiyuu");
+					_logger.Log($"Omitted person {seiyuu.Name} - not a seiyuu");
 					BlacklistId(malId, "Seiyuu", "Not a seiyuu");
 					continue;
 				}
@@ -154,7 +159,10 @@ namespace SeiyuuMoe.JikanToDBParser
 
 				_logger.Log($"Inserted {seiyuu.Name} with MalId: {seiyuu.MalId}");
 
-				foreach (var role in seiyuu.VoiceActingRoles) await InsertRole(seiyuu.MalId, role, new List<Role>());
+				foreach (var role in seiyuu.VoiceActingRoles)
+				{
+					await InsertRole(seiyuu.MalId, role, new List<Role>());
+				}
 			}
 
 			_logger.Log("Finished InsertNewSeiyuu job.");
@@ -167,6 +175,7 @@ namespace SeiyuuMoe.JikanToDBParser
 			var seiyuuIdCollection = await _seiyuuRepository.GetAllIdsAsync();
 
 			foreach (var seiyuuMalId in seiyuuIdCollection)
+			{
 				try
 				{
 					var seiyuuRoles = await _seiyuuRoleRepository.GetAllSeiyuuRolesAsync(seiyuuMalId, false);
@@ -176,12 +185,15 @@ namespace SeiyuuMoe.JikanToDBParser
 					_logger.Log($"Parsing seiyuu with id {seiyuuMalId}");
 
 					foreach (var role in seiyuuFullData.VoiceActingRoles)
+					{
 						await InsertRole(seiyuuMalId, role, seiyuuRoles);
+					}
 				}
 				catch (Exception ex)
 				{
 					_logger.Log($"Error during parsing seiyuu with id {seiyuuMalId}: {ex.Message}");
 				}
+			}
 
 			_logger.Log("Finished ParseRoles job.");
 		}
@@ -197,7 +209,7 @@ namespace SeiyuuMoe.JikanToDBParser
 			while (page * pageSize < totalAnimeCount)
 			{
 				var animeCollection =
-					await _animeRepository.GetOrderedPageAsync(PredicateBuilder.True<Anime>(), page, pageSize);
+					await _animeRepository.GetOrderedPageByAsync(PredicateBuilder.True<Anime>(), page, pageSize);
 
 				foreach (var anime in animeCollection.Results)
 				{
@@ -409,10 +421,14 @@ namespace SeiyuuMoe.JikanToDBParser
 			anime.ImageUrl = EmptyStringIfPlaceholder(animeParsedData.ImageURL);
 
 			if (animeParsedData.Aired.From.HasValue)
+			{
 				anime.AiringDate = animeParsedData.Aired.From.Value.ToString("dd-MM-yyyy");
+			}
 
-			if (animeParsedData.TitleSynonyms.Count > 0)
+			if (animeParsedData.TitleSynonyms.Any())
+			{
 				anime.TitleSynonyms = string.Join(';', animeParsedData.TitleSynonyms);
+			}
 
 			anime.TypeId = await MatchAnimeType(animeParsedData.Type);
 			anime.StatusId = await MatchAnimeStatus(animeParsedData.Status);
@@ -427,14 +443,15 @@ namespace SeiyuuMoe.JikanToDBParser
 		{
 			character.Name = characterParsedData.Name;
 			character.About = characterParsedData.About;
-			character.ImageUrl = characterParsedData.ImageURL;
 			character.NameKanji = characterParsedData.NameKanji;
 			character.Popularity = characterParsedData.MemberFavorites;
 
 			character.ImageUrl = EmptyStringIfPlaceholder(characterParsedData.ImageURL);
 
 			if (characterParsedData.Nicknames.Any())
+			{
 				character.Nicknames = string.Join(';', characterParsedData.Nicknames.ToArray());
+			}
 
 			await _characterRepository.UpdateAsync(character);
 		}
@@ -448,19 +465,25 @@ namespace SeiyuuMoe.JikanToDBParser
 			seiyuu.About = seiyuuParsedData.More;
 
 			if (seiyuuParsedData.Birthday.HasValue)
+			{
 				seiyuu.Birthday = seiyuuParsedData.Birthday.Value.ToString("dd-MM-yyyy");
+			}
 
 			seiyuu.ImageUrl = EmptyStringIfPlaceholder(seiyuuParsedData.ImageURL);
 
 			if (!string.IsNullOrWhiteSpace(seiyuuParsedData.FamilyName))
+			{
 				japaneseName += seiyuuParsedData.FamilyName;
+			}
 
 			if (!string.IsNullOrWhiteSpace(seiyuuParsedData.GivenName))
+			{
 				japaneseName += string.IsNullOrEmpty(japaneseName)
 					? seiyuuParsedData.GivenName
 					: " " + seiyuuParsedData.GivenName;
 
-			seiyuu.JapaneseName = japaneseName;
+				seiyuu.JapaneseName = japaneseName;
+			}
 
 			await _seiyuuRepository.UpdateAsync(seiyuu);
 		}
@@ -517,16 +540,16 @@ namespace SeiyuuMoe.JikanToDBParser
 
 		private async Task<Person> SendSinglePersonRequest(long malId, short retryCount)
 		{
-			Person seiyuu = null;
+			Person person = null;
 			await Task.Delay(3000 + retryCount * 10000);
 
 			try
 			{
-				seiyuu = await _jikan.GetPerson(malId);
+				person = await _jikan.GetPerson(malId);
 			}
 			catch (Exception ex)
 			{
-				if (retryCount < 10)
+				if (retryCount < 5)
 				{
 					if (ex.InnerException is JikanRequestException &&
 						(ex.InnerException as JikanRequestException).ResponseCode == HttpStatusCode.TooManyRequests)
@@ -561,7 +584,7 @@ namespace SeiyuuMoe.JikanToDBParser
 				}
 			}
 
-			return seiyuu;
+			return person;
 		}
 
 		private async Task<JikanDotNet.Character> SendSingleCharacterRequest(long malId, short retryCount)
@@ -735,8 +758,11 @@ namespace SeiyuuMoe.JikanToDBParser
 
 		#region InsertingRoleRelatedEntities
 
-		private async Task InsertRole(long seiyuuMalId, VoiceActingRole voiceActingRole,
-			IReadOnlyList<Role> seiyuuRoles)
+		private async Task InsertRole(
+			long seiyuuMalId,
+			VoiceActingRole voiceActingRole,
+			IReadOnlyList<Role> seiyuuRoles
+		)
 		{
 			try
 			{
@@ -748,9 +774,14 @@ namespace SeiyuuMoe.JikanToDBParser
 					var isAnimeInDatabase = true;
 
 					if (await _animeRepository.GetAsync(voiceActingRole.Anime.MalId) == null)
+					{
 						isAnimeInDatabase = await InsertAnime(voiceActingRole);
+					}
+
 					if (await _characterRepository.GetAsync(voiceActingRole.Character.MalId) == null)
+					{
 						isCharacterInDatabase = await InsertCharacter(voiceActingRole);
+					}
 
 					if (isAnimeInDatabase && isCharacterInDatabase)
 					{

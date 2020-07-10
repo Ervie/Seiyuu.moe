@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
-using SeiyuuMoe.Application.Character.Extensions;
+using SeiyuuMoe.Application.Characters.Extensions;
 using SeiyuuMoe.Tests.Unit.Builders.Model;
 using Xunit;
 

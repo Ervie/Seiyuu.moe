@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SeiyuuMoe.API.Controllers.Base;
-using SeiyuuMoe.Application.Season.GetSeasonSummaries;
+using SeiyuuMoe.Application.Seasons.GetSeasonSummaries;
 using SeiyuuMoe.Infrastructure.Logger;
 using System.Threading.Tasks;
 

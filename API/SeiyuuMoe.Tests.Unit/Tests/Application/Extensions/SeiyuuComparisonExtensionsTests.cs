@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
-using SeiyuuMoe.Application.SeiyuuComparison.Extensions;
+using SeiyuuMoe.Application.SeiyuuComparisons.Extensions;
 using SeiyuuMoe.Domain.ComparisonEntities;
 using SeiyuuMoe.Domain.Entities;
 using SeiyuuMoe.Tests.Unit.Builders.ComparisonEntities;

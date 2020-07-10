@@ -20,5 +20,7 @@ namespace SeiyuuMoe.Domain.Repositories
 		Task<ICollection<long>> GetAllIdsAsync();
 
 		Task<int> GetSeiyuuCountAsync();
+
+		Task<long?> GetLastSeiyuuMalId();
 	}
 }

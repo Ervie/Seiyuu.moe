@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
-using SeiyuuMoe.BusinessServices.Extensions;
+using SeiyuuMoe.Application.Seasons.Extensions;
 using SeiyuuMoe.Domain.Enums;
 using SeiyuuMoe.Tests.Unit.Builders.Queries;
 using Xunit;

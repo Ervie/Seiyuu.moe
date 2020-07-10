@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
-using SeiyuuMoe.Application.Anime.Extensions;
-using SeiyuuMoe.Contracts.Dtos;
+using SeiyuuMoe.Application.Animes;
+using SeiyuuMoe.Application.Animes.Extensions;
 using SeiyuuMoe.Domain.ComparisonEntities;
 using SeiyuuMoe.Tests.Unit.Builders.Model;
 using System;

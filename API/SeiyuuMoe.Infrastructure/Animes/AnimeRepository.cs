@@ -49,7 +49,25 @@ namespace SeiyuuMoe.Infrastructure.Animes
 			.Include(x => x.Status)
 			.FirstOrDefaultAsync(x => x.MalId == animeMalId);
 
-		public async Task<PagedResult<Anime>> GetOrderedPageAsync(Expression<Func<Anime, bool>> predicate, int page = 0, int pageSize = 10)
+		public async Task<PagedResult<Anime>> GetOrderedPageByAsync(Expression<Func<Anime, bool>> predicate, int page = 0, int pageSize = 10)
+		{
+			var entities = _dbContext.Anime.Where(predicate);
+			var totalCount = await entities.CountAsync();
+			var results = await entities
+				.Skip(page * pageSize)
+				.Take(pageSize)
+				.ToListAsync();
+
+			return new PagedResult<Anime>
+			{
+				Results = results,
+				Page = page,
+				PageSize = pageSize,
+				TotalCount = totalCount
+			};
+		}
+
+		public async Task<PagedResult<Anime>> GetOrderedPageByPopularityAsync(Expression<Func<Anime, bool>> predicate, int page = 0, int pageSize = 10)
 		{
 			var entities = _dbContext.Anime.Where(predicate);
 			var totalCount = await entities.CountAsync();

@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using SeiyuuMoe.Domain.Entities;
-using SeiyuuMoe.Infrastructure.Season;
+using SeiyuuMoe.Infrastructure.Seasons;
 using SeiyuuMoe.Tests.Unit.Builders.Model;
 using SeiyuuMoe.Tests.Unit.Helpers;
 using System.Collections.Generic;

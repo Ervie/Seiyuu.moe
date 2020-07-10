@@ -1,14 +1,14 @@
 ﻿using Autofac;
-using SeiyuuMoe.Application.Anime;
-using SeiyuuMoe.Application.Anime.GetAnimeCardInfo;
-using SeiyuuMoe.Application.Anime.SearchAnime;
-using SeiyuuMoe.Application.AnimeComparison.CompareAnime;
-using SeiyuuMoe.Application.Season;
-using SeiyuuMoe.Application.Season.GetSeasonSummaries;
-using SeiyuuMoe.Application.Seiyuu;
-using SeiyuuMoe.Application.Seiyuu.GetSeiyuuCardInfo;
-using SeiyuuMoe.Application.Seiyuu.SearchSeiyuu;
-using SeiyuuMoe.Application.SeiyuuComparison.CompareSeiyuu;
+using SeiyuuMoe.Application.Animes;
+using SeiyuuMoe.Application.Animes.GetAnimeCardInfo;
+using SeiyuuMoe.Application.Animes.SearchAnime;
+using SeiyuuMoe.Application.AnimeComparisons.CompareAnime;
+using SeiyuuMoe.Application.Seasons;
+using SeiyuuMoe.Application.Seasons.GetSeasonSummaries;
+using SeiyuuMoe.Application.Seiyuus;
+using SeiyuuMoe.Application.Seiyuus.GetSeiyuuCardInfo;
+using SeiyuuMoe.Application.Seiyuus.SearchSeiyuu;
+using SeiyuuMoe.Application.SeiyuuComparisons.CompareSeiyuu;
 
 namespace SeiyuuMoe.Application
 {

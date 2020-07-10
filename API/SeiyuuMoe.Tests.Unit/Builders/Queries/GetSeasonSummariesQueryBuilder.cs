@@ -1,4 +1,4 @@
-﻿using SeiyuuMoe.Application.Season.GetSeasonSummaries;
+﻿using SeiyuuMoe.Application.Seasons.GetSeasonSummaries;
 
 namespace SeiyuuMoe.Tests.Unit.Builders.Queries
 {

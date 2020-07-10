@@ -57,5 +57,11 @@ namespace SeiyuuMoe.Infrastructure.Seiyuus
 			_dbContext.Update(seiyuu);
 			await _dbContext.SaveChangesAsync();
 		}
+
+		public async Task<long?> GetLastSeiyuuMalId()
+		{
+			var lastSeiyuu = await _dbContext.Seiyuu.OrderBy(x => x.MalId).LastOrDefaultAsync();
+			return lastSeiyuu?.MalId;
+		}
 	}
 }

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SeiyuuMoe.API.Controllers.Base;
-using SeiyuuMoe.Application.Seiyuu.GetSeiyuuCardInfo;
-using SeiyuuMoe.Application.Seiyuu.SearchSeiyuu;
-using SeiyuuMoe.Application.SeiyuuComparison.CompareSeiyuu;
+using SeiyuuMoe.Application.SeiyuuComparisons.CompareSeiyuu;
+using SeiyuuMoe.Application.Seiyuus.GetSeiyuuCardInfo;
+using SeiyuuMoe.Application.Seiyuus.SearchSeiyuu;
 using SeiyuuMoe.Infrastructure.Logger;
 using System.Threading.Tasks;
 

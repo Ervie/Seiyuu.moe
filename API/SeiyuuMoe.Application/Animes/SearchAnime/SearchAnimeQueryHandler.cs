@@ -26,7 +26,7 @@ namespace SeiyuuMoe.Application.Animes.SearchAnime
 		{
 			var expression = _animeSearchCriteriaService.BuildExpression(query);
 
-			var entities = await _animeRepository.GetOrderedPageAsync(expression);
+			var entities = await _animeRepository.GetOrderedPageByPopularityAsync(expression);
 
 			var result = entities.Map<Anime, AnimeSearchEntryDto>(entities.Results.Select(x => x.ToAnimeSearchEntryDto()));
 

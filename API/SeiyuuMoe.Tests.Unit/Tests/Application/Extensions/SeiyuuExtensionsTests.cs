@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
-using SeiyuuMoe.Application.Seiyuu.Extensions;
-using SeiyuuMoe.Contracts.Dtos;
+using SeiyuuMoe.Application.Seiyuus;
+using SeiyuuMoe.Application.Seiyuus.Extensions;
 using SeiyuuMoe.Tests.Unit.Builders.Model;
 using System;
 using Xunit;

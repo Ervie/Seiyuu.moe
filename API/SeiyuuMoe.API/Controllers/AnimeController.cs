@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using SeiyuuMoe.API.Controllers.Base;
-using SeiyuuMoe.Application.Anime.GetAnimeCardInfo;
-using SeiyuuMoe.Application.Anime.SearchAnime;
-using SeiyuuMoe.Application.AnimeComparison.CompareAnime;
+using SeiyuuMoe.Application.AnimeComparisons.CompareAnime;
+using SeiyuuMoe.Application.Animes.GetAnimeCardInfo;
+using SeiyuuMoe.Application.Animes.SearchAnime;
 using SeiyuuMoe.Infrastructure.Logger;
 using System.Threading.Tasks;
 
