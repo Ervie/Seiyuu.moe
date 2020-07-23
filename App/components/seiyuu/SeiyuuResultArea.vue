@@ -135,21 +135,16 @@ export default {
     getSeiyuuCompareRequest() {
 
       var requestIUrl = process.env.apiUrl +
-        '/api/seiyuu/Compare' +
-        '?Page=0&PageSize=1000&SortExpression=Popularity DESC';
+        '/api/seiyuu/Compare';
       
+      requestIUrl += '?MainRolesOnly=' + this.mainRolesOnly;
+      
+      requestIUrl += '&GroupByFranchise=' + this.groupBySeries;
+
       this.seiyuuIds.forEach(element => {
-        requestIUrl += '&SearchCriteria.SeiyuuMalId=' + element;
+        requestIUrl += '&SeiyuuMalIds=' + element;
       });
       
-      if (this.mainRolesOnly) {
-        requestIUrl += '&SearchCriteria.MainRolesOnly=true';
-      }
-
-      if (this.groupBySeries) {
-        requestIUrl += '&SearchCriteria.GroupByFranchise=true';
-      }
-
       return requestIUrl;
     },
     generateShareLink () {

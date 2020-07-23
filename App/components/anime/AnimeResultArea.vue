@@ -78,13 +78,11 @@ export default {
       var animeIdPart = '';
       
       this.animeIds.forEach(element => {
-        animeIdPart += '&SearchCriteria.AnimeMalId=' + element;
+        animeIdPart += '&AnimeMalIds=' + element;
       });
-      
 
       return process.env.apiUrl +
-        '/api/anime/Compare' +
-        '?Page=0&PageSize=1000&SortExpression=Popularity DESC' +
+        '/api/anime/Compare?' +
         animeIdPart;
     },
     generateShareLink () {

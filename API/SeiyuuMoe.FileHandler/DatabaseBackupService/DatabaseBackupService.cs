@@ -1,5 +1,5 @@
 ﻿using Microsoft.Data.Sqlite;
-using SeiyuuMoe.Logger;
+using SeiyuuMoe.Infrastructure.Logger;
 
 namespace SeiyuuMoe.FileHandler.DatabaseBackupService
 {

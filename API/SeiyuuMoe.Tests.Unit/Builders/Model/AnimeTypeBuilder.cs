@@ -1,8 +1,8 @@
-﻿using SeiyuuMoe.Data.Model;
+﻿using SeiyuuMoe.Domain.Entities;
 
 namespace SeiyuuMoe.Tests.Unit.Builders.Model
 {
-	class AnimeTypeBuilder
+	public class AnimeTypeBuilder
 	{
 		private string _name = string.Empty;
 

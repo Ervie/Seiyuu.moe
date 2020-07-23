@@ -1,9 +1,9 @@
-﻿using SeiyuuMoe.Data.Model;
+﻿using SeiyuuMoe.Domain.Entities;
 using System;
 
 namespace SeiyuuMoe.Tests.Unit.Builders.Model
 {
-	internal class AnimeBuilder
+	public class AnimeBuilder
 	{
 		private string _title = string.Empty;
 		private string _imageUrl = string.Empty;
@@ -11,13 +11,18 @@ namespace SeiyuuMoe.Tests.Unit.Builders.Model
 		private string _japaneseTitle = string.Empty;
 		private string _titleSynonyms = string.Empty;
 		private string _about = string.Empty;
+
+		private int _popularity;
+
 		private long _malId;
 
 		private AnimeType _animeType;
 		private AnimeStatus _animeStatus;
+		private Season _season;
 
 		private AnimeTypeBuilder _animeTypeBuilder;
 		private AnimeStatusBuilder _animeStatusBuilder;
+		private SeasonBuilder _seasonBuilder;
 
 		public Anime Build() => new Anime
 		{
@@ -28,8 +33,10 @@ namespace SeiyuuMoe.Tests.Unit.Builders.Model
 			JapaneseTitle = _japaneseTitle,
 			TitleSynonyms = _titleSynonyms,
 			About = _about,
+			Popularity = _popularity,
 			Status = _animeStatusBuilder?.Build() ?? _animeStatus,
-			Type = _animeTypeBuilder?.Build() ?? _animeType
+			Type = _animeTypeBuilder?.Build() ?? _animeType,
+			Season = _seasonBuilder?.Build() ?? _season
 		};
 
 		public AnimeBuilder WithTitle(string title)
@@ -74,6 +81,12 @@ namespace SeiyuuMoe.Tests.Unit.Builders.Model
 			return this;
 		}
 
+		public AnimeBuilder WithPopularity(int popularity)
+		{
+			_popularity = popularity;
+			return this;
+		}
+
 		public AnimeBuilder WithAnimeType(AnimeTypeBuilder animeTypeBuilder)
 		{
 			_animeType = animeTypeBuilder.Build();
@@ -97,6 +110,19 @@ namespace SeiyuuMoe.Tests.Unit.Builders.Model
 		public AnimeBuilder WithAnimeStatus(AnimeStatus animeStatus)
 		{
 			_animeStatus = animeStatus;
+			return this;
+		}
+
+		public AnimeBuilder WithSeason(Season season)
+		{
+			_season = season;
+			return this;
+		}
+
+		public AnimeBuilder WithSeason(Action<SeasonBuilder> builderAction)
+		{
+			_seasonBuilder = new SeasonBuilder();
+			builderAction(_seasonBuilder);
 			return this;
 		}
 	}

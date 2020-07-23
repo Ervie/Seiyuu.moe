@@ -152,10 +152,10 @@ export default {
       axios.get(process.env.apiUrl + '/api/season/Summary' + 
         '?Page=' + (this.page - 1) +
         '&PageSize=' + this.pageSize +
-        '&SearchCriteria.Season=' + this.$route.params.season  +
-        '&SearchCriteria.Year=' + this.$route.params.year +
-        '&SearchCriteria.MainRolesOnly=' + this.mainRolesOnly +
-        '&SearchCriteria.TVSeriesOnly=' + this.tvSeriesOnly)
+        '&Season=' + this.$route.params.season  +
+        '&Year=' + this.$route.params.year +
+        '&MainRolesOnly=' + this.mainRolesOnly +
+        '&TVSeriesOnly=' + this.tvSeriesOnly)
       .then((response) => {
         this.seasonSummaryData = response.data.payload.results;
         this.totalPages = Math.ceil(response.data.payload.totalCount / this.pageSize);
@@ -171,10 +171,10 @@ export default {
     return axios.get(process.env.apiUrl + '/api/season/Summary' + 
         '?Page=0' +
         '&PageSize=25' +
-        '&SearchCriteria.Season=' + params.season +
-        '&SearchCriteria.Year=' + params.year +
-        '&SearchCriteria.MainRolesOnly=' + store.getters.getSeasonSummaryMainRolesOnly +
-        '&SearchCriteria.TVSeriesOnly=' + store.getters.getSeasonSummaryTVSeriesOnly)
+        '&Season=' + params.season +
+        '&Year=' + params.year +
+        '&MainRolesOnly=' + store.getters.getSeasonSummaryMainRolesOnly +
+        '&TVSeriesOnly=' + store.getters.getSeasonSummaryTVSeriesOnly)
     .then((response) => {
       return { 
         seasonSummaryData: response.data.payload.results,

@@ -225,8 +225,7 @@ export default {
 
         var requestUrl = process.env.apiUrl +
           '/api/seiyuu/' +
-          '?Page=0&PageSize=10&SortExpression=Popularity DESC' +
-          '&SearchCriteria.Name=' +
+          '?Name=' +
           String(val.replace('/', ' ')) 
 
         axios.get(requestUrl)

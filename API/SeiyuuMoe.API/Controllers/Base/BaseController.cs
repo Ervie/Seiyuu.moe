@@ -1,16 +1,16 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using SeiyuuMoe.Domain.WebEssentials;
+using SeiyuuMoe.Infrastructure.Extensions;
+using SeiyuuMoe.Infrastructure.Logger;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using SeiyuuMoe.Common.Extensions;
-using SeiyuuMoe.Logger;
-using SeiyuuMoe.WebEssentials;
 
 namespace SeiyuuMoe.API.Controllers.Base
 {
-    public abstract class BaseController : ControllerBase
-    {
+	public abstract class BaseController : ControllerBase
+	{
 		private readonly ILoggingService loggingService;
 
 		public BaseController(ILoggingService loggingService)
@@ -73,5 +73,5 @@ namespace SeiyuuMoe.API.Controllers.Base
 				Payload = response.Payload
 			};
 		}
-    }
+	}
 }
