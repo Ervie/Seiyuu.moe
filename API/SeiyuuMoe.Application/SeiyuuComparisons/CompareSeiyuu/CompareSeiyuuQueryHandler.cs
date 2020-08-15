@@ -29,13 +29,13 @@ namespace SeiyuuMoe.Application.SeiyuuComparisons.CompareSeiyuu
 
 				foreach (var role in roles)
 				{
-					if (partialResults.Any(x => x.Anime.First().MalId.Equals(role.AnimeId)))
+					if (partialResults.Any(x => x.Anime.First().Id.Equals(role.AnimeId)))
 					{
-						var foundAnime = partialResults.Single(x => x.Anime.First().MalId.Equals(role.AnimeId));
+						var foundAnime = partialResults.Single(x => x.Anime.First().Id.Equals(role.AnimeId));
 
-						if (foundAnime.SeiyuuCharacters.Any(x => x.Seiyuu.MalId.Equals(role.SeiyuuId)))
+						if (foundAnime.SeiyuuCharacters.Any(x => x.Seiyuu.Id.Equals(role.SeiyuuId)))
 						{
-							var foundSeiyuu = foundAnime.SeiyuuCharacters.Single(x => x.Seiyuu.MalId.Equals(role.SeiyuuId));
+							var foundSeiyuu = foundAnime.SeiyuuCharacters.Single(x => x.Seiyuu.Id.Equals(role.SeiyuuId));
 							foundSeiyuu.Characters.Add(role.Character);
 						}
 						else

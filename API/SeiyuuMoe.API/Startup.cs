@@ -9,8 +9,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SeiyuuMoe.Application;
-using SeiyuuMoe.FileHandler;
-using SeiyuuMoe.FileHandler.DatabaseBackupService;
 using SeiyuuMoe.Infrastructure;
 using SeiyuuMoe.Infrastructure.Configuration;
 using SeiyuuMoe.JikanToDBParser;
@@ -55,7 +53,6 @@ namespace SeiyuuMoe.API
 			builder.RegisterModule(new DomainModule());
 			builder.RegisterModule(new ApplicationModule());
 			builder.RegisterModule(new JikanParserModule());
-			builder.RegisterModule(new FileHandlerModule());
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -106,9 +103,6 @@ namespace SeiyuuMoe.API
 			RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.UpdateAllCharacters(), "0 0 15 * *");
 			RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.InsertNewSeiyuu(), "0 0 * * 7");
 			RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.InsertOldSeiyuu(), runNeverCronExpression);
-
-			RecurringJob.AddOrUpdate<IDatabaseBackupService>(databaseBackupService => databaseBackupService.BackupDatabase(), "0 12 3 * *");
-			RecurringJob.AddOrUpdate<IDatabaseBackupService>(databaseBackupService => databaseBackupService.RestoreDatabase(), runNeverCronExpression);
 		}
 	}
 }

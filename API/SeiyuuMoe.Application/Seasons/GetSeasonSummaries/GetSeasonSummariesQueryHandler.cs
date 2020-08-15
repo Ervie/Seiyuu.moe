@@ -81,7 +81,7 @@ namespace SeiyuuMoe.Application.Seasons.GetSeasonSummaries
 				else
 				{
 					groupedEntities
-						.Single(x => x.Seiyuu.MalId.Equals(role.SeiyuuId.Value))
+						.Single(x => x.Seiyuu.Id.Equals(role.SeiyuuId.Value))
 						.AnimeCharacterPairs.Add((role.Anime, role.Character));
 				}
 			}

@@ -1,5 +1,4 @@
-﻿using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SeiyuuMoe.Domain.Entities;
 using SeiyuuMoe.Infrastructure.Configuration;
 
@@ -7,7 +6,7 @@ namespace SeiyuuMoe.Infrastructure.Context
 {
 	public partial class SeiyuuMoeContext : DbContext
 	{
-		private readonly string _dataSource;
+		private readonly string _connectionString;
 
 		public SeiyuuMoeContext()
 		{
@@ -20,7 +19,7 @@ namespace SeiyuuMoe.Infrastructure.Context
 
 		public SeiyuuMoeContext(SeiyuuMoeConfiguration configuration)
 		{
-			_dataSource = configuration.PathToDB;
+			_connectionString = configuration.ConnectionString;
 		}
 
 		public virtual DbSet<Anime> Animes { get; set; }
@@ -38,19 +37,13 @@ namespace SeiyuuMoe.Infrastructure.Context
 		{
 			if (!optionsBuilder.IsConfigured)
 			{
-				//var connectionStringBuilder = new SqliteConnectionStringBuilder { DataSource = this.dataSource ?? string.Empty };
-				//var connectionString = connectionStringBuilder.ToString();
-				//var connection = new SqliteConnection(connectionString);
-
-				//optionsBuilder.UseSqlite(connection);
-				optionsBuilder.UseMySql("Server=seiyuu-moe-db.c6l5glsvscfq.eu-central-1.rds.amazonaws.com;Port=3306;Database=SeiyuuMoeDb;Uid=SeiyuuMoeAdmin;Pwd=Raidenmgs2;");
+				optionsBuilder.UseMySql(_connectionString);
 			}
 		}
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			modelBuilder.HasAnnotation("ProductVersion", "3.0.0-preview.19074.3");
-			//modelBuilder.HasDefaultSchema("seiyuu-moe");
 
 			modelBuilder.Entity<Anime>(entity =>
 			{
