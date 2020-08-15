@@ -23,7 +23,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			await repository.AddAsync(new SeasonBuilder().Build());
 
 			// Then
-			var allSeasons = await dbContext.Season.ToListAsync();
+			var allSeasons = await dbContext.AnimeSeasons.ToListAsync();
 
 			allSeasons.Should().ContainSingle();
 		}
@@ -47,8 +47,8 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			await repository.AddAsync(season);
 
 			// Then
-			var allSeasons = await dbContext.Season.ToListAsync();
-			var newSeason = await dbContext.Season.FirstOrDefaultAsync();
+			var allSeasons = await dbContext.AnimeSeasons.ToListAsync();
+			var newSeason = await dbContext.AnimeSeasons.FirstOrDefaultAsync();
 
 			using (new AssertionScope())
 			{
@@ -98,7 +98,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var repository = new SeasonRepository(dbContext);
 			var season1 = new SeasonBuilder().WithName("Test1").Build();
 
-			await dbContext.Season.AddAsync(season1);
+			await dbContext.AnimeSeasons.AddAsync(season1);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -116,7 +116,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var repository = new SeasonRepository(dbContext);
 			var season1 = new SeasonBuilder().WithName("Test1").Build();
 
-			await dbContext.Season.AddAsync(season1);
+			await dbContext.AnimeSeasons.AddAsync(season1);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -136,9 +136,9 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var season2 = new SeasonBuilder().WithName("Test2").Build();
 			var season3 = new SeasonBuilder().WithName("Test3").Build();
 
-			await dbContext.Season.AddAsync(season1);
-			await dbContext.Season.AddAsync(season2);
-			await dbContext.Season.AddAsync(season3);
+			await dbContext.AnimeSeasons.AddAsync(season1);
+			await dbContext.AnimeSeasons.AddAsync(season2);
+			await dbContext.AnimeSeasons.AddAsync(season3);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -158,9 +158,9 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var season2 = new SeasonBuilder().WithName("Test2").Build();
 			var season3 = new SeasonBuilder().WithName("Test3").Build();
 
-			await dbContext.Season.AddAsync(season1);
-			await dbContext.Season.AddAsync(season2);
-			await dbContext.Season.AddAsync(season3);
+			await dbContext.AnimeSeasons.AddAsync(season1);
+			await dbContext.AnimeSeasons.AddAsync(season2);
+			await dbContext.AnimeSeasons.AddAsync(season3);
 			await dbContext.SaveChangesAsync();
 
 			// When

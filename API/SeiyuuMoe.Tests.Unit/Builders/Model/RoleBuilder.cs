@@ -7,9 +7,9 @@ namespace SeiyuuMoe.Tests.Unit.Builders.Model
 	{
 		private Seiyuu _seiyuu;
 		private Anime _anime;
-		private Character _character;
+		private AnimeCharacter _character;
 		private Language _language;
-		private RoleType _roleType;
+		private AnimeRoleType _roleType;
 
 		private SeiyuuBuilder _seiyuuBuilder;
 		private AnimeBuilder _animeBuilder;
@@ -17,8 +17,8 @@ namespace SeiyuuMoe.Tests.Unit.Builders.Model
 		private LanguageBuilder _languageBuilder;
 		private RoleTypeBuilder _roleTypeBuilder;
 
-		public Role Build()
-			=> new Role
+		public AnimeRole Build()
+			=> new AnimeRole
 			{
 				Character = _characterBuilder?.Build() ?? _character,
 				Anime = _animeBuilder?.Build() ?? _anime,
@@ -53,7 +53,7 @@ namespace SeiyuuMoe.Tests.Unit.Builders.Model
 			return this;
 		}
 
-		public RoleBuilder WithCharacter(Character character)
+		public RoleBuilder WithCharacter(AnimeCharacter character)
 		{
 			_character = character;
 			return this;
@@ -79,7 +79,7 @@ namespace SeiyuuMoe.Tests.Unit.Builders.Model
 			return this;
 		}
 
-		public RoleBuilder WithRoleType(RoleType roleType)
+		public RoleBuilder WithRoleType(AnimeRoleType roleType)
 		{
 			_roleType = roleType;
 			return this;

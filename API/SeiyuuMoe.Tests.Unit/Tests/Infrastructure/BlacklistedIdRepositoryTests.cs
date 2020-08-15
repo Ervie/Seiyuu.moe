@@ -23,7 +23,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			await repository.AddAsync(new BlacklistedIdBuilder().Build());
 
 			// Then
-			var allAnime = await dbContext.BlacklistedId.ToListAsync();
+			var allAnime = await dbContext.Blacklists.ToListAsync();
 
 			allAnime.Should().ContainSingle();
 		}
@@ -49,8 +49,8 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			await repository.AddAsync(blacklistedId);
 
 			// Then
-			var allBlacklists = await dbContext.BlacklistedId.ToListAsync();
-			var newBlacklistedId = await dbContext.BlacklistedId.FirstOrDefaultAsync();
+			var allBlacklists = await dbContext.Blacklists.ToListAsync();
+			var newBlacklistedId = await dbContext.Blacklists.FirstOrDefaultAsync();
 
 			using (new AssertionScope())
 			{
@@ -67,13 +67,14 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 		public async Task AddAsync_GivenDuplicatedKeyAnime_ShouldThrowException()
 		{
 			// Given
+			var animeId = Guid.NewGuid();
 			var dbContext = InMemoryDbProvider.GetDbContext();
 			var repository = new BlacklistedIdRepository(dbContext);
 
-			await repository.AddAsync(new BlacklistedIdBuilder().WithId(1).Build());
+			await repository.AddAsync(new BlacklistedIdBuilder().WithId(animeId).Build());
 
 			// When
-			Func<Task> func = repository.Awaiting(x => x.AddAsync(new BlacklistedIdBuilder().WithId(1).Build()));
+			Func<Task> func = repository.Awaiting(x => x.AddAsync(new BlacklistedIdBuilder().WithId(animeId).Build()));
 
 			// Then
 			func.Should().Throw<Exception>();

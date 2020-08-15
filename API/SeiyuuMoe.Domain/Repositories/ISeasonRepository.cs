@@ -7,8 +7,8 @@ namespace SeiyuuMoe.Domain.Repositories
 {
 	public interface ISeasonRepository
 	{
-		Task<Season> GetAsync(Expression<Func<Season, bool>> predicate);
+		Task<AnimeSeason> GetAsync(Expression<Func<AnimeSeason, bool>> predicate);
 
-		Task AddAsync(Season season);
+		Task AddAsync(AnimeSeason season);
 	}
 }

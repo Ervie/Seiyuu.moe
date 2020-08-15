@@ -25,7 +25,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			await repository.AddAsync(new RoleBuilder().Build());
 
 			// Then
-			var allRoles = await dbContext.Role.ToListAsync();
+			var allRoles = await dbContext.AnimeRoles.ToListAsync();
 
 			allRoles.Should().ContainSingle();
 		}
@@ -47,16 +47,16 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 				.WithAnime(x => x.WithTitle(expectedAnimeTitle))
 				.WithSeiyuu(x => x.WithName(expectedSeiyuuName))
 				.WithCharacter(x => x.WithName(expectedcharacterName))
-				.WithRoleType(x => x.WithName(expectedRoleTypeName))
-				.WithLanguage(x => x.WithName(expectedLanguageName))
+				.WithRoleType(x => x.WithDescription(expectedRoleTypeName))
+				.WithLanguage(x => x.WithDescription(expectedLanguageName))
 				.Build();
 
 			// When
 			await repository.AddAsync(role);
 
 			// Then
-			var allroles = await dbContext.Role.ToListAsync();
-			var newRole = await dbContext.Role
+			var allroles = await dbContext.AnimeRoles.ToListAsync();
+			var newRole = await dbContext.AnimeRoles
 				.Include(x => x.Anime)
 				.Include(x => x.Character)
 				.Include(x => x.Seiyuu)
@@ -76,9 +76,9 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 				newRole.Seiyuu.Should().NotBeNull();
 				newRole.Seiyuu.Name.Should().Be(expectedSeiyuuName);
 				newRole.Language.Should().NotBeNull();
-				newRole.Language.Name.Should().Be(expectedLanguageName);
+				newRole.Language.Description.Should().Be(expectedLanguageName);
 				newRole.RoleType.Should().NotBeNull();
-				newRole.RoleType.Name.Should().Be(expectedRoleTypeName);
+				newRole.RoleType.Description.Should().Be(expectedRoleTypeName);
 			}
 		}
 
@@ -108,11 +108,12 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 		public async Task GetAllRolesInAnimeAsync_GivenNoRoles_ShouldReturnEmpty()
 		{
 			// Given
+			var animeId = Guid.NewGuid();
 			var dbContext = InMemoryDbProvider.GetDbContext();
 			var repository = new AnimeRoleRepository(dbContext);
 
 			// When
-			var result = await repository.GetAllRolesInAnimeAsync(1);
+			var result = await repository.GetAllRolesInAnimeAsync(animeId);
 
 			// Then
 			result.Should().BeEmpty();
@@ -122,17 +123,17 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 		public async Task GetAllRolesInAnimeAsync_GivenNoRolesForAnime_ShouldReturnEmpty()
 		{
 			// Given
-			const int animeMalId = 1;
+			var animeId = Guid.NewGuid();
 			var dbContext = InMemoryDbProvider.GetDbContext();
 			var repository = new AnimeRoleRepository(dbContext);
 
-			var anime = new AnimeBuilder().WithMalId(2).Build();
+			var anime = new AnimeBuilder().WithMalId(2).WithId(animeId).Build();
 
 			await dbContext.AddAsync(anime);
 			await dbContext.SaveChangesAsync();
 
 			// When
-			var result = await repository.GetAllRolesInAnimeAsync(animeMalId);
+			var result = await repository.GetAllRolesInAnimeAsync(animeId);
 
 			// Then
 			result.Should().BeEmpty();
@@ -143,21 +144,22 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 		{
 			// Given
 			const int animeMalId = 1;
+			var animeId = Guid.NewGuid();
 			var dbContext = InMemoryDbProvider.GetDbContext();
 			var repository = new AnimeRoleRepository(dbContext);
 
 			var role = new RoleBuilder()
 				.WithAnime(
-					x => x.WithMalId(animeMalId)
+					x => x.WithMalId(animeMalId).WithId(animeId)
 				)
-				.WithLanguage(x => x.WithName("Japanese").WithId(1))
+				.WithLanguage(x => x.WithDescription("Japanese").WithId(1))
 				.Build();
 
 			await dbContext.AddAsync(role);
 			await dbContext.SaveChangesAsync();
 
 			// When
-			var result = await repository.GetAllRolesInAnimeAsync(animeMalId);
+			var result = await repository.GetAllRolesInAnimeAsync(animeId);
 
 			// Then
 			result.Should().ContainSingle();
@@ -168,21 +170,22 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 		{
 			// Given
 			const int animeMalId = 1;
+			var animeId = Guid.NewGuid();
 			var dbContext = InMemoryDbProvider.GetDbContext();
 			var repository = new AnimeRoleRepository(dbContext);
 
 			var role = new RoleBuilder()
 				.WithAnime(
-					x => x.WithMalId(animeMalId)
+					x => x.WithMalId(animeMalId).WithId(animeId)
 				)
-				.WithLanguage(x => x.WithName("Test").WithId(9999))
+				.WithLanguage(x => x.WithDescription("Test").WithId(9999))
 				.Build();
 
 			await dbContext.AddAsync(role);
 			await dbContext.SaveChangesAsync();
 
 			// When
-			var result = await repository.GetAllRolesInAnimeAsync(animeMalId);
+			var result = await repository.GetAllRolesInAnimeAsync(animeId);
 
 			// Then
 			result.Should().BeEmpty();
@@ -193,12 +196,13 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 		{
 			// Given
 			const int animeMalId = 1;
+			var animeId = Guid.NewGuid();
 			var dbContext = InMemoryDbProvider.GetDbContext();
 			var repository = new AnimeRoleRepository(dbContext);
 
-			var japanese = new LanguageBuilder().WithId(1).WithName("Japanese").Build();
-			var anime = new AnimeBuilder().WithMalId(animeMalId).Build();
-			anime.Role = new List<Role>
+			var japanese = new LanguageBuilder().WithId(1).WithDescription("Japanese").Build();
+			var anime = new AnimeBuilder().WithMalId(animeMalId).WithId(animeId).Build();
+			anime.Role = new List<AnimeRole>
 			{
 				new RoleBuilder().WithLanguage(japanese).Build(),
 				new RoleBuilder().WithLanguage(japanese).Build(),
@@ -211,7 +215,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			await dbContext.SaveChangesAsync();
 
 			// When
-			var result = await repository.GetAllRolesInAnimeAsync(animeMalId);
+			var result = await repository.GetAllRolesInAnimeAsync(animeId);
 
 			// Then
 			result.Should().HaveCount(5);

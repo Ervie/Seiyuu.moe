@@ -9,7 +9,7 @@ namespace SeiyuuMoe.Tests.Unit.Builders.ComparisonEntities
 	{
 		private Seiyuu _seiyuu;
 		private Anime _anime;
-		private Character _character;
+		private AnimeCharacter _character;
 
 		private SeiyuuBuilder _seiyuuBuilder;
 		private AnimeBuilder _animeBuilder;
@@ -48,7 +48,7 @@ namespace SeiyuuMoe.Tests.Unit.Builders.ComparisonEntities
 			return this;
 		}
 
-		public SeasonSummaryEntryBuilder WithCharacter(Character character)
+		public SeasonSummaryEntryBuilder WithCharacter(AnimeCharacter character)
 		{
 			_character = character;
 			return this;

@@ -9,7 +9,7 @@ namespace SeiyuuMoe.Tests.Unit.Builders.ComparisonEntities
 	public class AnimeComparisonSubEntryBuilder
 	{
 		private Anime _anime;
-		private ICollection<Character> _characters;
+		private ICollection<AnimeCharacter> _characters;
 
 		private AnimeBuilder _animeBuilder;
 
@@ -33,7 +33,7 @@ namespace SeiyuuMoe.Tests.Unit.Builders.ComparisonEntities
 			return this;
 		}
 
-		public AnimeComparisonSubEntryBuilder WithCharacters(ICollection<Character> characters)
+		public AnimeComparisonSubEntryBuilder WithCharacters(ICollection<AnimeCharacter> characters)
 		{
 			_characters = characters;
 			return this;

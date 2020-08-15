@@ -8,7 +8,7 @@ namespace SeiyuuMoe.Tests.Unit.Builders.Model
 		private int _year;
 		private long _id;
 
-		public Season Build() => new Season
+		public AnimeSeason Build() => new AnimeSeason
 		{
 			Name = _name,
 			Year = _year,

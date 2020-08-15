@@ -15,7 +15,7 @@ namespace SeiyuuMoe.Domain.ComparisonEntities
 			SeiyuuCharacters = new List<SeiyuuComparisonSubEntry>();
 		}
 
-		public SeiyuuComparisonEntry(Anime anime, Character character, Seiyuu seiyuu)
+		public SeiyuuComparisonEntry(Anime anime, AnimeCharacter character, Seiyuu seiyuu)
 		{
 			Anime = new List<Anime>
 			{
@@ -32,12 +32,12 @@ namespace SeiyuuMoe.Domain.ComparisonEntities
 	{
 		public Seiyuu Seiyuu { get; set; }
 
-		public ICollection<Character> Characters { get; set; }
+		public ICollection<AnimeCharacter> Characters { get; set; }
 
-		public SeiyuuComparisonSubEntry(Character character, Seiyuu seiyuu)
+		public SeiyuuComparisonSubEntry(AnimeCharacter character, Seiyuu seiyuu)
 		{
 			Seiyuu = seiyuu;
-			Characters = new List<Character>
+			Characters = new List<AnimeCharacter>
 			{
 				character
 			};

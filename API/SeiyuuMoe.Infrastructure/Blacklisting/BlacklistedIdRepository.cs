@@ -14,9 +14,9 @@ namespace SeiyuuMoe.Infrastructure.Blacklisting
 			_dbContext = dbContext;
 		}
 
-		public async Task AddAsync(BlacklistedId blacklistedId)
+		public async Task AddAsync(Blacklist blacklistedId)
 		{
-			await _dbContext.BlacklistedId.AddAsync(blacklistedId);
+			await _dbContext.Blacklists.AddAsync(blacklistedId);
 			await _dbContext.SaveChangesAsync();
 		}
 	}

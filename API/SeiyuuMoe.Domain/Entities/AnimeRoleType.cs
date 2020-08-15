@@ -3,17 +3,17 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SeiyuuMoe.Domain.Entities
 {
-	public partial class AnimeType
+	public partial class AnimeRoleType
 	{
-		public AnimeType()
+		public AnimeRoleType()
 		{
-			Anime = new HashSet<Anime>();
+			Role = new HashSet<AnimeRole>();
 		}
 
 		[Key]
 		public long Id { get; set; }
 		public string Description { get; set; }
 
-		public virtual ICollection<Anime> Anime { get; set; }
+		public virtual ICollection<AnimeRole> Role { get; set; }
 	}
 }

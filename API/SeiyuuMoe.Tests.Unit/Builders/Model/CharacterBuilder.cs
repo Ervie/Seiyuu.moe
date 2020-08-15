@@ -13,12 +13,12 @@ namespace SeiyuuMoe.Tests.Unit.Builders.Model
 		private long _malId;
 		private int _popularity;
 
-		public Character Build() => new Character
+		public AnimeCharacter Build() => new AnimeCharacter
 		{
 			Name = _name,
 			MalId = _malId,
 			ImageUrl = _imageUrl,
-			NameKanji = _nameKanji,
+			KanjiName = _nameKanji,
 			Nicknames = _nicknames,
 			Popularity = _popularity,
 			About = _about

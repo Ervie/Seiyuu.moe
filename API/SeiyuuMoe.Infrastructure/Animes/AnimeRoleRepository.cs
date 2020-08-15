@@ -2,6 +2,7 @@
 using SeiyuuMoe.Domain.Entities;
 using SeiyuuMoe.Domain.Repositories;
 using SeiyuuMoe.Infrastructure.Context;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,19 +18,28 @@ namespace SeiyuuMoe.Infrastructure.Animes
 			_dbContext = dbContext;
 		}
 
-		public async Task AddAsync(Role role)
+		public async Task AddAsync(AnimeRole role)
 		{
-			await _dbContext.Role.AddAsync(role);
+			await _dbContext.AnimeRoles.AddAsync(role);
 			await _dbContext.SaveChangesAsync();
 		}
 
-		public async Task<IReadOnlyList<Role>> GetAllRolesInAnimeAsync(long animeMalId)
-			=> await _dbContext.Role
+		public async Task<IReadOnlyList<AnimeRole>> GetAllRolesInAnimeAsync(Guid animeId)
+			=> await _dbContext.AnimeRoles
 			.Include(a => a.Anime)
 			.Include(a => a.Character)
 			.Include(a => a.Seiyuu)
 			.Where(x => x.LanguageId == 1
-				&& x.AnimeId == animeMalId)
+				&& x.AnimeId == animeId)
+			.ToListAsync();
+
+		public async Task<IReadOnlyList<AnimeRole>> GetAllRolesInAnimeByMalIdAsync(long animeMalId)
+			=> await _dbContext.AnimeRoles
+			.Include(a => a.Anime)
+			.Include(a => a.Character)
+			.Include(a => a.Seiyuu)
+			.Where(x => x.LanguageId == 1
+				&& x.Anime.MalId == animeMalId)
 			.ToListAsync();
 	}
 }

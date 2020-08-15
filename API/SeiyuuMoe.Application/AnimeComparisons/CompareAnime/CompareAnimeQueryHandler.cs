@@ -24,7 +24,7 @@ namespace SeiyuuMoe.Application.AnimeComparisons.CompareAnime
 
 			for (int i = 0; i < query.AnimeMalIds.Count; i++)
 			{
-				var roles = await _roleRepository.GetAllRolesInAnimeAsync(query.AnimeMalIds.ElementAt(i));
+				var roles = await _roleRepository.GetAllRolesInAnimeByMalIdAsync(query.AnimeMalIds.ElementAt(i));
 
 				foreach (var role in roles)
 				{

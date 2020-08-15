@@ -4,18 +4,18 @@ namespace SeiyuuMoe.Tests.Unit.Builders.Model
 {
 	public class RoleTypeBuilder
 	{
-		private string _name;
+		private string _description;
 		private long _id;
 
-		public RoleType Build() => new RoleType
+		public AnimeRoleType Build() => new AnimeRoleType
 		{
-			Name = _name,
+			Description = _description,
 			Id = _id
 		};
 
-		public RoleTypeBuilder WithName(string name)
+		public RoleTypeBuilder WithDescription(string description)
 		{
-			_name = name;
+			_description = description;
 			return this;
 		}
 

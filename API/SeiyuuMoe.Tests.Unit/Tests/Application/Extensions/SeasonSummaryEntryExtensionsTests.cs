@@ -2,6 +2,7 @@
 using FluentAssertions.Execution;
 using SeiyuuMoe.Application.Seasons.Extensions;
 using SeiyuuMoe.Tests.Unit.Builders.ComparisonEntities;
+using System;
 using System.Linq;
 using Xunit;
 
@@ -84,7 +85,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Application.Extensions
 					.WithMalId(expectedAnimeMalId)
 					.WithTitle(expectedTitle)
 					.WithImageUrl(expectedAnimeImageUrl)
-					.WithAiringDate("10-10-1990"))
+					.WithAiringDate(new DateTime(1990, 1, 1)))
 				.WithCharacter(x => x.WithName(expectedCharacterName)
 					.WithMalId(expectedCharacterMalId)
 					.WithImageUrl(expectedCharacterImageUrl)

@@ -7,7 +7,7 @@ namespace SeiyuuMoe.Infrastructure.Context
 {
 	public partial class SeiyuuMoeContext : DbContext
 	{
-		private readonly string dataSource;
+		private readonly string _dataSource;
 
 		public SeiyuuMoeContext()
 		{
@@ -20,39 +20,45 @@ namespace SeiyuuMoe.Infrastructure.Context
 
 		public SeiyuuMoeContext(SeiyuuMoeConfiguration configuration)
 		{
-			dataSource = configuration.PathToDB;
+			_dataSource = configuration.PathToDB;
 		}
 
-		public virtual DbSet<Anime> Anime { get; set; }
-		public virtual DbSet<AnimeStatus> AnimeStatus { get; set; }
-		public virtual DbSet<AnimeType> AnimeType { get; set; }
-		public virtual DbSet<BlacklistedId> BlacklistedId { get; set; }
-		public virtual DbSet<Character> Character { get; set; }
-		public virtual DbSet<Language> Language { get; set; }
-		public virtual DbSet<Role> Role { get; set; }
-		public virtual DbSet<RoleType> RoleType { get; set; }
-		public virtual DbSet<Domain.Entities.Season> Season { get; set; }
-		public virtual DbSet<Domain.Entities.Seiyuu> Seiyuu { get; set; }
+		public virtual DbSet<Anime> Animes { get; set; }
+		public virtual DbSet<AnimeStatus> AnimeStatuses { get; set; }
+		public virtual DbSet<AnimeType> AnimeTypes { get; set; }
+		public virtual DbSet<Blacklist> Blacklists { get; set; }
+		public virtual DbSet<AnimeCharacter> AnimeCharacters { get; set; }
+		public virtual DbSet<Language> Languages { get; set; }
+		public virtual DbSet<AnimeRole> AnimeRoles { get; set; }
+		public virtual DbSet<AnimeRoleType> AnimeRoleTypes { get; set; }
+		public virtual DbSet<AnimeSeason> AnimeSeasons { get; set; }
+		public virtual DbSet<Seiyuu> Seiyuus { get; set; }
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
 			if (!optionsBuilder.IsConfigured)
 			{
-				var connectionStringBuilder = new SqliteConnectionStringBuilder { DataSource = this.dataSource ?? string.Empty };
-				var connectionString = connectionStringBuilder.ToString();
-				var connection = new SqliteConnection(connectionString);
+				//var connectionStringBuilder = new SqliteConnectionStringBuilder { DataSource = this.dataSource ?? string.Empty };
+				//var connectionString = connectionStringBuilder.ToString();
+				//var connection = new SqliteConnection(connectionString);
 
-				optionsBuilder.UseSqlite(connection);
+				//optionsBuilder.UseSqlite(connection);
+				optionsBuilder.UseMySql("Server=seiyuu-moe-db.c6l5glsvscfq.eu-central-1.rds.amazonaws.com;Port=3306;Database=SeiyuuMoeDb;Uid=SeiyuuMoeAdmin;Pwd=Raidenmgs2;");
 			}
 		}
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			modelBuilder.HasAnnotation("ProductVersion", "3.0.0-preview.19074.3");
+			//modelBuilder.HasDefaultSchema("seiyuu-moe");
 
 			modelBuilder.Entity<Anime>(entity =>
 			{
-				entity.Property(e => e.AiringDate).HasColumnType("NUMERIC");
+				entity.Property(e => e.Id).HasDefaultValueSql("(uuid())");
+
+				entity.HasIndex(e => e.MalId).IsUnique();
+
+				entity.Property(e => e.AiringDate).HasColumnType("DATE");
 
 				entity.Property(e => e.Title).IsRequired();
 
@@ -72,32 +78,39 @@ namespace SeiyuuMoe.Infrastructure.Context
 					.OnDelete(DeleteBehavior.SetNull);
 			});
 
+			modelBuilder.Entity<AnimeCharacter>(entity =>
+			{
+				entity.HasIndex(e => e.MalId).IsUnique();
+			});
+
 			modelBuilder.Entity<AnimeStatus>(entity =>
 			{
 				entity.Property(e => e.Id).ValueGeneratedNever();
 
-				entity.Property(e => e.Name).IsRequired();
+				entity.Property(e => e.Description).IsRequired();
 			});
 
 			modelBuilder.Entity<AnimeType>(entity =>
 			{
 				entity.Property(e => e.Id).ValueGeneratedNever();
 
-				entity.Property(e => e.Name).IsRequired();
+				entity.Property(e => e.Description).IsRequired();
 			});
 
-			modelBuilder.Entity<BlacklistedId>(entity =>
+			modelBuilder.Entity<Blacklist>(entity =>
 			{
-				//entity.Property(e => e.Id).ValueGeneratedNever();
+				entity.Property(e => e.Id).HasDefaultValueSql("(uuid())");
 
 				entity.Property(e => e.MalId).IsRequired();
 
 				entity.Property(e => e.EntityType).IsRequired();
 			});
 
-			modelBuilder.Entity<Character>(entity =>
+			modelBuilder.Entity<AnimeCharacter>(entity =>
 			{
-				//entity.Property(e => e.Id).ValueGeneratedNever();
+				entity.Property(e => e.Id).HasDefaultValueSql("(uuid())");
+
+				entity.HasIndex(e => e.MalId).IsUnique();
 
 				entity.Property(e => e.Name).IsRequired();
 			});
@@ -106,12 +119,12 @@ namespace SeiyuuMoe.Infrastructure.Context
 			{
 				entity.Property(e => e.Id).ValueGeneratedNever();
 
-				entity.Property(e => e.Name).IsRequired();
+				entity.Property(e => e.Description).IsRequired();
 			});
 
-			modelBuilder.Entity<Role>(entity =>
+			modelBuilder.Entity<AnimeRole>(entity =>
 			{
-				//entity.Property(e => e.Id).ValueGeneratedNever();
+				entity.Property(e => e.Id).HasDefaultValueSql("(uuid())");
 
 				entity.HasOne(d => d.Anime)
 					.WithMany(p => p.Role)
@@ -134,21 +147,24 @@ namespace SeiyuuMoe.Infrastructure.Context
 					.OnDelete(DeleteBehavior.Cascade);
 			});
 
-			modelBuilder.Entity<RoleType>(entity =>
+			modelBuilder.Entity<AnimeRoleType>(entity =>
 			{
 				entity.Property(e => e.Id).ValueGeneratedNever();
 
+				entity.Property(e => e.Description).IsRequired();
+			});
+
+			modelBuilder.Entity<AnimeSeason>(entity =>
+			{
+				entity.Property(e => e.Year).IsRequired();
 				entity.Property(e => e.Name).IsRequired();
 			});
 
-			modelBuilder.Entity<Domain.Entities.Season>(entity =>
+			modelBuilder.Entity<Seiyuu>(entity =>
 			{
-				//entity.Property(e => e.Id).ValueGeneratedNever();
-			});
-
-			modelBuilder.Entity<Domain.Entities.Seiyuu>(entity =>
-			{
-				entity.Property(e => e.Birthday).HasColumnType("NUMERIC");
+				entity.Property(e => e.Id).HasDefaultValueSql("(uuid())");
+				entity.HasIndex(e => e.MalId).IsUnique();
+				entity.Property(e => e.Birthday).HasColumnType("DATE");
 
 				entity.Property(e => e.Name).IsRequired();
 			});

@@ -62,8 +62,8 @@ namespace SeiyuuMoe.Application.SeiyuuComparisons.CompareSeiyuu
 			return new QueryResponse<ICollection<SeiyuuComparisonEntryDto>>(mappedResults);
 		}
 
-		private async Task<IReadOnlyCollection<Role>> GetSeiyuuRoles(long seiyuuMalId, bool? mainRolesOnly)
-			=> await _seiyuuRoleRepository.GetAllSeiyuuRolesAsync(seiyuuMalId, mainRolesOnly ?? false);
+		private async Task<IReadOnlyCollection<AnimeRole>> GetSeiyuuRoles(long seiyuuMalId, bool? mainRolesOnly)
+			=> await _seiyuuRoleRepository.GetAllSeiyuuRolesByMalIdAsync(seiyuuMalId, mainRolesOnly ?? false);
 
 		private ICollection<SeiyuuComparisonEntry> GroupByFranchise(ICollection<SeiyuuComparisonEntry> nonGroupedResults)
 		{

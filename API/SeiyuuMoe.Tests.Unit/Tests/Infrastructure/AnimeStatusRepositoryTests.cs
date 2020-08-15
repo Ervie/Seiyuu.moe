@@ -45,7 +45,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var repository = new AnimeStatusRepository(dbContext);
 			var status = new AnimeStatusBuilder().WithName("To be aired").Build();
 
-			await dbContext.AnimeStatus.AddAsync(status);
+			await dbContext.AnimeStatuses.AddAsync(status);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -63,7 +63,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var repository = new AnimeStatusRepository(dbContext);
 			var status = new AnimeStatusBuilder().WithName("Airing").Build();
 
-			await dbContext.AnimeStatus.AddAsync(status);
+			await dbContext.AnimeStatuses.AddAsync(status);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -71,7 +71,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 
 			// Then
 			result.Should().NotBeNull();
-			result.Name.Should().Be("Airing");
+			result.Description.Should().Be("Airing");
 		}
 	}
 }

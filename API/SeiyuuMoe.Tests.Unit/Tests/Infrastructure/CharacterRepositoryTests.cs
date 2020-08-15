@@ -23,7 +23,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			await repository.AddAsync(new CharacterBuilder().Build());
 
 			// Then
-			var allAnime = await dbContext.Character.ToListAsync();
+			var allAnime = await dbContext.AnimeCharacters.ToListAsync();
 
 			allAnime.Should().ContainSingle();
 		}
@@ -55,8 +55,8 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			await repository.AddAsync(character);
 
 			// Then
-			var allCharacters = await dbContext.Character.ToListAsync();
-			var newCharacter = await dbContext.Character.FirstOrDefaultAsync();
+			var allCharacters = await dbContext.AnimeCharacters.ToListAsync();
+			var newCharacter = await dbContext.AnimeCharacters.FirstOrDefaultAsync();
 
 			using (new AssertionScope())
 			{
@@ -66,7 +66,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 				newCharacter.Name.Should().Be(expectedName);
 				newCharacter.ImageUrl.Should().Be(expectedImageUrl);
 				newCharacter.MalId.Should().Be(expectedMalId);
-				newCharacter.NameKanji.Should().Be(expectedKanjiName);
+				newCharacter.KanjiName.Should().Be(expectedKanjiName);
 				newCharacter.Nicknames.Should().Be(expectedNicknames);
 				newCharacter.About.Should().Be(expectedAbout);
 			}
@@ -94,7 +94,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var repository = new CharacterRepository(dbContext);
 			var character = new CharacterBuilder().WithName("Test").Build();
 
-			await dbContext.Character.AddAsync(character);
+			await dbContext.AnimeCharacters.AddAsync(character);
 			await dbContext.SaveChangesAsync();
 
 			character.Name = "Updated";
@@ -103,7 +103,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			await repository.UpdateAsync(character);
 
 			// Then
-			var allCharacters = await dbContext.Character.ToListAsync();
+			var allCharacters = await dbContext.AnimeCharacters.ToListAsync();
 
 			allCharacters.Should().ContainSingle().Which.Name.Should().Be("Updated");
 		}
@@ -146,7 +146,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var repository = new CharacterRepository(dbContext);
 			var character = new CharacterBuilder().WithMalId(1).Build();
 
-			await dbContext.Character.AddAsync(character);
+			await dbContext.AnimeCharacters.AddAsync(character);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -164,7 +164,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var repository = new CharacterRepository(dbContext);
 			var character = new CharacterBuilder().WithMalId(1).Build();
 
-			await dbContext.Character.AddAsync(character);
+			await dbContext.AnimeCharacters.AddAsync(character);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -186,11 +186,11 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var character4 = new CharacterBuilder().WithMalId(4).Build();
 			var character5 = new CharacterBuilder().WithMalId(5).Build();
 
-			await dbContext.Character.AddAsync(character1);
-			await dbContext.Character.AddAsync(character2);
-			await dbContext.Character.AddAsync(character3);
-			await dbContext.Character.AddAsync(character4);
-			await dbContext.Character.AddAsync(character5);
+			await dbContext.AnimeCharacters.AddAsync(character1);
+			await dbContext.AnimeCharacters.AddAsync(character2);
+			await dbContext.AnimeCharacters.AddAsync(character3);
+			await dbContext.AnimeCharacters.AddAsync(character4);
+			await dbContext.AnimeCharacters.AddAsync(character5);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -223,7 +223,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var repository = new CharacterRepository(dbContext);
 			var character = new CharacterBuilder().WithName("Naruto").Build();
 
-			await dbContext.Character.AddAsync(character);
+			await dbContext.AnimeCharacters.AddAsync(character);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -243,9 +243,9 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var character2 = new CharacterBuilder().WithName("Sasuke").Build();
 			var character3 = new CharacterBuilder().WithName("Sakura").Build();
 
-			await dbContext.Character.AddAsync(character1);
-			await dbContext.Character.AddAsync(character2);
-			await dbContext.Character.AddAsync(character3);
+			await dbContext.AnimeCharacters.AddAsync(character1);
+			await dbContext.AnimeCharacters.AddAsync(character2);
+			await dbContext.AnimeCharacters.AddAsync(character3);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -283,9 +283,9 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var character2 = new CharacterBuilder().WithName("Test2").Build();
 			var character3 = new CharacterBuilder().WithName("Test3").Build();
 
-			await dbContext.Character.AddAsync(character1);
-			await dbContext.Character.AddAsync(character2);
-			await dbContext.Character.AddAsync(character3);
+			await dbContext.AnimeCharacters.AddAsync(character1);
+			await dbContext.AnimeCharacters.AddAsync(character2);
+			await dbContext.AnimeCharacters.AddAsync(character3);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -311,9 +311,9 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var character2 = new CharacterBuilder().WithName("Test2").Build();
 			var character3 = new CharacterBuilder().WithName("Test3").Build();
 
-			await dbContext.Character.AddAsync(character1);
-			await dbContext.Character.AddAsync(character2);
-			await dbContext.Character.AddAsync(character3);
+			await dbContext.AnimeCharacters.AddAsync(character1);
+			await dbContext.AnimeCharacters.AddAsync(character2);
+			await dbContext.AnimeCharacters.AddAsync(character3);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -341,9 +341,9 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var character2 = new CharacterBuilder().WithName("Test2").Build();
 			var character3 = new CharacterBuilder().WithName("Test3").Build();
 
-			await dbContext.Character.AddAsync(character1);
-			await dbContext.Character.AddAsync(character2);
-			await dbContext.Character.AddAsync(character3);
+			await dbContext.AnimeCharacters.AddAsync(character1);
+			await dbContext.AnimeCharacters.AddAsync(character2);
+			await dbContext.AnimeCharacters.AddAsync(character3);
 			await dbContext.SaveChangesAsync();
 
 			// When

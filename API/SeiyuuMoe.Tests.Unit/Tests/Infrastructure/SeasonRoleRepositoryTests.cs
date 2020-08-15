@@ -3,6 +3,7 @@ using SeiyuuMoe.Domain.Entities;
 using SeiyuuMoe.Infrastructure.Seasons;
 using SeiyuuMoe.Tests.Unit.Builders.Model;
 using SeiyuuMoe.Tests.Unit.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
@@ -19,7 +20,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var repository = new SeasonRoleRepository(dbContext);
 
 			// When
-			var result = await repository.GetAllRolesInSeason(new List<long> { 1 }, false);
+			var result = await repository.GetAllRolesInSeason(new List<Guid> { Guid.NewGuid() }, false);
 
 			// Then
 			result.Should().BeEmpty();
@@ -29,20 +30,20 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 		public async Task GetAllRolesInSeason_GivenNoRolesInSeason_ShouldReturnEmpty()
 		{
 			// Given
-			const int animeMalId = 1;
+			var animeId = Guid.NewGuid();
 			var dbContext = InMemoryDbProvider.GetDbContext();
 			var repository = new SeasonRoleRepository(dbContext);
 
 			var anime = new RoleBuilder()
-				.WithAnime(x => x.WithMalId(2))
-				.WithLanguage(x => x.WithName("Japanese").WithId(1))
+				.WithAnime(x => x.WithId(Guid.NewGuid()))
+				.WithLanguage(x => x.WithDescription("Japanese").WithId(1))
 				.Build();
 
 			await dbContext.AddAsync(anime);
 			await dbContext.SaveChangesAsync();
 
 			// When
-			var result = await repository.GetAllRolesInSeason(new List<long> { animeMalId }, false);
+			var result = await repository.GetAllRolesInSeason(new List<Guid> { animeId }, false);
 
 			// Then
 			result.Should().BeEmpty();
@@ -52,20 +53,21 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 		public async Task GetAllRolesInSeason_GivenSeasonWithSingleAnimeWithSingleRole_ShouldReturnSingle()
 		{
 			// Given
-			const int animeMalId = 1;
+			var animeId = Guid.NewGuid();
 			var dbContext = InMemoryDbProvider.GetDbContext();
 			var repository = new SeasonRoleRepository(dbContext);
 
 			var role = new RoleBuilder()
-				.WithAnime(x => x.WithMalId(animeMalId))
-				.WithLanguage(x => x.WithName("Japanese").WithId(1))
+				.WithAnime(x => x.WithId(animeId))
+				.WithLanguage(x => x.WithDescription("Japanese").WithId(1))
+				.WithRoleType(x => x.WithDescription("Main").WithId(1))
 				.Build();
 
 			await dbContext.AddAsync(role);
 			await dbContext.SaveChangesAsync();
 
 			// When
-			var result = await repository.GetAllRolesInSeason(new List<long> { animeMalId }, false);
+			var result = await repository.GetAllRolesInSeason(new List<Guid> { animeId }, false);
 
 			// Then
 			result.Should().ContainSingle();
@@ -75,20 +77,20 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 		public async Task GetAllRolesInSeason_GivenSeasonWithSingleAnimeWithSingleRoleInLanguageOtherThanJapanese_ShouldReturnEmpty()
 		{
 			// Given
-			const int animeMalId = 1;
+			var animeId = Guid.NewGuid();
 			var dbContext = InMemoryDbProvider.GetDbContext();
 			var repository = new SeasonRoleRepository(dbContext);
 
 			var role = new RoleBuilder()
-				.WithAnime(x => x.WithMalId(animeMalId))
-				.WithLanguage(x => x.WithName("Test").WithId(9999))
+				.WithAnime(x => x.WithId(animeId))
+				.WithLanguage(x => x.WithDescription("Test").WithId(9999))
 				.Build();
 
 			await dbContext.AddAsync(role);
 			await dbContext.SaveChangesAsync();
 
 			// When
-			var result = await repository.GetAllRolesInSeason(new List<long> { animeMalId }, false);
+			var result = await repository.GetAllRolesInSeason(new List<Guid> { animeId }, false);
 
 			// Then
 			result.Should().BeEmpty();
@@ -98,13 +100,13 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 		public async Task GetAllRolesInSeason_GivenSeasonWithSingleAnimeWithMultipleRoles_ShouldReturnMultiple()
 		{
 			// Given
-			const int animeMalId = 1;
+			var animeId = Guid.NewGuid();
 			var dbContext = InMemoryDbProvider.GetDbContext();
 			var repository = new SeasonRoleRepository(dbContext);
 
-			var japanese = new LanguageBuilder().WithId(1).WithName("Japanese").Build();
-			var anime = new AnimeBuilder().WithMalId(animeMalId).Build();
-			anime.Role = new List<Role>
+			var japanese = new LanguageBuilder().WithId(1).WithDescription("Japanese").Build();
+			var anime = new AnimeBuilder().WithId(animeId).Build();
+			anime.Role = new List<AnimeRole>
 			{
 				new RoleBuilder().WithLanguage(japanese).Build(),
 				new RoleBuilder().WithLanguage(japanese).Build(),
@@ -117,7 +119,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			await dbContext.SaveChangesAsync();
 
 			// When
-			var result = await repository.GetAllRolesInSeason(new List<long> { animeMalId }, false);
+			var result = await repository.GetAllRolesInSeason(new List<Guid> { animeId }, false);
 
 			// Then
 			result.Should().HaveCount(5);
@@ -127,16 +129,16 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 		public async Task GetAllRolesInSeason_GivenSeasonWithSingleAnimeWithMultipleRolesAndMainRolesOnly_ShouldReturnPartial()
 		{
 			// Given
-			const int animeMalId = 1;
+			var animeId = Guid.NewGuid();
 			var dbContext = InMemoryDbProvider.GetDbContext();
 			var repository = new SeasonRoleRepository(dbContext);
 
-			var japanese = new LanguageBuilder().WithId(1).WithName("Japanese").Build();
-			var anime = new AnimeBuilder().WithMalId(animeMalId).Build();
-			var mainRole = new RoleTypeBuilder().WithName("Main").WithId(1).Build();
-			var supportingRole = new RoleTypeBuilder().WithName("Supporting").WithId(2).Build();
+			var japanese = new LanguageBuilder().WithId(1).WithDescription("Japanese").Build();
+			var anime = new AnimeBuilder().WithId(animeId).Build();
+			var mainRole = new RoleTypeBuilder().WithDescription("Main").WithId(1).Build();
+			var supportingRole = new RoleTypeBuilder().WithDescription("Supporting").WithId(2).Build();
 
-			anime.Role = new List<Role>
+			anime.Role = new List<AnimeRole>
 			{
 				new RoleBuilder().WithLanguage(japanese).WithRoleType(mainRole).Build(),
 				new RoleBuilder().WithLanguage(japanese).WithRoleType(supportingRole).Build(),
@@ -149,7 +151,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			await dbContext.SaveChangesAsync();
 
 			// When
-			var result = await repository.GetAllRolesInSeason(new List<long> { animeMalId }, true);
+			var result = await repository.GetAllRolesInSeason(new List<Guid> { animeId }, true);
 
 			// Then
 			result.Should().HaveCount(2);
@@ -159,17 +161,17 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 		public async Task GetAllRolesInSeason_GivenSeasonWithSingleAnimeWithMultipleRolesInDifferentLanguagesAndMainRolesOnly_ShouldReturnPartial()
 		{
 			// Given
-			const int animeMalId = 1;
+			var animeId = Guid.NewGuid();
 			var dbContext = InMemoryDbProvider.GetDbContext();
 			var repository = new SeasonRoleRepository(dbContext);
 
-			var japanese = new LanguageBuilder().WithId(1).WithName("Japanese").Build();
-			var korean = new LanguageBuilder().WithId(2).WithName("Korean").Build();
-			var anime = new AnimeBuilder().WithMalId(animeMalId).Build();
-			var mainRole = new RoleTypeBuilder().WithName("Main").WithId(1).Build();
-			var supportingRole = new RoleTypeBuilder().WithName("Supporting").WithId(2).Build();
+			var japanese = new LanguageBuilder().WithId(1).WithDescription("Japanese").Build();
+			var korean = new LanguageBuilder().WithId(2).WithDescription("Korean").Build();
+			var anime = new AnimeBuilder().WithId(animeId).Build();
+			var mainRole = new RoleTypeBuilder().WithDescription("Main").WithId(1).Build();
+			var supportingRole = new RoleTypeBuilder().WithDescription("Supporting").WithId(2).Build();
 
-			anime.Role = new List<Role>
+			anime.Role = new List<AnimeRole>
 			{
 				new RoleBuilder().WithLanguage(japanese).WithRoleType(mainRole).Build(),
 				new RoleBuilder().WithLanguage(japanese).WithRoleType(supportingRole).Build(),
@@ -187,7 +189,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			await dbContext.SaveChangesAsync();
 
 			// When
-			var result = await repository.GetAllRolesInSeason(new List<long> { animeMalId }, true);
+			var result = await repository.GetAllRolesInSeason(new List<Guid> { animeId }, true);
 
 			// Then
 			result.Should().HaveCount(2);
@@ -197,19 +199,19 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 		public async Task GetAllRolesInSeason_GivenSeasonWithMultipleAnime_ShouldReturnPartial()
 		{
 			// Given
-			const int animeMalId1 = 1;
-			const int animeMalId2 = 2;
-			const int animeMalId3 = 3;
+			var animeId1 = Guid.NewGuid();
+			var animeId2 = Guid.NewGuid();
+			var animeId3 = Guid.NewGuid();
 			var dbContext = InMemoryDbProvider.GetDbContext();
 			var repository = new SeasonRoleRepository(dbContext);
 
-			var japanese = new LanguageBuilder().WithId(1).WithName("Japanese").Build();
-			var mainRole = new RoleTypeBuilder().WithName("Main").WithId(1).Build();
-			var supportingRole = new RoleTypeBuilder().WithName("Supporting").WithId(2).Build();
+			var japanese = new LanguageBuilder().WithId(1).WithDescription("Japanese").Build();
+			var mainRole = new RoleTypeBuilder().WithDescription("Main").WithId(1).Build();
+			var supportingRole = new RoleTypeBuilder().WithDescription("Supporting").WithId(2).Build();
 
-			var anime1 = new AnimeBuilder().WithMalId(animeMalId1).Build();
+			var anime1 = new AnimeBuilder().WithId(animeId1).Build();
 
-			anime1.Role = new List<Role>
+			anime1.Role = new List<AnimeRole>
 			{
 				new RoleBuilder().WithLanguage(japanese).WithRoleType(mainRole).Build(),
 				new RoleBuilder().WithLanguage(japanese).WithRoleType(supportingRole).Build(),
@@ -218,9 +220,9 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 				new RoleBuilder().WithLanguage(japanese).WithRoleType(mainRole).Build(),
 			};
 
-			var anime2 = new AnimeBuilder().WithMalId(animeMalId2).Build();
+			var anime2 = new AnimeBuilder().WithId(animeId2).Build();
 
-			anime2.Role = new List<Role>
+			anime2.Role = new List<AnimeRole>
 			{
 				new RoleBuilder().WithLanguage(japanese).WithRoleType(mainRole).Build(),
 				new RoleBuilder().WithLanguage(japanese).WithRoleType(supportingRole).Build(),
@@ -229,9 +231,9 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 				new RoleBuilder().WithLanguage(japanese).WithRoleType(mainRole).Build(),
 			};
 
-			var anime3 = new AnimeBuilder().WithMalId(animeMalId3).Build();
+			var anime3 = new AnimeBuilder().WithId(animeId3).Build();
 
-			anime3.Role = new List<Role>
+			anime3.Role = new List<AnimeRole>
 			{
 				new RoleBuilder().WithLanguage(japanese).WithRoleType(mainRole).Build(),
 				new RoleBuilder().WithLanguage(japanese).WithRoleType(supportingRole).Build(),
@@ -246,7 +248,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			await dbContext.SaveChangesAsync();
 
 			// When
-			var result = await repository.GetAllRolesInSeason(new List<long> { animeMalId1, animeMalId2 }, true);
+			var result = await repository.GetAllRolesInSeason(new List<Guid> { animeId1, animeId2}, true);
 
 			// Then
 			result.Should().HaveCount(4);

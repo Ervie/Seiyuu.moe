@@ -8,7 +8,7 @@ namespace SeiyuuMoe.Tests.Unit.Builders.ComparisonEntities
 	internal class SeiyuuComparisonSubEntryBuilder
 	{
 		private Seiyuu _seiyuu;
-		private Character _character;
+		private AnimeCharacter _character;
 
 		private SeiyuuBuilder _seiyuuBuilder;
 		private CharacterBuilder _characterBuilder;
@@ -33,7 +33,7 @@ namespace SeiyuuMoe.Tests.Unit.Builders.ComparisonEntities
 			return this;
 		}
 
-		public SeiyuuComparisonSubEntryBuilder WithCharacter(Character character)
+		public SeiyuuComparisonSubEntryBuilder WithCharacter(AnimeCharacter character)
 		{
 			_character = character;
 			return this;

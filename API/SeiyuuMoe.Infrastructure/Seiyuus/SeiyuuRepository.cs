@@ -21,21 +21,21 @@ namespace SeiyuuMoe.Infrastructure.Seiyuus
 
 		public async Task AddAsync(Domain.Entities.Seiyuu seiyuu)
 		{
-			await _dbContext.Seiyuu.AddAsync(seiyuu);
+			await _dbContext.Seiyuus.AddAsync(seiyuu);
 			await _dbContext.SaveChangesAsync();
 		}
 
-		public async Task<ICollection<long>> GetAllIdsAsync()
-			=> await _dbContext.Seiyuu.Select(x => x.MalId).ToListAsync();
+		public async Task<Dictionary<Guid, long>> GetAllIdsAsync() 
+			=> await _dbContext.Seiyuus.ToDictionaryAsync(x => x.Id, x => x.MalId);
 
-		public Task<int> GetSeiyuuCountAsync() => _dbContext.Seiyuu.CountAsync();
+		public Task<int> GetSeiyuuCountAsync() => _dbContext.Seiyuus.CountAsync();
 
 		public Task<Domain.Entities.Seiyuu> GetAsync(long seiyuuMalId)
-			=> _dbContext.Seiyuu.FirstOrDefaultAsync(x => x.MalId == seiyuuMalId);
+			=> _dbContext.Seiyuus.FirstOrDefaultAsync(x => x.MalId == seiyuuMalId);
 
 		public async Task<PagedResult<Domain.Entities.Seiyuu>> GetOrderedPageAsync(Expression<Func<Domain.Entities.Seiyuu, bool>> predicate, int page = 0, int pageSize = 10)
 		{
-			var entities = _dbContext.Seiyuu.Where(predicate);
+			var entities = _dbContext.Seiyuus.Where(predicate);
 			var totalCount = await entities.CountAsync();
 			var results = await entities
 				.Skip(page * pageSize)
@@ -60,7 +60,7 @@ namespace SeiyuuMoe.Infrastructure.Seiyuus
 
 		public async Task<long?> GetLastSeiyuuMalId()
 		{
-			var lastSeiyuu = await _dbContext.Seiyuu.OrderBy(x => x.MalId).LastOrDefaultAsync();
+			var lastSeiyuu = await _dbContext.Seiyuus.OrderBy(x => x.MalId).LastOrDefaultAsync();
 			return lastSeiyuu?.MalId;
 		}
 	}

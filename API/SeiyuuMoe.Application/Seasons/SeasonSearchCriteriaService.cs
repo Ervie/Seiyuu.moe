@@ -8,13 +8,13 @@ namespace SeiyuuMoe.Application.Seasons
 {
 	internal class SeasonSearchCriteriaService : ISeasonSearchCriteriaService
 	{
-		public Expression<Func<Season, bool>> BuildExpression(GetSeasonSummariesQuery query)
+		public Expression<Func<AnimeSeason, bool>> BuildExpression(GetSeasonSummariesQuery query)
 		{
-			var predicate = PredicateBuilder.True<Domain.Entities.Season>();
+			var predicate = PredicateBuilder.True<Domain.Entities.AnimeSeason>();
 			return query != null ? ExtendExpressionWithSearchCriteria(predicate, query) : predicate;
 		}
 
-		private Expression<Func<Season, bool>> ExtendExpressionWithSearchCriteria(Expression<Func<Season, bool>> predicate, GetSeasonSummariesQuery query)
+		private Expression<Func<AnimeSeason, bool>> ExtendExpressionWithSearchCriteria(Expression<Func<AnimeSeason, bool>> predicate, GetSeasonSummariesQuery query)
 		{
 			return predicate
 				.And(!string.IsNullOrWhiteSpace(query.Season), () => season => season.Name.ToLower().Contains(query.Season.ToLower()))

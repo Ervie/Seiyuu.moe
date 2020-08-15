@@ -24,7 +24,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			await repository.AddAsync(new AnimeBuilder().Build());
 
 			// Then
-			var allAnime = await dbContext.Anime.ToListAsync();
+			var allAnime = await dbContext.Animes.ToListAsync();
 
 			allAnime.Should().ContainSingle();
 		}
@@ -60,8 +60,8 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			await repository.AddAsync(anime);
 
 			// Then
-			var allAnime = await dbContext.Anime.ToListAsync();
-			var newAnime = await dbContext.Anime.FirstOrDefaultAsync();
+			var allAnime = await dbContext.Animes.ToListAsync();
+			var newAnime = await dbContext.Animes.FirstOrDefaultAsync();
 
 			using (new AssertionScope())
 			{
@@ -71,11 +71,11 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 				newAnime.Title.Should().Be(expectedTitle);
 				newAnime.ImageUrl.Should().Be(expectedImageUrl);
 				newAnime.MalId.Should().Be(expectedMalId);
-				newAnime.JapaneseTitle.Should().Be(expectedJapaneseTitle);
+				newAnime.KanjiTitle.Should().Be(expectedJapaneseTitle);
 				newAnime.TitleSynonyms.Should().Be(expectedTitleSynonyms);
 				newAnime.About.Should().Be(expectedAbout);
-				newAnime.Type.Name.Should().Be(expectedType);
-				newAnime.Status.Name.Should().Be(expectedStatus);
+				newAnime.Type.Description.Should().Be(expectedType);
+				newAnime.Status.Description.Should().Be(expectedStatus);
 			}
 		}
 
@@ -117,7 +117,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var repository = new AnimeRepository(dbContext);
 			var anime = new AnimeBuilder().WithTitle("Test").Build();
 
-			await dbContext.Anime.AddAsync(anime);
+			await dbContext.Animes.AddAsync(anime);
 			await dbContext.SaveChangesAsync();
 
 			anime.Title = "Updated";
@@ -126,7 +126,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			await repository.UpdateAsync(anime);
 
 			// Then
-			var allAnimes = await dbContext.Anime.ToListAsync();
+			var allAnimes = await dbContext.Animes.ToListAsync();
 
 			allAnimes.Should().ContainSingle().Which.Title.Should().Be("Updated");
 		}
@@ -153,7 +153,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var repository = new AnimeRepository(dbContext);
 			var anime1 = new AnimeBuilder().WithMalId(1).Build();
 
-			await dbContext.Anime.AddAsync(anime1);
+			await dbContext.Animes.AddAsync(anime1);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -171,7 +171,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var repository = new AnimeRepository(dbContext);
 			var anime1 = new AnimeBuilder().WithMalId(1).Build();
 
-			await dbContext.Anime.AddAsync(anime1);
+			await dbContext.Animes.AddAsync(anime1);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -193,11 +193,11 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var anime4 = new AnimeBuilder().WithMalId(4).Build();
 			var anime5 = new AnimeBuilder().WithMalId(5).Build();
 
-			await dbContext.Anime.AddAsync(anime1);
-			await dbContext.Anime.AddAsync(anime2);
-			await dbContext.Anime.AddAsync(anime3);
-			await dbContext.Anime.AddAsync(anime4);
-			await dbContext.Anime.AddAsync(anime5);
+			await dbContext.Animes.AddAsync(anime1);
+			await dbContext.Animes.AddAsync(anime2);
+			await dbContext.Animes.AddAsync(anime3);
+			await dbContext.Animes.AddAsync(anime4);
+			await dbContext.Animes.AddAsync(anime5);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -224,7 +224,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 				 .WithMalId(1)
 				 .Build();
 
-			await dbContext.Anime.AddAsync(anime);
+			await dbContext.Animes.AddAsync(anime);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -239,9 +239,9 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 				result.ImageUrl.Should().Be("ExpectedImageUrl");
 				result.About.Should().Be("ExpectedAbout");
 				result.Type.Should().NotBeNull();
-				result.Type.Name.Should().Be("TV");
+				result.Type.Description.Should().Be("TV");
 				result.Status.Should().NotBeNull();
-				result.Status.Name.Should().Be("Airing");
+				result.Status.Description.Should().Be("Airing");
 			}
 		}
 
@@ -267,7 +267,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var repository = new AnimeRepository(dbContext);
 			var anime = new AnimeBuilder().WithTitle("Test").Build();
 
-			await dbContext.Anime.AddAsync(anime);
+			await dbContext.Animes.AddAsync(anime);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -290,7 +290,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 				.WithSeason(x => x.WithName("Spring").WithYear(2020).Build())
 				.Build();
 
-			await dbContext.Anime.AddAsync(anime);
+			await dbContext.Animes.AddAsync(anime);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -305,9 +305,9 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			{
 				addedAnime.Should().NotBeNull();
 				addedAnime.Type.Should().NotBeNull();
-				addedAnime.Type.Name.Should().Be("TV");
+				addedAnime.Type.Description.Should().Be("TV");
 				addedAnime.Status.Should().NotBeNull();
-				addedAnime.Status.Name.Should().Be("Airing");
+				addedAnime.Status.Description.Should().Be("Airing");
 				addedAnime.Season.Should().NotBeNull();
 				addedAnime.Season.Name.Should().Be("Spring");
 				addedAnime.Season.Year.Should().Be(2020);
@@ -324,9 +324,9 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var anime2 = new AnimeBuilder().WithTitle("Test2").Build();
 			var anime3 = new AnimeBuilder().WithTitle("Test3").Build();
 
-			await dbContext.Anime.AddAsync(anime1);
-			await dbContext.Anime.AddAsync(anime2);
-			await dbContext.Anime.AddAsync(anime3);
+			await dbContext.Animes.AddAsync(anime1);
+			await dbContext.Animes.AddAsync(anime2);
+			await dbContext.Animes.AddAsync(anime3);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -346,9 +346,9 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var anime2 = new AnimeBuilder().WithTitle("Test2").Build();
 			var anime3 = new AnimeBuilder().WithTitle("Test3").Build();
 
-			await dbContext.Anime.AddAsync(anime1);
-			await dbContext.Anime.AddAsync(anime2);
-			await dbContext.Anime.AddAsync(anime3);
+			await dbContext.Animes.AddAsync(anime1);
+			await dbContext.Animes.AddAsync(anime2);
+			await dbContext.Animes.AddAsync(anime3);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -368,9 +368,9 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var anime2 = new AnimeBuilder().WithTitle("Test2").Build();
 			var anime3 = new AnimeBuilder().WithTitle("Test3").Build();
 
-			await dbContext.Anime.AddAsync(anime1);
-			await dbContext.Anime.AddAsync(anime2);
-			await dbContext.Anime.AddAsync(anime3);
+			await dbContext.Animes.AddAsync(anime1);
+			await dbContext.Animes.AddAsync(anime2);
+			await dbContext.Animes.AddAsync(anime3);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -402,7 +402,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var repository = new AnimeRepository(dbContext);
 			var anime1 = new AnimeBuilder().WithTitle("Test1").Build();
 
-			await dbContext.Anime.AddAsync(anime1);
+			await dbContext.Animes.AddAsync(anime1);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -422,9 +422,9 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var anime2 = new AnimeBuilder().WithTitle("Test2").Build();
 			var anime3 = new AnimeBuilder().WithTitle("Test3").Build();
 
-			await dbContext.Anime.AddAsync(anime1);
-			await dbContext.Anime.AddAsync(anime2);
-			await dbContext.Anime.AddAsync(anime3);
+			await dbContext.Animes.AddAsync(anime1);
+			await dbContext.Animes.AddAsync(anime2);
+			await dbContext.Animes.AddAsync(anime3);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -462,9 +462,9 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var anime2 = new AnimeBuilder().WithTitle("Test2").Build();
 			var anime3 = new AnimeBuilder().WithTitle("Test3").Build();
 
-			await dbContext.Anime.AddAsync(anime1);
-			await dbContext.Anime.AddAsync(anime2);
-			await dbContext.Anime.AddAsync(anime3);
+			await dbContext.Animes.AddAsync(anime1);
+			await dbContext.Animes.AddAsync(anime2);
+			await dbContext.Animes.AddAsync(anime3);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -490,9 +490,9 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var anime2 = new AnimeBuilder().WithTitle("Test2").Build();
 			var anime3 = new AnimeBuilder().WithTitle("Test3").Build();
 
-			await dbContext.Anime.AddAsync(anime1);
-			await dbContext.Anime.AddAsync(anime2);
-			await dbContext.Anime.AddAsync(anime3);
+			await dbContext.Animes.AddAsync(anime1);
+			await dbContext.Animes.AddAsync(anime2);
+			await dbContext.Animes.AddAsync(anime3);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -520,9 +520,9 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var anime2 = new AnimeBuilder().WithTitle("Test2").Build();
 			var anime3 = new AnimeBuilder().WithTitle("Test3").Build();
 
-			await dbContext.Anime.AddAsync(anime1);
-			await dbContext.Anime.AddAsync(anime2);
-			await dbContext.Anime.AddAsync(anime3);
+			await dbContext.Animes.AddAsync(anime1);
+			await dbContext.Animes.AddAsync(anime2);
+			await dbContext.Animes.AddAsync(anime3);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -550,9 +550,9 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var anime2 = new AnimeBuilder().WithTitle("Test2").Build();
 			var anime3 = new AnimeBuilder().WithTitle("Test3").Build();
 
-			await dbContext.Anime.AddAsync(anime1);
-			await dbContext.Anime.AddAsync(anime2);
-			await dbContext.Anime.AddAsync(anime3);
+			await dbContext.Animes.AddAsync(anime1);
+			await dbContext.Animes.AddAsync(anime2);
+			await dbContext.Animes.AddAsync(anime3);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -580,9 +580,9 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var anime2 = new AnimeBuilder().WithTitle("Test2").Build();
 			var anime3 = new AnimeBuilder().WithTitle("Test3").Build();
 
-			await dbContext.Anime.AddAsync(anime1);
-			await dbContext.Anime.AddAsync(anime2);
-			await dbContext.Anime.AddAsync(anime3);
+			await dbContext.Animes.AddAsync(anime1);
+			await dbContext.Animes.AddAsync(anime2);
+			await dbContext.Animes.AddAsync(anime3);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -626,9 +626,9 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var anime2 = new AnimeBuilder().WithTitle("Test2").Build();
 			var anime3 = new AnimeBuilder().WithTitle("Test3").Build();
 
-			await dbContext.Anime.AddAsync(anime1);
-			await dbContext.Anime.AddAsync(anime2);
-			await dbContext.Anime.AddAsync(anime3);
+			await dbContext.Animes.AddAsync(anime1);
+			await dbContext.Animes.AddAsync(anime2);
+			await dbContext.Animes.AddAsync(anime3);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -654,9 +654,9 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var anime2 = new AnimeBuilder().WithTitle("Test2").Build();
 			var anime3 = new AnimeBuilder().WithTitle("Test3").Build();
 
-			await dbContext.Anime.AddAsync(anime1);
-			await dbContext.Anime.AddAsync(anime2);
-			await dbContext.Anime.AddAsync(anime3);
+			await dbContext.Animes.AddAsync(anime1);
+			await dbContext.Animes.AddAsync(anime2);
+			await dbContext.Animes.AddAsync(anime3);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -684,9 +684,9 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var anime2 = new AnimeBuilder().WithTitle("Test2").Build();
 			var anime3 = new AnimeBuilder().WithTitle("Test3").Build();
 
-			await dbContext.Anime.AddAsync(anime1);
-			await dbContext.Anime.AddAsync(anime2);
-			await dbContext.Anime.AddAsync(anime3);
+			await dbContext.Animes.AddAsync(anime1);
+			await dbContext.Animes.AddAsync(anime2);
+			await dbContext.Animes.AddAsync(anime3);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -714,9 +714,9 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var anime2 = new AnimeBuilder().WithTitle("Test2").Build();
 			var anime3 = new AnimeBuilder().WithTitle("Test3").Build();
 
-			await dbContext.Anime.AddAsync(anime1);
-			await dbContext.Anime.AddAsync(anime2);
-			await dbContext.Anime.AddAsync(anime3);
+			await dbContext.Animes.AddAsync(anime1);
+			await dbContext.Animes.AddAsync(anime2);
+			await dbContext.Animes.AddAsync(anime3);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -744,9 +744,9 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var anime2 = new AnimeBuilder().WithTitle("Test2").Build();
 			var anime3 = new AnimeBuilder().WithTitle("Test3").Build();
 
-			await dbContext.Anime.AddAsync(anime1);
-			await dbContext.Anime.AddAsync(anime2);
-			await dbContext.Anime.AddAsync(anime3);
+			await dbContext.Animes.AddAsync(anime1);
+			await dbContext.Animes.AddAsync(anime2);
+			await dbContext.Animes.AddAsync(anime3);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -774,9 +774,9 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var anime2 = new AnimeBuilder().WithTitle("Test2").WithPopularity(50).Build();
 			var anime3 = new AnimeBuilder().WithTitle("Test3").WithPopularity(30).Build();
 
-			await dbContext.Anime.AddAsync(anime1);
-			await dbContext.Anime.AddAsync(anime2);
-			await dbContext.Anime.AddAsync(anime3);
+			await dbContext.Animes.AddAsync(anime1);
+			await dbContext.Animes.AddAsync(anime2);
+			await dbContext.Animes.AddAsync(anime3);
 			await dbContext.SaveChangesAsync();
 
 			// When

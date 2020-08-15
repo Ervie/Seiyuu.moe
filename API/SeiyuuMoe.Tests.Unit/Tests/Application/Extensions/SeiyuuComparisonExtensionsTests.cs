@@ -5,6 +5,7 @@ using SeiyuuMoe.Domain.ComparisonEntities;
 using SeiyuuMoe.Domain.Entities;
 using SeiyuuMoe.Tests.Unit.Builders.ComparisonEntities;
 using SeiyuuMoe.Tests.Unit.Builders.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
@@ -161,7 +162,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Application.Extensions
 						.WithMalId(expectedSeiyuuMalId)
 						.WithName(expectedSeiyuuName)
 						.WithImageUrl(expectedSeiyuuImageUrl)
-						.WithBirthday("10-10-1970")
+						.WithBirthday(new DateTime(1970, 1, 1))
 					)
 					.WithCharacter(x => x
 						.WithName(expectedCharacterName)
@@ -177,7 +178,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Application.Extensions
 					.WithTitle(expectedTitle)
 					.WithImageUrl(expectedAnimeImageUrl)
 					.WithMalId(expectedAnimeMalId)
-					.WithAiringDate("10-10-1990")
+					.WithAiringDate(new DateTime(1970, 1, 1))
 					.Build()
 			};
 

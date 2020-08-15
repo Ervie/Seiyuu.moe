@@ -50,9 +50,9 @@ namespace SeiyuuMoe.Application.Seasons.GetSeasonSummaries
 
 				if (animeInSeason.Any())
 				{
-					var animeInSeasonIds = animeInSeason.Select(x => x.MalId).ToList();
+					var animeInSeasonIds = animeInSeason.Select(x => x.Id).ToList();
 
-					IReadOnlyCollection<Role> allRolesInSeason = await _seasonRoleRepository.GetAllRolesInSeason(
+					IReadOnlyCollection<AnimeRole> allRolesInSeason = await _seasonRoleRepository.GetAllRolesInSeason(
 						animeInSeasonIds,
 						query.MainRolesOnly
 					);
@@ -68,13 +68,13 @@ namespace SeiyuuMoe.Application.Seasons.GetSeasonSummaries
 			return null;
 		}
 
-		private PagedResult<SeasonSummaryEntry> GroupRoles(IReadOnlyCollection<Role> roles, GetSeasonSummariesQuery query)
+		private PagedResult<SeasonSummaryEntry> GroupRoles(IReadOnlyCollection<AnimeRole> roles, GetSeasonSummariesQuery query)
 		{
 			ICollection<SeasonSummaryEntry> groupedEntities = new List<SeasonSummaryEntry>();
 
-			foreach (Role role in roles)
+			foreach (AnimeRole role in roles)
 			{
-				if (!groupedEntities.Select(x => x.Seiyuu.MalId).Contains(role.SeiyuuId.Value))
+				if (!groupedEntities.Select(x => x.Seiyuu.Id).Contains(role.SeiyuuId.Value))
 				{
 					groupedEntities.Add(new SeasonSummaryEntry(role.Seiyuu, role.Anime, role.Character));
 				}

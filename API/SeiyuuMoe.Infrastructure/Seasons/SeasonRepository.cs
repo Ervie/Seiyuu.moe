@@ -17,13 +17,13 @@ namespace SeiyuuMoe.Infrastructure.Seasons
 			_dbContext = dbContext;
 		}
 
-		public async Task AddAsync(Domain.Entities.Season season)
+		public async Task AddAsync(Domain.Entities.AnimeSeason season)
 		{
-			await _dbContext.Season.AddAsync(season);
+			await _dbContext.AnimeSeasons.AddAsync(season);
 			await _dbContext.SaveChangesAsync();
 		}
 
-		public Task<Season> GetAsync(Expression<Func<Season, bool>> predicate)
-			=> _dbContext.Season.FirstOrDefaultAsync(predicate);
+		public Task<AnimeSeason> GetAsync(Expression<Func<AnimeSeason, bool>> predicate)
+			=> _dbContext.AnimeSeasons.FirstOrDefaultAsync(predicate);
 	}
 }

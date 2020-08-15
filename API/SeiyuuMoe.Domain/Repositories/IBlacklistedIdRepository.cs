@@ -5,6 +5,6 @@ namespace SeiyuuMoe.Domain.Repositories
 {
 	public interface IBlacklistedIdRepository
 	{
-		Task AddAsync(BlacklistedId blacklistedId);
+		Task AddAsync(Blacklist blacklistedId);
 	}
 }

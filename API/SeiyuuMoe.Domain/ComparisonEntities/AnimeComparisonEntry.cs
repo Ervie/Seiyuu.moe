@@ -19,12 +19,12 @@ namespace SeiyuuMoe.Domain.ComparisonEntities
 	{
 		public Anime Anime { get; set; }
 
-		public ICollection<Character> Characters { get; set; }
+		public ICollection<AnimeCharacter> Characters { get; set; }
 
-		public AnimeComparisonSubEntry(Character character, Anime anime)
+		public AnimeComparisonSubEntry(AnimeCharacter character, Anime anime)
 		{
 			Anime = anime;
-			Characters = new List<Character>
+			Characters = new List<AnimeCharacter>
 			{
 				character
 			};

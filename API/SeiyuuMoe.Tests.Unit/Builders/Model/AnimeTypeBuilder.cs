@@ -6,7 +6,7 @@ namespace SeiyuuMoe.Tests.Unit.Builders.Model
 	{
 		private string _name = string.Empty;
 
-		public AnimeType Build() => new AnimeType { Name = _name };
+		public AnimeType Build() => new AnimeType { Description = _name };
 
 		public AnimeTypeBuilder WithName(string name)
 		{
