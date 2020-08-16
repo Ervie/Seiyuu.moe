@@ -38,9 +38,9 @@ namespace SeiyuuMoe.Infrastructure.Seiyuus
 			var entities = _dbContext.Seiyuus.Where(predicate);
 			var totalCount = await entities.CountAsync();
 			var results = await entities
+				.OrderByDescending(x => x.Popularity)
 				.Skip(page * pageSize)
 				.Take(pageSize)
-				.OrderByDescending(x => x.Popularity)
 				.ToListAsync();
 
 			return new PagedResult<Domain.Entities.Seiyuu>

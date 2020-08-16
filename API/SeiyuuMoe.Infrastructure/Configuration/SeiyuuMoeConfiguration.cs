@@ -3,6 +3,6 @@
 	public class SeiyuuMoeConfiguration
 	{
 		public string JikanUrl { get; set; }
-		public string ConnectionString { get; set; }
+		public DatabaseConfiguration DatabaseConfiguration { get; set; }
 	}
 }

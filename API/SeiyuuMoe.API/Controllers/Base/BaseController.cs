@@ -11,11 +11,11 @@ namespace SeiyuuMoe.API.Controllers.Base
 {
 	public abstract class BaseController : ControllerBase
 	{
-		private readonly ILoggingService loggingService;
+		private readonly ILoggingService _loggingService;
 
 		public BaseController(ILoggingService loggingService)
 		{
-			this.loggingService = loggingService;
+			_loggingService = loggingService;
 		}
 
 		protected async Task<IActionResult> Handle(Func<Task<IActionResult>> func)
@@ -39,7 +39,7 @@ namespace SeiyuuMoe.API.Controllers.Base
 			}
 			catch (Exception ex)
 			{
-				loggingService.Log($"Internal Error: {ex.GetType().Name}, Message: {ex.GetFullMessage()}, stack trace: {ex.StackTrace}");
+				_loggingService.Log($"Internal Error: {ex.GetType().Name}, Message: {ex.GetFullMessage()}, stack trace: {ex.StackTrace}");
 
 				return StatusCode(500);
 			}

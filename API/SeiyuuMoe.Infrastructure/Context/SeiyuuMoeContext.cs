@@ -6,7 +6,7 @@ namespace SeiyuuMoe.Infrastructure.Context
 {
 	public partial class SeiyuuMoeContext : DbContext
 	{
-		private readonly string _connectionString;
+		private readonly DatabaseConfiguration _databaseConfiguration;
 
 		public SeiyuuMoeContext()
 		{
@@ -17,9 +17,9 @@ namespace SeiyuuMoe.Infrastructure.Context
 		{
 		}
 
-		public SeiyuuMoeContext(SeiyuuMoeConfiguration configuration)
+		public SeiyuuMoeContext(DatabaseConfiguration configuration)
 		{
-			_connectionString = configuration.ConnectionString;
+			_databaseConfiguration = configuration;
 		}
 
 		public virtual DbSet<Anime> Animes { get; set; }
@@ -37,7 +37,7 @@ namespace SeiyuuMoe.Infrastructure.Context
 		{
 			if (!optionsBuilder.IsConfigured)
 			{
-				optionsBuilder.UseMySql(_connectionString);
+				optionsBuilder.UseMySql(_databaseConfiguration.ToConnectionString);
 			}
 		}
 

@@ -92,7 +92,7 @@ namespace SeiyuuMoe.JikanToDBParser
 
 		#region Interface Implementation
 
-		public async Task InsertNewSeiyuu()
+		public async Task InsertNewSeiyuuAsync()
 		{
 			_logger.Log("Started InsertNewSeiyuu job.");
 
@@ -135,7 +135,7 @@ namespace SeiyuuMoe.JikanToDBParser
 					continue;
 				}
 
-				if (seiyuu.VoiceActingRoles.Any())
+				if (!seiyuu.VoiceActingRoles.Any())
 				{
 					_logger.Log($"Omitted person {seiyuu.Name} - not a seiyuu");
 					BlacklistId(malId, "Seiyuu", "Not a seiyuu");
@@ -166,7 +166,7 @@ namespace SeiyuuMoe.JikanToDBParser
 			_logger.Log("Finished InsertNewSeiyuu job.");
 		}
 
-		public async Task ParseRoles()
+		public async Task ParseRolesAsync()
 		{
 			_logger.Log("Started ParseRoles job.");
 
@@ -196,7 +196,7 @@ namespace SeiyuuMoe.JikanToDBParser
 			_logger.Log("Finished ParseRoles job.");
 		}
 
-		public async Task UpdateAllAnime()
+		public async Task UpdateAllAnimeAsync()
 		{
 			_logger.Log("Started UpdateAllAnime job.");
 
@@ -231,7 +231,7 @@ namespace SeiyuuMoe.JikanToDBParser
 			_logger.Log("Finished UpdateAllAnime job.");
 		}
 
-		public async Task UpdateAllCharacters()
+		public async Task UpdateAllCharactersAsync()
 		{
 			try
 			{
@@ -272,7 +272,7 @@ namespace SeiyuuMoe.JikanToDBParser
 			}
 		}
 
-		public async Task UpdateAllSeiyuu()
+		public async Task UpdateAllSeiyuuAsync()
 		{
 			_logger.Log("Started UpdateAllSeiyuu job.");
 
@@ -307,7 +307,7 @@ namespace SeiyuuMoe.JikanToDBParser
 			_logger.Log("Finished UpdateAllSeiyuu job.");
 		}
 
-		public async Task UpdateSeasons()
+		public async Task UpdateSeasonsAsync()
 		{
 			_logger.Log("Started UpdateSeasons job.");
 
@@ -322,7 +322,7 @@ namespace SeiyuuMoe.JikanToDBParser
 
 				if (insertedSeason == null)
 				{
-					await _seasonRepository.AddAsync(new Domain.Entities.AnimeSeason
+					await _seasonRepository.AddAsync(new AnimeSeason
 					{
 						Name = season.ToString(),
 						Year = yearInNextSixMonths
@@ -333,7 +333,7 @@ namespace SeiyuuMoe.JikanToDBParser
 			_logger.Log("Finished UpdateSeasons job.");
 		}
 
-		public async Task InsertOldSeiyuu()
+		public async Task InsertOldSeiyuuAsync()
 		{
 			_logger.Log("Started InsertOldSeiyuu job.");
 
@@ -764,8 +764,8 @@ namespace SeiyuuMoe.JikanToDBParser
 			try
 			{
 				if (!seiyuuRoles.Any(x =>
-					x.AnimeId.Equals(voiceActingRole.Anime.MalId) &&
-					x.CharacterId.Equals(voiceActingRole.Character.MalId)))
+					x.Anime.MalId.Equals(voiceActingRole.Anime.MalId) &&
+					x.Character.MalId.Equals(voiceActingRole.Character.MalId)))
 				{
 					var animeInDatabase = await InsertAnime(voiceActingRole);
 					var characterInDatabase = await InsertCharacter(voiceActingRole);
