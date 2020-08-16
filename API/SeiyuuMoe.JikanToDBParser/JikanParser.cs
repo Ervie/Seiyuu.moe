@@ -155,7 +155,7 @@ namespace SeiyuuMoe.JikanToDBParser
 
 				await _seiyuuRepository.AddAsync(newSeiyuu);
 
-				_logger.Log($"Inserted {seiyuu.Name} with MalId: {seiyuu.MalId}");
+				_logger.Log($"Inserted {seiyuu.Name} with Id {newSeiyuu.Id}, MalId: {seiyuu.MalId}");
 
 				foreach (var role in seiyuu.VoiceActingRoles)
 				{
@@ -180,7 +180,7 @@ namespace SeiyuuMoe.JikanToDBParser
 
 					var seiyuuFullData = await SendSinglePersonRequest(dictionaryEntry.Value, 0);
 
-					_logger.Log($"Parsing seiyuu with malId {dictionaryEntry.Value}");
+					_logger.Log($"Parsing seiyuu with id {dictionaryEntry.Key}, malId {dictionaryEntry.Value}");
 
 					foreach (var role in seiyuuFullData.VoiceActingRoles)
 					{
@@ -189,7 +189,7 @@ namespace SeiyuuMoe.JikanToDBParser
 				}
 				catch (Exception ex)
 				{
-					_logger.Log($"Error during parsing seiyuu with malId {dictionaryEntry.Value}: {ex.Message}");
+					_logger.Log($"Error during parsing seiyuu with Id {dictionaryEntry.Key}, malId {dictionaryEntry.Value}: {ex.Message}");
 				}
 			}
 
@@ -215,7 +215,7 @@ namespace SeiyuuMoe.JikanToDBParser
 
 					if (animeFullData != null)
 					{
-						_logger.Log($"Parsed anime with id {anime.MalId}: {anime.Title}");
+						_logger.Log($"Parsed anime with id {anime.Id}, malId {anime.MalId}: {anime.Title}");
 
 						await UpdateAnime(anime, animeFullData);
 					}
@@ -251,7 +251,7 @@ namespace SeiyuuMoe.JikanToDBParser
 
 						if (characterFullData != null)
 						{
-							_logger.Log($"Parsed character with id {character.MalId}: {character.Name}");
+							_logger.Log($"Parsed character with id {character.Id}, malID {character.MalId}: {character.Name}");
 
 							await UpdateCharacter(character, characterFullData);
 						}
@@ -291,7 +291,7 @@ namespace SeiyuuMoe.JikanToDBParser
 
 					if (seiyuuFullData != null)
 					{
-						_logger.Log($"Parsed id:{seiyuu.MalId}, {seiyuu.Name}");
+						_logger.Log($"Parsed seiyuu with id {seiyuu.Id}, malId {seiyuu.MalId}: {seiyuu.Name}");
 
 						await UpdateSeiyuu(seiyuu, seiyuuFullData);
 					}
@@ -352,7 +352,7 @@ namespace SeiyuuMoe.JikanToDBParser
 
 				if (seiyuu != null)
 				{
-					_logger.Log($"Parsed id:{seiyuu.MalId}: {seiyuu.Name}");
+					_logger.Log($"Parsed malId:{seiyuu.MalId} {seiyuu.Name}");
 				}
 				else
 				{
