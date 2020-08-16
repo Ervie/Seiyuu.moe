@@ -62,6 +62,7 @@ namespace SeiyuuMoe.JikanToDBParser
 		{
 			var blacklistedId = new Blacklist
 			{
+				Id = Guid.NewGuid(),
 				MalId = id,
 				EntityType = type,
 				Reason = reason
@@ -144,6 +145,7 @@ namespace SeiyuuMoe.JikanToDBParser
 
 				var newSeiyuu = new Seiyuu
 				{
+					Id = Guid.NewGuid(),
 					Name = seiyuu.Name,
 					MalId = seiyuu.MalId,
 					ImageUrl = EmptyStringIfPlaceholder(seiyuu.ImageURL),
@@ -384,6 +386,7 @@ namespace SeiyuuMoe.JikanToDBParser
 
 				var newSeiyuu = new Seiyuu
 				{
+					Id = Guid.NewGuid(),
 					Name = seiyuu.Name,
 					MalId = seiyuu.MalId,
 					ImageUrl = EmptyStringIfPlaceholder(seiyuu.ImageURL),
@@ -774,6 +777,7 @@ namespace SeiyuuMoe.JikanToDBParser
 					{
 						await _animeRoleRepository.AddAsync(new AnimeRole
 						{
+							Id = Guid.NewGuid(),
 							LanguageId = 1, // Always japanese for now
 							RoleTypeId = voiceActingRole.Role.Equals("Main") ? 1 : 2,
 							AnimeId = animeInDatabase.Id,
@@ -811,6 +815,7 @@ namespace SeiyuuMoe.JikanToDBParser
 
 						var newAnime = new Anime
 						{
+							Id = Guid.NewGuid(),
 							MalId = animeFullData.MalId,
 							ImageUrl = EmptyStringIfPlaceholder(animeFullData.ImageURL),
 							Title = animeFullData.Title,
@@ -861,6 +866,7 @@ namespace SeiyuuMoe.JikanToDBParser
 
 						var newCharacter = new AnimeCharacter
 						{
+							Id = Guid.NewGuid(),
 							MalId = characterFullData.MalId,
 							ImageUrl = EmptyStringIfPlaceholder(characterFullData.ImageURL),
 							Name = characterFullData.Name,
