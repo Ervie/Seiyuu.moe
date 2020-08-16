@@ -76,11 +76,12 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 		public void UpdateAsync_GivenNotExistingCharacter_ShouldThrowExcepton()
 		{
 			// Given
+			var id = Guid.NewGuid();
 			var dbContext = InMemoryDbProvider.GetDbContext();
 			var repository = new CharacterRepository(dbContext);
 
 			// When
-			Func<Task> func = repository.Awaiting(x => x.UpdateAsync(new CharacterBuilder().WithMalId(1).Build()));
+			Func<Task> func = repository.Awaiting(x => x.UpdateAsync(new CharacterBuilder().WithId(id).Build()));
 
 			// Then
 			func.Should().Throw<Exception>();
@@ -112,13 +113,14 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 		public async Task AddAsync_GivenDuplicatedKeyCharacter_ShouldThrowException()
 		{
 			// Given
+			var id = Guid.NewGuid();
 			var dbContext = InMemoryDbProvider.GetDbContext();
 			var repository = new CharacterRepository(dbContext);
 
-			await repository.AddAsync(new CharacterBuilder().WithMalId(1).Build());
+			await repository.AddAsync(new CharacterBuilder().WithId(id).Build());
 
 			// When
-			Func<Task> func = repository.Awaiting(x => x.AddAsync(new CharacterBuilder().WithMalId(1).Build()));
+			Func<Task> func = repository.Awaiting(x => x.AddAsync(new CharacterBuilder().WithId(id).Build()));
 
 			// Then
 			func.Should().Throw<Exception>();

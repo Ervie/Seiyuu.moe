@@ -819,7 +819,7 @@ namespace SeiyuuMoe.JikanToDBParser
 							KanjiTitle = animeFullData.TitleJapanese,
 							EnglishTitle = animeFullData.TitleEnglish,
 							TitleSynonyms = titleSynonym,
-							AiringDate = animeFullData.Aired.From.HasValue ? animeFullData.Aired.From.Value : DateTime.MinValue,
+							AiringDate = animeFullData.Aired.From ?? DateTime.MinValue,
 							StatusId = await MatchAnimeStatus(animeFullData.Status),
 							TypeId = await MatchAnimeType(animeFullData.Type),
 							SeasonId = await MatchSeason(animeFullData.Premiered)

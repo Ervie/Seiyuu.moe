@@ -191,7 +191,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Application.Extensions
 				dto.Title.Should().BeEmpty();
 				dto.Url.Should().NotBeEmpty();
 				dto.MalId.Should().Be(default);
-				dto.AiringFrom.Should().Be(null);
+				dto.AiringFrom.Should().Be(DateTime.MinValue);
 			}
 		}
 

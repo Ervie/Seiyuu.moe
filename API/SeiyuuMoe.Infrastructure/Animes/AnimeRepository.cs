@@ -88,7 +88,7 @@ namespace SeiyuuMoe.Infrastructure.Animes
 
 		public async Task UpdateAsync(Anime anime)
 		{
-			_dbContext.Update(anime);
+			_dbContext.Animes.Update(anime);
 			await _dbContext.SaveChangesAsync();
 		}
 	}

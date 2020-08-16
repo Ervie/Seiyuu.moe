@@ -1,4 +1,5 @@
 ﻿using SeiyuuMoe.Domain.Entities;
+using System;
 
 namespace SeiyuuMoe.Tests.Unit.Builders.Model
 {
@@ -6,15 +7,16 @@ namespace SeiyuuMoe.Tests.Unit.Builders.Model
 	{
 		private string _name = string.Empty;
 		private string _imageUrl = string.Empty;
-		private string _birthday = string.Empty;
 		private string _nameKanji = string.Empty;
 		private string _about = string.Empty;
 		private string _nicknames = string.Empty;
 		private long _malId;
 		private int _popularity;
+		private Guid _id;
 
 		public AnimeCharacter Build() => new AnimeCharacter
 		{
+			Id = _id,
 			Name = _name,
 			MalId = _malId,
 			ImageUrl = _imageUrl,
@@ -23,6 +25,12 @@ namespace SeiyuuMoe.Tests.Unit.Builders.Model
 			Popularity = _popularity,
 			About = _about
 		};
+
+		public CharacterBuilder WithId(Guid id)
+		{
+			_id = id;
+			return this;
+		}
 
 		public CharacterBuilder WithName(string name)
 		{

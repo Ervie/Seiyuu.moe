@@ -95,31 +95,15 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 		}
 
 		[Fact]
-		public async Task AddAsync_GivenDuplicatedMalId_ShouldThrowException()
-		{
-			// Given
-			const int malId = 1;
-			var dbContext = InMemoryDbProvider.GetDbContext();
-			var repository = new SeiyuuRepository(dbContext);
-
-			await repository.AddAsync(new SeiyuuBuilder().WithMalId(malId).Build());
-
-			// When
-			Func<Task> func = repository.Awaiting(x => x.AddAsync(new SeiyuuBuilder().WithMalId(malId).Build()));
-
-			// Then
-			func.Should().Throw<Exception>();
-		}
-
-		[Fact]
 		public void UpdateAsync_GivenNotExistingSeiyuu_ShouldThrowExcepton()
 		{
 			// Given
+			var id = Guid.NewGuid();
 			var dbContext = InMemoryDbProvider.GetDbContext();
 			var repository = new SeiyuuRepository(dbContext);
 
 			// When
-			Func<Task> func = repository.Awaiting(x => x.UpdateAsync(new SeiyuuBuilder().WithMalId(1).Build()));
+			Func<Task> func = repository.Awaiting(x => x.UpdateAsync(new SeiyuuBuilder().WithId(id).Build()));
 
 			// Then
 			func.Should().Throw<Exception>();

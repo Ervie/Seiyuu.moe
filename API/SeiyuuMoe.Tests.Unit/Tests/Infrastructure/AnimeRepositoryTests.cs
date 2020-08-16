@@ -83,13 +83,14 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 		public async Task AddAsync_GivenDuplicatedKeyAnime_ShouldThrowException()
 		{
 			// Given
+			var id = Guid.NewGuid();
 			var dbContext = InMemoryDbProvider.GetDbContext();
 			var repository = new AnimeRepository(dbContext);
 
-			await repository.AddAsync(new AnimeBuilder().WithMalId(1).Build());
+			await repository.AddAsync(new AnimeBuilder().WithId(id).Build());
 
 			// When
-			Func<Task> func = repository.Awaiting(x => x.AddAsync(new AnimeBuilder().WithMalId(1).Build()));
+			Func<Task> func = repository.Awaiting(x => x.AddAsync(new AnimeBuilder().WithId(id).Build()));
 
 			// Then
 			func.Should().Throw<Exception>();
@@ -103,7 +104,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var repository = new AnimeRepository(dbContext);
 
 			// When
-			Func<Task> func = repository.Awaiting(x => x.UpdateAsync(new AnimeBuilder().WithMalId(1).Build()));
+			Func<Task> func = repository.Awaiting(x => x.UpdateAsync(new AnimeBuilder().WithId(Guid.NewGuid()).Build()));
 
 			// Then
 			func.Should().Throw<Exception>();
