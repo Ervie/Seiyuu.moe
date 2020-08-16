@@ -99,7 +99,7 @@ module.exports = {
       if (ctx.isServer) {
         config.externals = [
           nodeExternals({
-            whitelist: [/^vuetify/]
+            allowlist: [/^vuetify/]
           })
         ]
       }
