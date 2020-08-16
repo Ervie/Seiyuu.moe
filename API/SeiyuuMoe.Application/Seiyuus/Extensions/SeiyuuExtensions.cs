@@ -5,7 +5,7 @@ namespace SeiyuuMoe.Application.Seiyuus.Extensions
 {
 	public static class SeiyuuExtensions
 	{
-		private const string _malPersonBaseUrl = "https://myanimelist.net/people/";
+		private const string MalPersonBaseUrl = "https://myanimelist.net/people/";
 
 		public static SeiyuuSearchEntryDto ToSeiyuuSearchEntryDto(this Domain.Entities.Seiyuu seiyuu)
 			=> new SeiyuuSearchEntryDto(seiyuu.MalId, seiyuu.Name, seiyuu.ImageUrl);
@@ -15,10 +15,8 @@ namespace SeiyuuMoe.Application.Seiyuus.Extensions
 				seiyuu.MalId,
 				seiyuu.Name,
 				seiyuu.ImageUrl,
-				seiyuu.JapaneseName,
-				!string.IsNullOrWhiteSpace(seiyuu.Birthday)
-					? DateTime.ParseExact(seiyuu.Birthday, "dd-MM-yyyy", null)
-					: (DateTime?)null,
+				seiyuu.KanjiName,
+				seiyuu.Birthday,
 				seiyuu.About
 			);
 
@@ -27,7 +25,7 @@ namespace SeiyuuMoe.Application.Seiyuus.Extensions
 				seiyuu.MalId,
 				seiyuu.Name,
 				seiyuu.ImageUrl,
-				_malPersonBaseUrl + seiyuu.MalId
+				MalPersonBaseUrl + seiyuu.MalId
 			);
 	}
 }

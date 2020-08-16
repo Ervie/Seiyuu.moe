@@ -25,7 +25,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			await repository.AddAsync(new SeiyuuBuilder().Build());
 
 			// Then
-			var allSeiyuu = await dbContext.Seiyuu.ToListAsync();
+			var allSeiyuu = await dbContext.Seiyuus.ToListAsync();
 
 			allSeiyuu.Should().ContainSingle();
 		}
@@ -41,7 +41,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			const string expectedImageUrl = "ExpectedImageUrl";
 			const string expectedKanjiName = "期待される日本語タイトル";
 			const string expectedAbout = "ExpectedAbout";
-			const string expectedDateOfBirth = "1990-01-01";
+			var expectedDateOfBirth = new DateTime(1990, 1, 1);
 			const int expectedPopularity = 1000;
 			const long expectedMalId = 1;
 
@@ -59,8 +59,8 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			await repository.AddAsync(seiyuu);
 
 			// Then
-			var allAnime = await dbContext.Seiyuu.ToListAsync();
-			var newSeiyuu = await dbContext.Seiyuu.FirstOrDefaultAsync();
+			var allAnime = await dbContext.Seiyuus.ToListAsync();
+			var newSeiyuu = await dbContext.Seiyuus.FirstOrDefaultAsync();
 
 			using (new AssertionScope())
 			{
@@ -70,7 +70,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 				newSeiyuu.Name.Should().Be(expectedName);
 				newSeiyuu.ImageUrl.Should().Be(expectedImageUrl);
 				newSeiyuu.MalId.Should().Be(expectedMalId);
-				newSeiyuu.JapaneseName.Should().Be(expectedKanjiName);
+				newSeiyuu.KanjiName.Should().Be(expectedKanjiName);
 				newSeiyuu.Birthday.Should().Be(expectedDateOfBirth);
 				newSeiyuu.About.Should().Be(expectedAbout);
 				newSeiyuu.Popularity.Should().Be(expectedPopularity);
@@ -81,13 +81,14 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 		public async Task AddAsync_GivenDuplicatedKey_ShouldThrowException()
 		{
 			// Given
+			var animeId = Guid.NewGuid();
 			var dbContext = InMemoryDbProvider.GetDbContext();
 			var repository = new SeiyuuRepository(dbContext);
 
-			await repository.AddAsync(new SeiyuuBuilder().WithMalId(1).Build());
+			await repository.AddAsync(new SeiyuuBuilder().WithId(animeId).Build());
 
 			// When
-			Func<Task> func = repository.Awaiting(x => x.AddAsync(new SeiyuuBuilder().WithMalId(1).Build()));
+			Func<Task> func = repository.Awaiting(x => x.AddAsync(new SeiyuuBuilder().WithId(animeId).Build()));
 
 			// Then
 			func.Should().Throw<Exception>();
@@ -97,11 +98,12 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 		public void UpdateAsync_GivenNotExistingSeiyuu_ShouldThrowExcepton()
 		{
 			// Given
+			var id = Guid.NewGuid();
 			var dbContext = InMemoryDbProvider.GetDbContext();
 			var repository = new SeiyuuRepository(dbContext);
 
 			// When
-			Func<Task> func = repository.Awaiting(x => x.UpdateAsync(new SeiyuuBuilder().WithMalId(1).Build()));
+			Func<Task> func = repository.Awaiting(x => x.UpdateAsync(new SeiyuuBuilder().WithId(id).Build()));
 
 			// Then
 			func.Should().Throw<Exception>();
@@ -115,7 +117,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var repository = new SeiyuuRepository(dbContext);
 			var seiyuu = new SeiyuuBuilder().WithName("Test").Build();
 
-			await dbContext.Seiyuu.AddAsync(seiyuu);
+			await dbContext.Seiyuus.AddAsync(seiyuu);
 			await dbContext.SaveChangesAsync();
 
 			seiyuu.Name = "Updated";
@@ -124,7 +126,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			await repository.UpdateAsync(seiyuu);
 
 			// Then
-			var allSeiyuu = await dbContext.Seiyuu.ToListAsync();
+			var allSeiyuu = await dbContext.Seiyuus.ToListAsync();
 
 			allSeiyuu.Should().ContainSingle().Which.Name.Should().Be("Updated");
 		}
@@ -151,7 +153,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var repository = new SeiyuuRepository(dbContext);
 			var seiyuu = new SeiyuuBuilder().WithName("Test1").Build();
 
-			await dbContext.Seiyuu.AddAsync(seiyuu);
+			await dbContext.Seiyuus.AddAsync(seiyuu);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -183,7 +185,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var repository = new SeiyuuRepository(dbContext);
 			var seiyuu = new SeiyuuBuilder().WithMalId(1).Build();
 
-			await dbContext.Seiyuu.AddAsync(seiyuu);
+			await dbContext.Seiyuus.AddAsync(seiyuu);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -201,7 +203,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var repository = new SeiyuuRepository(dbContext);
 			var seiyuu = new SeiyuuBuilder().WithMalId(1).Build();
 
-			await dbContext.Seiyuu.AddAsync(seiyuu);
+			await dbContext.Seiyuus.AddAsync(seiyuu);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -223,11 +225,11 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var seiyuu4 = new SeiyuuBuilder().WithMalId(4).Build();
 			var seiyuu5 = new SeiyuuBuilder().WithMalId(5).Build();
 
-			await dbContext.Seiyuu.AddAsync(seiyuu1);
-			await dbContext.Seiyuu.AddAsync(seiyuu2);
-			await dbContext.Seiyuu.AddAsync(seiyuu3);
-			await dbContext.Seiyuu.AddAsync(seiyuu4);
-			await dbContext.Seiyuu.AddAsync(seiyuu5);
+			await dbContext.Seiyuus.AddAsync(seiyuu1);
+			await dbContext.Seiyuus.AddAsync(seiyuu2);
+			await dbContext.Seiyuus.AddAsync(seiyuu3);
+			await dbContext.Seiyuus.AddAsync(seiyuu4);
+			await dbContext.Seiyuus.AddAsync(seiyuu5);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -246,7 +248,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			const string expectedImageUrl = "ExpectedImageUrl";
 			const string expectedKanjiName = "期待される日本語タイトル";
 			const string expectedAbout = "ExpectedAbout";
-			const string expectedDateOfBirth = "1990-01-01";
+			var expectedDateOfBirth = new DateTime(1990, 1, 1);
 			const int expectedPopularity = 1000;
 			const long expectedMalId = 1;
 
@@ -263,7 +265,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var dbContext = InMemoryDbProvider.GetDbContext();
 			var repository = new SeiyuuRepository(dbContext);
 
-			await dbContext.Seiyuu.AddAsync(seiyuu);
+			await dbContext.Seiyuus.AddAsync(seiyuu);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -276,7 +278,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 				result.Name.Should().Be(expectedName);
 				result.ImageUrl.Should().Be(expectedImageUrl);
 				result.MalId.Should().Be(expectedMalId);
-				result.JapaneseName.Should().Be(expectedKanjiName);
+				result.KanjiName.Should().Be(expectedKanjiName);
 				result.Birthday.Should().Be(expectedDateOfBirth);
 				result.About.Should().Be(expectedAbout);
 				result.Popularity.Should().Be(expectedPopularity);
@@ -305,14 +307,14 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var repository = new SeiyuuRepository(dbContext);
 			var seiyuu = new SeiyuuBuilder().WithName("Test1").Build();
 
-			await dbContext.Seiyuu.AddAsync(seiyuu);
+			await dbContext.Seiyuus.AddAsync(seiyuu);
 			await dbContext.SaveChangesAsync();
 
 			// When
 			var result = await repository.GetAllIdsAsync();
 
 			// Then
-			result.Should().ContainSingle();
+			result.Should().HaveCount(1);
 		}
 
 		[Fact]
@@ -330,7 +332,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 				new SeiyuuBuilder().WithName("Test5").Build()
 			};
 
-			await dbContext.Seiyuu.AddRangeAsync(seiyuuCollection);
+			await dbContext.Seiyuus.AddRangeAsync(seiyuuCollection);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -368,9 +370,9 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var seiyuu2 = new SeiyuuBuilder().WithName("Test2").Build();
 			var seiyuu3 = new SeiyuuBuilder().WithName("Test3").Build();
 
-			await dbContext.Seiyuu.AddAsync(seiyuu1);
-			await dbContext.Seiyuu.AddAsync(seiyuu2);
-			await dbContext.Seiyuu.AddAsync(seiyuu3);
+			await dbContext.Seiyuus.AddAsync(seiyuu1);
+			await dbContext.Seiyuus.AddAsync(seiyuu2);
+			await dbContext.Seiyuus.AddAsync(seiyuu3);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -396,9 +398,9 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var seiyuu2 = new SeiyuuBuilder().WithName("Test2").Build();
 			var seiyuu3 = new SeiyuuBuilder().WithName("Test3").Build();
 
-			await dbContext.Seiyuu.AddAsync(seiyuu1);
-			await dbContext.Seiyuu.AddAsync(seiyuu2);
-			await dbContext.Seiyuu.AddAsync(seiyuu3);
+			await dbContext.Seiyuus.AddAsync(seiyuu1);
+			await dbContext.Seiyuus.AddAsync(seiyuu2);
+			await dbContext.Seiyuus.AddAsync(seiyuu3);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -426,9 +428,9 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var seiyuu2 = new SeiyuuBuilder().WithName("Test2").Build();
 			var seiyuu3 = new SeiyuuBuilder().WithName("Test3").Build();
 
-			await dbContext.Seiyuu.AddAsync(seiyuu1);
-			await dbContext.Seiyuu.AddAsync(seiyuu2);
-			await dbContext.Seiyuu.AddAsync(seiyuu3);
+			await dbContext.Seiyuus.AddAsync(seiyuu1);
+			await dbContext.Seiyuus.AddAsync(seiyuu2);
+			await dbContext.Seiyuus.AddAsync(seiyuu3);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -456,9 +458,9 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var seiyuu2 = new SeiyuuBuilder().WithName("Test2").Build();
 			var seiyuu3 = new SeiyuuBuilder().WithName("Test3").Build();
 
-			await dbContext.Seiyuu.AddAsync(seiyuu1);
-			await dbContext.Seiyuu.AddAsync(seiyuu2);
-			await dbContext.Seiyuu.AddAsync(seiyuu3);
+			await dbContext.Seiyuus.AddAsync(seiyuu1);
+			await dbContext.Seiyuus.AddAsync(seiyuu2);
+			await dbContext.Seiyuus.AddAsync(seiyuu3);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -486,9 +488,9 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var seiyuu2 = new SeiyuuBuilder().WithName("Test2").Build();
 			var seiyuu3 = new SeiyuuBuilder().WithName("Test3").Build();
 
-			await dbContext.Seiyuu.AddAsync(seiyuu1);
-			await dbContext.Seiyuu.AddAsync(seiyuu2);
-			await dbContext.Seiyuu.AddAsync(seiyuu3);
+			await dbContext.Seiyuus.AddAsync(seiyuu1);
+			await dbContext.Seiyuus.AddAsync(seiyuu2);
+			await dbContext.Seiyuus.AddAsync(seiyuu3);
 			await dbContext.SaveChangesAsync();
 
 			// When

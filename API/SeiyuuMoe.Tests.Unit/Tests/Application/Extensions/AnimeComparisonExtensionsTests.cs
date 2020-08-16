@@ -162,9 +162,9 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Application.Extensions
 						.WithMalId(expectedAnimeMalId)
 						.WithTitle(expectedTitle)
 						.WithImageUrl(expectedAnimeImageUrl)
-						.WithAiringDate("10-10-1990")
+						.WithAiringDate(new System.DateTime(1990, 1, 1))
 					)
-					.WithCharacters(new List<Character> { character })
+					.WithCharacters(new List<AnimeCharacter> { character })
 					.Build()
 			};
 

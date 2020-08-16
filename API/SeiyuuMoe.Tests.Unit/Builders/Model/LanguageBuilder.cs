@@ -4,18 +4,18 @@ namespace SeiyuuMoe.Tests.Unit.Builders.Model
 {
 	public class LanguageBuilder
 	{
-		private string _name;
+		private string _description;
 		private int _id;
 
 		public Language Build() => new Language
 		{
-			Name = _name,
+			Description = _description,
 			Id = _id
 		};
 
-		public LanguageBuilder WithName(string name)
+		public LanguageBuilder WithDescription(string description)
 		{
-			_name = name;
+			_description = description;
 			return this;
 		}
 

@@ -11,7 +11,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Anime = SeiyuuMoe.Domain.Entities.Anime;
-using Character = SeiyuuMoe.Domain.Entities.Character;
+using AnimeCharacter = SeiyuuMoe.Domain.Entities.AnimeCharacter;
 using Season = JikanDotNet.Season;
 
 namespace SeiyuuMoe.JikanToDBParser
@@ -60,7 +60,7 @@ namespace SeiyuuMoe.JikanToDBParser
 
 		private void BlacklistId(long id, string type, string reason = null)
 		{
-			var blacklistedId = new BlacklistedId
+			var blacklistedId = new Blacklist
 			{
 				MalId = id,
 				EntityType = type,
@@ -92,7 +92,7 @@ namespace SeiyuuMoe.JikanToDBParser
 
 		#region Interface Implementation
 
-		public async Task InsertNewSeiyuu()
+		public async Task InsertNewSeiyuuAsync()
 		{
 			_logger.Log("Started InsertNewSeiyuu job.");
 
@@ -135,70 +135,68 @@ namespace SeiyuuMoe.JikanToDBParser
 					continue;
 				}
 
-				if (seiyuu.VoiceActingRoles.Any())
+				if (!seiyuu.VoiceActingRoles.Any())
 				{
 					_logger.Log($"Omitted person {seiyuu.Name} - not a seiyuu");
 					BlacklistId(malId, "Seiyuu", "Not a seiyuu");
 					continue;
 				}
 
-				await _seiyuuRepository.AddAsync(
-					new Seiyuu
-					{
-						Name = seiyuu.Name,
-						MalId = seiyuu.MalId,
-						ImageUrl = EmptyStringIfPlaceholder(seiyuu.ImageURL),
-						About = seiyuu.More,
-						Birthday = seiyuu.Birthday.HasValue
-							? seiyuu.Birthday.Value.ToString("dd-MM-yyyy")
-							: string.Empty,
-						Popularity = seiyuu.MemberFavorites,
-						JapaneseName = japaneseName
-					}
-				);
+				var newSeiyuu = new Seiyuu
+				{
+					Name = seiyuu.Name,
+					MalId = seiyuu.MalId,
+					ImageUrl = EmptyStringIfPlaceholder(seiyuu.ImageURL),
+					About = seiyuu.More,
+					Birthday = seiyuu.Birthday,
+					Popularity = seiyuu.MemberFavorites,
+					KanjiName = japaneseName
+				};
 
-				_logger.Log($"Inserted {seiyuu.Name} with MalId: {seiyuu.MalId}");
+				await _seiyuuRepository.AddAsync(newSeiyuu);
+
+				_logger.Log($"Inserted {seiyuu.Name} with Id {newSeiyuu.Id}, MalId: {seiyuu.MalId}");
 
 				foreach (var role in seiyuu.VoiceActingRoles)
 				{
-					await InsertRole(seiyuu.MalId, role, new List<Role>());
+					await InsertRole(newSeiyuu.Id, role, new List<AnimeRole>());
 				}
 			}
 
 			_logger.Log("Finished InsertNewSeiyuu job.");
 		}
 
-		public async Task ParseRoles()
+		public async Task ParseRolesAsync()
 		{
 			_logger.Log("Started ParseRoles job.");
 
-			var seiyuuIdCollection = await _seiyuuRepository.GetAllIdsAsync();
+			var seiyuuIdDictionary = await _seiyuuRepository.GetAllIdsAsync();
 
-			foreach (var seiyuuMalId in seiyuuIdCollection)
+			foreach (var dictionaryEntry in seiyuuIdDictionary)
 			{
 				try
 				{
-					var seiyuuRoles = await _seiyuuRoleRepository.GetAllSeiyuuRolesAsync(seiyuuMalId, false);
+					var seiyuuRoles = await _seiyuuRoleRepository.GetAllSeiyuuRolesAsync(dictionaryEntry.Key, false);
 
-					var seiyuuFullData = await SendSinglePersonRequest(seiyuuMalId, 0);
+					var seiyuuFullData = await SendSinglePersonRequest(dictionaryEntry.Value, 0);
 
-					_logger.Log($"Parsing seiyuu with id {seiyuuMalId}");
+					_logger.Log($"Parsing seiyuu with id {dictionaryEntry.Key}, malId {dictionaryEntry.Value}");
 
 					foreach (var role in seiyuuFullData.VoiceActingRoles)
 					{
-						await InsertRole(seiyuuMalId, role, seiyuuRoles);
+						await InsertRole(dictionaryEntry.Key, role, seiyuuRoles);
 					}
 				}
 				catch (Exception ex)
 				{
-					_logger.Log($"Error during parsing seiyuu with id {seiyuuMalId}: {ex.Message}");
+					_logger.Log($"Error during parsing seiyuu with Id {dictionaryEntry.Key}, malId {dictionaryEntry.Value}: {ex.Message}");
 				}
 			}
 
 			_logger.Log("Finished ParseRoles job.");
 		}
 
-		public async Task UpdateAllAnime()
+		public async Task UpdateAllAnimeAsync()
 		{
 			_logger.Log("Started UpdateAllAnime job.");
 
@@ -217,7 +215,7 @@ namespace SeiyuuMoe.JikanToDBParser
 
 					if (animeFullData != null)
 					{
-						_logger.Log($"Parsed anime with id {anime.MalId}: {anime.Title}");
+						_logger.Log($"Parsed anime with id {anime.Id}, malId {anime.MalId}: {anime.Title}");
 
 						await UpdateAnime(anime, animeFullData);
 					}
@@ -233,7 +231,7 @@ namespace SeiyuuMoe.JikanToDBParser
 			_logger.Log("Finished UpdateAllAnime job.");
 		}
 
-		public async Task UpdateAllCharacters()
+		public async Task UpdateAllCharactersAsync()
 		{
 			try
 			{
@@ -253,7 +251,7 @@ namespace SeiyuuMoe.JikanToDBParser
 
 						if (characterFullData != null)
 						{
-							_logger.Log($"Parsed character with id {character.MalId}: {character.Name}");
+							_logger.Log($"Parsed character with id {character.Id}, malID {character.MalId}: {character.Name}");
 
 							await UpdateCharacter(character, characterFullData);
 						}
@@ -274,7 +272,7 @@ namespace SeiyuuMoe.JikanToDBParser
 			}
 		}
 
-		public async Task UpdateAllSeiyuu()
+		public async Task UpdateAllSeiyuuAsync()
 		{
 			_logger.Log("Started UpdateAllSeiyuu job.");
 
@@ -293,7 +291,7 @@ namespace SeiyuuMoe.JikanToDBParser
 
 					if (seiyuuFullData != null)
 					{
-						_logger.Log($"Parsed id:{seiyuu.MalId}, {seiyuu.Name}");
+						_logger.Log($"Parsed seiyuu with id {seiyuu.Id}, malId {seiyuu.MalId}: {seiyuu.Name}");
 
 						await UpdateSeiyuu(seiyuu, seiyuuFullData);
 					}
@@ -309,7 +307,7 @@ namespace SeiyuuMoe.JikanToDBParser
 			_logger.Log("Finished UpdateAllSeiyuu job.");
 		}
 
-		public async Task UpdateSeasons()
+		public async Task UpdateSeasonsAsync()
 		{
 			_logger.Log("Started UpdateSeasons job.");
 
@@ -324,7 +322,7 @@ namespace SeiyuuMoe.JikanToDBParser
 
 				if (insertedSeason == null)
 				{
-					await _seasonRepository.AddAsync(new Domain.Entities.Season
+					await _seasonRepository.AddAsync(new AnimeSeason
 					{
 						Name = season.ToString(),
 						Year = yearInNextSixMonths
@@ -335,15 +333,16 @@ namespace SeiyuuMoe.JikanToDBParser
 			_logger.Log("Finished UpdateSeasons job.");
 		}
 
-		public async Task InsertOldSeiyuu()
+		public async Task InsertOldSeiyuuAsync()
 		{
 			_logger.Log("Started InsertOldSeiyuu job.");
 
-			var seiyuuCollection = await _seiyuuRepository.GetAllIdsAsync();
+			var seiyuuIdDictionary = await _seiyuuRepository.GetAllIdsAsync();
+			long lastId = seiyuuIdDictionary.Values.Max();
 
-			for (long malId = 1; malId < seiyuuCollection.Last(); malId++)
+			for (long malId = 1; malId < lastId; malId++)
 			{
-				if (seiyuuCollection.Contains(malId))
+				if (seiyuuIdDictionary.ContainsValue(malId))
 				{
 					_logger.Log($"Omitted {malId} - already in database.");
 					continue;
@@ -353,7 +352,7 @@ namespace SeiyuuMoe.JikanToDBParser
 
 				if (seiyuu != null)
 				{
-					_logger.Log($"Parsed id:{seiyuu.MalId}: {seiyuu.Name}");
+					_logger.Log($"Parsed malId:{seiyuu.MalId} {seiyuu.Name}");
 				}
 				else
 				{
@@ -383,24 +382,22 @@ namespace SeiyuuMoe.JikanToDBParser
 					continue;
 				}
 
-				await _seiyuuRepository.AddAsync(
-					new Seiyuu
-					{
-						Name = seiyuu.Name,
-						MalId = seiyuu.MalId,
-						ImageUrl = EmptyStringIfPlaceholder(seiyuu.ImageURL),
-						About = seiyuu.More,
-						Birthday = seiyuu.Birthday.HasValue
-							? seiyuu.Birthday.Value.ToString("dd-MM-yyyy")
-							: string.Empty,
-						Popularity = seiyuu.MemberFavorites,
-						JapaneseName = japaneseName
-					}
-				);
+				var newSeiyuu = new Seiyuu
+				{
+					Name = seiyuu.Name,
+					MalId = seiyuu.MalId,
+					ImageUrl = EmptyStringIfPlaceholder(seiyuu.ImageURL),
+					About = seiyuu.More,
+					Birthday = seiyuu.Birthday,
+					Popularity = seiyuu.MemberFavorites,
+					KanjiName = japaneseName
+				};
+
+				await _seiyuuRepository.AddAsync(newSeiyuu);
 
 				_logger.Log($"Inserted {seiyuu.Name} with MalId: {seiyuu.MalId}");
 
-				foreach (var role in seiyuu.VoiceActingRoles) await InsertRole(seiyuu.MalId, role, new List<Role>());
+				foreach (var role in seiyuu.VoiceActingRoles) await InsertRole(newSeiyuu.Id, role, new List<AnimeRole>());
 			}
 
 			_logger.Log("Finished InsertOldSeiyuu job.");
@@ -415,14 +412,14 @@ namespace SeiyuuMoe.JikanToDBParser
 			anime.Title = animeParsedData.Title;
 			anime.About = animeParsedData.Synopsis;
 			anime.EnglishTitle = animeParsedData.TitleEnglish;
-			anime.JapaneseTitle = animeParsedData.TitleJapanese;
+			anime.KanjiTitle = animeParsedData.TitleJapanese;
 			anime.Popularity = animeParsedData.Members;
 
 			anime.ImageUrl = EmptyStringIfPlaceholder(animeParsedData.ImageURL);
 
 			if (animeParsedData.Aired.From.HasValue)
 			{
-				anime.AiringDate = animeParsedData.Aired.From.Value.ToString("dd-MM-yyyy");
+				anime.AiringDate = animeParsedData.Aired.From.Value;
 			}
 
 			if (animeParsedData.TitleSynonyms.Any())
@@ -439,11 +436,11 @@ namespace SeiyuuMoe.JikanToDBParser
 			await _animeRepository.UpdateAsync(anime);
 		}
 
-		private async Task UpdateCharacter(Character character, JikanDotNet.Character characterParsedData)
+		private async Task UpdateCharacter(AnimeCharacter character, JikanDotNet.Character characterParsedData)
 		{
 			character.Name = characterParsedData.Name;
 			character.About = characterParsedData.About;
-			character.NameKanji = characterParsedData.NameKanji;
+			character.KanjiName = characterParsedData.NameKanji;
 			character.Popularity = characterParsedData.MemberFavorites;
 
 			character.ImageUrl = EmptyStringIfPlaceholder(characterParsedData.ImageURL);
@@ -466,7 +463,7 @@ namespace SeiyuuMoe.JikanToDBParser
 
 			if (seiyuuParsedData.Birthday.HasValue)
 			{
-				seiyuu.Birthday = seiyuuParsedData.Birthday.Value.ToString("dd-MM-yyyy");
+				seiyuu.Birthday = seiyuuParsedData.Birthday.Value;
 			}
 
 			seiyuu.ImageUrl = EmptyStringIfPlaceholder(seiyuuParsedData.ImageURL);
@@ -482,7 +479,7 @@ namespace SeiyuuMoe.JikanToDBParser
 					? seiyuuParsedData.GivenName
 					: " " + seiyuuParsedData.GivenName;
 
-				seiyuu.JapaneseName = japaneseName;
+				seiyuu.KanjiName = japaneseName;
 			}
 
 			await _seiyuuRepository.UpdateAsync(seiyuu);
@@ -759,39 +756,29 @@ namespace SeiyuuMoe.JikanToDBParser
 		#region InsertingRoleRelatedEntities
 
 		private async Task InsertRole(
-			long seiyuuMalId,
+			Guid seiyuuId,
 			VoiceActingRole voiceActingRole,
-			IReadOnlyList<Role> seiyuuRoles
+			IReadOnlyList<AnimeRole> seiyuuRoles
 		)
 		{
 			try
 			{
 				if (!seiyuuRoles.Any(x =>
-					x.AnimeId.Equals(voiceActingRole.Anime.MalId) &&
-					x.CharacterId.Equals(voiceActingRole.Character.MalId)))
+					x.Anime.MalId.Equals(voiceActingRole.Anime.MalId) &&
+					x.Character.MalId.Equals(voiceActingRole.Character.MalId)))
 				{
-					var isCharacterInDatabase = true;
-					var isAnimeInDatabase = true;
+					var animeInDatabase = await InsertAnime(voiceActingRole);
+					var characterInDatabase = await InsertCharacter(voiceActingRole);
 
-					if (await _animeRepository.GetAsync(voiceActingRole.Anime.MalId) == null)
+					if (animeInDatabase != null && characterInDatabase != null)
 					{
-						isAnimeInDatabase = await InsertAnime(voiceActingRole);
-					}
-
-					if (await _characterRepository.GetAsync(voiceActingRole.Character.MalId) == null)
-					{
-						isCharacterInDatabase = await InsertCharacter(voiceActingRole);
-					}
-
-					if (isAnimeInDatabase && isCharacterInDatabase)
-					{
-						await _animeRoleRepository.AddAsync(new Role
+						await _animeRoleRepository.AddAsync(new AnimeRole
 						{
 							LanguageId = 1, // Always japanese for now
 							RoleTypeId = voiceActingRole.Role.Equals("Main") ? 1 : 2,
-							AnimeId = voiceActingRole.Anime.MalId,
-							CharacterId = voiceActingRole.Character.MalId,
-							SeiyuuId = seiyuuMalId
+							AnimeId = animeInDatabase.Id,
+							CharacterId = characterInDatabase.Id,
+							SeiyuuId = seiyuuId
 						});
 
 						_logger.Log($"Inserted {voiceActingRole.Character.Name} in {voiceActingRole.Anime.Name}");
@@ -805,7 +792,7 @@ namespace SeiyuuMoe.JikanToDBParser
 			}
 		}
 
-		private async Task<bool> InsertAnime(VoiceActingRole voiceActingRole)
+		private async Task<Anime> InsertAnime(VoiceActingRole voiceActingRole)
 		{
 			var existingAnime = await _animeRepository.GetAsync(voiceActingRole.Anime.MalId);
 
@@ -822,40 +809,40 @@ namespace SeiyuuMoe.JikanToDBParser
 						if (animeFullData.TitleSynonyms.Any())
 							titleSynonym = string.Join(';', animeFullData.TitleSynonyms.ToArray());
 
-						await _animeRepository.AddAsync(
-							new Anime
-							{
-								MalId = animeFullData.MalId,
-								ImageUrl = EmptyStringIfPlaceholder(animeFullData.ImageURL),
-								Title = animeFullData.Title,
-								Popularity = animeFullData.Members,
-								About = animeFullData.Synopsis,
-								JapaneseTitle = animeFullData.TitleJapanese,
-								EnglishTitle = animeFullData.TitleEnglish,
-								TitleSynonyms = titleSynonym,
-								AiringDate = animeFullData.Aired.From?.ToString("dd-MM-yyyy"),
-								StatusId = await MatchAnimeStatus(animeFullData.Status),
-								TypeId = await MatchAnimeType(animeFullData.Type),
-								SeasonId = await MatchSeason(animeFullData.Premiered)
-							}
-						);
+						var newAnime = new Anime
+						{
+							MalId = animeFullData.MalId,
+							ImageUrl = EmptyStringIfPlaceholder(animeFullData.ImageURL),
+							Title = animeFullData.Title,
+							Popularity = animeFullData.Members,
+							About = animeFullData.Synopsis,
+							KanjiTitle = animeFullData.TitleJapanese,
+							EnglishTitle = animeFullData.TitleEnglish,
+							TitleSynonyms = titleSynonym,
+							AiringDate = animeFullData.Aired.From ?? DateTime.MinValue,
+							StatusId = await MatchAnimeStatus(animeFullData.Status),
+							TypeId = await MatchAnimeType(animeFullData.Type),
+							SeasonId = await MatchSeason(animeFullData.Premiered)
+						};
 
-						return true;
+						await _animeRepository.AddAsync(newAnime);
+
+						return newAnime;
 					}
 
-					return false;
+					return null;
 				}
 				catch (Exception ex)
 				{
 					_logger.Log(
 						$"Error during inserting anime {voiceActingRole.Anime.Name} with id {voiceActingRole.Character.MalId}: {ex.Message}");
-					return false;
+					return null;
 				}
 
-			return true; //already inserted
+			return existingAnime; //already inserted
 		}
 
-		private async Task<bool> InsertCharacter(VoiceActingRole voiceActingRole)
+		private async Task<AnimeCharacter> InsertCharacter(VoiceActingRole voiceActingRole)
 		{
 			var existingCharacter = await _characterRepository.GetAsync(voiceActingRole.Character.MalId);
 
@@ -872,32 +859,32 @@ namespace SeiyuuMoe.JikanToDBParser
 						if (characterFullData.Nicknames.Any())
 							nicknames = string.Join(';', characterFullData.Nicknames.ToArray());
 
-						await _characterRepository.AddAsync(
-							new Character
-							{
-								MalId = characterFullData.MalId,
-								ImageUrl = EmptyStringIfPlaceholder(characterFullData.ImageURL),
-								Name = characterFullData.Name,
-								Popularity = characterFullData.MemberFavorites,
-								About = characterFullData.About,
-								NameKanji = characterFullData.NameKanji,
-								Nicknames = nicknames
-							}
-						);
+						var newCharacter = new AnimeCharacter
+						{
+							MalId = characterFullData.MalId,
+							ImageUrl = EmptyStringIfPlaceholder(characterFullData.ImageURL),
+							Name = characterFullData.Name,
+							Popularity = characterFullData.MemberFavorites,
+							About = characterFullData.About,
+							KanjiName = characterFullData.NameKanji,
+							Nicknames = nicknames
+						};
 
-						return true;
+						await _characterRepository.AddAsync(newCharacter);
+
+						return newCharacter;
 					}
 
-					return false;
+					return null;
 				}
 				catch (Exception ex)
 				{
 					_logger.Log(
 						$"Error during inserting character {voiceActingRole.Anime.Name} with id {voiceActingRole.Anime.MalId}: {ex.Message}");
-					return false;
+					return null;
 				}
 
-			return true; //already inserted
+			return existingCharacter; //already inserted
 		}
 
 		#endregion InsertingRoleRelatedEntities

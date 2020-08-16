@@ -27,31 +27,31 @@ namespace SeiyuuMoe.Infrastructure.Animes
 		}
 
 		public async Task<IReadOnlyList<Anime>> GetAllAsync()
-			=> await _dbContext.Anime
+			=> await _dbContext.Animes
 			.Include(a => a.Type)
 			.Include(a => a.Status)
 			.Include(a => a.Season)
 			.ToListAsync();
 
 		public async Task<IReadOnlyList<Anime>> GetAllAsync(Expression<Func<Anime, bool>> predicate)
-			=> await _dbContext.Anime
+			=> await _dbContext.Animes
 			.Include(a => a.Type)
 			.Include(a => a.Status)
 			.Include(a => a.Season)
 			.Where(predicate)
 			.ToListAsync();
 
-		public Task<int> GetAnimeCountAsync() => _dbContext.Anime.CountAsync();
+		public Task<int> GetAnimeCountAsync() => _dbContext.Animes.CountAsync();
 
 		public Task<Anime> GetAsync(long animeMalId)
-			=> _dbContext.Anime
+			=> _dbContext.Animes
 			.Include(x => x.Type)
 			.Include(x => x.Status)
 			.FirstOrDefaultAsync(x => x.MalId == animeMalId);
 
 		public async Task<PagedResult<Anime>> GetOrderedPageByAsync(Expression<Func<Anime, bool>> predicate, int page = 0, int pageSize = 10)
 		{
-			var entities = _dbContext.Anime.Where(predicate);
+			var entities = _dbContext.Animes.Where(predicate);
 			var totalCount = await entities.CountAsync();
 			var results = await entities
 				.Skip(page * pageSize)
@@ -69,7 +69,7 @@ namespace SeiyuuMoe.Infrastructure.Animes
 
 		public async Task<PagedResult<Anime>> GetOrderedPageByPopularityAsync(Expression<Func<Anime, bool>> predicate, int page = 0, int pageSize = 10)
 		{
-			var entities = _dbContext.Anime.Where(predicate);
+			var entities = _dbContext.Animes.Where(predicate);
 			var totalCount = await entities.CountAsync();
 			var results = await entities
 				.OrderByDescending(x => x.Popularity)
@@ -88,7 +88,7 @@ namespace SeiyuuMoe.Infrastructure.Animes
 
 		public async Task UpdateAsync(Anime anime)
 		{
-			_dbContext.Update(anime);
+			_dbContext.Animes.Update(anime);
 			await _dbContext.SaveChangesAsync();
 		}
 	}

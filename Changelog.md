@@ -1,4 +1,14 @@
-### Version 2.1 - 11 May 2019 (latest)
+### Version 2.2 - 16 August 2020 (latest)
+
+* More DDD approach (Domain, Application, Infrastructure).
+* Unit tests.
+* Enable migrations on the database.
+* Migrate to MySQL.
+    * Guid as an Id (primary key).
+    * MalId moved to being indexed non-key column.
+    * Rename few entities which relate strictly with Anime (in the future I want to suppor VN as well).
+
+### Version 2.1 - 11 May 2019
 
 * Job for database backup.
 * Update jobs running on own Jikan instance.

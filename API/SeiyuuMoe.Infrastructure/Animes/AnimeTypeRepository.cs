@@ -16,6 +16,6 @@ namespace SeiyuuMoe.Infrastructure.Animes
 		}
 
 		public Task<AnimeType> GetByNameAsync(string typeName)
-			=> _dbContext.AnimeType.FirstOrDefaultAsync(x => x.Name == typeName);
+			=> _dbContext.AnimeTypes.FirstOrDefaultAsync(x => x.Description == typeName);
 	}
 }

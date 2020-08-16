@@ -5,18 +5,18 @@ namespace SeiyuuMoe.JikanToDBParser
 {
 	public interface IJikanParser
 	{
-		Task InsertNewSeiyuu();
+		Task InsertNewSeiyuuAsync();
 
-		Task ParseRoles();
+		Task ParseRolesAsync();
 
-		Task UpdateAllCharacters();
+		Task UpdateAllCharactersAsync();
 
-		Task UpdateAllAnime();
+		Task UpdateAllAnimeAsync();
 
-		Task UpdateSeasons();
+		Task UpdateSeasonsAsync();
 
-		Task UpdateAllSeiyuu();
+		Task UpdateAllSeiyuuAsync();
 
-		Task InsertOldSeiyuu();
+		Task InsertOldSeiyuuAsync();
 	}
 }

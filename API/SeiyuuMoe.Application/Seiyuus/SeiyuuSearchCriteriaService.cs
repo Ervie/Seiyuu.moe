@@ -22,7 +22,7 @@ namespace SeiyuuMoe.Application.Seiyuus
 				.And(!string.IsNullOrWhiteSpace(query.Name), () => seiyuu =>
 					seiyuu.Name.ToLower().Contains(query.Name.ToLower()) ||
 					seiyuu.Name.ToLower().Contains(swappedNameSurname.ToLower()) ||
-					seiyuu.JapaneseName.ToLower().Contains(query.Name.ToLower()));
+					seiyuu.KanjiName.ToLower().Contains(query.Name.ToLower()));
 		}
 	}
 }

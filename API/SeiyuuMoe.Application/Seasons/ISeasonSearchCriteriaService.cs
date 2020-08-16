@@ -7,6 +7,6 @@ namespace SeiyuuMoe.Application.Seasons
 {
 	public interface ISeasonSearchCriteriaService
 	{
-		Expression<Func<Season, bool>> BuildExpression(GetSeasonSummariesQuery query);
+		Expression<Func<AnimeSeason, bool>> BuildExpression(GetSeasonSummariesQuery query);
 	}
 }

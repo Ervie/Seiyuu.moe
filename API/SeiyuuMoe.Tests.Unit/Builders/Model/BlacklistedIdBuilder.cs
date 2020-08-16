@@ -1,16 +1,17 @@
 ﻿using SeiyuuMoe.Domain.Entities;
+using System;
 
 namespace SeiyuuMoe.Tests.Unit.Builders.Model
 {
 	public class BlacklistedIdBuilder
 	{
 		private long _malId;
-		private long _id;
+		private Guid _id;
 		private string _reason;
 		private string _entityType;
 
-		public BlacklistedId Build()
-			=> new BlacklistedId
+		public Blacklist Build()
+			=> new Blacklist
 			{
 				EntityType = _entityType,
 				Reason = _reason,
@@ -24,7 +25,7 @@ namespace SeiyuuMoe.Tests.Unit.Builders.Model
 			return this;
 		}
 
-		public BlacklistedIdBuilder WithId(long id)
+		public BlacklistedIdBuilder WithId(Guid id)
 		{
 			_id = id;
 			return this;

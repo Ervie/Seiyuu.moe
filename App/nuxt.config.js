@@ -31,8 +31,8 @@ module.exports = {
   },
 
   env: {
-    baseUrl: "http://localhost:3000",
-    apiUrl: "http://localhost:5000",
+    baseUrl: "https://seiyuu.moe",
+    apiUrl: "https://seiyuu.moe:9000",
   },
 
   /*

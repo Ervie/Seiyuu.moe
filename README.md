@@ -62,20 +62,12 @@ Require .Net Core 3.1 installed.
 
 ## Changelog
 
+### Version 2.2 - 11 May 2020
 
-### Version 2.1 - 11 May 2019
-
-* Job for database backup.
-* Update jobs running on own Jikan instance.
-* No result placeholder with loading indication.
-* Modal window with loading indication.
-* Custom error page.
-* Season summary page
-    * Shows seiyuu with the most roles in selected season.
-    * TV series only and main roles only filtering.
-    * Pagination support.
-    * Navigation arrows.
-* Added Vuex store to project
+* More DDD approach (Domain, Application, Infrastructure)
+* Unit tests
+* Enable migrations on the database
+* Migrate to MySQL
 
 **[Read More](https://github.com/Ervie/Seiyuu.moe/blob/master/Changelog.md)**
 

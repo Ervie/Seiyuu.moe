@@ -17,26 +17,26 @@ namespace SeiyuuMoe.Infrastructure.Characters
 			_dbContext = dbContext;
 		}
 
-		public async Task AddAsync(Character character)
+		public async Task AddAsync(AnimeCharacter character)
 		{
 			await _dbContext.AddAsync(character);
 			await _dbContext.SaveChangesAsync();
 		}
 
-		public Task<Character> GetAsync(long characterMalId)
-			=> _dbContext.Character.FirstOrDefaultAsync(x => x.MalId == characterMalId);
+		public Task<AnimeCharacter> GetAsync(long characterMalId)
+			=> _dbContext.AnimeCharacters.FirstOrDefaultAsync(x => x.MalId == characterMalId);
 
-		public Task<int> GetCountAsync() => _dbContext.Character.CountAsync();
+		public Task<int> GetCountAsync() => _dbContext.AnimeCharacters.CountAsync();
 
-		public async Task<PagedResult<Character>> GetPageAsync(int page = 0, int pageSize = 100)
+		public async Task<PagedResult<AnimeCharacter>> GetPageAsync(int page = 0, int pageSize = 100)
 		{
-			var totalCount = await _dbContext.Character.CountAsync();
-			var results = await _dbContext.Character
+			var totalCount = await _dbContext.AnimeCharacters.CountAsync();
+			var results = await _dbContext.AnimeCharacters
 				.Skip(page * pageSize)
 				.Take(pageSize)
 				.ToListAsync();
 
-			return new PagedResult<Character>
+			return new PagedResult<AnimeCharacter>
 			{
 				Results = results,
 				Page = page,
@@ -45,7 +45,7 @@ namespace SeiyuuMoe.Infrastructure.Characters
 			};
 		}
 
-		public async Task UpdateAsync(Character character)
+		public async Task UpdateAsync(AnimeCharacter character)
 		{
 			_dbContext.Update(character);
 			await _dbContext.SaveChangesAsync();

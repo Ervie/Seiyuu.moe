@@ -7,7 +7,7 @@ namespace SeiyuuMoe.Tests.Unit.Builders.Model
 	{
 		private string _title = string.Empty;
 		private string _imageUrl = string.Empty;
-		private string _airingDate;
+		private DateTime _airingDate = DateTime.MinValue;
 		private string _japaneseTitle = string.Empty;
 		private string _titleSynonyms = string.Empty;
 		private string _about = string.Empty;
@@ -15,10 +15,11 @@ namespace SeiyuuMoe.Tests.Unit.Builders.Model
 		private int _popularity;
 
 		private long _malId;
+		private Guid _id;
 
 		private AnimeType _animeType;
 		private AnimeStatus _animeStatus;
-		private Season _season;
+		private AnimeSeason _season;
 
 		private AnimeTypeBuilder _animeTypeBuilder;
 		private AnimeStatusBuilder _animeStatusBuilder;
@@ -26,11 +27,12 @@ namespace SeiyuuMoe.Tests.Unit.Builders.Model
 
 		public Anime Build() => new Anime
 		{
+			Id = _id,
 			Title = _title,
 			ImageUrl = _imageUrl,
 			MalId = _malId,
 			AiringDate = _airingDate,
-			JapaneseTitle = _japaneseTitle,
+			KanjiTitle = _japaneseTitle,
 			TitleSynonyms = _titleSynonyms,
 			About = _about,
 			Popularity = _popularity,
@@ -38,6 +40,12 @@ namespace SeiyuuMoe.Tests.Unit.Builders.Model
 			Type = _animeTypeBuilder?.Build() ?? _animeType,
 			Season = _seasonBuilder?.Build() ?? _season
 		};
+
+		public AnimeBuilder WithId(Guid id)
+		{
+			_id = id;
+			return this;
+		}
 
 		public AnimeBuilder WithTitle(string title)
 		{
@@ -57,7 +65,7 @@ namespace SeiyuuMoe.Tests.Unit.Builders.Model
 			return this;
 		}
 
-		public AnimeBuilder WithAiringDate(string airingDate)
+		public AnimeBuilder WithAiringDate(DateTime airingDate)
 		{
 			_airingDate = airingDate;
 			return this;
@@ -113,7 +121,7 @@ namespace SeiyuuMoe.Tests.Unit.Builders.Model
 			return this;
 		}
 
-		public AnimeBuilder WithSeason(Season season)
+		public AnimeBuilder WithSeason(AnimeSeason season)
 		{
 			_season = season;
 			return this;

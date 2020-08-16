@@ -6,7 +6,7 @@ namespace SeiyuuMoe.Application.Characters.Extensions
 	{
 		private const string malCharacterBaseUrl = "https://myanimelist.net/character/";
 
-		public static CharacterTableEntry ToCharacterTableEntry(this Domain.Entities.Character character)
+		public static CharacterTableEntry ToCharacterTableEntry(this Domain.Entities.AnimeCharacter character)
 			=> new CharacterTableEntry(
 				character.MalId,
 				character.Name,

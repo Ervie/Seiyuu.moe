@@ -17,7 +17,7 @@ namespace SeiyuuMoe.Domain.Repositories
 
 		Task UpdateAsync(Seiyuu seiyuu);
 
-		Task<ICollection<long>> GetAllIdsAsync();
+		Task<Dictionary<Guid, long>> GetAllIdsAsync();
 
 		Task<int> GetSeiyuuCountAsync();
 

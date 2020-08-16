@@ -1,15 +1,18 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace SeiyuuMoe.Domain.Entities
 {
-	public partial class Season
+	public partial class AnimeSeason
 	{
-		public Season()
+		public AnimeSeason()
 		{
 			Anime = new HashSet<Anime>();
 		}
 
+		[Key]
 		public long Id { get; set; }
+
 		public long Year { get; set; }
 		public string Name { get; set; }
 

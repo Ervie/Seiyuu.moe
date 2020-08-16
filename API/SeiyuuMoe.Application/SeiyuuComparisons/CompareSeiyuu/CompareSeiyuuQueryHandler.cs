@@ -29,13 +29,13 @@ namespace SeiyuuMoe.Application.SeiyuuComparisons.CompareSeiyuu
 
 				foreach (var role in roles)
 				{
-					if (partialResults.Any(x => x.Anime.First().MalId.Equals(role.AnimeId)))
+					if (partialResults.Any(x => x.Anime.First().Id.Equals(role.AnimeId)))
 					{
-						var foundAnime = partialResults.Single(x => x.Anime.First().MalId.Equals(role.AnimeId));
+						var foundAnime = partialResults.Single(x => x.Anime.First().Id.Equals(role.AnimeId));
 
-						if (foundAnime.SeiyuuCharacters.Any(x => x.Seiyuu.MalId.Equals(role.SeiyuuId)))
+						if (foundAnime.SeiyuuCharacters.Any(x => x.Seiyuu.Id.Equals(role.SeiyuuId)))
 						{
-							var foundSeiyuu = foundAnime.SeiyuuCharacters.Single(x => x.Seiyuu.MalId.Equals(role.SeiyuuId));
+							var foundSeiyuu = foundAnime.SeiyuuCharacters.Single(x => x.Seiyuu.Id.Equals(role.SeiyuuId));
 							foundSeiyuu.Characters.Add(role.Character);
 						}
 						else
@@ -62,8 +62,8 @@ namespace SeiyuuMoe.Application.SeiyuuComparisons.CompareSeiyuu
 			return new QueryResponse<ICollection<SeiyuuComparisonEntryDto>>(mappedResults);
 		}
 
-		private async Task<IReadOnlyCollection<Role>> GetSeiyuuRoles(long seiyuuMalId, bool? mainRolesOnly)
-			=> await _seiyuuRoleRepository.GetAllSeiyuuRolesAsync(seiyuuMalId, mainRolesOnly ?? false);
+		private async Task<IReadOnlyCollection<AnimeRole>> GetSeiyuuRoles(long seiyuuMalId, bool? mainRolesOnly)
+			=> await _seiyuuRoleRepository.GetAllSeiyuuRolesByMalIdAsync(seiyuuMalId, mainRolesOnly ?? false);
 
 		private ICollection<SeiyuuComparisonEntry> GroupByFranchise(ICollection<SeiyuuComparisonEntry> nonGroupedResults)
 		{

@@ -6,7 +6,7 @@ namespace SeiyuuMoe.Tests.Unit.Builders.Model
 	{
 		private string _name = string.Empty;
 
-		public AnimeStatus Build() => new AnimeStatus { Name = _name };
+		public AnimeStatus Build() => new AnimeStatus { Description = _name };
 
 		public AnimeStatusBuilder WithName(string name)
 		{

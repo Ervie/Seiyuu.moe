@@ -3,7 +3,6 @@
 	public class SeiyuuMoeConfiguration
 	{
 		public string JikanUrl { get; set; }
-		public string PathToBackupDB { get; set; }
-		public string PathToDB { get; set; }
+		public DatabaseConfiguration DatabaseConfiguration { get; set; }
 	}
 }

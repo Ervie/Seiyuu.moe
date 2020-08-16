@@ -1,4 +1,5 @@
 ﻿using SeiyuuMoe.Domain.Entities;
+using System;
 
 namespace SeiyuuMoe.Tests.Unit.Builders.Model
 {
@@ -6,22 +7,31 @@ namespace SeiyuuMoe.Tests.Unit.Builders.Model
 	{
 		private string _name = string.Empty;
 		private string _imageUrl = string.Empty;
-		private string _birthday = string.Empty;
+		private DateTime? _birthday = null;
 		private string _japaneseName = string.Empty;
 		private string _about = string.Empty;
 		private long _malId;
 		private int _popularity;
+		private Guid _id;
 
 		public Seiyuu Build() => new Seiyuu
 		{
+			Id = _id,
 			Name = _name,
 			ImageUrl = _imageUrl,
 			MalId = _malId,
 			Birthday = _birthday,
 			Popularity = _popularity,
-			JapaneseName = _japaneseName,
+			KanjiName = _japaneseName,
 			About = _about
 		};
+
+
+		public SeiyuuBuilder WithId(Guid id)
+		{
+			_id = id;
+			return this;
+		}
 
 		public SeiyuuBuilder WithName(string name)
 		{
@@ -41,7 +51,7 @@ namespace SeiyuuMoe.Tests.Unit.Builders.Model
 			return this;
 		}
 
-		public SeiyuuBuilder WithBirthday(string birthday)
+		public SeiyuuBuilder WithBirthday(DateTime? birthday)
 		{
 			_birthday = birthday;
 			return this;

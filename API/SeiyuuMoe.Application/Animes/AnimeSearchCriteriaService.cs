@@ -19,7 +19,7 @@ namespace SeiyuuMoe.Application.Animes
 				.And(query.MalId != null && query.MalId.Count > 0, () => anime => query.MalId.Contains(anime.MalId))
 				.And(!string.IsNullOrWhiteSpace(query.Title), () => anime =>
 					anime.Title.ToLower().Contains(query.Title.ToLower()) ||
-					(!string.IsNullOrWhiteSpace(anime.JapaneseTitle) && anime.JapaneseTitle.ToLower().Contains(query.Title.ToLower())) ||
+					(!string.IsNullOrWhiteSpace(anime.KanjiTitle) && anime.KanjiTitle.ToLower().Contains(query.Title.ToLower())) ||
 					(!string.IsNullOrWhiteSpace(anime.EnglishTitle) && anime.EnglishTitle.ToLower().Contains(query.Title.ToLower())) ||
 					(!string.IsNullOrWhiteSpace(anime.TitleSynonyms) && anime.TitleSynonyms.ToLower().Contains(query.Title.ToLower())))
 				.And(query.SeasonId.HasValue, () => anime => query.SeasonId.Equals(anime.SeasonId.Value))

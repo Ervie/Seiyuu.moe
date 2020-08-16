@@ -45,7 +45,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var repository = new AnimeTypeRepository(dbContext);
 			var type = new AnimeTypeBuilder().WithName("Movie").Build();
 
-			await dbContext.AnimeType.AddAsync(type);
+			await dbContext.AnimeTypes.AddAsync(type);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -63,7 +63,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var repository = new AnimeTypeRepository(dbContext);
 			var type = new AnimeTypeBuilder().WithName("TV").Build();
 
-			await dbContext.AnimeType.AddAsync(type);
+			await dbContext.AnimeTypes.AddAsync(type);
 			await dbContext.SaveChangesAsync();
 
 			// When
@@ -71,7 +71,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 
 			// Then
 			result.Should().NotBeNull();
-			result.Name.Should().Be("TV");
+			result.Description.Should().Be("TV");
 		}
 	}
 }

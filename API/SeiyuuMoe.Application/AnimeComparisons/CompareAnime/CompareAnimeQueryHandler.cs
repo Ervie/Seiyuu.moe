@@ -24,17 +24,17 @@ namespace SeiyuuMoe.Application.AnimeComparisons.CompareAnime
 
 			for (int i = 0; i < query.AnimeMalIds.Count; i++)
 			{
-				var roles = await _roleRepository.GetAllRolesInAnimeAsync(query.AnimeMalIds.ElementAt(i));
+				var roles = await _roleRepository.GetAllRolesInAnimeByMalIdAsync(query.AnimeMalIds.ElementAt(i));
 
 				foreach (var role in roles)
 				{
-					if (partialResults.Any(x => x.Seiyuu.MalId.Equals(role.SeiyuuId)))
+					if (partialResults.Any(x => x.Seiyuu.Id.Equals(role.SeiyuuId)))
 					{
-						var foundSeiyuu = partialResults.Single(x => x.Seiyuu.MalId.Equals(role.SeiyuuId));
+						var foundSeiyuu = partialResults.Single(x => x.Seiyuu.Id.Equals(role.SeiyuuId));
 
-						if (foundSeiyuu.AnimeCharacters.Any(x => x.Anime.MalId.Equals(role.AnimeId)))
+						if (foundSeiyuu.AnimeCharacters.Any(x => x.Anime.Id.Equals(role.AnimeId)))
 						{
-							var foundAnime = foundSeiyuu.AnimeCharacters.Single(x => x.Anime.MalId.Equals(role.AnimeId));
+							var foundAnime = foundSeiyuu.AnimeCharacters.Single(x => x.Anime.Id.Equals(role.AnimeId));
 							foundAnime.Characters.Add(role.Character);
 						}
 						else

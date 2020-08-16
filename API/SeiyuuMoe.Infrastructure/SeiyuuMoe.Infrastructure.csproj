@@ -5,11 +5,32 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200815190338_AddAutoGenerateIdentity.cs" />
+    <Compile Remove="Migrations\20200815190338_AddAutoGenerateIdentity.Designer.cs" />
+    <Compile Remove="Migrations\20200815190419_AddAutoGenerateIdentity.cs" />
+    <Compile Remove="Migrations\20200815190419_AddAutoGenerateIdentity.Designer.cs" />
+    <Compile Remove="Migrations\20200815190829_AddAutoGenerateIdentity.cs" />
+    <Compile Remove="Migrations\20200815190829_AddAutoGenerateIdentity.Designer.cs" />
+    <Compile Remove="Migrations\20200815195650_AddAutoGenerateIdentity.cs" />
+    <Compile Remove="Migrations\20200815195650_AddAutoGenerateIdentity.Designer.cs" />
+    <Compile Remove="Migrations\20200815200002_AddAutoGenerateIdentity.cs" />
+    <Compile Remove="Migrations\20200815200002_AddAutoGenerateIdentity.Designer.cs" />
+    <Compile Remove="Migrations\20200815200359_AddAutoGenerateIdentity.cs" />
+    <Compile Remove="Migrations\20200815200359_AddAutoGenerateIdentity.Designer.cs" />
+    <Compile Remove="Migrations\20200815200507_AddAutoGenerateIdentity.cs" />
+    <Compile Remove="Migrations\20200815200507_AddAutoGenerateIdentity.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Autofac" Version="5.2.0" />
-    <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="3.1.5" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.5" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.5" />
-    <PackageReference Include="NLog" Version="4.7.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.7">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="NLog" Version="4.7.3" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.2" />
   </ItemGroup>
 
   <ItemGroup>

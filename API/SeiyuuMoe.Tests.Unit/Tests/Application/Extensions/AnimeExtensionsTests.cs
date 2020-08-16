@@ -132,76 +132,6 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Application.Extensions
 			}
 		}
 
-		[Theory]
-		[InlineData(null)]
-		[InlineData("")]
-		[InlineData("\n\n \t        \t\n")]
-		public void ToAnimeCardDto_GivenAnimeWithNullOrWhitespaceAiringDate_ShouldReturnAnimeCardDtoWithNullAiringDate(string date)
-		{
-			// Given
-
-			var anime = new AnimeBuilder()
-				.WithAiringDate(date)
-				.Build();
-
-			// When
-			var dto = anime.ToAnimeCardDto();
-
-			// Then
-			using (new AssertionScope())
-			{
-				dto.Should().NotBeNull();
-				dto.AiringDate.Should().BeNull();
-			}
-		}
-
-		[Theory]
-		[InlineData("01-01-0001")]
-		[InlineData("01-01-1999")]
-		[InlineData("01-01-2000")]
-		[InlineData("10-10-2020")]
-		[InlineData("31-12-2020")]
-		[InlineData("29-02-2020")]
-		public void ToAnimeCardDto_GivenAnimeWithValidAiringDate_ShouldReturnAnimeCardDtoWithAiringDate(string date)
-		{
-			// Given
-
-			var anime = new AnimeBuilder()
-				.WithAiringDate(date)
-				.Build();
-
-			// When
-			var dto = anime.ToAnimeCardDto();
-
-			// Then
-			using (new AssertionScope())
-			{
-				dto.Should().NotBeNull();
-				dto.AiringDate.Should().NotBeNull();
-			}
-		}
-
-		[Theory]
-		[InlineData("Naruto")]
-		[InlineData("This is very pecular")]
-		[InlineData("Zażółć gęślą jaźń")]
-		[InlineData("01/01/1999")]
-		[InlineData("1th sept 1999")]
-		public void ToAnimeCardDto_GivenAnimeWithInvalidAiringDate_ShouldThrowException(string date)
-		{
-			// Given
-
-			var anime = new AnimeBuilder()
-				.WithAiringDate(date)
-				.Build();
-
-			// When
-			Func<AnimeCardDto> func = () => anime.ToAnimeCardDto();
-
-			// Then
-			func.Should().Throw<Exception>();
-		}
-
 		[Fact]
 		public void ToAnimeCardDto_GivenAnimeWithValues_ShouldReturnEmptyAnimeSearchEntryDtoWithValues()
 		{
@@ -261,7 +191,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Application.Extensions
 				dto.Title.Should().BeEmpty();
 				dto.Url.Should().NotBeEmpty();
 				dto.MalId.Should().Be(default);
-				dto.AiringFrom.Should().Be(null);
+				dto.AiringFrom.Should().Be(DateTime.MinValue);
 			}
 		}
 
@@ -288,73 +218,6 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Application.Extensions
 				dto.Should().NotBeNull();
 				dto.Title.Should().Be(title);
 			}
-		}
-
-		[Theory]
-		[InlineData(null)]
-		[InlineData("")]
-		[InlineData("\n\n \t        \t\n")]
-		public void ToAnimeTableEntry_GivenAnimeWithNullOrWhitespaceAiringFrom_ShouldReturnAnimeTableEntryDtoWithNullAiringFrom(string date)
-		{
-			// Given
-			var anime = new AnimeBuilder()
-				.WithAiringDate(date)
-				.Build();
-
-			// When
-			var dto = anime.ToAnimeTableEntry();
-
-			// Then
-			using (new AssertionScope())
-			{
-				dto.Should().NotBeNull();
-				dto.AiringFrom.Should().BeNull();
-			}
-		}
-
-		[Theory]
-		[InlineData("01-01-0001")]
-		[InlineData("01-01-1999")]
-		[InlineData("01-01-2000")]
-		[InlineData("10-10-2020")]
-		[InlineData("31-12-2020")]
-		[InlineData("29-02-2020")]
-		public void ToAnimeTableEntry_GivenAnimeWithValidAiringDate_ShouldReturnAnimeCardDtoWithAiringFrom(string date)
-		{
-			// Given
-			var anime = new AnimeBuilder()
-				.WithAiringDate(date)
-				.Build();
-
-			// When
-			var dto = anime.ToAnimeTableEntry();
-
-			// Then
-			using (new AssertionScope())
-			{
-				dto.Should().NotBeNull();
-				dto.AiringFrom.Should().NotBeNull();
-			}
-		}
-
-		[Theory]
-		[InlineData("Naruto")]
-		[InlineData("This is very pecular")]
-		[InlineData("Zażółć gęślą jaźń")]
-		[InlineData("01/01/1999")]
-		[InlineData("1th sept 1999")]
-		public void ToAnimeTableEntry_GivenAnimeWithInvalidAiringDate_ShouldThrowException(string date)
-		{
-			// Given
-			var anime = new AnimeBuilder()
-				.WithAiringDate(date)
-				.Build();
-
-			// When
-			Func<AnimeTableEntry> func = () => anime.ToAnimeTableEntry();
-
-			// Then
-			func.Should().Throw<Exception>();
 		}
 
 		[Fact]
