@@ -47,6 +47,7 @@ namespace SeiyuuMoe.Infrastructure.Animes
 			=> _dbContext.Animes
 			.Include(x => x.Type)
 			.Include(x => x.Status)
+			.Include(x => x.Season)
 			.FirstOrDefaultAsync(x => x.MalId == animeMalId);
 
 		public async Task<PagedResult<Anime>> GetOrderedPageByAsync(Expression<Func<Anime, bool>> predicate, int page = 0, int pageSize = 10)

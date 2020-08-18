@@ -175,6 +175,30 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Application.Extensions
 		}
 
 		[Fact]
+		public void ToAnimeCardDto_GivenAnimeWithSeason_ShouldReturnAnimeSearchEntryDtoWithSeason()
+		{
+			// Given
+			const string expectedSeason = "Winter";
+			const int expectedSeasonYear = 2010;
+			const long expectedMalId = 1;
+
+			var anime = new AnimeBuilder()
+				.WithMalId(expectedMalId)
+				.WithSeason(x => x.WithName(expectedSeason).WithYear(expectedSeasonYear).Build())
+				.Build();
+
+			// When
+			var dto = anime.ToAnimeCardDto();
+
+			// Then
+			using (new AssertionScope())
+			{
+				dto.Should().NotBeNull();
+				dto.Season.Should().Be(expectedSeason + ' ' +  expectedSeasonYear);
+			}
+		}
+
+		[Fact]
 		public void ToAnimeTableEntry_GivenEmptyAnime_ShouldReturnEmptyAnimeTableEntryDto()
 		{
 			// Given
