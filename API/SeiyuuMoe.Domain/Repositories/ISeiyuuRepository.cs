@@ -11,7 +11,7 @@ namespace SeiyuuMoe.Domain.Repositories
 	{
 		Task<Seiyuu> GetAsync(long seiyuuMalId);
 
-		Task<PagedResult<Seiyuu>> GetOrderedPageAsync(Expression<Func<Seiyuu, bool>> predicate, int page = 0, int pageSize = 10);
+		Task<PagedResult<Seiyuu>> GetOrderedPageByPopularityAsync(Expression<Func<Seiyuu, bool>> predicate, int page = 0, int pageSize = 10);
 
 		Task AddAsync(Seiyuu seiyuu);
 

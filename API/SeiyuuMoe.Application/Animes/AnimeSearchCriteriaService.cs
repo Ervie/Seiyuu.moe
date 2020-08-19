@@ -1,4 +1,5 @@
 ﻿using SeiyuuMoe.Application.Animes.SearchAnime;
+using SeiyuuMoe.Domain.Entities;
 using SeiyuuMoe.Infrastructure.Utilities;
 using System;
 using System.Linq.Expressions;
@@ -7,13 +8,13 @@ namespace SeiyuuMoe.Application.Animes
 {
 	public class AnimeSearchCriteriaService : IAnimeSearchCriteriaService
 	{
-		public Expression<Func<Domain.Entities.Anime, bool>> BuildExpression(SearchAnimeQuery query)
+		public Expression<Func<Anime, bool>> BuildExpression(SearchAnimeQuery query)
 		{
-			var predicate = PredicateBuilder.True<Domain.Entities.Anime>();
+			var predicate = PredicateBuilder.True<Anime>();
 			return query != null ? ExtendExpressionWithSearchCriteria(predicate, query) : predicate;
 		}
 
-		private Expression<Func<Domain.Entities.Anime, bool>> ExtendExpressionWithSearchCriteria(Expression<Func<Domain.Entities.Anime, bool>> predicate, SearchAnimeQuery query)
+		private Expression<Func<Anime, bool>> ExtendExpressionWithSearchCriteria(Expression<Func<Anime, bool>> predicate, SearchAnimeQuery query)
 		{
 			return predicate
 				.And(query.MalId != null && query.MalId.Count > 0, () => anime => query.MalId.Contains(anime.MalId))

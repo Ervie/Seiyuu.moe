@@ -1,6 +1,6 @@
 ﻿using SeiyuuMoe.Animes;
 using SeiyuuMoe.Domain.ComparisonEntities;
-using System;
+using SeiyuuMoe.Domain.Entities;
 
 namespace SeiyuuMoe.Application.Animes.Extensions
 {
@@ -8,26 +8,28 @@ namespace SeiyuuMoe.Application.Animes.Extensions
 	{
 		private const string MalAnimeBaseUrl = "https://myanimelist.net/anime/";
 
-		public static AnimeSearchEntryDto ToAnimeSearchEntryDto(this Domain.Entities.Anime anime)
+		public static AnimeSearchEntryDto ToAnimeSearchEntryDto(this Anime anime)
 			=> new AnimeSearchEntryDto(anime.Title, anime.ImageUrl, anime.MalId);
 
-		public static AnimeCardDto ToAnimeCardDto(this Domain.Entities.Anime anime)
-			=> new AnimeCardDto(
-				anime.Title,
-				anime.ImageUrl,
-				anime.MalId,
-				anime.KanjiTitle,
-				anime.TitleSynonyms,
-				anime.About,
-				anime.AiringDate,
-				anime.Status?.Description ?? string.Empty,
-				anime.Type?.Description ?? string.Empty,
-				anime.Season != null
-					? anime.Season.Name + ' ' + anime.Season.Year
-					: string.Empty
-			);
+		public static AnimeCardDto ToAnimeCardDto(this Anime anime) => 
+			anime == null
+				? null
+				: new AnimeCardDto(
+					anime.Title,
+					anime.ImageUrl,
+					anime.MalId,
+					anime.KanjiTitle,
+					anime.TitleSynonyms,
+					anime.About,
+					anime.AiringDate,
+					anime.Status?.Description ?? string.Empty,
+					anime.Type?.Description ?? string.Empty,
+					anime.Season != null
+						? anime.Season.Name + ' ' + anime.Season.Year
+						: string.Empty
+				);
 
-		public static AnimeTableEntry ToAnimeTableEntry(this Domain.Entities.Anime anime)
+		public static AnimeTableEntry ToAnimeTableEntry(this Anime anime)
 			=> new AnimeTableEntry(
 				anime.MalId,
 				anime.Title,

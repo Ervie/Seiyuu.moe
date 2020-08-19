@@ -1,8 +1,7 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
-using SeiyuuMoe.Application.Animes;
 using SeiyuuMoe.Application.Animes.Extensions;
-using SeiyuuMoe.Domain.ComparisonEntities;
+using SeiyuuMoe.Domain.Entities;
 using SeiyuuMoe.Tests.Unit.Builders.Model;
 using System;
 using Xunit;
@@ -80,6 +79,16 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Application.Extensions
 				dto.ImageUrl.Should().Be(expectedImageUrl);
 				dto.MalId.Should().Be(expectedMalId);
 			}
+		}
+
+		[Fact]
+		public void ToAnimeCardDto_GivenNull_ShouldReturnNull()
+		{
+			// Given && When
+			var dto = ((Anime) null).ToAnimeCardDto();
+
+			// Then
+			dto.Should().BeNull();
 		}
 
 		[Fact]
@@ -194,7 +203,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Application.Extensions
 			using (new AssertionScope())
 			{
 				dto.Should().NotBeNull();
-				dto.Season.Should().Be(expectedSeason + ' ' +  expectedSeasonYear);
+				dto.Season.Should().Be(expectedSeason + ' ' + expectedSeasonYear);
 			}
 		}
 

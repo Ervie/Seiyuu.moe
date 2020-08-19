@@ -1,5 +1,5 @@
 ﻿using SeiyuuMoe.Domain.ComparisonEntities;
-using System;
+using SeiyuuMoe.Domain.Entities;
 
 namespace SeiyuuMoe.Application.Seiyuus.Extensions
 {
@@ -7,11 +7,12 @@ namespace SeiyuuMoe.Application.Seiyuus.Extensions
 	{
 		private const string MalPersonBaseUrl = "https://myanimelist.net/people/";
 
-		public static SeiyuuSearchEntryDto ToSeiyuuSearchEntryDto(this Domain.Entities.Seiyuu seiyuu)
+		public static SeiyuuSearchEntryDto ToSeiyuuSearchEntryDto(this Seiyuu seiyuu)
 			=> new SeiyuuSearchEntryDto(seiyuu.MalId, seiyuu.Name, seiyuu.ImageUrl);
 
-		public static SeiyuuCardDto ToSeiyuuCardDto(this Domain.Entities.Seiyuu seiyuu)
-			=> new SeiyuuCardDto(
+		public static SeiyuuCardDto ToSeiyuuCardDto(this Seiyuu seiyuu) => seiyuu == null 
+			? null
+			: new SeiyuuCardDto(
 				seiyuu.MalId,
 				seiyuu.Name,
 				seiyuu.ImageUrl,
@@ -20,7 +21,7 @@ namespace SeiyuuMoe.Application.Seiyuus.Extensions
 				seiyuu.About
 			);
 
-		public static SeiyuuTableEntry ToSeiyuuTableEntry(this Domain.Entities.Seiyuu seiyuu)
+		public static SeiyuuTableEntry ToSeiyuuTableEntry(this Seiyuu seiyuu)
 			=> new SeiyuuTableEntry(
 				seiyuu.MalId,
 				seiyuu.Name,

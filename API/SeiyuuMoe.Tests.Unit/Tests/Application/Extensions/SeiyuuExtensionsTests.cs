@@ -2,6 +2,7 @@
 using FluentAssertions.Execution;
 using SeiyuuMoe.Application.Seiyuus;
 using SeiyuuMoe.Application.Seiyuus.Extensions;
+using SeiyuuMoe.Domain.Entities;
 using SeiyuuMoe.Tests.Unit.Builders.Model;
 using System;
 using Xunit;
@@ -79,6 +80,16 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Application.Extensions
 				dto.ImageUrl.Should().Be(expectedImageUrl);
 				dto.MalId.Should().Be(expectedMalId);
 			}
+		}
+
+		[Fact]
+		public void ToSeiyuuCardDto_GivenNull_ShouldReturnNull()
+		{
+			// Given && When
+			var dto = ((Seiyuu) null).ToSeiyuuCardDto();
+
+			// Then
+			dto.Should().BeNull();
 		}
 
 		[Fact]

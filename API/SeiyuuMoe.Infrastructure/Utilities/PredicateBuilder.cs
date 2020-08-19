@@ -14,13 +14,10 @@ namespace SeiyuuMoe.Infrastructure.Utilities
 
 		public static Expression<Func<T, bool>> False<T>(IQueryable<T> query) => f => false;
 
-		public static Expression<Func<T, bool>> Or<T>(
-			this Expression<Func<T, bool>> first, bool condition, Func<Expression<Func<T, bool>>> second)
-		{
-			return condition
+		public static Expression<Func<T, bool>> Or<T>(this Expression<Func<T, bool>> first, bool condition, Func<Expression<Func<T, bool>>> second) 
+			=> condition
 				? first.Or(second())
 				: first;
-		}
 
 		public static Expression<Func<T, bool>> Or<T>(
 			this Expression<Func<T, bool>> expr1,
@@ -31,13 +28,10 @@ namespace SeiyuuMoe.Infrastructure.Utilities
 				  Expression.OrElse(expr1.Body, secondBody), expr1.Parameters);
 		}
 
-		public static Expression<Func<T, bool>> And<T>(
-			this Expression<Func<T, bool>> first, bool condition, Func<Expression<Func<T, bool>>> second)
-		{
-			return condition
+		public static Expression<Func<T, bool>> And<T>(this Expression<Func<T, bool>> first, bool condition, Func<Expression<Func<T, bool>>> second) 
+			=> condition
 				? first.And(second())
 				: first;
-		}
 
 		public static Expression<Func<T, bool>> And<T>(
 			this Expression<Func<T, bool>> expr1,
@@ -48,28 +42,22 @@ namespace SeiyuuMoe.Infrastructure.Utilities
 				  Expression.AndAlso(expr1.Body, secondBody), expr1.Parameters);
 		}
 
-		public static Expression Replace(
-			this Expression expression,
-			Expression searchEx,
-			Expression replaceEx)
-		{
-			return new ReplaceVisitor(searchEx, replaceEx).Visit(expression);
-		}
+		public static Expression Replace(this Expression expression, Expression searchEx, Expression replaceEx) => new ReplaceVisitor(searchEx, replaceEx).Visit(expression);
 
 		internal class ReplaceVisitor : ExpressionVisitor
 		{
-			private readonly Expression from;
-			private readonly Expression to;
+			private readonly Expression _from;
+			private readonly Expression _to;
 
 			public ReplaceVisitor(Expression from, Expression to)
 			{
-				this.from = from;
-				this.to = to;
+				_from = from;
+				_to = to;
 			}
 
 			public override Expression Visit(Expression node)
 			{
-				return node == from ? to : base.Visit(node);
+				return node == _from ? _to : base.Visit(node);
 			}
 		}
 	}

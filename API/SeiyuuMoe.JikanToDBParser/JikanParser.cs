@@ -285,7 +285,7 @@ namespace SeiyuuMoe.JikanToDBParser
 			while (page * pageSize < totalSeiyuuCount)
 			{
 				var seiyuuCollection =
-					await _seiyuuRepository.GetOrderedPageAsync(PredicateBuilder.True<Seiyuu>(), page, pageSize);
+					await _seiyuuRepository.GetOrderedPageByPopularityAsync(PredicateBuilder.True<Seiyuu>(), page, pageSize);
 
 				foreach (var seiyuu in seiyuuCollection.Results)
 				{

@@ -25,7 +25,7 @@ namespace SeiyuuMoe.Application.Seiyuus.SearchSeiyuu
 		{
 			var expression = _seiyuuSearchCriteriaService.BuildExpression(query);
 
-			var entities = await _seiyuuRepository.GetOrderedPageAsync(expression);
+			var entities = await _seiyuuRepository.GetOrderedPageByPopularityAsync(expression);
 
 			var result = entities.Map<Seiyuu, SeiyuuSearchEntryDto>(entities.Results.Select(x => x.ToSeiyuuSearchEntryDto()));
 

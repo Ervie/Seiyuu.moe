@@ -33,7 +33,7 @@ namespace SeiyuuMoe.Infrastructure.Seiyuus
 		public Task<Domain.Entities.Seiyuu> GetAsync(long seiyuuMalId)
 			=> _dbContext.Seiyuus.FirstOrDefaultAsync(x => x.MalId == seiyuuMalId);
 
-		public async Task<PagedResult<Domain.Entities.Seiyuu>> GetOrderedPageAsync(Expression<Func<Domain.Entities.Seiyuu, bool>> predicate, int page = 0, int pageSize = 10)
+		public async Task<PagedResult<Domain.Entities.Seiyuu>> GetOrderedPageByPopularityAsync(Expression<Func<Domain.Entities.Seiyuu, bool>> predicate, int page = 0, int pageSize = 10)
 		{
 			var entities = _dbContext.Seiyuus.Where(predicate);
 			var totalCount = await entities.CountAsync();

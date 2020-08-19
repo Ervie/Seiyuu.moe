@@ -343,14 +343,14 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 		}
 
 		[Fact]
-		public async Task GetOrderedPageAsync_GivenNoSeiyuu_ShouldReturnEmpty()
+		public async Task GetOrderedPageByPopularityAsync_GivenNoSeiyuu_ShouldReturnEmpty()
 		{
 			// Given
 			var dbContext = InMemoryDbProvider.GetDbContext();
 			var repository = new SeiyuuRepository(dbContext);
 
 			// When
-			var result = await repository.GetOrderedPageAsync(x => true);
+			var result = await repository.GetOrderedPageByPopularityAsync(x => true);
 
 			// Then
 			using (new AssertionScope())
@@ -361,7 +361,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 		}
 
 		[Fact]
-		public async Task GetOrderedPageAsync_GivenMultipleSeiyuu_ShouldReturnAll()
+		public async Task GetOrderedPageByPopularityAsync_GivenMultipleSeiyuu_ShouldReturnAll()
 		{
 			// Given
 			var dbContext = InMemoryDbProvider.GetDbContext();
@@ -376,7 +376,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			await dbContext.SaveChangesAsync();
 
 			// When
-			var result = await repository.GetOrderedPageAsync(x => true);
+			var result = await repository.GetOrderedPageByPopularityAsync(x => true);
 
 			// Then
 			using (new AssertionScope())
@@ -387,7 +387,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 		}
 
 		[Fact]
-		public async Task GetOrderedPageAsync_GivenMultipleWithPagesize_ShouldReturnOnlyOnePage()
+		public async Task GetOrderedPageByPopularityAsync_GivenMultipleWithPagesize_ShouldReturnOnlyOnePage()
 		{
 			// Given
 			const int pageSize = 2;
@@ -404,7 +404,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			await dbContext.SaveChangesAsync();
 
 			// When
-			var result = await repository.GetOrderedPageAsync(x => true, 0, pageSize);
+			var result = await repository.GetOrderedPageByPopularityAsync(x => true, 0, pageSize);
 
 			// Then// Then
 			using (new AssertionScope())
@@ -416,7 +416,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 		}
 
 		[Fact]
-		public async Task GetOrderedPageAsync_GivenMultipleWithPagesizeAndPage_ShouldReturnOnlyOnePage()
+		public async Task GetOrderedPageByPopularityAsync_GivenMultipleWithPagesizeAndPage_ShouldReturnOnlyOnePage()
 		{
 			// Given
 			const int pageSize = 2;
@@ -434,7 +434,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			await dbContext.SaveChangesAsync();
 
 			// When
-			var result = await repository.GetOrderedPageAsync(x => true, pageNumber, pageSize);
+			var result = await repository.GetOrderedPageByPopularityAsync(x => true, pageNumber, pageSize);
 
 			// Then// Then
 			using (new AssertionScope())
@@ -447,7 +447,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 		}
 
 		[Fact]
-		public async Task GetOrderedPageAsync_GivenMultipleWithPredicate_ShouldReturnOnlyOnePage()
+		public async Task GetOrderedPageByPopularityAsync_GivenMultipleWithPredicate_ShouldReturnOnlyOnePage()
 		{
 			// Given
 			const int pageSize = 2;
@@ -464,7 +464,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			await dbContext.SaveChangesAsync();
 
 			// When
-			var result = await repository.GetOrderedPageAsync(x => x.Name.EndsWith("1"), 0, pageSize);
+			var result = await repository.GetOrderedPageByPopularityAsync(x => x.Name.EndsWith("1"), 0, pageSize);
 
 			// Then// Then
 			using (new AssertionScope())
@@ -476,7 +476,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 		}
 
 		[Fact]
-		public async Task GetOrderedPageAsync_GivenMultipleWithPredicate_ShouldReturnEmpty()
+		public async Task GetOrderedPageByPopularityAsync_GivenMultipleWithPredicate_ShouldReturnEmpty()
 		{
 			// Given
 			const int pageSize = 2;
@@ -494,7 +494,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			await dbContext.SaveChangesAsync();
 
 			// When
-			var result = await repository.GetOrderedPageAsync(x => x.Name.EndsWith("1"), pageNumber, pageSize);
+			var result = await repository.GetOrderedPageByPopularityAsync(x => x.Name.EndsWith("1"), pageNumber, pageSize);
 
 			// Then// Then
 			using (new AssertionScope())
