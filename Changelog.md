@@ -1,3 +1,8 @@
+### Version 2.3 - 23 August 2020 (latest)
+
+* Fix season displaying in anime card
+* Rework mobile comparison tables and timeline to include images
+
 ### Version 2.2 - 16 August 2020 (latest)
 
 * More DDD approach (Domain, Application, Infrastructure).

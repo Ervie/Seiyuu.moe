@@ -62,12 +62,10 @@ Require .Net Core 3.1 installed.
 
 ## Changelog
 
-### Version 2.2 - 11 May 2020
+### Version 2.3 - 23 August 2020
 
-* More DDD approach (Domain, Application, Infrastructure)
-* Unit tests
-* Enable migrations on the database
-* Migrate to MySQL
+* Fix season displaying in anime card
+* Rework mobile comparison tables and timeline to include images
 
 **[Read More](https://github.com/Ervie/Seiyuu.moe/blob/master/Changelog.md)**
 

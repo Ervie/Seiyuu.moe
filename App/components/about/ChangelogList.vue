@@ -84,6 +84,14 @@
             return {
                 showOlderUpdates: false,
                 newestItem: {
+                  title: 'Version 2.2 - Season summary',
+                  date: '23rd August 2020',
+                  items: [
+                      { isFeature: true, title: 'Add image to mobile comparison tables and timeline' },
+                      { isFeature: false, title: 'Proper season displaying in anime card' }
+                  ]},
+                items: [
+                  {
                   title: 'Version 2.1 - Season summary',
                   date: '11th May 2019',
                   items: [
@@ -93,7 +101,6 @@
                       { isFeature: false, title: '"No results" placeholder on autocompletion.' },
                       { isFeature: false, title: 'Search working with alternative titles.' }
                   ]},
-                items: [
                   {
                   title: 'Version 2.0 - Performance improvement',
                   date: '30th March 2019',
