@@ -15,23 +15,17 @@
           <v-card-text 
             v-for="animeEntry in singleObjectToArray(props.item.anime)" 
             :key="animeEntry.malId"
-            class="primary title font-weight-bold"> 
+            class="primary title font-weight-bold mobile-card-text"> 
             {{ animeEntry.title }}
             </v-card-text>
-          <v-container fluid grid-list-lg>
-            <v-layout 
-              v-for="role in props.item.seiyuuCharacters" 
-              :key="role.seiyuu.malId"
-              row>
-              <v-flex xs6
-                class="body-2">
-                {{ swapNameSurname(decodeHtml(role.seiyuu.name)) }}
-              </v-flex>
-              <v-flex xs6>
-                <div
-                class="body-2"  
+          <v-container fluid grid-list-xs class="smaller-padding" v-for="role in props.item.seiyuuCharacters" :key="role.seiyuu.malId">
+            <v-card-text class="title mobile-card-text"> {{ role.seiyuu.name }} </v-card-text>
+            <v-layout justify-center row wrap>
+              <v-flex xs6 sm4 md3
                 v-for="character in role.characters" 
-                :key="character.malId">
+                :key="character.malId"> 
+                <div class="body-2">
+                  <v-img :src="pathToImage(character.imageUrl)" />
                   {{ swapNameSurname(decodeHtml(character.name)) }}
                 </div>
               </v-flex>
@@ -53,3 +47,9 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.mobile-card-text {
+  padding: 8px;
+}
+</style>

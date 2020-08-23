@@ -112,4 +112,7 @@ a {
   position: relative;
 }    
 
+.smaller-padding {
+  padding: 4px;
+}
 </style>

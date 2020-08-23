@@ -1,5 +1,5 @@
 <template>
-  <v-container grid-list-md text-xs-center>
+  <v-container grid-list-xs text-xs-center>
     <browser 
       @seiyuuReturned="addSeiyuu"
       @runImmediately="runImmediately = true"

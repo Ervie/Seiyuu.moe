@@ -44,7 +44,7 @@
           </v-tab-item>
         </v-tabs-items>
     </v-container>
-    <v-container hidden-lg-and-up>
+    <v-container hidden-lg-and-up class="smaller-padding">
        <anime-data-iterator
           :items="tableData" 
         />

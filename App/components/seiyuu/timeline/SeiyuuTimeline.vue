@@ -1,6 +1,6 @@
 <template>
 <div>
-  <v-container hidden-md-and-down>
+  <v-container hidden-sm-and-down class="smaller-padding">
     <v-timeline v-if="items != null">
       <v-timeline-item
       color="secondary"
@@ -45,7 +45,7 @@
       </v-timeline-item>
     </v-timeline>
   </v-container>
-  <v-container hidden-lg-and-up>
+  <v-container hidden-md-and-up class="smaller-padding">
     <v-timeline
       dense>
       <v-timeline-item
@@ -69,10 +69,11 @@
       >
         <v-layout align-center justify-center row fill-height >
             <v-flex xs4>
-        <div class="caption" > {{ anime.airedDate }} </div>
+              <v-img :src="pathToImage(anime.imageUrl)" />
             </v-flex>
             <v-flex xs8>
-        <div class="subheading"> {{ anime.title }}  </div>
+              <div class="subheading"> {{ anime.title }}  </div>
+              <div class="caption" > ({{ anime.airedDate }}) </div>
             </v-flex>
         </v-layout>
       </v-timeline-item>
