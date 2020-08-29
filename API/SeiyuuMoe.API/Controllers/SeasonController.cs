@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SeiyuuMoe.API.Controllers.Base;
+using SeiyuuMoe.Application.Seasons;
 using SeiyuuMoe.Application.Seasons.GetSeasonSummaries;
+using SeiyuuMoe.Domain.WebEssentials;
 using SeiyuuMoe.Infrastructure.Logger;
 using System.Threading.Tasks;
 
@@ -18,9 +20,7 @@ namespace SeiyuuMoe.API.Controllers
 
 		[HttpGet]
 		[Route("Summary")]
-		public Task<IActionResult> GetSeasonSummary([FromQuery] GetSeasonSummariesQuery query)
-		{
-			return Handle(async () => HandleServiceResult(await _getSeasonSummariesQueryHandler.HandleAsync(query)));
-		}
+		public Task<QueryResponse<PagedResult<SeasonSummaryEntryDto>>> GetSeasonSummary([FromQuery] GetSeasonSummariesQuery query)
+			=> HandleAsync(async () => await _getSeasonSummariesQueryHandler.HandleAsync(query));
 	}
 }

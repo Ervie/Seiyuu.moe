@@ -1,9 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
+using SeiyuuMoe.AnimeComparisons;
+using SeiyuuMoe.Animes;
 using SeiyuuMoe.API.Controllers.Base;
 using SeiyuuMoe.Application.AnimeComparisons.CompareAnime;
+using SeiyuuMoe.Application.Animes;
 using SeiyuuMoe.Application.Animes.GetAnimeCardInfo;
 using SeiyuuMoe.Application.Animes.SearchAnime;
+using SeiyuuMoe.Domain.WebEssentials;
 using SeiyuuMoe.Infrastructure.Logger;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SeiyuuMoe.API.Controllers
@@ -29,23 +34,20 @@ namespace SeiyuuMoe.API.Controllers
 
 		[HttpGet]
 		[Route("{id}")]
-		public Task<IActionResult> GetCardInfo(long id)
+		public async Task<QueryResponse<AnimeCardDto>> GetCardInfo(long id)
 		{
 			var query = new GetAnimeCardInfoQuery(id);
-			return Handle(async () => HandleServiceResult(await _getAnimeCardInfoQueryHandler.HandleAsync(query)));
+			return await HandleAsync(async () => await _getAnimeCardInfoQueryHandler.HandleAsync(query));
 		}
 
 		[HttpGet]
-		public Task<IActionResult> GetSearchEntries([FromQuery] SearchAnimeQuery query)
-		{
-			return Handle(async () => HandleServiceResult(await _searchAnimeQueryHandler.HandleAsync(query)));
-		}
+		public Task<QueryResponse<PagedResult<AnimeSearchEntryDto>>> GetSearchEntries([FromQuery] SearchAnimeQuery query)
+			=> HandleAsync(async () => await _searchAnimeQueryHandler.HandleAsync(query));
 
 		[HttpGet]
 		[Route("Compare")]
-		public Task<IActionResult> GetComparison([FromQuery] CompareAnimeQuery query)
-		{
-			return Handle(async () => HandleServiceResult(await _compareAnimeQueryHandler.HandleAsync(query)));
-		}
+		public Task<QueryResponse<ICollection<AnimeComparisonEntryDto>>> GetComparison([FromQuery] CompareAnimeQuery query)
+			=> HandleAsync(async () => await _compareAnimeQueryHandler.HandleAsync(query));
+		
 	}
 }
