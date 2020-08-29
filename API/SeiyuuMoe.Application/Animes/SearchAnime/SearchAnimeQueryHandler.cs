@@ -22,15 +22,13 @@ namespace SeiyuuMoe.Application.Animes.SearchAnime
 			_animeSearchCriteriaService = animeSearchCriteriaService;
 		}
 
-		public async Task<QueryResponse<PagedResult<AnimeSearchEntryDto>>> HandleAsync(SearchAnimeQuery query)
+		public async Task<PagedResult<AnimeSearchEntryDto>> HandleAsync(SearchAnimeQuery query)
 		{
 			var expression = _animeSearchCriteriaService.BuildExpression(query);
 
 			var entities = await _animeRepository.GetOrderedPageByPopularityAsync(expression);
 
-			var result = entities.Map<Anime, AnimeSearchEntryDto>(entities.Results.Select(x => x.ToAnimeSearchEntryDto()));
-
-			return new QueryResponse<PagedResult<AnimeSearchEntryDto>>(result);
+			return entities.Map<Anime, AnimeSearchEntryDto>(entities.Results.Select(x => x.ToAnimeSearchEntryDto()));
 		}
 	}
 }

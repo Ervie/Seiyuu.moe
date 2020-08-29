@@ -1,6 +1,5 @@
 ﻿using SeiyuuMoe.Application.Seiyuus.Extensions;
 using SeiyuuMoe.Domain.Repositories;
-using SeiyuuMoe.Domain.WebEssentials;
 using System.Threading.Tasks;
 
 namespace SeiyuuMoe.Application.Seiyuus.GetSeiyuuCardInfo
@@ -14,12 +13,11 @@ namespace SeiyuuMoe.Application.Seiyuus.GetSeiyuuCardInfo
 			_seiyuuRepository = seiyuuRepository;
 		}
 
-		public async Task<QueryResponse<SeiyuuCardDto>> HandleAsync(GetSeiyuuCardInfoQuery query)
-
+		public async Task<SeiyuuCardDto> HandleAsync(GetSeiyuuCardInfoQuery query)
 		{
 			var entity = await _seiyuuRepository.GetAsync(query.MalId);
 
-			return new QueryResponse<SeiyuuCardDto>(entity.ToSeiyuuCardDto());
+			return entity.ToSeiyuuCardDto();
 		}
 	}
 }

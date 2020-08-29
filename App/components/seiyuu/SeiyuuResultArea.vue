@@ -122,8 +122,8 @@ export default {
         this.outputData = [];
         axios.get(this.getSeiyuuCompareRequest())
           .then((response) => {
-            if (response.data.payload !== null) {
-              this.outputData = response.data.payload;
+            if (response.data !== null) {
+              this.outputData = response.data;
               this.loadingComparison = false;
             }
           })

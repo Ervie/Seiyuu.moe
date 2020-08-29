@@ -2,7 +2,6 @@
 using SeiyuuMoe.Domain.ComparisonEntities;
 using SeiyuuMoe.Domain.Entities;
 using SeiyuuMoe.Domain.Repositories;
-using SeiyuuMoe.Domain.WebEssentials;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +18,7 @@ namespace SeiyuuMoe.Application.SeiyuuComparisons.CompareSeiyuu
 			_seiyuuRoleRepository = seiyuuRoleRepository;
 		}
 
-		public async Task<QueryResponse<ICollection<SeiyuuComparisonEntryDto>>> HandleAsync(CompareSeiyuuQuery query)
+		public async Task<ICollection<SeiyuuComparisonEntryDto>> HandleAsync(CompareSeiyuuQuery query)
 		{
 			ICollection<SeiyuuComparisonEntry> partialResults = new List<SeiyuuComparisonEntry>();
 
@@ -57,9 +56,7 @@ namespace SeiyuuMoe.Application.SeiyuuComparisons.CompareSeiyuu
 				GroupByFranchise(partialResults) :
 				partialResults;
 
-			var mappedResults = partialResults.Select(x => x.ToSeiyuuComparisonEntryDto()).ToList();
-
-			return new QueryResponse<ICollection<SeiyuuComparisonEntryDto>>(mappedResults);
+			return partialResults.Select(x => x.ToSeiyuuComparisonEntryDto()).ToList();
 		}
 
 		private async Task<IReadOnlyCollection<AnimeRole>> GetSeiyuuRoles(long seiyuuMalId, bool? mainRolesOnly)

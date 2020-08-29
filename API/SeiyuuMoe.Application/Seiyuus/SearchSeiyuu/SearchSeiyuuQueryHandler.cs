@@ -21,15 +21,13 @@ namespace SeiyuuMoe.Application.Seiyuus.SearchSeiyuu
 			_seiyuuSearchCriteriaService = seiyuuSearchCriteriaService;
 		}
 
-		public async Task<QueryResponse<PagedResult<SeiyuuSearchEntryDto>>> HandleAsync(SearchSeiyuuQuery query)
+		public async Task<PagedResult<SeiyuuSearchEntryDto>> HandleAsync(SearchSeiyuuQuery query)
 		{
 			var expression = _seiyuuSearchCriteriaService.BuildExpression(query);
 
 			var entities = await _seiyuuRepository.GetOrderedPageByPopularityAsync(expression);
 
-			var result = entities.Map<Seiyuu, SeiyuuSearchEntryDto>(entities.Results.Select(x => x.ToSeiyuuSearchEntryDto()));
-
-			return new QueryResponse<PagedResult<SeiyuuSearchEntryDto>>(result);
+			return entities.Map<Seiyuu, SeiyuuSearchEntryDto>(entities.Results.Select(x => x.ToSeiyuuSearchEntryDto()));
 		}
 	}
 }

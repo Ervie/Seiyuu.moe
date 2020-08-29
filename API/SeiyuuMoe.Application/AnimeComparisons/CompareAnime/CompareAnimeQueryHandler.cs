@@ -18,7 +18,7 @@ namespace SeiyuuMoe.Application.AnimeComparisons.CompareAnime
 			_roleRepository = animeRoleRepository;
 		}
 
-		public async Task<QueryResponse<ICollection<AnimeComparisonEntryDto>>> HandleAsync(CompareAnimeQuery query)
+		public async Task<ICollection<AnimeComparisonEntryDto>> HandleAsync(CompareAnimeQuery query)
 		{
 			ICollection<AnimeComparisonEntry> partialResults = new List<AnimeComparisonEntry>();
 
@@ -58,7 +58,7 @@ namespace SeiyuuMoe.Application.AnimeComparisons.CompareAnime
 
 			var mappedEntities = partialResults.Select(x => x.ToAnimeComparisonEntryDto()).ToList();
 
-			return new QueryResponse<ICollection<AnimeComparisonEntryDto>>(mappedEntities);
+			return mappedEntities;
 		}
 	}
 }

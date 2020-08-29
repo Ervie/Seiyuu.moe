@@ -35,7 +35,7 @@ namespace SeiyuuMoe.Application.Seasons.GetSeasonSummaries
 			_seasonSearchCriteriaService = seasonSearchCriteriaService;
 		}
 
-		public async Task<QueryResponse<PagedResult<SeasonSummaryEntryDto>>> HandleAsync(GetSeasonSummariesQuery query)
+		public async Task<PagedResult<SeasonSummaryEntryDto>> HandleAsync(GetSeasonSummariesQuery query)
 		{
 			var seasonPredicate = _seasonSearchCriteriaService.BuildExpression(query);
 
@@ -61,7 +61,7 @@ namespace SeiyuuMoe.Application.Seasons.GetSeasonSummaries
 
 					var mappedRoles = groupedRoles.Map<SeasonSummaryEntry, SeasonSummaryEntryDto>(groupedRoles.Results.Select(x => x.ToSeasonSummaryEntryDto()));
 
-					return new QueryResponse<PagedResult<SeasonSummaryEntryDto>>(mappedRoles);
+					return mappedRoles;
 				}
 			}
 

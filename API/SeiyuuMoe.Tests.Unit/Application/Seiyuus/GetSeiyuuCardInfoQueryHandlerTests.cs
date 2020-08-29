@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using FluentAssertions.Execution;
 using Moq;
 using SeiyuuMoe.Application.Seiyuus;
 using SeiyuuMoe.Application.Seiyuus.GetSeiyuuCardInfo;
@@ -25,11 +24,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Application.Seiyuus
 
 			// Then
 			mockRepository.Verify(x => x.GetAsync(seiyuuMalId), Times.Once);
-			using (new AssertionScope())
-			{
-				result.Found.Should().BeFalse();
-				result.Payload.Should().BeNull();
-			}
+			result.Should().BeNull();
 		}
 
 		[Fact]
@@ -46,11 +41,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Application.Seiyuus
 
 			// Then
 			mockRepository.Verify(x => x.GetAsync(seiyuuMalId), Times.Once);
-			using (new AssertionScope())
-			{
-				result.Found.Should().BeTrue();
-				result.Payload.Should().NotBeNull().And.BeOfType(typeof(SeiyuuCardDto));
-			}
+			result.Should().NotBeNull().And.BeOfType(typeof(SeiyuuCardDto));
 		}
 	}
 }

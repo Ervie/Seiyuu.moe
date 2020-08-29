@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using FluentAssertions.Execution;
 using Moq;
 using SeiyuuMoe.Application.Seiyuus;
 using SeiyuuMoe.Application.Seiyuus.SearchSeiyuu;
@@ -34,11 +33,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Application.Seiyuus
 
 			// Then
 			mockRepository.Verify(x => x.GetOrderedPageByPopularityAsync(It.IsAny<Expression<Func<Seiyuu, bool>>>(), 0, 10), Times.Once);
-			using (new AssertionScope())
-			{
-				result.Found.Should().BeTrue();
-				result.Payload.Results.Should().BeEmpty();
-			}
+			result.Results.Should().BeEmpty();
 		}
 
 		[Fact]
@@ -64,12 +59,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Application.Seiyuus
 
 			// Then
 			mockRepository.Verify(x => x.GetOrderedPageByPopularityAsync(It.IsAny<Expression<Func<Seiyuu, bool>>>(), 0, 10), Times.Once);
-			using (new AssertionScope())
-			{
-				result.Found.Should().BeTrue();
-				result.Payload.Should().NotBeNull();
-				result.Payload.Results.Should().NotBeNull();
-			}
+			result.Results.Should().NotBeNull();
 		}
 	}
 }

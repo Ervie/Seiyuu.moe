@@ -14,11 +14,11 @@ namespace SeiyuuMoe.Application.Animes.GetAnimeCardInfo
 			_animeRepository = animeRepository;
 		}
 
-		public async Task<QueryResponse<AnimeCardDto>> HandleAsync(GetAnimeCardInfoQuery query)
+		public async Task<AnimeCardDto> HandleAsync(GetAnimeCardInfoQuery query)
 		{
 			var entity = await _animeRepository.GetAsync(query.MalId);
 
-			return new QueryResponse<AnimeCardDto>(entity.ToAnimeCardDto());
+			return entity.ToAnimeCardDto();
 		}
 	}
 }

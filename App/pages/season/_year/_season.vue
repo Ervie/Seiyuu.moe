@@ -157,8 +157,8 @@ export default {
         '&MainRolesOnly=' + this.mainRolesOnly +
         '&TVSeriesOnly=' + this.tvSeriesOnly)
       .then((response) => {
-        this.seasonSummaryData = response.data.payload.results;
-        this.totalPages = Math.ceil(response.data.payload.totalCount / this.pageSize);
+        this.seasonSummaryData = response.data.results;
+        this.totalPages = Math.ceil(response.data.totalCount / this.pageSize);
         this.loading = false;
       })
       .catch((e) => {
@@ -177,8 +177,8 @@ export default {
         '&TVSeriesOnly=' + store.getters.getSeasonSummaryTVSeriesOnly)
     .then((response) => {
       return { 
-        seasonSummaryData: response.data.payload.results,
-        totalPages: Math.ceil(response.data.payload.totalCount / response.data.payload.pageSize),
+        seasonSummaryData: response.data.results,
+        totalPages: Math.ceil(response.data.totalCount / response.data.pageSize),
         season: params.season,
         year: Number(params.year)
       }

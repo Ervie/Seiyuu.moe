@@ -27,7 +27,7 @@ namespace SeiyuuMoe.Tests.Component.Animes
 			using (new AssertionScope())
 			{
 				//result.Found.Should().BeTrue();
-				result.Payload.Results.Should().BeEmpty();
+				result.Results.Should().BeEmpty();
 			}
 		}
 

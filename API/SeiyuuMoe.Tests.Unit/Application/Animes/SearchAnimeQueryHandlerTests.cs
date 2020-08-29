@@ -34,11 +34,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Application.Animes
 
 			// Then
 			mockRepository.Verify(x => x.GetOrderedPageByPopularityAsync(It.IsAny<Expression<Func<Anime, bool>>>(), 0, 10), Times.Once);
-			using (new AssertionScope())
-			{
-				result.Found.Should().BeTrue();
-				result.Payload.Results.Should().BeEmpty();
-			}
+			result.Results.Should().BeEmpty();
 		}
 
 		[Fact]
@@ -66,9 +62,8 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Application.Animes
 			mockRepository.Verify(x => x.GetOrderedPageByPopularityAsync(It.IsAny<Expression<Func<Anime, bool>>>(), 0, 10), Times.Once);
 			using (new AssertionScope())
 			{
-				result.Found.Should().BeTrue();
-				result.Payload.Should().NotBeNull();
-				result.Payload.Results.Should().NotBeNull();
+				result.Should().NotBeNull();
+				result.Results.Should().NotBeNull();
 			}
 		}
 	}

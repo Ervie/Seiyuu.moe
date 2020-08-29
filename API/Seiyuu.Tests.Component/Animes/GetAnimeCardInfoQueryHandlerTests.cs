@@ -25,11 +25,7 @@ namespace SeiyuuMoe.Tests.Component.Animes
 			var result = await handler.HandleAsync(new GetAnimeCardInfoQuery(animeMalId));
 
 			// Then
-			using (new AssertionScope())
-			{
-				result.Found.Should().BeFalse();
-				result.Payload.Should().BeNull();
-			}
+			result.Should().BeNull();
 		}
 
 		[Fact]
@@ -38,7 +34,6 @@ namespace SeiyuuMoe.Tests.Component.Animes
 			// Given
 			const long expectedMalId = 1;
 			var dbContext = InMemoryDbProvider.GetDbContext();
-
 
 			var anime = new AnimeBuilder()
 				.WithMalId(expectedMalId + 1)
@@ -53,11 +48,7 @@ namespace SeiyuuMoe.Tests.Component.Animes
 			var result = await handler.HandleAsync(new GetAnimeCardInfoQuery(expectedMalId));
 
 			// Then
-			using (new AssertionScope())
-			{
-				result.Found.Should().BeFalse();
-				result.Payload.Should().BeNull();
-			}
+			result.Should().BeNull();
 		}
 
 		[Fact]
@@ -73,7 +64,6 @@ namespace SeiyuuMoe.Tests.Component.Animes
 			const string expectedStatus = "ExpectedStatus";
 			const long expectedMalId = 1;
 			var dbContext = InMemoryDbProvider.GetDbContext();
-
 
 			var anime = new AnimeBuilder()
 				.WithTitle(expectedTitle)
@@ -97,18 +87,15 @@ namespace SeiyuuMoe.Tests.Component.Animes
 			// Then
 			using (new AssertionScope())
 			{
-				result.Found.Should().BeTrue();
-				result.Payload.Should().NotBeNull();
-
-				result.Payload.Should().NotBeNull();
-				result.Payload.Title.Should().Be(expectedTitle);
-				result.Payload.ImageUrl.Should().Be(expectedImageUrl);
-				result.Payload.MalId.Should().Be(expectedMalId);
-				result.Payload.JapaneseTitle.Should().Be(expectedJapaneseTitle);
-				result.Payload.TitleSynonyms.Should().Be(expectedTitleSynonyms);
-				result.Payload.About.Should().Be(expectedAbout);
-				result.Payload.Type.Should().Be(expectedType);
-				result.Payload.Status.Should().Be(expectedStatus);
+				result.Should().NotBeNull();
+				result.Title.Should().Be(expectedTitle);
+				result.ImageUrl.Should().Be(expectedImageUrl);
+				result.MalId.Should().Be(expectedMalId);
+				result.JapaneseTitle.Should().Be(expectedJapaneseTitle);
+				result.TitleSynonyms.Should().Be(expectedTitleSynonyms);
+				result.About.Should().Be(expectedAbout);
+				result.Type.Should().Be(expectedType);
+				result.Status.Should().Be(expectedStatus);
 			}
 		}
 

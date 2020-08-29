@@ -33,19 +33,19 @@ namespace SeiyuuMoe.API.Controllers
 
 		[HttpGet]
 		[Route("{id}")]
-		public Task<QueryResponse<SeiyuuCardDto>> GetCardInfo(long id)
+		public Task<SeiyuuCardDto> GetCardInfo(long id)
 		{
 			var query = new GetSeiyuuCardInfoQuery(id);
 			return HandleAsync(async () => await _getSeiyuuCardInfoQueryHandler.HandleAsync(query));
 		}
 
 		[HttpGet]
-		public Task<QueryResponse<PagedResult<SeiyuuSearchEntryDto>>> Get([FromQuery] SearchSeiyuuQuery query) 
+		public Task<PagedResult<SeiyuuSearchEntryDto>> Get([FromQuery] SearchSeiyuuQuery query) 
 			=> HandleAsync(async () => await _searchSeiyuuQueryHandler.HandleAsync(query));
 
 		[HttpGet]
 		[Route("Compare")]
-		public Task<QueryResponse<ICollection<SeiyuuComparisonEntryDto>>> GetComparison([FromQuery] CompareSeiyuuQuery query)
+		public Task<ICollection<SeiyuuComparisonEntryDto>> GetComparison([FromQuery] CompareSeiyuuQuery query)
 			=> HandleAsync(async () => await _compareSeiyuuQueryHandler.HandleAsync(query));
 		
 	}

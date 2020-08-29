@@ -34,19 +34,19 @@ namespace SeiyuuMoe.API.Controllers
 
 		[HttpGet]
 		[Route("{id}")]
-		public async Task<QueryResponse<AnimeCardDto>> GetCardInfo(long id)
+		public async Task<AnimeCardDto> GetCardInfo(long id)
 		{
 			var query = new GetAnimeCardInfoQuery(id);
 			return await HandleAsync(async () => await _getAnimeCardInfoQueryHandler.HandleAsync(query));
 		}
 
 		[HttpGet]
-		public Task<QueryResponse<PagedResult<AnimeSearchEntryDto>>> GetSearchEntries([FromQuery] SearchAnimeQuery query)
+		public Task<PagedResult<AnimeSearchEntryDto>> GetSearchEntries([FromQuery] SearchAnimeQuery query)
 			=> HandleAsync(async () => await _searchAnimeQueryHandler.HandleAsync(query));
 
 		[HttpGet]
 		[Route("Compare")]
-		public Task<QueryResponse<ICollection<AnimeComparisonEntryDto>>> GetComparison([FromQuery] CompareAnimeQuery query)
+		public Task<ICollection<AnimeComparisonEntryDto>> GetComparison([FromQuery] CompareAnimeQuery query)
 			=> HandleAsync(async () => await _compareAnimeQueryHandler.HandleAsync(query));
 		
 	}

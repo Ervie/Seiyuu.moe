@@ -20,7 +20,7 @@ namespace SeiyuuMoe.API.Controllers
 
 		[HttpGet]
 		[Route("Summary")]
-		public Task<QueryResponse<PagedResult<SeasonSummaryEntryDto>>> GetSeasonSummary([FromQuery] GetSeasonSummariesQuery query)
+		public Task<PagedResult<SeasonSummaryEntryDto>> GetSeasonSummary([FromQuery] GetSeasonSummariesQuery query)
 			=> HandleAsync(async () => await _getSeasonSummariesQueryHandler.HandleAsync(query));
 	}
 }

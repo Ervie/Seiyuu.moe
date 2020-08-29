@@ -108,8 +108,8 @@ export default {
         } else {
           axios.get(this.cardInfoRequest)
             .then((response) => {
-              if (response.data.payload !== null) {
-                this.$emit('animeReturned', response.data.payload)
+              if (response.data !== null) {
+                this.$emit('animeReturned', response.data)
                 this.resetAlerts()
                 this.resetSearch()
               }
@@ -137,7 +137,7 @@ export default {
           if (this.searchedId.indexOf(element) === -1  && Number.parseInt(element) !== 'NaN' && Number.parseInt(element) > 0) {
             axios.get(process.env.apiUrl + '/api/anime/'+ String(element))
               .then((response) => {
-                this.$emit('animeReturned', response.data.payload);
+                this.$emit('animeReturned', response.data);
                 this.resetAlerts();
                 this.resetSearch();
               })
@@ -195,8 +195,8 @@ export default {
 
           axios.get(requestUrl)
             .then(res => {
-              if (res.data.payload.results.length > 0) {
-                self.entries = res.data.payload.results;
+              if (res.data.results.length > 0) {
+                self.entries = res.data.results;
                 self.excludeFromSearchResults();
               }
               self.loadingSearch = false;

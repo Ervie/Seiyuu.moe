@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using FluentAssertions.Execution;
 using Moq;
 using SeiyuuMoe.Application.Animes;
 using SeiyuuMoe.Application.Animes.GetAnimeCardInfo;
@@ -24,12 +23,8 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Application.Animes
 			var result = await handler.HandleAsync(new GetAnimeCardInfoQuery(animeMalId));
 
 			// Then
-			mockRepository.Verify(x => x.GetAsync(animeMalId), Times.Once);
-			using (new AssertionScope())
-			{
-				result.Found.Should().BeFalse();
-				result.Payload.Should().BeNull();
-			}
+			mockRepository.Verify(x => x.GetAsync(animeMalId), Times.Once); ;
+			result.Should().BeNull();
 		}
 
 		[Fact]
@@ -46,11 +41,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Application.Animes
 
 			// Then
 			mockRepository.Verify(x => x.GetAsync(animeMalId), Times.Once);
-			using (new AssertionScope())
-			{
-				result.Found.Should().BeTrue();
-				result.Payload.Should().NotBeNull().And.BeOfType(typeof(AnimeCardDto));
-			}
+			result.Should().NotBeNull().And.BeOfType(typeof(AnimeCardDto));
 		}
 	}
 }

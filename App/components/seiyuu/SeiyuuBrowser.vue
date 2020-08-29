@@ -129,8 +129,8 @@ export default {
           } else {
             axios.get(this.cardInfoRequest)
               .then((response) => {
-                if (response.data.payload !== null) {
-                  this.addToList(response.data.payload);
+                if (response.data !== null) {
+                  this.addToList(response.data);
                 }
               })
               .catch((error) => {
@@ -157,8 +157,8 @@ export default {
             this.loadingEntry = true
             axios.get(process.env.apiUrl + '/api/seiyuu/' + String(element))
               .then((response) => {
-                if (response.data.payload !== null) {
-                  this.addToList(response.data.payload);
+                if (response.data !== null) {
+                  this.addToList(response.data);
                 }
               })
               .catch((error) => {
@@ -230,8 +230,8 @@ export default {
 
         axios.get(requestUrl)
           .then(res => {
-            if (res.data.payload.results.length > 0) {
-              self.entries = res.data.payload.results
+            if (res.data.results.length > 0) {
+              self.entries = res.data.results
               self.excludeFromSearchResults()
             }
             self.loadingSearch = false
