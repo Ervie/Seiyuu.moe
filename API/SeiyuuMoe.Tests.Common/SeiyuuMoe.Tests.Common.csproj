@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SeiyuuMoe.Application\SeiyuuMoe.Application.csproj" />
+    <ProjectReference Include="..\SeiyuuMoe.Domain\SeiyuuMoe.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
