@@ -1,0 +1,55 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Application stack for MAL Bg Jobs
+Transform: AWS::Serverless-2016-10-31
+
+Parameters:
+  EnvironmentType:
+    Type: String
+    AllowedValues:
+      - dev
+      - prod
+
+Conditions:
+  IsProdEnvironment: !Equals [ !Ref EnvironmentType, prod ]
+
+Resources:
+  ScheduleLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - sts:AssumeRole
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
+        - arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess
+  ScheduleAnimesUpdate:
+    Type: AWS::Lambda::Function
+    Properties:
+      Runtime: dotnetcore3.1
+      Description: Lambda for pushing animes on queue for updating
+      FunctionName: ScheduleAnimesUpdate
+      Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.ScheduleAnimesLambda::InvokeAsync
+      MemorySize: 3008
+      Role: !GetAtt ScheduleLambdaRole.Arn
+
+Globals:
+  Function:
+    Runtime: dotnetcore3.1
+    MemorySize: 1024
+    Timeout: 15
+    CodeUri: /bin/Release/netcore3.1/publish
+    Description: !Ref AWS:StackName
+    Tracing: Active
+    Environment:
+      Variables:
+        EnvironmentType: !Ref EnvironmentType
+    Tags:
+      environment: !Ref EnvironmentType
+      service-name: mal-bg-jobs
