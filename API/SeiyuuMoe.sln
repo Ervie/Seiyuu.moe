@@ -19,14 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeiyuuMoe.Application", "Se
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeiyuuMoe.Infrastructure", "SeiyuuMoe.Infrastructure\SeiyuuMoe.Infrastructure.csproj", "{AE992BC2-5D76-4F9D-870C-10570B15BDAF}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQL", "SQL", "{B01C71FB-6088-45BC-8768-16821A719F6E}"
-	ProjectSection(SolutionItems) = preProject
-		Schema.sql = Schema.sql
-	EndProjectSection
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeiyuuMoe.Tests.Component", "Seiyuu.Tests.Component\SeiyuuMoe.Tests.Component.csproj", "{DE743EA5-F81B-4DBE-808C-AA91936BF6BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeiyuuMoe.Tests.Component", "Seiyuu.Tests.Component\SeiyuuMoe.Tests.Component.csproj", "{DE743EA5-F81B-4DBE-808C-AA91936BF6BE}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeiyuuMoe.Tests.Common", "SeiyuuMoe.Tests.Common\SeiyuuMoe.Tests.Common.csproj", "{26E7DB51-2BE0-46C9-B9DE-53A9CE587E9D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeiyuuMoe.Tests.Common", "SeiyuuMoe.Tests.Common\SeiyuuMoe.Tests.Common.csproj", "{26E7DB51-2BE0-46C9-B9DE-53A9CE587E9D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

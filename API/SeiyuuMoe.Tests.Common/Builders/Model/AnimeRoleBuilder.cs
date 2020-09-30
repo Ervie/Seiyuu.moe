@@ -3,7 +3,7 @@ using System;
 
 namespace SeiyuuMoe.Tests.Common.Builders.Model
 {
-	public class RoleBuilder
+	public class AnimeRoleBuilder
 	{
 		private Seiyuu _seiyuu;
 		private Anime _anime;
@@ -15,7 +15,7 @@ namespace SeiyuuMoe.Tests.Common.Builders.Model
 		private AnimeBuilder _animeBuilder;
 		private CharacterBuilder _characterBuilder;
 		private LanguageBuilder _languageBuilder;
-		private RoleTypeBuilder _roleTypeBuilder;
+		private AnimeRoleTypeBuilder _roleTypeBuilder;
 
 		public AnimeRole Build()
 			=> new AnimeRole
@@ -27,67 +27,67 @@ namespace SeiyuuMoe.Tests.Common.Builders.Model
 				RoleType = _roleTypeBuilder?.Build() ?? _roleType,
 			};
 
-		public RoleBuilder WithSeiyuu(Seiyuu seiyuu)
+		public AnimeRoleBuilder WithSeiyuu(Seiyuu seiyuu)
 		{
 			_seiyuu = seiyuu;
 			return this;
 		}
 
-		public RoleBuilder WithSeiyuu(Action<SeiyuuBuilder> builderAction)
+		public AnimeRoleBuilder WithSeiyuu(Action<SeiyuuBuilder> builderAction)
 		{
 			_seiyuuBuilder = new SeiyuuBuilder();
 			builderAction(_seiyuuBuilder);
 			return this;
 		}
 
-		public RoleBuilder WithAnime(Anime anime)
+		public AnimeRoleBuilder WithAnime(Anime anime)
 		{
 			_anime = anime;
 			return this;
 		}
 
-		public RoleBuilder WithAnime(Action<AnimeBuilder> builderAction)
+		public AnimeRoleBuilder WithAnime(Action<AnimeBuilder> builderAction)
 		{
 			_animeBuilder = new AnimeBuilder();
 			builderAction(_animeBuilder);
 			return this;
 		}
 
-		public RoleBuilder WithCharacter(AnimeCharacter character)
+		public AnimeRoleBuilder WithCharacter(AnimeCharacter character)
 		{
 			_character = character;
 			return this;
 		}
 
-		public RoleBuilder WithCharacter(Action<CharacterBuilder> builderAction)
+		public AnimeRoleBuilder WithCharacter(Action<CharacterBuilder> builderAction)
 		{
 			_characterBuilder = new CharacterBuilder();
 			builderAction(_characterBuilder);
 			return this;
 		}
 
-		public RoleBuilder WithLanguage(Language language)
+		public AnimeRoleBuilder WithLanguage(Language language)
 		{
 			_language = language;
 			return this;
 		}
 
-		public RoleBuilder WithLanguage(Action<LanguageBuilder> builderAction)
+		public AnimeRoleBuilder WithLanguage(Action<LanguageBuilder> builderAction)
 		{
 			_languageBuilder = new LanguageBuilder();
 			builderAction(_languageBuilder);
 			return this;
 		}
 
-		public RoleBuilder WithRoleType(AnimeRoleType roleType)
+		public AnimeRoleBuilder WithRoleType(AnimeRoleType roleType)
 		{
 			_roleType = roleType;
 			return this;
 		}
 
-		public RoleBuilder WithRoleType(Action<RoleTypeBuilder> builderAction)
+		public AnimeRoleBuilder WithRoleType(Action<AnimeRoleTypeBuilder> builderAction)
 		{
-			_roleTypeBuilder = new RoleTypeBuilder();
+			_roleTypeBuilder = new AnimeRoleTypeBuilder();
 			builderAction(_roleTypeBuilder);
 			return this;
 		}

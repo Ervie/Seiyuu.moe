@@ -2,7 +2,6 @@
 using SeiyuuMoe.Application.AnimeComparisons.Extensions;
 using SeiyuuMoe.Domain.ComparisonEntities;
 using SeiyuuMoe.Domain.Repositories;
-using SeiyuuMoe.Domain.WebEssentials;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -56,9 +55,7 @@ namespace SeiyuuMoe.Application.AnimeComparisons.CompareAnime
 				partialResults = partialResults.Where(x => x.AnimeCharacters.Select(y => y.Anime).ToList().Count >= i + 1).ToList();
 			}
 
-			var mappedEntities = partialResults.Select(x => x.ToAnimeComparisonEntryDto()).ToList();
-
-			return mappedEntities;
+			return partialResults.Select(x => x.ToAnimeComparisonEntryDto()).ToList();
 		}
 	}
 }

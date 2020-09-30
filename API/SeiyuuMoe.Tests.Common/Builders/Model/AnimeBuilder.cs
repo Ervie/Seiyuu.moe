@@ -9,6 +9,7 @@ namespace SeiyuuMoe.Tests.Common.Builders.Model
 		private string _imageUrl = string.Empty;
 		private DateTime _airingDate = DateTime.MinValue;
 		private string _japaneseTitle = string.Empty;
+		private string _englishTitle = string.Empty;
 		private string _titleSynonyms = string.Empty;
 		private string _about = string.Empty;
 
@@ -33,6 +34,7 @@ namespace SeiyuuMoe.Tests.Common.Builders.Model
 			MalId = _malId,
 			AiringDate = _airingDate,
 			KanjiTitle = _japaneseTitle,
+			EnglishTitle = _englishTitle,
 			TitleSynonyms = _titleSynonyms,
 			About = _about,
 			Popularity = _popularity,
@@ -74,6 +76,12 @@ namespace SeiyuuMoe.Tests.Common.Builders.Model
 		public AnimeBuilder WithJapaneseTitle(string japanesetitle)
 		{
 			_japaneseTitle = japanesetitle;
+			return this;
+		}
+
+		public AnimeBuilder WithEnglishTitle(string englishTitle)
+		{
+			_englishTitle = englishTitle;
 			return this;
 		}
 

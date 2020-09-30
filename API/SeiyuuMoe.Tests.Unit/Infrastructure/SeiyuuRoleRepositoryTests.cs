@@ -53,7 +53,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var dbContext = InMemoryDbProvider.GetDbContext();
 			var repository = new SeiyuuRoleRepository(dbContext);
 
-			var role = new RoleBuilder()
+			var role = new AnimeRoleBuilder()
 				.WithSeiyuu(
 					x => x.WithMalId(seiyuuMalId)
 				)
@@ -78,7 +78,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var dbContext = InMemoryDbProvider.GetDbContext();
 			var repository = new SeiyuuRoleRepository(dbContext);
 
-			var role = new RoleBuilder()
+			var role = new AnimeRoleBuilder()
 				.WithSeiyuu(
 					x => x.WithMalId(seiyuuMalId)
 				)
@@ -107,11 +107,11 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var seiyuu = new SeiyuuBuilder().WithMalId(animeMalId).Build();
 			seiyuu.Role = new List<AnimeRole>
 			{
-				new RoleBuilder().WithLanguage(japanese).Build(),
-				new RoleBuilder().WithLanguage(japanese).Build(),
-				new RoleBuilder().WithLanguage(japanese).Build(),
-				new RoleBuilder().WithLanguage(japanese).Build(),
-				new RoleBuilder().WithLanguage(japanese).Build(),
+				new AnimeRoleBuilder().WithLanguage(japanese).Build(),
+				new AnimeRoleBuilder().WithLanguage(japanese).Build(),
+				new AnimeRoleBuilder().WithLanguage(japanese).Build(),
+				new AnimeRoleBuilder().WithLanguage(japanese).Build(),
+				new AnimeRoleBuilder().WithLanguage(japanese).Build(),
 			};
 
 			await dbContext.AddAsync(seiyuu);
@@ -134,16 +134,16 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 
 			var japanese = new LanguageBuilder().WithId(1).WithDescription("Japanese").Build();
 			var seiyuu = new SeiyuuBuilder().WithMalId(seiyuuMalId).Build();
-			var mainRole = new RoleTypeBuilder().WithDescription("Main").WithId(1).Build();
-			var supportingRole = new RoleTypeBuilder().WithDescription("Supporting").WithId(2).Build();
+			var mainRole = new AnimeRoleTypeBuilder().WithDescription("Main").WithId(1).Build();
+			var supportingRole = new AnimeRoleTypeBuilder().WithDescription("Supporting").WithId(2).Build();
 
 			seiyuu.Role = new List<AnimeRole>
 			{
-				new RoleBuilder().WithLanguage(japanese).WithRoleType(mainRole).Build(),
-				new RoleBuilder().WithLanguage(japanese).WithRoleType(supportingRole).Build(),
-				new RoleBuilder().WithLanguage(japanese).WithRoleType(supportingRole).Build(),
-				new RoleBuilder().WithLanguage(japanese).WithRoleType(supportingRole).Build(),
-				new RoleBuilder().WithLanguage(japanese).WithRoleType(mainRole).Build()
+				new AnimeRoleBuilder().WithLanguage(japanese).WithRoleType(mainRole).Build(),
+				new AnimeRoleBuilder().WithLanguage(japanese).WithRoleType(supportingRole).Build(),
+				new AnimeRoleBuilder().WithLanguage(japanese).WithRoleType(supportingRole).Build(),
+				new AnimeRoleBuilder().WithLanguage(japanese).WithRoleType(supportingRole).Build(),
+				new AnimeRoleBuilder().WithLanguage(japanese).WithRoleType(mainRole).Build()
 			};
 
 			await dbContext.AddAsync(seiyuu);
@@ -167,21 +167,21 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var japanese = new LanguageBuilder().WithId(1).WithDescription("Japanese").Build();
 			var korean = new LanguageBuilder().WithId(2).WithDescription("Korean").Build();
 			var seiyuu = new SeiyuuBuilder().WithMalId(seiyuuMalId).Build();
-			var mainRole = new RoleTypeBuilder().WithDescription("Main").WithId(1).Build();
-			var supportingRole = new RoleTypeBuilder().WithDescription("Supporting").WithId(2).Build();
+			var mainRole = new AnimeRoleTypeBuilder().WithDescription("Main").WithId(1).Build();
+			var supportingRole = new AnimeRoleTypeBuilder().WithDescription("Supporting").WithId(2).Build();
 
 			seiyuu.Role = new List<AnimeRole>
 			{
-				new RoleBuilder().WithLanguage(japanese).WithRoleType(mainRole).Build(),
-				new RoleBuilder().WithLanguage(japanese).WithRoleType(supportingRole).Build(),
-				new RoleBuilder().WithLanguage(japanese).WithRoleType(supportingRole).Build(),
-				new RoleBuilder().WithLanguage(japanese).WithRoleType(supportingRole).Build(),
-				new RoleBuilder().WithLanguage(japanese).WithRoleType(mainRole).Build(),
-				new RoleBuilder().WithLanguage(korean).WithRoleType(mainRole).Build(),
-				new RoleBuilder().WithLanguage(korean).WithRoleType(supportingRole).Build(),
-				new RoleBuilder().WithLanguage(korean).WithRoleType(supportingRole).Build(),
-				new RoleBuilder().WithLanguage(korean).WithRoleType(supportingRole).Build(),
-				new RoleBuilder().WithLanguage(korean).WithRoleType(mainRole).Build()
+				new AnimeRoleBuilder().WithLanguage(japanese).WithRoleType(mainRole).Build(),
+				new AnimeRoleBuilder().WithLanguage(japanese).WithRoleType(supportingRole).Build(),
+				new AnimeRoleBuilder().WithLanguage(japanese).WithRoleType(supportingRole).Build(),
+				new AnimeRoleBuilder().WithLanguage(japanese).WithRoleType(supportingRole).Build(),
+				new AnimeRoleBuilder().WithLanguage(japanese).WithRoleType(mainRole).Build(),
+				new AnimeRoleBuilder().WithLanguage(korean).WithRoleType(mainRole).Build(),
+				new AnimeRoleBuilder().WithLanguage(korean).WithRoleType(supportingRole).Build(),
+				new AnimeRoleBuilder().WithLanguage(korean).WithRoleType(supportingRole).Build(),
+				new AnimeRoleBuilder().WithLanguage(korean).WithRoleType(supportingRole).Build(),
+				new AnimeRoleBuilder().WithLanguage(korean).WithRoleType(mainRole).Build()
 			};
 
 			await dbContext.AddAsync(seiyuu);
