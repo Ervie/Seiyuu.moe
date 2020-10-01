@@ -29,8 +29,74 @@ Resources:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
         - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
         - arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess
+        - !Ref ParameterStoreAccessPolicy
+      Policies:
+        - PolicyName: AllowToPopulateSqs
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - sqs:SendMessage
+                  - sqs:SendMessageBatch
+                Resource: !GetAtt AnimeToUpdateQueue.Arn
+  
+  UpdateLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - sts:AssumeRole
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
+        - arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess
+        - !Ref ParameterStoreAccessPolicy
+      Policies:
+        - PolicyName: AllowToPopulateSqs
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - sqs:SendMessage
+                  - sqs:DeleteMessage
+                  - sqs:ReceiveMessage
+                  - sqs:ChangeMessageVisibility
+                  - sqs:GetQueueAttributes
+                Resource: !GetAtt AnimeToUpdateQueue.Arn
+
+  ParameterStoreAccessPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Description: Allows access to Parameter Store
+    Properties:
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action: ssm:GetParametersByPath
+            Resource: !Sub 'arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${AWS::StackName}'
+
+  ScheduleAnimesUpdateSchedule:
+    Type: AWS::Events::Rule
+    Properties:
+      ScheduleExpression: cron(0 0 8 * ? *)
+      State: !If
+        - IsProdEnvironment
+        - ENABLED
+        - DISABLED
+      Targets:
+        - Arn: !GetAtt ScheduleAnimesUpdate.Arn
+          Id: LambdaTarget
+  
   ScheduleAnimesUpdate:
-    Type: AWS::Lambda::Function
+    Type: AWS::Serverless::Function
     Properties:
       Runtime: dotnetcore3.1
       Description: Lambda for pushing animes on queue for updating
@@ -38,6 +104,40 @@ Resources:
       Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.ScheduleAnimesLambda::InvokeAsync
       MemorySize: 3008
       Role: !GetAtt ScheduleLambdaRole.Arn
+
+  AnimeToUpdateQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: AnimeToUpdateQueue
+      DelaySeconds: 3
+      ReceiveMessageWaitTimeSeconds: 20
+      RedrivePolicy: 
+        deadLetterTargetArn: !GetAtt AnimeToUpdateDLQ.Arn
+        maxReceiveCount: 3
+      VisibilityTimeout: 30
+
+  AnimeToUpdateDLQ:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: AnimeToUpdateDLQ
+      MessageRetentionPeriod: 1209600
+      ReceiveMessageWaitTimeSeconds: 0
+
+  UpdateAnime:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: dotnetcore3.1
+      Description: Lambda for updating single anime
+      FunctionName: UpdateAnime
+      Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.UpdateAnimeLambda::InvokeAsync
+      MemorySize: 256
+      Role: !GetAtt UpdateLambdaRole.Arn
+      Events:
+        SqsEvent:
+          Type: SQS
+          Properties:
+            BatchSize: 1
+            Queue: !GetAtt AnimeToUpdateQueue.Arn
 
 Globals:
   Function:
