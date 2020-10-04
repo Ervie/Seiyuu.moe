@@ -1,0 +1,10 @@
+﻿using SeiyuuMoe.Domain.MalUpdateData;
+using System.Threading.Tasks;
+
+namespace SeiyuuMoe.Domain.Services
+{
+	public interface IMalApiService
+	{
+		Task<MalAnimeUpdateData> GetAnimeDataAsync(long malId);
+	}
+}

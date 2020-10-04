@@ -59,7 +59,7 @@ Resources:
         - arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess
         - !Ref ParameterStoreAccessPolicy
       Policies:
-        - PolicyName: AllowToPopulateSqs
+        - PolicyName: AllowToReadFromSqs
           PolicyDocument:
             Version: 2012-10-17
             Statement:
@@ -81,7 +81,7 @@ Resources:
         Statement:
           - Effect: Allow
             Action: ssm:GetParametersByPath
-            Resource: !Sub 'arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${AWS::StackName}'
+            Resource: !Sub 'arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/*'
 
   ScheduleAnimesUpdateSchedule:
     Type: AWS::Events::Rule
@@ -102,14 +102,15 @@ Resources:
       Description: Lambda for pushing animes on queue for updating
       FunctionName: ScheduleAnimesUpdate
       Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.ScheduleAnimesLambda::InvokeAsync
-      MemorySize: 3008
+      MemorySize: 512
+      Timeout: 180
       Role: !GetAtt ScheduleLambdaRole.Arn
 
   AnimeToUpdateQueue:
     Type: AWS::SQS::Queue
     Properties:
       QueueName: AnimeToUpdateQueue
-      DelaySeconds: 3
+      DelaySeconds: 0
       ReceiveMessageWaitTimeSeconds: 20
       RedrivePolicy: 
         deadLetterTargetArn: !GetAtt AnimeToUpdateDLQ.Arn
@@ -131,6 +132,7 @@ Resources:
       FunctionName: UpdateAnime
       Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.UpdateAnimeLambda::InvokeAsync
       MemorySize: 256
+      ReservedConcurrentExecutions: 1
       Role: !GetAtt UpdateLambdaRole.Arn
       Events:
         SqsEvent:
@@ -142,14 +144,16 @@ Resources:
 Globals:
   Function:
     Runtime: dotnetcore3.1
-    MemorySize: 1024
-    Timeout: 15
+    MemorySize: 512
+    Timeout: 150
     CodeUri: /bin/Release/netcore3.1/publish
-    Description: !Ref AWS:StackName
+    Description: !Ref AWS::StackName
     Tracing: Active
     Environment:
       Variables:
         EnvironmentType: !Ref EnvironmentType
+        AnimeToUpdateQueueUrl: !Ref AnimeToUpdateQueue
+        StackName: !Ref AWS::StackName
     Tags:
       environment: !Ref EnvironmentType
       service-name: mal-bg-jobs

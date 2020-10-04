@@ -1,12 +1,12 @@
 ﻿using Amazon.Lambda.SQSEvents;
 using System;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
-using static Amazon.Lambda.SQSEvents.SQSEvent;
 
 namespace SeiyuuMoe.MalBackgroundJobs.Lambda.Base
 {
-	public abstract class BaseSqsLambda
+	public abstract class BaseSqsLambda<T>
 	{
 		public async Task InvokeAsync(SQSEvent @event)
 		{
@@ -15,7 +15,10 @@ namespace SeiyuuMoe.MalBackgroundJobs.Lambda.Base
 			try
 			{
 				var sqsMessage = @event.Records.Single();
-				await HandleAsync(sqsMessage);
+
+				var deserializedMessage = JsonSerializer.Deserialize<T>(sqsMessage.Body);
+
+				await HandleAsync(deserializedMessage);
 			}
 			catch (Exception)
 			{
@@ -23,6 +26,6 @@ namespace SeiyuuMoe.MalBackgroundJobs.Lambda.Base
 			}
 		}
 
-		protected abstract Task HandleAsync(SQSMessage message);
+		protected abstract Task HandleAsync(T deserializedMessage);
 	}
 }
