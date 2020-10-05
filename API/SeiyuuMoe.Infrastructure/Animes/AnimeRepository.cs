@@ -68,6 +68,14 @@ namespace SeiyuuMoe.Infrastructure.Animes
 			};
 		}
 
+		public async Task<IReadOnlyList<Anime>> GetOlderThanModifiedDate(DateTime olderThan, int pageSize = 150)
+		=> await _dbContext.Animes
+			.Where(x => x.ModificationDate < olderThan)
+			.OrderBy(x => x.ModificationDate)
+			.ThenBy(x => x.Id)
+			.Take(pageSize)
+			.ToListAsync();
+
 		public async Task<PagedResult<Anime>> GetOrderedPageByPopularityAsync(Expression<Func<Anime, bool>> predicate, int page = 0, int pageSize = 10)
 		{
 			var entities = _dbContext.Animes.Where(predicate);

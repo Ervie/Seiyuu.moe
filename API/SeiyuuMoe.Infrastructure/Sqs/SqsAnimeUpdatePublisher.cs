@@ -18,18 +18,16 @@ namespace SeiyuuMoe.Infrastructure.Sns
 			_queueUrl = queueArn;
 		}
 
-		public async Task PublishAnimeUpdateAsync(UpdateAnimeMessage updateAnimeMessage)
+		public async Task PublishAnimeUpdateAsync(UpdateAnimeMessage updateAnimeMessage, int delayInSeconds = 0)
 		{
 			var sendMessageRequest = new SendMessageRequest
 			{
 				MessageBody = JsonSerializer.Serialize(updateAnimeMessage),
 				QueueUrl = _queueUrl,
-				DelaySeconds = AddDelayInSeconds(updateAnimeMessage.MalId)
+				DelaySeconds = delayInSeconds
 			};
 
 			await _sqsService.SendMessageAsync(sendMessageRequest);
 		}
-
-		private int AddDelayInSeconds(long malId) => (int)malId * 4;
 	}
 }

@@ -112,7 +112,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 				var updatedCharacter = allCharacters.SingleOrDefault();
 				updatedCharacter.Should().NotBeNull();
 				updatedCharacter.Name.Should().Be("Updated");
-				updatedCharacter.ModificationDate.Should().NotBeNull();
+				updatedCharacter.ModificationDate.Should().HaveDay(DateTime.UtcNow.Day);
 			}
 		}
 

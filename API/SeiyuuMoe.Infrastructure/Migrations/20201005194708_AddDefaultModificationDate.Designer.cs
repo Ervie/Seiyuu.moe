@@ -9,8 +9,8 @@ using SeiyuuMoe.Infrastructure.Context;
 namespace SeiyuuMoe.Infrastructure.Migrations
 {
     [DbContext(typeof(SeiyuuMoeContext))]
-    [Migration("20201005163543_AddModificationDateColumns")]
-    partial class AddModificationDateColumns
+    [Migration("20201005194708_AddDefaultModificationDate")]
+    partial class AddDefaultModificationDate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -44,8 +44,10 @@ namespace SeiyuuMoe.Infrastructure.Migrations
                     b.Property<long>("MalId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime?>("ModificationDate")
-                        .HasColumnType("datetime(6)");
+                    b.Property<DateTime>("ModificationDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("current_timestamp()");
 
                     b.Property<long?>("Popularity")
                         .HasColumnType("bigint");
@@ -99,8 +101,10 @@ namespace SeiyuuMoe.Infrastructure.Migrations
                     b.Property<long>("MalId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime?>("ModificationDate")
-                        .HasColumnType("datetime(6)");
+                    b.Property<DateTime>("ModificationDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("current_timestamp()");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -275,8 +279,10 @@ namespace SeiyuuMoe.Infrastructure.Migrations
                     b.Property<long>("MalId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime?>("ModificationDate")
-                        .HasColumnType("datetime(6)");
+                    b.Property<DateTime>("ModificationDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("current_timestamp()");
 
                     b.Property<string>("Name")
                         .IsRequired()

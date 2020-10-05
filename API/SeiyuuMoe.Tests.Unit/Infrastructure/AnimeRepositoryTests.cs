@@ -134,7 +134,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 				var updateAnime = allAnimes.SingleOrDefault();
 				updateAnime.Should().NotBeNull();
 				updateAnime.Title.Should().Be("Updated");
-				updateAnime.ModificationDate.Should().NotBeNull();
+				updateAnime.ModificationDate.Should().HaveDay(DateTime.UtcNow.Day);
 			}
 		}
 

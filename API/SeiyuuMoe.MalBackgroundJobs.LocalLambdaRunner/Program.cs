@@ -5,11 +5,12 @@ namespace SeiyuuMoe.MalBackgroundJobs.LocalLambdaRunner
 {
 	internal class Program
 	{
-		private static async Task Main(string[] args)
+		private static async Task Main()
 		{
 			SetupEnvironmentalVariables();
 
-			var runner = new UpdateAnimeLambdaRunner();
+			// var runner = new UpdateAnimeLambdaRunner();
+			var runner = new ScheduleAnimesLambdaRunner();
 
 			await runner.RunAsync();
 		}

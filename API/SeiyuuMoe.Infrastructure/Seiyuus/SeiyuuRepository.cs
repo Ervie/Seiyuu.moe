@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using NLog.Time;
 using SeiyuuMoe.Domain.Repositories;
 using SeiyuuMoe.Domain.WebEssentials;
 using SeiyuuMoe.Infrastructure.Context;
@@ -26,8 +25,8 @@ namespace SeiyuuMoe.Infrastructure.Seiyuus
 			await _dbContext.SaveChangesAsync();
 		}
 
-		public async Task<Dictionary<Guid, long>> GetAllIdsAsync() 
-			=> await _dbContext.Seiyuus.ToDictionaryAsync(x => x.Id, x => x.MalId);
+		public Task<Dictionary<Guid, long>> GetAllIdsAsync()
+			=> _dbContext.Seiyuus.ToDictionaryAsync(x => x.Id, x => x.MalId);
 
 		public Task<int> GetSeiyuuCountAsync() => _dbContext.Seiyuus.CountAsync();
 
@@ -55,7 +54,7 @@ namespace SeiyuuMoe.Infrastructure.Seiyuus
 
 		public async Task UpdateAsync(Domain.Entities.Seiyuu seiyuu)
 		{
-			seiyuu.ModificationDate = DateTime.UtcNow;
+			// seiyuu.ModificationDate = DateTime.UtcNow;
 			_dbContext.Update(seiyuu);
 			await _dbContext.SaveChangesAsync();
 		}

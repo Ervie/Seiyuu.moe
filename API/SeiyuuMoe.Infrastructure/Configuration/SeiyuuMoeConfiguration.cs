@@ -4,5 +4,7 @@
 	{
 		public string JikanUrl { get; set; }
 		public DatabaseConfiguration DatabaseConfiguration { get; set; }
+
+		public MalBgJobsScheduleConfiguration ScheduleConfiguration { get; set; }
 	}
 }

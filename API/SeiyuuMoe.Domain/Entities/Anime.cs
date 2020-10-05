@@ -28,7 +28,7 @@ namespace SeiyuuMoe.Domain.Entities
 		public long? StatusId { get; set; }
 		public long? TypeId { get; set; }
 		public long? SeasonId { get; set; }
-		public DateTime? ModificationDate { get; set; }
+		public DateTime ModificationDate { get; set; }
 
 		public virtual AnimeSeason Season { get; set; }
 		public virtual AnimeStatus Status { get; set; }

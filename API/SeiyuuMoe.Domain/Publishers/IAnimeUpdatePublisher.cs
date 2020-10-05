@@ -6,6 +6,6 @@ namespace SeiyuuMoe.Domain.Publishers
 {
 	public interface IAnimeUpdatePublisher
 	{
-		Task PublishAnimeUpdateAsync(UpdateAnimeMessage updateAnimeMessage);
+		Task PublishAnimeUpdateAsync(UpdateAnimeMessage updateAnimeMessage, int delayInSeconds = 0);
 	}
 }

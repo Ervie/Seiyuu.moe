@@ -24,6 +24,9 @@ namespace SeiyuuMoe.Infrastructure.Configuration
 		public static DatabaseConfiguration DatabaseConfiguration
 			=> ReturnConfigSection<DatabaseConfiguration>("DatabaseConfiguration");
 
+		public static MalBgJobsScheduleConfiguration MalBgJobsScheduleConfiguration
+			=> ReturnConfigSection<MalBgJobsScheduleConfiguration>("ScheduleConfiguration");
+
 		public static string JikanUrl => Config["JikanUrl"];
 
 		private static T ReturnConfigSection<T>(string sectionName) where T : new()

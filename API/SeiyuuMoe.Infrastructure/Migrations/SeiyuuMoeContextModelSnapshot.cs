@@ -42,8 +42,10 @@ namespace SeiyuuMoe.Infrastructure.Migrations
                     b.Property<long>("MalId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime?>("ModificationDate")
-                        .HasColumnType("datetime(6)");
+                    b.Property<DateTime>("ModificationDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("current_timestamp()");
 
                     b.Property<long?>("Popularity")
                         .HasColumnType("bigint");
@@ -97,8 +99,10 @@ namespace SeiyuuMoe.Infrastructure.Migrations
                     b.Property<long>("MalId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime?>("ModificationDate")
-                        .HasColumnType("datetime(6)");
+                    b.Property<DateTime>("ModificationDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("current_timestamp()");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -273,8 +277,10 @@ namespace SeiyuuMoe.Infrastructure.Migrations
                     b.Property<long>("MalId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime?>("ModificationDate")
-                        .HasColumnType("datetime(6)");
+                    b.Property<DateTime>("ModificationDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("current_timestamp()");
 
                     b.Property<string>("Name")
                         .IsRequired()

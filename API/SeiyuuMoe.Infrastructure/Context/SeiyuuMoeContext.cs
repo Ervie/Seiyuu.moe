@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SeiyuuMoe.Domain.Entities;
 using SeiyuuMoe.Infrastructure.Configuration;
+using System;
 
 namespace SeiyuuMoe.Infrastructure.Context
 {
@@ -66,11 +67,8 @@ namespace SeiyuuMoe.Infrastructure.Context
 					.WithMany(p => p.Anime)
 					.HasForeignKey(d => d.TypeId)
 					.OnDelete(DeleteBehavior.SetNull);
-			});
 
-			modelBuilder.Entity<AnimeCharacter>(entity =>
-			{
-				entity.HasIndex(e => e.MalId).IsUnique();
+				entity.Property(e => e.ModificationDate).HasColumnType("datetime").HasDefaultValueSql("current_timestamp()");
 			});
 
 			modelBuilder.Entity<AnimeStatus>(entity =>
@@ -103,6 +101,8 @@ namespace SeiyuuMoe.Infrastructure.Context
 				entity.HasIndex(e => e.MalId).IsUnique();
 
 				entity.Property(e => e.Name).IsRequired();
+
+				entity.Property(e => e.ModificationDate).HasColumnType("datetime").HasDefaultValueSql("current_timestamp()");
 			});
 
 			modelBuilder.Entity<Language>(entity =>
@@ -155,6 +155,7 @@ namespace SeiyuuMoe.Infrastructure.Context
 				entity.Property(e => e.Id).HasDefaultValueSql("(uuid())");
 				entity.HasIndex(e => e.MalId).IsUnique();
 				entity.Property(e => e.Birthday).HasColumnType("DATE");
+				entity.Property(e => e.ModificationDate).HasColumnType("datetime").HasDefaultValueSql("current_timestamp()");
 
 				entity.Property(e => e.Name).IsRequired();
 			});

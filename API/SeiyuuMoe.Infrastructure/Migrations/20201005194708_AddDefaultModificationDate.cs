@@ -3,24 +3,30 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SeiyuuMoe.Infrastructure.Migrations
 {
-    public partial class AddModificationDateColumns : Migration
+    public partial class AddDefaultModificationDate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<DateTime>(
                 name: "ModificationDate",
                 table: "Seiyuus",
-                nullable: true);
+                type: "datetime",
+                nullable: false,
+                defaultValueSql: "current_timestamp()");
 
             migrationBuilder.AddColumn<DateTime>(
                 name: "ModificationDate",
                 table: "Animes",
-                nullable: true);
+                type: "datetime",
+                nullable: false,
+                defaultValueSql: "current_timestamp()");
 
             migrationBuilder.AddColumn<DateTime>(
                 name: "ModificationDate",
                 table: "AnimeCharacters",
-                nullable: true);
+                type: "datetime",
+                nullable: false,
+                defaultValueSql: "current_timestamp()");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

@@ -28,8 +28,14 @@ namespace SeiyuuMoe.MalBackgroundJobs.Lambda.Function
 			var animeRepository = new AnimeRepository(dbContext);
 			var queueUrl = Environment.GetEnvironmentVariable("AnimeToUpdateQueueUrl");
 			var animeUpdatePublisher = new SqsAnimeUpdatePublisher(new AmazonSQSClient(), queueUrl);
+			var scheduleConfiguration = ConfigurationReader.MalBgJobsScheduleConfiguration;
 
-			return new ScheduleAnimesHandler(animeRepository, animeUpdatePublisher);
+			return new ScheduleAnimesHandler(
+				scheduleConfiguration.BatchSize,
+				scheduleConfiguration.DelayBetweenMessagesInSeconds,
+				animeRepository,
+				animeUpdatePublisher
+			);
 		}
 	}
 }

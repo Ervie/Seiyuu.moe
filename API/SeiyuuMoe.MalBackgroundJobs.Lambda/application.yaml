@@ -86,7 +86,7 @@ Resources:
   ScheduleAnimesUpdateSchedule:
     Type: AWS::Events::Rule
     Properties:
-      ScheduleExpression: cron(0 0 8 * ? *)
+      ScheduleExpression: cron(1/15 * 8 * ? *)
       State: !If
         - IsProdEnvironment
         - ENABLED

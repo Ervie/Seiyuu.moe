@@ -135,7 +135,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 				var updatedSeiyuu = allSeiyuu.SingleOrDefault();
 				updatedSeiyuu.Should().NotBeNull();
 				updatedSeiyuu.Name.Should().Be("Updated");
-				updatedSeiyuu.ModificationDate.Should().NotBeNull();
+				updatedSeiyuu.ModificationDate.Should().HaveDay(DateTime.UtcNow.Day);
 			}
 		}
 
