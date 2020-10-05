@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using NLog.Time;
 using SeiyuuMoe.Domain.Repositories;
 using SeiyuuMoe.Domain.WebEssentials;
 using SeiyuuMoe.Infrastructure.Context;
@@ -54,6 +55,7 @@ namespace SeiyuuMoe.Infrastructure.Seiyuus
 
 		public async Task UpdateAsync(Domain.Entities.Seiyuu seiyuu)
 		{
+			seiyuu.ModificationDate = DateTime.UtcNow;
 			_dbContext.Update(seiyuu);
 			await _dbContext.SaveChangesAsync();
 		}

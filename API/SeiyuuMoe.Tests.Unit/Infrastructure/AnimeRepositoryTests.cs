@@ -129,7 +129,13 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			// Then
 			var allAnimes = await dbContext.Animes.ToListAsync();
 
-			allAnimes.Should().ContainSingle().Which.Title.Should().Be("Updated");
+			using (new AssertionScope())
+			{
+				var updateAnime = allAnimes.SingleOrDefault();
+				updateAnime.Should().NotBeNull();
+				updateAnime.Title.Should().Be("Updated");
+				updateAnime.ModificationDate.Should().NotBeNull();
+			}
 		}
 
 		[Fact]

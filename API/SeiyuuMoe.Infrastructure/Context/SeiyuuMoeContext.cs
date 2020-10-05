@@ -8,10 +8,6 @@ namespace SeiyuuMoe.Infrastructure.Context
 	{
 		private readonly DatabaseConfiguration _databaseConfiguration;
 
-		public SeiyuuMoeContext()
-		{
-		}
-
 		public SeiyuuMoeContext(DbContextOptions<SeiyuuMoeContext> options)
 			: base(options)
 		{
@@ -35,10 +31,11 @@ namespace SeiyuuMoe.Infrastructure.Context
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
-			if (!optionsBuilder.IsConfigured)
+			if (optionsBuilder.IsConfigured)
 			{
-				optionsBuilder.UseMySql(_databaseConfiguration.ToConnectionString);
+				return;
 			}
+			optionsBuilder.UseMySql(_databaseConfiguration.ToConnectionString);
 		}
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -3,6 +3,7 @@ using SeiyuuMoe.Domain.Entities;
 using SeiyuuMoe.Domain.Repositories;
 using SeiyuuMoe.Domain.WebEssentials;
 using SeiyuuMoe.Infrastructure.Context;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -47,6 +48,7 @@ namespace SeiyuuMoe.Infrastructure.Characters
 
 		public async Task UpdateAsync(AnimeCharacter character)
 		{
+			character.ModificationDate = DateTime.UtcNow;
 			_dbContext.Update(character);
 			await _dbContext.SaveChangesAsync();
 		}

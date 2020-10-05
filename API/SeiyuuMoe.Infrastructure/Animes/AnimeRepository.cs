@@ -89,6 +89,7 @@ namespace SeiyuuMoe.Infrastructure.Animes
 
 		public async Task UpdateAsync(Anime anime)
 		{
+			anime.ModificationDate = DateTime.UtcNow;
 			_dbContext.Animes.Update(anime);
 			await _dbContext.SaveChangesAsync();
 		}

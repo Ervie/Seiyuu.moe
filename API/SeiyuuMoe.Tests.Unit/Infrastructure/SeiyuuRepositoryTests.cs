@@ -1,12 +1,14 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using SeiyuuMoe.Domain.Entities;
 using SeiyuuMoe.Infrastructure.Seiyuus;
 using SeiyuuMoe.Tests.Common.Builders.Model;
 using SeiyuuMoe.Tests.Common.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -128,7 +130,13 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			// Then
 			var allSeiyuu = await dbContext.Seiyuus.ToListAsync();
 
-			allSeiyuu.Should().ContainSingle().Which.Name.Should().Be("Updated");
+			using (new AssertionScope())
+			{
+				var updatedSeiyuu = allSeiyuu.SingleOrDefault();
+				updatedSeiyuu.Should().NotBeNull();
+				updatedSeiyuu.Name.Should().Be("Updated");
+				updatedSeiyuu.ModificationDate.Should().NotBeNull();
+			}
 		}
 
 		[Fact]

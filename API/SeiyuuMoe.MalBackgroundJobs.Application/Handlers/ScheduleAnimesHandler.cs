@@ -20,7 +20,7 @@ namespace SeiyuuMoe.MalBackgroundJobs.Application.Handlers
 		public async Task HandleAsync()
 		{
 			// var animesToUpdate = await _animeRepository.GetAllAsync(x => string.IsNullOrWhiteSpace(x.ImageUrl) || x.AiringDate == null || string.IsNullOrWhiteSpace(x.About));
-			var animesToUpdate = await _animeRepository.GetAllAsync(x => x.MalId < 2);
+			var animesToUpdate = await _animeRepository.GetAllAsync(x => x.MalId < 200);
 
 			var publishTasks = animesToUpdate.Select(
 				a => _animeUpdatePublisher.PublishAnimeUpdateAsync(

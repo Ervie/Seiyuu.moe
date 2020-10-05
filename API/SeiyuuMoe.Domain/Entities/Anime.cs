@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SeiyuuMoe.Domain.Entities
 {
@@ -27,6 +28,7 @@ namespace SeiyuuMoe.Domain.Entities
 		public long? StatusId { get; set; }
 		public long? TypeId { get; set; }
 		public long? SeasonId { get; set; }
+		public DateTime? ModificationDate { get; set; }
 
 		public virtual AnimeSeason Season { get; set; }
 		public virtual AnimeStatus Status { get; set; }

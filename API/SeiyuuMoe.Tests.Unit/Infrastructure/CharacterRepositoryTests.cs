@@ -5,6 +5,7 @@ using SeiyuuMoe.Infrastructure.Characters;
 using SeiyuuMoe.Tests.Common.Builders.Model;
 using SeiyuuMoe.Tests.Common.Helpers;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -106,7 +107,13 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			// Then
 			var allCharacters = await dbContext.AnimeCharacters.ToListAsync();
 
-			allCharacters.Should().ContainSingle().Which.Name.Should().Be("Updated");
+			using (new AssertionScope())
+			{
+				var updatedCharacter = allCharacters.SingleOrDefault();
+				updatedCharacter.Should().NotBeNull();
+				updatedCharacter.Name.Should().Be("Updated");
+				updatedCharacter.ModificationDate.Should().NotBeNull();
+			}
 		}
 
 		[Fact]
