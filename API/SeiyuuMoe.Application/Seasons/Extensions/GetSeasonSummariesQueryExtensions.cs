@@ -1,6 +1,6 @@
 ﻿using SeiyuuMoe.Application.Animes.SearchAnime;
 using SeiyuuMoe.Application.Seasons.GetSeasonSummaries;
-using SeiyuuMoe.Domain.Enums;
+using SeiyuuMoe.Domain.Entities;
 
 namespace SeiyuuMoe.Application.Seasons.Extensions
 {
@@ -10,8 +10,8 @@ namespace SeiyuuMoe.Application.Seasons.Extensions
 			=> new SearchAnimeQuery
 			{
 				AnimeTypeId = GetSeasonSummariesQuery.TVSeriesOnly
-					? (long)AnimeTypeDictionary.TV
-					: (long)AnimeTypeDictionary.AllTypes,
+					? (long)AnimeTypeId.TV
+					: (long)AnimeTypeId.AllTypes,
 				SeasonId = GetSeasonSummariesQuery.Id
 			};
 	}

@@ -53,6 +53,10 @@ namespace SeiyuuMoe.Infrastructure.Context
 
 				entity.Property(e => e.Title).IsRequired();
 
+				entity.Property(e => e.StatusId).HasConversion<int>();
+
+				entity.Property(e => e.TypeId).HasConversion<int>();
+
 				entity.HasOne(d => d.Season)
 					.WithMany(p => p.Anime)
 					.HasForeignKey(d => d.SeasonId)
@@ -73,14 +77,14 @@ namespace SeiyuuMoe.Infrastructure.Context
 
 			modelBuilder.Entity<AnimeStatus>(entity =>
 			{
-				entity.Property(e => e.Id).ValueGeneratedNever();
+				entity.Property(e => e.Id).HasConversion<int>();
 
 				entity.Property(e => e.Description).IsRequired();
 			});
 
 			modelBuilder.Entity<AnimeType>(entity =>
 			{
-				entity.Property(e => e.Id).ValueGeneratedNever();
+				entity.Property(e => e.Id).HasConversion<int>();
 
 				entity.Property(e => e.Description).IsRequired();
 			});
@@ -118,6 +122,8 @@ namespace SeiyuuMoe.Infrastructure.Context
 
 				entity.Property(e => e.LanguageId).HasConversion<int>();
 
+				entity.Property(e => e.RoleTypeId).HasConversion<int>();
+
 				entity.HasOne(d => d.Anime)
 					.WithMany(p => p.Role)
 					.HasForeignKey(d => d.AnimeId)
@@ -141,7 +147,7 @@ namespace SeiyuuMoe.Infrastructure.Context
 
 			modelBuilder.Entity<AnimeRoleType>(entity =>
 			{
-				entity.Property(e => e.Id).ValueGeneratedNever();
+				entity.Property(e => e.Id).HasConversion<int>();
 
 				entity.Property(e => e.Description).IsRequired();
 			});
