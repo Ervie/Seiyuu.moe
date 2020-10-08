@@ -54,7 +54,7 @@ namespace SeiyuuMoe.Infrastructure.Seiyuus
 
 		public async Task UpdateAsync(Domain.Entities.Seiyuu seiyuu)
 		{
-			// seiyuu.ModificationDate = DateTime.UtcNow;
+			seiyuu.ModificationDate = DateTime.UtcNow;
 			_dbContext.Update(seiyuu);
 			await _dbContext.SaveChangesAsync();
 		}

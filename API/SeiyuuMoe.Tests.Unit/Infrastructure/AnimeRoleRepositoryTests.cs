@@ -152,7 +152,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 				.WithAnime(
 					x => x.WithMalId(animeMalId).WithId(animeId)
 				)
-				.WithLanguage(x => x.WithDescription("Japanese").WithId(1))
+				.WithLanguage(x => x.WithDescription("Japanese").WithLanguageId(LanguageId.Japanese))
 				.Build();
 
 			await dbContext.AddAsync(role);
@@ -178,7 +178,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 				.WithAnime(
 					x => x.WithMalId(animeMalId).WithId(animeId)
 				)
-				.WithLanguage(x => x.WithDescription("Test").WithId(9999))
+				.WithLanguage(x => x.WithDescription("Test").WithLanguageId(LanguageId.Korean))
 				.Build();
 
 			await dbContext.AddAsync(role);
@@ -200,7 +200,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var dbContext = InMemoryDbProvider.GetDbContext();
 			var repository = new AnimeRoleRepository(dbContext);
 
-			var japanese = new LanguageBuilder().WithId(1).WithDescription("Japanese").Build();
+			var japanese = new LanguageBuilder().WithLanguageId(LanguageId.Japanese).WithDescription("Japanese").Build();
 			var anime = new AnimeBuilder().WithMalId(animeMalId).WithId(animeId).Build();
 			anime.Role = new List<AnimeRole>
 			{

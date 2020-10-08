@@ -48,7 +48,7 @@ namespace SeiyuuMoe.Infrastructure.Characters
 
 		public async Task UpdateAsync(AnimeCharacter character)
 		{
-			// character.ModificationDate = DateTime.UtcNow;
+			character.ModificationDate = DateTime.UtcNow;
 			_dbContext.Update(character);
 			await _dbContext.SaveChangesAsync();
 		}

@@ -11,7 +11,7 @@ namespace SeiyuuMoe.Domain.Entities
 		public long? RoleTypeId { get; set; }
 		public Guid? CharacterId { get; set; }
 		public Guid? SeiyuuId { get; set; }
-		public long? LanguageId { get; set; }
+		public LanguageId? LanguageId { get; set; }
 
 		public virtual Anime Anime { get; set; }
 		public virtual AnimeCharacter Character { get; set; }

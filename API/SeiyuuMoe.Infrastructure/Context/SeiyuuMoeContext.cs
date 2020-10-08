@@ -107,7 +107,7 @@ namespace SeiyuuMoe.Infrastructure.Context
 
 			modelBuilder.Entity<Language>(entity =>
 			{
-				entity.Property(e => e.Id).ValueGeneratedNever();
+				entity.Property(e => e.Id).HasConversion<int>();
 
 				entity.Property(e => e.Description).IsRequired();
 			});
@@ -115,6 +115,8 @@ namespace SeiyuuMoe.Infrastructure.Context
 			modelBuilder.Entity<AnimeRole>(entity =>
 			{
 				entity.Property(e => e.Id).HasDefaultValueSql("(uuid())");
+
+				entity.Property(e => e.LanguageId).HasConversion<int>();
 
 				entity.HasOne(d => d.Anime)
 					.WithMany(p => p.Role)

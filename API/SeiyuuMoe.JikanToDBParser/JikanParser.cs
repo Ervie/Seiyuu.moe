@@ -778,7 +778,7 @@ namespace SeiyuuMoe.JikanToDBParser
 						await _animeRoleRepository.AddAsync(new AnimeRole
 						{
 							Id = Guid.NewGuid(),
-							LanguageId = 1, // Always japanese for now
+							LanguageId = LanguageId.Japanese, // Always japanese for now
 							RoleTypeId = voiceActingRole.Role.Equals("Main") ? 1 : 2,
 							AnimeId = animeInDatabase.Id,
 							CharacterId = characterInDatabase.Id,

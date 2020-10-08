@@ -23,7 +23,7 @@ namespace SeiyuuMoe.Infrastructure.Seiyuus
 			.Include(a => a.Anime)
 			.Include(a => a.Character)
 			.Include(a => a.Seiyuu)
-			.Where(x => x.LanguageId == 1
+			.Where(x => x.LanguageId == LanguageId.Japanese
 				&& x.SeiyuuId == seiyuuId
 				&& (!mainRolesOnly || x.RoleTypeId == 1))
 			.ToListAsync();
@@ -33,7 +33,7 @@ namespace SeiyuuMoe.Infrastructure.Seiyuus
 			.Include(a => a.Anime)
 			.Include(a => a.Character)
 			.Include(a => a.Seiyuu)
-			.Where(x => x.LanguageId == 1
+			.Where(x => x.LanguageId == LanguageId.Japanese
 				&& x.Seiyuu.MalId == seiyuuMalId
 				&& (!mainRolesOnly || x.RoleTypeId == 1))
 			.ToListAsync();

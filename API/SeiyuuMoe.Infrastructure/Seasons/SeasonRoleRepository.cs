@@ -23,7 +23,7 @@ namespace SeiyuuMoe.Infrastructure.Seasons
 			.Include(a => a.Anime)
 			.Include(a => a.Character)
 			.Include(a => a.Seiyuu)
-			.Where(x => x.LanguageId == 1
+			.Where(x => x.LanguageId == LanguageId.Japanese
 				&& animeIds.Contains(x.AnimeId.Value)
 				&& (!mainRolesOnly || x.RoleTypeId == 1))
 			.ToListAsync();

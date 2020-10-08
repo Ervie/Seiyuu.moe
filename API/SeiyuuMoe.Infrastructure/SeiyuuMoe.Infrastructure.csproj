@@ -4,42 +4,6 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Migrations\20200815190338_AddAutoGenerateIdentity.cs" />
-    <Compile Remove="Migrations\20200815190338_AddAutoGenerateIdentity.Designer.cs" />
-    <Compile Remove="Migrations\20200815190419_AddAutoGenerateIdentity.cs" />
-    <Compile Remove="Migrations\20200815190419_AddAutoGenerateIdentity.Designer.cs" />
-    <Compile Remove="Migrations\20200815190829_AddAutoGenerateIdentity.cs" />
-    <Compile Remove="Migrations\20200815190829_AddAutoGenerateIdentity.Designer.cs" />
-    <Compile Remove="Migrations\20200815195650_AddAutoGenerateIdentity.cs" />
-    <Compile Remove="Migrations\20200815195650_AddAutoGenerateIdentity.Designer.cs" />
-    <Compile Remove="Migrations\20200815200002_AddAutoGenerateIdentity.cs" />
-    <Compile Remove="Migrations\20200815200002_AddAutoGenerateIdentity.Designer.cs" />
-    <Compile Remove="Migrations\20200815200359_AddAutoGenerateIdentity.cs" />
-    <Compile Remove="Migrations\20200815200359_AddAutoGenerateIdentity.Designer.cs" />
-    <Compile Remove="Migrations\20200815200507_AddAutoGenerateIdentity.cs" />
-    <Compile Remove="Migrations\20200815200507_AddAutoGenerateIdentity.Designer.cs" />
-    <Compile Remove="Migrations\20201005175347_AddDefaultModificationDate.cs" />
-    <Compile Remove="Migrations\20201005175347_AddDefaultModificationDate.Designer.cs" />
-    <Compile Remove="Migrations\20201005175704_AddDefaultModificationDate.cs" />
-    <Compile Remove="Migrations\20201005175704_AddDefaultModificationDate.Designer.cs" />
-    <Compile Remove="Migrations\20201005184006_AddDefaultModificationDate.cs" />
-    <Compile Remove="Migrations\20201005184006_AddDefaultModificationDate.Designer.cs" />
-    <Compile Remove="Migrations\20201005190241_AddDefaultModificationDate.cs" />
-    <Compile Remove="Migrations\20201005190241_AddDefaultModificationDate.Designer.cs" />
-    <Compile Remove="Migrations\20201005190332_AddDefaultModificationDate.cs" />
-    <Compile Remove="Migrations\20201005190332_AddDefaultModificationDate.Designer.cs" />
-    <Compile Remove="Migrations\20201005190501_AddDefaultModificationDate.cs" />
-    <Compile Remove="Migrations\20201005190501_AddDefaultModificationDate.Designer.cs" />
-    <Compile Remove="Migrations\20201005190723_AddDefaultModificationDate.cs" />
-    <Compile Remove="Migrations\20201005190723_AddDefaultModificationDate.Designer.cs" />
-    <Compile Remove="Migrations\20201005191800_AddDefaultModificationDate.cs" />
-    <Compile Remove="Migrations\20201005191800_AddDefaultModificationDate.Designer.cs" />
-    <Compile Remove="Migrations\20201005192814_AddDefaultModificationDate.cs" />
-    <Compile Remove="Migrations\20201005192814_AddDefaultModificationDate.Designer.cs" />
-    <Compile Remove="Migrations\20201005193931_AddDefaultModificationDate.cs" />
-    <Compile Remove="Migrations\20201005193931_AddDefaultModificationDate.Designer.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Amazon.Extensions.Configuration.SystemsManager" Version="1.2.0" />
