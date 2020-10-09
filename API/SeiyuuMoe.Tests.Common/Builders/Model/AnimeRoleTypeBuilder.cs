@@ -5,7 +5,7 @@ namespace SeiyuuMoe.Tests.Common.Builders.Model
 	public class AnimeRoleTypeBuilder
 	{
 		private string _description;
-		private long _id;
+		private AnimeRoleTypeId _id;
 
 		public AnimeRoleType Build() => new AnimeRoleType
 		{
@@ -19,7 +19,7 @@ namespace SeiyuuMoe.Tests.Common.Builders.Model
 			return this;
 		}
 
-		public AnimeRoleTypeBuilder WithId(long id)
+		public AnimeRoleTypeBuilder WithId(AnimeRoleTypeId id)
 		{
 			_id = id;
 			return this;

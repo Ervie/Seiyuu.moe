@@ -150,8 +150,8 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Application.Extensions
 			const string expectedJapaneseTitle = "期待される日本語タイトル";
 			const string expectedTitleSynonyms = "expectedTitleSynonyms";
 			const string expectedAbout = "ExpectedAbout";
-			const string expectedType = "ExpectedAbout";
 			const string expectedStatus = "ExpectedStatus";
+			var expectedType = AnimeTypeId.TV;
 			const long expectedMalId = 1;
 
 			var anime = new AnimeBuilder()
@@ -161,7 +161,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Application.Extensions
 				.WithJapaneseTitle(expectedJapaneseTitle)
 				.WithTitleSynonyms(expectedTitleSynonyms)
 				.WithAbout(expectedAbout)
-				.WithAnimeType(at => at.WithName(expectedType))
+				.WithAnimeType(at => at.WithId(expectedType))
 				.WithAnimeStatus(at => at.WithName(expectedStatus))
 				.Build();
 
@@ -178,7 +178,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Application.Extensions
 				dto.JapaneseTitle.Should().Be(expectedJapaneseTitle);
 				dto.TitleSynonyms.Should().Be(expectedTitleSynonyms);
 				dto.About.Should().Be(expectedAbout);
-				dto.Type.Should().Be(expectedType);
+				dto.Type.Should().Be(expectedType.ToString());
 				dto.Status.Should().Be(expectedStatus);
 			}
 		}

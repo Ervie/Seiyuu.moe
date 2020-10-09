@@ -106,7 +106,7 @@ namespace SeiyuuMoe.Tests.Component.AnimeComparisons
 			var dbContext = InMemoryDbProvider.GetDbContext();
 
 			var miyukiSawashiro = new SeiyuuBuilder().WithId(Guid.NewGuid()).WithMalId(1).WithName("Miyuki Sawashiro").Build();
-			var japanese = new LanguageBuilder().WithDescription("Japanese").WithLanguageId(LanguageId.Japanese).Build();
+			var japanese = new LanguageBuilder().WithLanguageId(LanguageId.Japanese).Build();
 			var animeRoles = new List<AnimeRole>
 			{
 				new AnimeRoleBuilder()
@@ -146,7 +146,7 @@ namespace SeiyuuMoe.Tests.Component.AnimeComparisons
 			var chiwaSaito = new SeiyuuBuilder().WithId(Guid.NewGuid()).WithMalId(2).WithName("Chiwa Saito").Build();
 			var onePieceAnime = new AnimeBuilder().WithId(Guid.NewGuid()).WithMalId(1).WithTitle("One Piece").Build();
 			var bakemonogatariAnime = new AnimeBuilder().WithId(Guid.NewGuid()).WithMalId(2).WithTitle("Bakemonogatari").Build();
-			var japanese = new LanguageBuilder().WithDescription("Japanese").WithLanguageId(LanguageId.Japanese).Build();
+			var japanese = new LanguageBuilder().WithLanguageId(LanguageId.Japanese).Build();
 			var animeRoles = new List<AnimeRole>
 			{
 				new AnimeRoleBuilder()

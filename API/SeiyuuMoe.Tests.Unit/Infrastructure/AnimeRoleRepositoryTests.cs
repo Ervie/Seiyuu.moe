@@ -41,14 +41,14 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			const string expectedSeiyuuName = "expectedSeiyuuName";
 			const string expectedcharacterName = "expectedCharacterName";
 			const string expectedRoleTypeName = "Main";
-			const string expectedLanguageName = "Japanese";
+			var expectedLanguage = LanguageId.Japanese;
 
 			var role = new AnimeRoleBuilder()
 				.WithAnime(x => x.WithTitle(expectedAnimeTitle))
 				.WithSeiyuu(x => x.WithName(expectedSeiyuuName))
 				.WithCharacter(x => x.WithName(expectedcharacterName))
 				.WithRoleType(x => x.WithDescription(expectedRoleTypeName))
-				.WithLanguage(x => x.WithDescription(expectedLanguageName))
+				.WithLanguage(x => x.WithLanguageId(expectedLanguage))
 				.Build();
 
 			// When
@@ -76,7 +76,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 				newRole.Seiyuu.Should().NotBeNull();
 				newRole.Seiyuu.Name.Should().Be(expectedSeiyuuName);
 				newRole.Language.Should().NotBeNull();
-				newRole.Language.Description.Should().Be(expectedLanguageName);
+				newRole.Language.Id.Should().Be(expectedLanguage);
 				newRole.RoleType.Should().NotBeNull();
 				newRole.RoleType.Description.Should().Be(expectedRoleTypeName);
 			}
@@ -152,7 +152,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 				.WithAnime(
 					x => x.WithMalId(animeMalId).WithId(animeId)
 				)
-				.WithLanguage(x => x.WithDescription("Japanese").WithLanguageId(LanguageId.Japanese))
+				.WithLanguage(x => x.WithLanguageId(LanguageId.Japanese))
 				.Build();
 
 			await dbContext.AddAsync(role);
@@ -178,7 +178,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 				.WithAnime(
 					x => x.WithMalId(animeMalId).WithId(animeId)
 				)
-				.WithLanguage(x => x.WithDescription("Test").WithLanguageId(LanguageId.Korean))
+				.WithLanguage(x => x.WithLanguageId(LanguageId.Korean))
 				.Build();
 
 			await dbContext.AddAsync(role);
@@ -200,7 +200,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var dbContext = InMemoryDbProvider.GetDbContext();
 			var repository = new AnimeRoleRepository(dbContext);
 
-			var japanese = new LanguageBuilder().WithLanguageId(LanguageId.Japanese).WithDescription("Japanese").Build();
+			var japanese = new LanguageBuilder().WithLanguageId(LanguageId.Japanese).Build();
 			var anime = new AnimeBuilder().WithMalId(animeMalId).WithId(animeId).Build();
 			anime.Role = new List<AnimeRole>
 			{

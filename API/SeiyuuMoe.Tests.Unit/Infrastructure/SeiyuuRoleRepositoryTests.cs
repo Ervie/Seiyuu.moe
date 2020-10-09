@@ -57,7 +57,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 				.WithSeiyuu(
 					x => x.WithMalId(seiyuuMalId)
 				)
-				.WithLanguage(x => x.WithDescription("Japanese").WithLanguageId(LanguageId.Japanese))
+				.WithLanguage(x => x.WithLanguageId(LanguageId.Japanese))
 				.Build();
 
 			await dbContext.AddAsync(role);
@@ -82,7 +82,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 				.WithSeiyuu(
 					x => x.WithMalId(seiyuuMalId)
 				)
-				.WithLanguage(x => x.WithDescription("Test").WithLanguageId(LanguageId.Korean))
+				.WithLanguage(x => x.WithLanguageId(LanguageId.Korean))
 				.Build();
 
 			await dbContext.AddAsync(role);
@@ -103,7 +103,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var dbContext = InMemoryDbProvider.GetDbContext();
 			var repository = new SeiyuuRoleRepository(dbContext);
 
-			var japanese = new LanguageBuilder().WithLanguageId(LanguageId.Japanese).WithDescription("Japanese").Build();
+			var japanese = new LanguageBuilder().WithLanguageId(LanguageId.Japanese).Build();
 			var seiyuu = new SeiyuuBuilder().WithMalId(animeMalId).Build();
 			seiyuu.Role = new List<AnimeRole>
 			{
@@ -132,10 +132,10 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var dbContext = InMemoryDbProvider.GetDbContext();
 			var repository = new SeiyuuRoleRepository(dbContext);
 
-			var japanese = new LanguageBuilder().WithLanguageId(LanguageId.Japanese).WithDescription("Japanese").Build();
+			var japanese = new LanguageBuilder().WithLanguageId(LanguageId.Japanese).Build();
 			var seiyuu = new SeiyuuBuilder().WithMalId(seiyuuMalId).Build();
-			var mainRole = new AnimeRoleTypeBuilder().WithDescription("Main").WithId(1).Build();
-			var supportingRole = new AnimeRoleTypeBuilder().WithDescription("Supporting").WithId(2).Build();
+			var mainRole = new AnimeRoleTypeBuilder().WithId(AnimeRoleTypeId.Main).Build();
+			var supportingRole = new AnimeRoleTypeBuilder().WithId(AnimeRoleTypeId.Supporting).Build();
 
 			seiyuu.Role = new List<AnimeRole>
 			{
@@ -164,11 +164,11 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var dbContext = InMemoryDbProvider.GetDbContext();
 			var repository = new SeiyuuRoleRepository(dbContext);
 
-			var japanese = new LanguageBuilder().WithLanguageId(LanguageId.Japanese).WithDescription("Japanese").Build();
-			var korean = new LanguageBuilder().WithLanguageId(LanguageId.Korean).WithDescription("Korean").Build();
+			var japanese = new LanguageBuilder().WithLanguageId(LanguageId.Japanese).Build();
+			var korean = new LanguageBuilder().WithLanguageId(LanguageId.Korean).Build();
 			var seiyuu = new SeiyuuBuilder().WithMalId(seiyuuMalId).Build();
-			var mainRole = new AnimeRoleTypeBuilder().WithDescription("Main").WithId(1).Build();
-			var supportingRole = new AnimeRoleTypeBuilder().WithDescription("Supporting").WithId(2).Build();
+			var mainRole = new AnimeRoleTypeBuilder().WithId(AnimeRoleTypeId.Main).Build();
+			var supportingRole = new AnimeRoleTypeBuilder().WithId(AnimeRoleTypeId.Supporting).Build();
 
 			seiyuu.Role = new List<AnimeRole>
 			{

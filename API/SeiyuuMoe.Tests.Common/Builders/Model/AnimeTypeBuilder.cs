@@ -4,13 +4,13 @@ namespace SeiyuuMoe.Tests.Common.Builders.Model
 {
 	public class AnimeTypeBuilder
 	{
-		private string _name = string.Empty;
+		private AnimeTypeId _id;
 
-		public AnimeType Build() => new AnimeType { Description = _name };
+		public AnimeType Build() => new AnimeType { Id = _id };
 
-		public AnimeTypeBuilder WithName(string name)
+		public AnimeTypeBuilder WithId(AnimeTypeId id)
 		{
-			_name = name;
+			_id = id;
 			return this;
 		}
 	}

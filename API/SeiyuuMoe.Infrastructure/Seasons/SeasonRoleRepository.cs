@@ -25,7 +25,7 @@ namespace SeiyuuMoe.Infrastructure.Seasons
 			.Include(a => a.Seiyuu)
 			.Where(x => x.LanguageId == LanguageId.Japanese
 				&& animeIds.Contains(x.AnimeId.Value)
-				&& (!mainRolesOnly || x.RoleTypeId == RoleTypeId.Main))
+				&& (!mainRolesOnly || x.RoleTypeId == AnimeRoleTypeId.Main))
 			.ToListAsync();
 	}
 }

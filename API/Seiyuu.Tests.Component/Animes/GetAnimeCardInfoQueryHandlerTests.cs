@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
 using SeiyuuMoe.Application.Animes.GetAnimeCardInfo;
+using SeiyuuMoe.Domain.Entities;
 using SeiyuuMoe.Infrastructure.Animes;
 using SeiyuuMoe.Infrastructure.Context;
 using SeiyuuMoe.Tests.Common.Builders.Model;
@@ -60,9 +61,9 @@ namespace SeiyuuMoe.Tests.Component.Animes
 			const string expectedJapaneseTitle = "期待される日本語タイトル";
 			const string expectedTitleSynonyms = "expectedTitleSynonyms";
 			const string expectedAbout = "ExpectedAbout";
-			const string expectedType = "ExpectedAbout";
 			const string expectedStatus = "ExpectedStatus";
 			const long expectedMalId = 1;
+			var expectedType = AnimeTypeId.TV;
 			var dbContext = InMemoryDbProvider.GetDbContext();
 
 			var anime = new AnimeBuilder()
@@ -72,7 +73,7 @@ namespace SeiyuuMoe.Tests.Component.Animes
 				.WithJapaneseTitle(expectedJapaneseTitle)
 				.WithTitleSynonyms(expectedTitleSynonyms)
 				.WithAbout(expectedAbout)
-				.WithAnimeType(at => at.WithName(expectedType))
+				.WithAnimeType(at => at.WithId(expectedType))
 				.WithAnimeStatus(at => at.WithName(expectedStatus))
 				.Build();
 
@@ -94,7 +95,7 @@ namespace SeiyuuMoe.Tests.Component.Animes
 				result.JapaneseTitle.Should().Be(expectedJapaneseTitle);
 				result.TitleSynonyms.Should().Be(expectedTitleSynonyms);
 				result.About.Should().Be(expectedAbout);
-				result.Type.Should().Be(expectedType);
+				result.Type.Should().Be(expectedType.ToString());
 				result.Status.Should().Be(expectedStatus);
 			}
 		}

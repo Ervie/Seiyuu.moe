@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.EntityFrameworkCore;
+using SeiyuuMoe.Domain.Entities;
 using SeiyuuMoe.Infrastructure.Animes;
 using SeiyuuMoe.Tests.Common.Builders.Model;
 using SeiyuuMoe.Tests.Common.Helpers;
@@ -41,8 +42,8 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			const string expectedJapaneseTitle = "期待される日本語タイトル";
 			const string expectedTitleSynonyms = "expectedTitleSynonyms";
 			const string expectedAbout = "ExpectedAbout";
-			const string expectedType = "ExpectedType";
 			const string expectedStatus = "ExpectedStatus";
+			var expectedType = AnimeTypeId.TV;
 			const long expectedMalId = 1;
 
 			var anime = new AnimeBuilder()
@@ -52,7 +53,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 				.WithJapaneseTitle(expectedJapaneseTitle)
 				.WithTitleSynonyms(expectedTitleSynonyms)
 				.WithAbout(expectedAbout)
-				.WithAnimeType(at => at.WithName(expectedType))
+				.WithAnimeType(at => at.WithId(expectedType))
 				.WithAnimeStatus(at => at.WithName(expectedStatus))
 				.Build();
 
@@ -74,7 +75,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 				newAnime.KanjiTitle.Should().Be(expectedJapaneseTitle);
 				newAnime.TitleSynonyms.Should().Be(expectedTitleSynonyms);
 				newAnime.About.Should().Be(expectedAbout);
-				newAnime.Type.Description.Should().Be(expectedType);
+				newAnime.Type.Id.Should().Be(expectedType);
 				newAnime.Status.Description.Should().Be(expectedStatus);
 			}
 		}
@@ -224,7 +225,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var anime = new AnimeBuilder()
 				 .WithTitle("Test")
 				 .WithAnimeStatus(x => x.WithName("Airing"))
-				 .WithAnimeType(x => x.WithName("TV"))
+				 .WithAnimeType(x => x.WithId(AnimeTypeId.TV))
 				 .WithTitle("ExpectedTitle")
 				 .WithImageUrl("ExpectedImageUrl")
 				 .WithAbout("ExpectedAbout")
@@ -246,7 +247,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 				result.ImageUrl.Should().Be("ExpectedImageUrl");
 				result.About.Should().Be("ExpectedAbout");
 				result.Type.Should().NotBeNull();
-				result.Type.Description.Should().Be("TV");
+				result.Type.Id.Should().Be(AnimeTypeId.TV);
 				result.Status.Should().NotBeNull();
 				result.Status.Description.Should().Be("Airing");
 			}
@@ -293,7 +294,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var anime = new AnimeBuilder()
 				.WithTitle("Test")
 				.WithAnimeStatus(x => x.WithName("Airing"))
-				.WithAnimeType(x => x.WithName("TV"))
+				.WithAnimeType(x => x.WithId(AnimeTypeId.TV))
 				.WithSeason(x => x.WithName("Spring").WithYear(2020).Build())
 				.Build();
 
@@ -312,7 +313,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			{
 				addedAnime.Should().NotBeNull();
 				addedAnime.Type.Should().NotBeNull();
-				addedAnime.Type.Description.Should().Be("TV");
+				addedAnime.Type.Id.Should().Be(AnimeTypeId.TV);
 				addedAnime.Status.Should().NotBeNull();
 				addedAnime.Status.Description.Should().Be("Airing");
 				addedAnime.Season.Should().NotBeNull();

@@ -773,7 +773,7 @@ namespace SeiyuuMoe.JikanToDBParser
 						{
 							Id = Guid.NewGuid(),
 							LanguageId = LanguageId.Japanese, // Always japanese for now
-							RoleTypeId = voiceActingRole.Role.Equals("Main") ? RoleTypeId.Main : RoleTypeId.Supporting,
+							RoleTypeId = voiceActingRole.Role.Equals("Main") ? AnimeRoleTypeId.Main : AnimeRoleTypeId.Supporting,
 							AnimeId = animeInDatabase.Id,
 							CharacterId = characterInDatabase.Id,
 							SeiyuuId = seiyuuId
