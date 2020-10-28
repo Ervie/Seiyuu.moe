@@ -4,6 +4,7 @@ using SeiyuuMoe.Infrastructure.Animes;
 using SeiyuuMoe.Infrastructure.Configuration;
 using SeiyuuMoe.Infrastructure.Context;
 using SeiyuuMoe.Infrastructure.Jikan;
+using SeiyuuMoe.Infrastructure.Seasons;
 using SeiyuuMoe.MalBackgroundJobs.Application.Handlers;
 using SeiyuuMoe.MalBackgroundJobs.Lambda.Base;
 using System;
@@ -27,12 +28,13 @@ namespace SeiyuuMoe.MalBackgroundJobs.Lambda.Function
 		private static UpdateAnimeHandler CreateHandler(SeiyuuMoeContext dbContext)
 		{
 			var animeRepository = new AnimeRepository(dbContext);
+			var seasonRepository = new SeasonRepository(dbContext);
 
 			var jikanUrl = ConfigurationReader.JikanUrl;
 			var jikanClient = new Jikan(jikanUrl);
 			var jikanService = new JikanService(jikanClient);
 
-			return new UpdateAnimeHandler(animeRepository, jikanService);
+			return new UpdateAnimeHandler(animeRepository, seasonRepository, jikanService);
 		}
 	}
 }

@@ -26,12 +26,13 @@ namespace SeiyuuMoe.MalBackgroundJobs.Application.Handlers
 		{
 			var animesToUpdate = await _animeRepository.GetOlderThanModifiedDate(DateTime.UtcNow, _batchSize);
 
-			var publishTasks = Enumerable.Range(0, animesToUpdate.Count).Select(
-					a => _animeUpdatePublisher.PublishAnimeUpdateAsync(
-						new UpdateAnimeMessage { Id = animesToUpdate.ElementAt(a).Id, MalId = animesToUpdate.ElementAt(a).MalId },
-						a * _delayBetweenMessages
-					)
+			var publishTasks = animesToUpdate.Select(
+				(a, i) => _animeUpdatePublisher.PublishAnimeUpdateAsync(
+					new UpdateAnimeMessage { Id = a.Id, MalId = a.MalId },
+					i * _delayBetweenMessages
+				)
 			);
+
 			await Task.WhenAll(publishTasks);
 		}
 	}

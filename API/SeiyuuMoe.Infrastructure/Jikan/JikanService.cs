@@ -30,7 +30,7 @@ namespace SeiyuuMoe.Infrastructure.Jikan
 				parsedData.Aired.From,
 				parsedData.Type,
 				parsedData.Status,
-				parsedData.Premiered ?? parsedData.Aired.From.ToString()
+				parsedData.Premiered
 			);
 		}
 

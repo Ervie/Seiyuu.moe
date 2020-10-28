@@ -20,8 +20,8 @@ namespace SeiyuuMoe.Domain.Entities
 	public enum AnimeStatusId: int
 	{
 		All = 0,
-		Finished_Airing = 1,
-		Currently_Airing = 2,
-		Not_yet_aired = 3
+		FinishedAiring = 1,
+		CurrentlyAiring = 2,
+		Notyetaired = 3
 	}
 }

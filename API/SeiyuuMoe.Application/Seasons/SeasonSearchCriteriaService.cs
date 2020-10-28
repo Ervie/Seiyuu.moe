@@ -10,7 +10,7 @@ namespace SeiyuuMoe.Application.Seasons
 	{
 		public Expression<Func<AnimeSeason, bool>> BuildExpression(GetSeasonSummariesQuery query)
 		{
-			var predicate = PredicateBuilder.True<Domain.Entities.AnimeSeason>();
+			var predicate = PredicateBuilder.True<AnimeSeason>();
 			return query != null ? ExtendExpressionWithSearchCriteria(predicate, query) : predicate;
 		}
 
