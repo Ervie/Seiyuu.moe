@@ -23,8 +23,20 @@ namespace SeiyuuMoe.MalBackgroundJobs.Application.Handlers
 
 		public async Task HandleAsync(UpdateAnimeMessage updateAnimeMessage)
 		{
-			var updateData = await _malApiService.GetAnimeDataAsync(updateAnimeMessage.MalId);
 			var animeToUpdate = await _animeRepository.GetAsync(updateAnimeMessage.MalId);
+
+			if (animeToUpdate == null)
+			{
+				return;
+			}
+
+			var updateData = await _malApiService.GetAnimeDataAsync(updateAnimeMessage.MalId);
+
+			if (updateData == null)
+			{
+				return;
+			}
+
 			await UpdateAnimeAsync(animeToUpdate, updateData);
 			await _animeRepository.UpdateAsync(animeToUpdate);
 		}
@@ -86,7 +98,7 @@ namespace SeiyuuMoe.MalBackgroundJobs.Application.Handlers
 		}
 
 		private static AnimeStatusId? UpdateAnimeStatus(AnimeStatusId? currentStatus, string newStatus) =>
-			Enum.TryParse(newStatus.Replace(" ", ""), out AnimeStatusId parsedAnimeStatus) ?
+			Enum.TryParse(newStatus?.Replace(" ", ""), out AnimeStatusId parsedAnimeStatus) ?
 				parsedAnimeStatus :
 				currentStatus;
 

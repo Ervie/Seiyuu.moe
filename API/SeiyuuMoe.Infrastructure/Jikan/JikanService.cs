@@ -19,6 +19,11 @@ namespace SeiyuuMoe.Infrastructure.Jikan
 		{
 			var parsedData = await _jikanClient.GetAnime(malId);
 
+			if (parsedData is null)
+			{
+				return null;
+			}
+
 			return new MalAnimeUpdateData(
 				parsedData.Title,
 				parsedData.Synopsis,
@@ -27,7 +32,7 @@ namespace SeiyuuMoe.Infrastructure.Jikan
 				parsedData.TitleSynonyms.Any() ? string.Join(';', parsedData.TitleSynonyms) : string.Empty,
 				parsedData.Members,
 				EmptyStringIfPlaceholder(parsedData.ImageURL),
-				parsedData.Aired.From,
+				parsedData.Aired?.From,
 				parsedData.Type,
 				parsedData.Status,
 				parsedData.Premiered

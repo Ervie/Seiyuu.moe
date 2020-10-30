@@ -21,7 +21,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SeiyuuMoe.MalBackgroundJobs.Application\SeiyuuMoe.MalBackgroundJobs.Application.csproj" />
     <ProjectReference Include="..\SeiyuuMoe.Tests.Common\SeiyuuMoe.Tests.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="MalBackgroundJobs\" />
   </ItemGroup>
 
 </Project>
