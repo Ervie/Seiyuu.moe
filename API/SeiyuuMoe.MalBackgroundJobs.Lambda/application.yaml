@@ -132,6 +132,7 @@ Resources:
       FunctionName: UpdateAnime
       Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.UpdateAnimeLambda::InvokeAsync
       MemorySize: 256
+      Timeout: 15
       ReservedConcurrentExecutions: 1
       Role: !GetAtt UpdateLambdaRole.Arn
       Events:
@@ -140,6 +141,29 @@ Resources:
           Properties:
             BatchSize: 1
             Queue: !GetAtt AnimeToUpdateQueue.Arn
+
+  UpdateSeasonsSchedule:
+    Type: AWS::Events::Rule
+    Properties:
+      ScheduleExpression: cron(0 0 1 * ? *)
+      State: !If
+        - IsProdEnvironment
+        - ENABLED
+        - DISABLED
+      Targets:
+        - Arn: !GetAtt UpdateSeasons.Arn
+          Id: LambdaTarget
+
+  UpdateSeasons:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: dotnetcore3.1
+      Description: Lambda for updating seasons table
+      FunctionName: UpdateSeasons
+      Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.UpdateSeasonsLambda::InvokeAsync
+      MemorySize: 512
+      Timeout: 180
+      Role: !GetAtt ScheduleLambdaRole.Arn
 
 Globals:
   Function:

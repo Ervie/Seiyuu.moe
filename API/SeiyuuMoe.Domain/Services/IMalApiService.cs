@@ -6,5 +6,7 @@ namespace SeiyuuMoe.Domain.Services
 	public interface IMalApiService
 	{
 		Task<MalAnimeUpdateData> GetAnimeDataAsync(long malId);
+
+		Task<MalSeasonUpdateData> GetSeasonDataAsync();
 	}
 }

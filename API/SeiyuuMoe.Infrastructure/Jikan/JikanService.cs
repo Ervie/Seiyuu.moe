@@ -39,6 +39,20 @@ namespace SeiyuuMoe.Infrastructure.Jikan
 			);
 		}
 
+		public async Task<MalSeasonUpdateData> GetSeasonDataAsync()
+		{
+			var parsedData = await _jikanClient.GetSeasonArchive();
+
+			if (parsedData is null)
+			{
+				return null;
+			}
+
+			var latestYear = parsedData?.Archives?.FirstOrDefault();
+
+			return new MalSeasonUpdateData(latestYear.Year, latestYear.Season.Last().ToString());
+		}
+
 		private string EmptyStringIfPlaceholder(string imageUrl)
 		{
 			var isEmptyOrPlaceholder = string.IsNullOrWhiteSpace(imageUrl) ||

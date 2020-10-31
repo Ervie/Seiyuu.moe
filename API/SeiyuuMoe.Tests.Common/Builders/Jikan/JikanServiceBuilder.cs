@@ -2,6 +2,7 @@
 using JikanDotNet.Exceptions;
 using Moq;
 using SeiyuuMoe.Infrastructure.Jikan;
+using System.Collections.Generic;
 
 namespace SeiyuuMoe.Tests.Common.Builders.Jikan
 {
@@ -36,6 +37,20 @@ namespace SeiyuuMoe.Tests.Common.Builders.Jikan
 		{
 			JikanClient.Setup(x => x.GetPerson(It.IsAny<long>()))
 				.ReturnsAsync(person);
+			return this;
+		}
+
+		public JikanServiceBuilder WithLastSeasonArchiveReturned(SeasonArchive seasonArchive)
+		{
+			JikanClient.Setup(x => x.GetSeasonArchive())
+				.ReturnsAsync(new SeasonArchives { Archives = new List<SeasonArchive> { seasonArchive } });
+			return this;
+		}
+
+		public JikanServiceBuilder WithGetSeasonArchiveThrowing()
+		{
+			JikanClient.Setup(x => x.GetSeasonArchive())
+				.ThrowsAsync(new JikanRequestException());
 			return this;
 		}
 	}
