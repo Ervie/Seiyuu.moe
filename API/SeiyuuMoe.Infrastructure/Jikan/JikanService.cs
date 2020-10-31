@@ -29,7 +29,7 @@ namespace SeiyuuMoe.Infrastructure.Jikan
 				parsedData.Synopsis,
 				parsedData.TitleEnglish,
 				parsedData.TitleJapanese,
-				parsedData.TitleSynonyms.Any() ? string.Join(';', parsedData.TitleSynonyms) : string.Empty,
+				(parsedData.TitleSynonyms != null && parsedData.TitleSynonyms.Any()) ? string.Join(';', parsedData.TitleSynonyms) : string.Empty,
 				parsedData.Members,
 				EmptyStringIfPlaceholder(parsedData.ImageURL),
 				parsedData.Aired?.From,
@@ -41,7 +41,7 @@ namespace SeiyuuMoe.Infrastructure.Jikan
 
 		private string EmptyStringIfPlaceholder(string imageUrl)
 		{
-			var isEmptyOrPlaceholder = string.IsNullOrEmpty(imageUrl) ||
+			var isEmptyOrPlaceholder = string.IsNullOrWhiteSpace(imageUrl) ||
 				imageUrl.Equals("https://cdn.myanimelist.net/images/questionmark_23.gif") ||
 				imageUrl.Equals("https://cdn.myanimelist.net/img/sp/icon/apple-touch-icon-256.png");
 

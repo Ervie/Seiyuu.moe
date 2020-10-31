@@ -50,7 +50,7 @@ namespace SeiyuuMoe.MalBackgroundJobs.Application.Handlers
 			animeToUpdate.Popularity = malAnimeUpdateData.Popularity;
 			animeToUpdate.ImageUrl = malAnimeUpdateData.ImageUrl;
 			animeToUpdate.AiringDate = malAnimeUpdateData.AiringDate ?? animeToUpdate.AiringDate;
-			animeToUpdate.TitleSynonyms = string.IsNullOrWhiteSpace(malAnimeUpdateData.TitleSynonyms) ? malAnimeUpdateData.TitleSynonyms : animeToUpdate.TitleSynonyms;
+			animeToUpdate.TitleSynonyms = !string.IsNullOrWhiteSpace(malAnimeUpdateData.TitleSynonyms) ? malAnimeUpdateData.TitleSynonyms : animeToUpdate.TitleSynonyms;
 			animeToUpdate.StatusId = UpdateAnimeStatus(animeToUpdate.StatusId, malAnimeUpdateData.Status);
 			animeToUpdate.TypeId = UpdateAnimeType(animeToUpdate.TypeId, malAnimeUpdateData.Type);
 			animeToUpdate.SeasonId = string.IsNullOrEmpty(malAnimeUpdateData.Season)
@@ -65,8 +65,11 @@ namespace SeiyuuMoe.MalBackgroundJobs.Application.Handlers
 			if (seasonParts.Length < 2)
 				return null;
 
-			var year = int.Parse(seasonParts[1]);
+			var isYearNumber = int.TryParse(seasonParts[1], out int year);
 			var seasonName = seasonParts[0];
+
+			if (!isYearNumber)
+				return null;
 
 			var foundSeason = await _seasonRepository.GetAsync(x => x.Name.ToLower().Equals(seasonName.ToLower()) && x.Year.Equals(year));
 			return foundSeason?.Id;
@@ -77,7 +80,7 @@ namespace SeiyuuMoe.MalBackgroundJobs.Application.Handlers
 			if (!airingDate.HasValue)
 				return null;
 
-			var airingDay = airingDate.Value.Day;
+			var airingDay = airingDate.Value.DayOfYear;
 			var airingYear = airingDate.Value.Year;
 
 			var seasonName = airingDay switch
