@@ -1,3 +1,4 @@
+![buildstatus](https://codebuild.eu-central-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiZURWVExKMDVXckc4UFhmZktaRHIyaXIySnBxa0RLRDFtMDBwYWNYYkNYQVVnb3Y5eWs5NHR4WTNoY0xaK2NCTTFXL2wvY09vbDA2V3hOTm81c2dyTG13PSIsIml2UGFyYW1ldGVyU3BlYyI6IktlNVpqYWhHOHVUMjhmTFEiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master)
 # Seiyuu.moe
 
 > A webpage searching for collaborate works between seiyuu.
