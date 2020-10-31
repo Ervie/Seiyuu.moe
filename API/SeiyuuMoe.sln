@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeiyuuMoe.Application", "Se
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeiyuuMoe.Infrastructure", "SeiyuuMoe.Infrastructure\SeiyuuMoe.Infrastructure.csproj", "{AE992BC2-5D76-4F9D-870C-10570B15BDAF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeiyuuMoe.Tests.Component", "Seiyuu.Tests.Component\SeiyuuMoe.Tests.Component.csproj", "{DE743EA5-F81B-4DBE-808C-AA91936BF6BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeiyuuMoe.Tests.Component", "SeiyuuMoe.Tests.Component\SeiyuuMoe.Tests.Component.csproj", "{DE743EA5-F81B-4DBE-808C-AA91936BF6BE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeiyuuMoe.Tests.Common", "SeiyuuMoe.Tests.Common\SeiyuuMoe.Tests.Common.csproj", "{26E7DB51-2BE0-46C9-B9DE-53A9CE587E9D}"
 EndProject
