@@ -39,7 +39,9 @@ Resources:
                 Action:
                   - sqs:SendMessage
                   - sqs:SendMessageBatch
-                Resource: !GetAtt AnimeToUpdateQueue.Arn
+                Resource: 
+                  - !GetAtt AnimeToUpdateQueue.Arn
+                  - !GetAtt CharactersToUpdateQueue.Arn
   
   UpdateLambdaRole:
     Type: AWS::IAM::Role
@@ -70,7 +72,9 @@ Resources:
                   - sqs:ReceiveMessage
                   - sqs:ChangeMessageVisibility
                   - sqs:GetQueueAttributes
-                Resource: !GetAtt AnimeToUpdateQueue.Arn
+                Resource: 
+                  - !GetAtt AnimeToUpdateQueue.Arn
+                  - !GetAtt CharactersToUpdateQueue.Arn
 
   ParameterStoreAccessPolicy:
     Type: AWS::IAM::ManagedPolicy
@@ -83,7 +87,7 @@ Resources:
             Action: ssm:GetParametersByPath
             Resource: !Sub 'arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/*'
 
-  ScheduleAnimesUpdateSchedule:
+  ScheduleAnimesUpdateRule:
     Type: AWS::Events::Rule
     Properties:
       ScheduleExpression: cron(1/15 * 8 * ? *)
@@ -132,7 +136,7 @@ Resources:
       FunctionName: UpdateAnime
       Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.UpdateAnimeLambda::InvokeAsync
       MemorySize: 256
-      Timeout: 15
+      Timeout: 30
       ReservedConcurrentExecutions: 1
       Role: !GetAtt UpdateLambdaRole.Arn
       Events:
@@ -141,6 +145,65 @@ Resources:
           Properties:
             BatchSize: 1
             Queue: !GetAtt AnimeToUpdateQueue.Arn
+
+  ScheduleCharactersUpdateRule:
+    Type: AWS::Events::Rule
+    Properties:
+      ScheduleExpression: cron(1/15 * 14-20 * ? *)
+      State: !If
+        - IsProdEnvironment
+        - ENABLED
+        - DISABLED
+      Targets:
+        - Arn: !GetAtt ScheduleCharactersUpdate.Arn
+          Id: LambdaTarget
+
+  ScheduleCharactersUpdate:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: dotnetcore3.1
+      Description: Lambda for pushing characters on queue for updating
+      FunctionName: ScheduleCharactersUpdate
+      Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.ScheduleCharactersLambda::InvokeAsync
+      MemorySize: 512
+      Timeout: 180
+      Role: !GetAtt ScheduleLambdaRole.Arn
+
+  CharactersToUpdateQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: CharactersToUpdateQueue
+      DelaySeconds: 0
+      ReceiveMessageWaitTimeSeconds: 20
+      RedrivePolicy: 
+        deadLetterTargetArn: !GetAtt CharacterToUpdateDLQ.Arn
+        maxReceiveCount: 3
+      VisibilityTimeout: 30
+
+  CharacterToUpdateDLQ:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: CharacterToUpdateDLQ
+      MessageRetentionPeriod: 1209600
+      ReceiveMessageWaitTimeSeconds: 0
+
+  UpdateCharacter:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: dotnetcore3.1
+      Description: Lambda for updating single chraracter
+      FunctionName: UpdateCharacter
+      Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.UpdateCharacterLambda::InvokeAsync
+      MemorySize: 256
+      Timeout: 30
+      ReservedConcurrentExecutions: 1
+      Role: !GetAtt UpdateLambdaRole.Arn
+      Events:
+        SqsEvent:
+          Type: SQS
+          Properties:
+            BatchSize: 1
+            Queue: !GetAtt CharactersToUpdateQueue.Arn
 
   UpdateSeasonsSchedule:
     Type: AWS::Events::Rule
@@ -177,6 +240,7 @@ Globals:
       Variables:
         EnvironmentType: !Ref EnvironmentType
         AnimeToUpdateQueueUrl: !Ref AnimeToUpdateQueue
+        CharactersToUpdateQueueUrl: !Ref CharactersToUpdateQueue
         StackName: !Ref AWS::StackName
     Tags:
       environment: !Ref EnvironmentType

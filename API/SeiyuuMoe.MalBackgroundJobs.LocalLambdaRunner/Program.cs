@@ -10,7 +10,8 @@ namespace SeiyuuMoe.MalBackgroundJobs.LocalLambdaRunner
 			SetupEnvironmentalVariables();
 
 			// var runner = new UpdateAnimeLambdaRunner();
-			var runner = new ScheduleAnimesLambdaRunner();
+			//var runner = new ScheduleAnimesLambdaRunner();
+			var runner = new ScheduleCharactersLambdaRunner();
 
 			await runner.RunAsync();
 		}
