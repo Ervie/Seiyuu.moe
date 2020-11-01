@@ -24,7 +24,9 @@ namespace SeiyuuMoe.MalBackgroundJobs.Application.Handlers
 
 		public async Task HandleAsync()
 		{
-			var charactersToUpdate = await _characterRepository.GetOlderThanModifiedDate(DateTime.UtcNow, _batchSize);
+			var thresholdDate = DateTime.UtcNow.AddDays(-31);
+
+			var charactersToUpdate = await _characterRepository.GetOlderThanModifiedDate(thresholdDate, _batchSize);
 
 			var publishTasks = charactersToUpdate.Select(
 				(a, i) => _charactersUpdatePublisher.PublishCharacterUpdateAsync(
