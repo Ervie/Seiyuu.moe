@@ -33,6 +33,13 @@ namespace SeiyuuMoe.Tests.Common.Builders.Jikan
 			return this;
 		}
 
+		public JikanServiceBuilder WithGetCharacterThrowing()
+		{
+			JikanClient.Setup(x => x.GetCharacter(It.IsAny<long>()))
+				.ThrowsAsync(new JikanRequestException());
+			return this;
+		}
+
 		public JikanServiceBuilder WithPersonReturned(Person person)
 		{
 			JikanClient.Setup(x => x.GetPerson(It.IsAny<long>()))

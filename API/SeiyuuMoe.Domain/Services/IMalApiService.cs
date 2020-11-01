@@ -8,5 +8,7 @@ namespace SeiyuuMoe.Domain.Services
 		Task<MalAnimeUpdateData> GetAnimeDataAsync(long malId);
 
 		Task<MalSeasonUpdateData> GetSeasonDataAsync();
+
+		Task<MalCharacterUpdateData> GetCharacterDataAsync(long malId);
 	}
 }

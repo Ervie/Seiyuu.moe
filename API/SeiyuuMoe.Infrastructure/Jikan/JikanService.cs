@@ -39,6 +39,25 @@ namespace SeiyuuMoe.Infrastructure.Jikan
 			);
 		}
 
+		public async Task<MalCharacterUpdateData> GetCharacterDataAsync(long malId)
+		{
+			var parsedData = await _jikanClient.GetCharacter(malId);
+
+			if (parsedData is null)
+			{
+				return null;
+			}
+
+			return new MalCharacterUpdateData(
+				parsedData.Name,
+				parsedData.About,
+				parsedData.NameKanji,
+				EmptyStringIfPlaceholder(parsedData.ImageURL),
+				(parsedData.Nicknames != null && parsedData.Nicknames.Any()) ? string.Join(';', parsedData.Nicknames) : string.Empty,
+				parsedData.MemberFavorites
+			);
+		}
+
 		public async Task<MalSeasonUpdateData> GetSeasonDataAsync()
 		{
 			var parsedData = await _jikanClient.GetSeasonArchive();
