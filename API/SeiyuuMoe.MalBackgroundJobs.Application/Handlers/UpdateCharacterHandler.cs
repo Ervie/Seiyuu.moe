@@ -3,7 +3,6 @@ using SeiyuuMoe.Domain.MalUpdateData;
 using SeiyuuMoe.Domain.Repositories;
 using SeiyuuMoe.Domain.Services;
 using SeiyuuMoe.Domain.SqsMessages;
-using System;
 using System.Threading.Tasks;
 
 namespace SeiyuuMoe.MalBackgroundJobs.Application.Handlers

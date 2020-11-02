@@ -3,6 +3,7 @@ using SeiyuuMoe.Domain.Entities;
 using SeiyuuMoe.Infrastructure.Seiyuus;
 using SeiyuuMoe.Tests.Common.Builders.Model;
 using SeiyuuMoe.Tests.Common.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
@@ -189,6 +190,185 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 
 			// When
 			var result = await repository.GetAllSeiyuuRolesByMalIdAsync(seiyuuMalId, true);
+
+			// Then
+			result.Should().HaveCount(2);
+		}
+
+		[Fact]
+		public async Task GetAllSeiyuuRolesAsync_GivenNoRoles_ShouldReturnEmpty()
+		{
+			// Given
+			var dbContext = InMemoryDbProvider.GetDbContext();
+			var repository = new SeiyuuRoleRepository(dbContext);
+
+			// When
+			var result = await repository.GetAllSeiyuuRolesAsync(Guid.NewGuid(), false);
+
+			// Then
+			result.Should().BeEmpty();
+		}
+
+		[Fact]
+		public async Task GetAllSeiyuuRolesAsync_GivenNoRolesForAnime_ShouldReturnEmpty()
+		{
+			// Given
+			var seiyuuId = Guid.NewGuid();
+			var dbContext = InMemoryDbProvider.GetDbContext();
+			var repository = new SeiyuuRoleRepository(dbContext);
+
+			var seiyuu = new SeiyuuBuilder().WithId(Guid.NewGuid()).Build();
+
+			await dbContext.AddAsync(seiyuu);
+			await dbContext.SaveChangesAsync();
+
+			// When
+			var result = await repository.GetAllSeiyuuRolesAsync(seiyuuId, false);
+
+			// Then
+			result.Should().BeEmpty();
+		}
+
+		[Fact]
+		public async Task GetAllSeiyuuRolesAsync_GivenAnimeWithSingleRole_ShouldReturnSingle()
+		{
+			// Given
+			var seiyuuId = Guid.NewGuid();
+			var dbContext = InMemoryDbProvider.GetDbContext();
+			var repository = new SeiyuuRoleRepository(dbContext);
+
+			var role = new AnimeRoleBuilder()
+				.WithSeiyuu(x => x.WithId(seiyuuId))
+				.WithLanguage(x => x.WithLanguageId(LanguageId.Japanese))
+				.Build();
+
+			await dbContext.AddAsync(role);
+			await dbContext.SaveChangesAsync();
+
+			// When
+			var result = await repository.GetAllSeiyuuRolesAsync(seiyuuId, false);
+
+			// Then
+			result.Should().ContainSingle();
+		}
+
+		[Fact]
+		public async Task GetAllSeiyuuRolesAsync_GivenAnimeWithSingleRoleInLanguageOtherThanJapanese_ShouldReturnEmpty()
+		{
+			// Given
+			var seiyuuId = Guid.NewGuid();
+			var dbContext = InMemoryDbProvider.GetDbContext();
+			var repository = new SeiyuuRoleRepository(dbContext);
+
+			var role = new AnimeRoleBuilder()
+				.WithSeiyuu(x => x.WithId(seiyuuId))
+				.WithLanguage(x => x.WithLanguageId(LanguageId.Korean))
+				.Build();
+
+			await dbContext.AddAsync(role);
+			await dbContext.SaveChangesAsync();
+
+			// When
+			var result = await repository.GetAllSeiyuuRolesAsync(seiyuuId, false);
+
+			// Then
+			result.Should().BeEmpty();
+		}
+
+		[Fact]
+		public async Task GetAllSeiyuuRolesAsync_GivenMultipleRoles_ShouldReturnMultiple()
+		{
+			// Given
+			var seiyuuId = Guid.NewGuid();
+			var dbContext = InMemoryDbProvider.GetDbContext();
+			var repository = new SeiyuuRoleRepository(dbContext);
+
+			var japanese = new LanguageBuilder().WithLanguageId(LanguageId.Japanese).Build();
+			var seiyuu = new SeiyuuBuilder().WithId(seiyuuId).Build();
+			seiyuu.Role = new List<AnimeRole>
+			{
+				new AnimeRoleBuilder().WithLanguage(japanese).Build(),
+				new AnimeRoleBuilder().WithLanguage(japanese).Build(),
+				new AnimeRoleBuilder().WithLanguage(japanese).Build(),
+				new AnimeRoleBuilder().WithLanguage(japanese).Build(),
+				new AnimeRoleBuilder().WithLanguage(japanese).Build(),
+			};
+
+			await dbContext.AddAsync(seiyuu);
+			await dbContext.SaveChangesAsync();
+
+			// When
+			var result = await repository.GetAllSeiyuuRolesAsync(seiyuuId, false);
+
+			// Then
+			result.Should().HaveCount(5);
+		}
+
+		[Fact]
+		public async Task GetAllSeiyuuRolesAsync_GivenSeiyuuWithMultipleRolesAndMainRolesOnly_ShouldReturnPartial()
+		{
+			// Given
+			var seiyuuId = Guid.NewGuid();
+			var dbContext = InMemoryDbProvider.GetDbContext();
+			var repository = new SeiyuuRoleRepository(dbContext);
+
+			var japanese = new LanguageBuilder().WithLanguageId(LanguageId.Japanese).Build();
+			var seiyuu = new SeiyuuBuilder().WithId(seiyuuId).Build();
+			var mainRole = new AnimeRoleTypeBuilder().WithId(AnimeRoleTypeId.Main).Build();
+			var supportingRole = new AnimeRoleTypeBuilder().WithId(AnimeRoleTypeId.Supporting).Build();
+
+			seiyuu.Role = new List<AnimeRole>
+			{
+				new AnimeRoleBuilder().WithLanguage(japanese).WithRoleType(mainRole).Build(),
+				new AnimeRoleBuilder().WithLanguage(japanese).WithRoleType(supportingRole).Build(),
+				new AnimeRoleBuilder().WithLanguage(japanese).WithRoleType(supportingRole).Build(),
+				new AnimeRoleBuilder().WithLanguage(japanese).WithRoleType(supportingRole).Build(),
+				new AnimeRoleBuilder().WithLanguage(japanese).WithRoleType(mainRole).Build()
+			};
+
+			await dbContext.AddAsync(seiyuu);
+			await dbContext.SaveChangesAsync();
+
+			// When
+			var result = await repository.GetAllSeiyuuRolesAsync(seiyuuId, true);
+
+			// Then
+			result.Should().HaveCount(2);
+		}
+
+		[Fact]
+		public async Task GetAllSeiyuuRolesAsync_GivenSeiyuuWithMultipleRolesAndMainRolesOnlyAndInDifferentLanguages_ShouldReturnPartial()
+		{
+			// Given
+			var seiyuuId = Guid.NewGuid();
+			var dbContext = InMemoryDbProvider.GetDbContext();
+			var repository = new SeiyuuRoleRepository(dbContext);
+
+			var japanese = new LanguageBuilder().WithLanguageId(LanguageId.Japanese).Build();
+			var korean = new LanguageBuilder().WithLanguageId(LanguageId.Korean).Build();
+			var seiyuu = new SeiyuuBuilder().WithId(seiyuuId).Build();
+			var mainRole = new AnimeRoleTypeBuilder().WithId(AnimeRoleTypeId.Main).Build();
+			var supportingRole = new AnimeRoleTypeBuilder().WithId(AnimeRoleTypeId.Supporting).Build();
+
+			seiyuu.Role = new List<AnimeRole>
+			{
+				new AnimeRoleBuilder().WithLanguage(japanese).WithRoleType(mainRole).Build(),
+				new AnimeRoleBuilder().WithLanguage(japanese).WithRoleType(supportingRole).Build(),
+				new AnimeRoleBuilder().WithLanguage(japanese).WithRoleType(supportingRole).Build(),
+				new AnimeRoleBuilder().WithLanguage(japanese).WithRoleType(supportingRole).Build(),
+				new AnimeRoleBuilder().WithLanguage(japanese).WithRoleType(mainRole).Build(),
+				new AnimeRoleBuilder().WithLanguage(korean).WithRoleType(mainRole).Build(),
+				new AnimeRoleBuilder().WithLanguage(korean).WithRoleType(supportingRole).Build(),
+				new AnimeRoleBuilder().WithLanguage(korean).WithRoleType(supportingRole).Build(),
+				new AnimeRoleBuilder().WithLanguage(korean).WithRoleType(supportingRole).Build(),
+				new AnimeRoleBuilder().WithLanguage(korean).WithRoleType(mainRole).Build()
+			};
+
+			await dbContext.AddAsync(seiyuu);
+			await dbContext.SaveChangesAsync();
+
+			// When
+			var result = await repository.GetAllSeiyuuRolesAsync(seiyuuId, true);
 
 			// Then
 			result.Should().HaveCount(2);

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SeiyuuMoe.Domain.Entities;
 using SeiyuuMoe.Domain.Repositories;
 using SeiyuuMoe.Domain.WebEssentials;
 using SeiyuuMoe.Infrastructure.Context;
@@ -19,7 +20,7 @@ namespace SeiyuuMoe.Infrastructure.Seiyuus
 			_dbContext = dbContext;
 		}
 
-		public async Task AddAsync(Domain.Entities.Seiyuu seiyuu)
+		public async Task AddAsync(Seiyuu seiyuu)
 		{
 			await _dbContext.Seiyuus.AddAsync(seiyuu);
 			await _dbContext.SaveChangesAsync();
@@ -30,10 +31,10 @@ namespace SeiyuuMoe.Infrastructure.Seiyuus
 
 		public Task<int> GetSeiyuuCountAsync() => _dbContext.Seiyuus.CountAsync();
 
-		public Task<Domain.Entities.Seiyuu> GetAsync(long seiyuuMalId)
+		public Task<Seiyuu> GetAsync(long seiyuuMalId)
 			=> _dbContext.Seiyuus.FirstOrDefaultAsync(x => x.MalId == seiyuuMalId);
 
-		public async Task<PagedResult<Domain.Entities.Seiyuu>> GetOrderedPageByPopularityAsync(Expression<Func<Domain.Entities.Seiyuu, bool>> predicate, int page = 0, int pageSize = 10)
+		public async Task<PagedResult<Seiyuu>> GetOrderedPageByPopularityAsync(Expression<Func<Seiyuu, bool>> predicate, int page = 0, int pageSize = 10)
 		{
 			var entities = _dbContext.Seiyuus.Where(predicate);
 			var totalCount = await entities.CountAsync();
@@ -43,7 +44,7 @@ namespace SeiyuuMoe.Infrastructure.Seiyuus
 				.Take(pageSize)
 				.ToListAsync();
 
-			return new PagedResult<Domain.Entities.Seiyuu>
+			return new PagedResult<Seiyuu>
 			{
 				Results = results,
 				Page = page,
@@ -52,7 +53,7 @@ namespace SeiyuuMoe.Infrastructure.Seiyuus
 			};
 		}
 
-		public async Task UpdateAsync(Domain.Entities.Seiyuu seiyuu)
+		public async Task UpdateAsync(Seiyuu seiyuu)
 		{
 			seiyuu.ModificationDate = DateTime.UtcNow;
 			_dbContext.Update(seiyuu);
@@ -64,5 +65,13 @@ namespace SeiyuuMoe.Infrastructure.Seiyuus
 			var lastSeiyuu = await _dbContext.Seiyuus.OrderBy(x => x.MalId).LastOrDefaultAsync();
 			return lastSeiyuu?.MalId;
 		}
+
+		public async Task<IReadOnlyList<Seiyuu>> GetOlderThanModifiedDate(DateTime olderThan, int pageSize = 150)
+			=> await _dbContext.Seiyuus
+				.Where(x => x.ModificationDate < olderThan)
+				.OrderBy(x => x.ModificationDate)
+				.ThenBy(x => x.Id)
+				.Take(pageSize)
+				.ToListAsync();
 	}
 }

@@ -72,6 +72,33 @@ namespace SeiyuuMoe.Infrastructure.Jikan
 			return new MalSeasonUpdateData(latestYear.Year, latestYear.Season.Last().ToString());
 		}
 
+		public async  Task<MalSeiyuuUpdateData> GetSeiyuuDataAsync(long malId)
+		{
+			var parsedData = await _jikanClient.GetPerson(malId);
+
+			if (parsedData is null)
+			{
+				return null;
+			}
+
+
+			return new MalSeiyuuUpdateData(
+				parsedData.Name,
+				parsedData.More,
+				$"{parsedData.FamilyName ?? string.Empty} {parsedData.GivenName ?? string.Empty}".Trim(),
+				EmptyStringIfPlaceholder(parsedData.ImageURL),
+				parsedData.MemberFavorites,
+				parsedData.VoiceActingRoles.Select(
+					x => new MalVoiceActingRoleUpdateData(
+						x.Anime.MalId,
+						x.Character.MalId,
+						x.Role
+					)
+				)
+				.ToList()
+			);
+		}
+
 		private string EmptyStringIfPlaceholder(string imageUrl)
 		{
 			var isEmptyOrPlaceholder = string.IsNullOrWhiteSpace(imageUrl) ||
