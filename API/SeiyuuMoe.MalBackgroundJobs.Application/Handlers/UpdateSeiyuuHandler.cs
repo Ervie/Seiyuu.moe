@@ -11,12 +11,13 @@ using System.Threading.Tasks;
 
 namespace SeiyuuMoe.MalBackgroundJobs.Application.Handlers
 {
-	internal class UpdateSeiyuuHandler
+	public class UpdateSeiyuuHandler
 	{
 		private readonly ISeiyuuRepository _seiyuuRepository;
 		private readonly IAnimeRepository _animeRepository;
 		private readonly ICharacterRepository _characterRepository;
 		private readonly ISeiyuuRoleRepository _seiyuuRoleRepository;
+		private readonly IAnimeRoleRepository _animeRoleRepository;
 		private readonly ISeasonRepository _seasonRepository;
 		private readonly IMalApiService _malApiService;
 
@@ -25,6 +26,7 @@ namespace SeiyuuMoe.MalBackgroundJobs.Application.Handlers
 			IAnimeRepository animeRepository,
 			ICharacterRepository characterRepository,
 			ISeiyuuRoleRepository seiyuuRoleRepository,
+			IAnimeRoleRepository animeRoleRepository,
 			ISeasonRepository seasonRepository,
 			IMalApiService malApiService
 		)
@@ -33,6 +35,7 @@ namespace SeiyuuMoe.MalBackgroundJobs.Application.Handlers
 			_animeRepository = animeRepository;
 			_characterRepository = characterRepository;
 			_seiyuuRoleRepository = seiyuuRoleRepository;
+			_animeRoleRepository = animeRoleRepository;
 			_seasonRepository = seasonRepository;
 			_malApiService = malApiService;
 		}
@@ -66,6 +69,7 @@ namespace SeiyuuMoe.MalBackgroundJobs.Application.Handlers
 			seiyuuToUpdate.KanjiName = updateData.JapaneseName;
 			seiyuuToUpdate.ImageUrl = updateData.ImageUrl;
 			seiyuuToUpdate.Popularity = updateData.Popularity;
+			seiyuuToUpdate.Birthday = updateData.Birthday;
 		}
 
 		private async Task UpdateRolesAsync(UpdateSeiyuuMessage updateSeiyuuMessage, ICollection<MalVoiceActingRoleUpdateData> parsedVoiceActingRoles)
@@ -78,6 +82,19 @@ namespace SeiyuuMoe.MalBackgroundJobs.Application.Handlers
 				{
 					var animeInDatabase = await InsertAnimeAsync(parsedRole.AnimeMalId);
 					var characterInDatabase = await InsertCharacterAsync(parsedRole.CharacterMaId);
+
+					if (animeInDatabase != null && characterInDatabase != null)
+					{
+						await _animeRoleRepository.AddAsync(new AnimeRole
+						{
+							Id = Guid.NewGuid(),
+							LanguageId = LanguageId.Japanese,
+							RoleTypeId = parsedRole.RoleType.Equals("Main") ? AnimeRoleTypeId.Main : AnimeRoleTypeId.Supporting,
+							AnimeId = animeInDatabase.Id,
+							CharacterId = characterInDatabase.Id,
+							SeiyuuId = updateSeiyuuMessage.Id
+						});
+					}
 				}
 			}
 		}

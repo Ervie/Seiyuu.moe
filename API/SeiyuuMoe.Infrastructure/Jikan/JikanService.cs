@@ -1,6 +1,7 @@
 ﻿using JikanDotNet;
 using SeiyuuMoe.Domain.MalUpdateData;
 using SeiyuuMoe.Domain.Services;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -88,14 +89,15 @@ namespace SeiyuuMoe.Infrastructure.Jikan
 				$"{parsedData.FamilyName ?? string.Empty} {parsedData.GivenName ?? string.Empty}".Trim(),
 				EmptyStringIfPlaceholder(parsedData.ImageURL),
 				parsedData.MemberFavorites,
-				parsedData.VoiceActingRoles.Select(
+				parsedData.Birthday,
+				parsedData.VoiceActingRoles?.Select(
 					x => new MalVoiceActingRoleUpdateData(
 						x.Anime.MalId,
 						x.Character.MalId,
 						x.Role
 					)
 				)
-				.ToList()
+				.ToList() ?? new List<MalVoiceActingRoleUpdateData>()
 			);
 		}
 

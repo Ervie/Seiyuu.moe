@@ -19,6 +19,7 @@ namespace SeiyuuMoe.Tests.Common.Builders.Model
 		private Guid _id;
 
 		private AnimeStatus _animeStatus;
+		private AnimeType _animeType;
 		private AnimeSeason _season;
 
 		private AnimeTypeBuilder _animeTypeBuilder;
@@ -38,7 +39,7 @@ namespace SeiyuuMoe.Tests.Common.Builders.Model
 			About = _about,
 			Popularity = _popularity,
 			Status = _animeStatusBuilder?.Build() ?? _animeStatus,
-			Type = _animeTypeBuilder?.Build(),
+			Type = _animeTypeBuilder?.Build() ?? _animeType,
 			Season = _seasonBuilder?.Build() ?? _season
 		};
 
@@ -107,6 +108,12 @@ namespace SeiyuuMoe.Tests.Common.Builders.Model
 		{
 			_animeTypeBuilder = new AnimeTypeBuilder();
 			builderAction(_animeTypeBuilder);
+			return this;
+		}
+
+		public AnimeBuilder WithAnimeType(AnimeType animeType)
+		{
+			_animeType = animeType;
 			return this;
 		}
 
