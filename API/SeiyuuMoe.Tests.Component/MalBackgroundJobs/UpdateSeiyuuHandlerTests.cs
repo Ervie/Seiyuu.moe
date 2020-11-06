@@ -363,7 +363,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 					.WithId(AnimeRoleTypeId.Main)
 				)
 				.Build(),
-		
+
 				new AnimeRoleBuilder()
 				.WithSeiyuu(seiyuu)
 				.WithCharacter(x => x
@@ -471,8 +471,6 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			await dbContext.AddAsync(seiyuu);
 			await dbContext.AddAsync(anime);
 			await dbContext.AddAsync(character);
-			await dbContext.SaveChangesAsync();
-
 			await dbContext.SaveChangesAsync();
 
 			var handler = CreateHandler(dbContext, jikanServiceBuilder.Build());
@@ -598,7 +596,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			};
 
 			var characters = new List<AnimeCharacter>
-			{ 
+			{
 				new CharacterBuilder()
 					.WithId(character1Id)
 					.WithMalId(character1MalId)
@@ -622,8 +620,6 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			await dbContext.AddAsync(seiyuu);
 			await dbContext.AddRangeAsync(animes);
 			await dbContext.AddRangeAsync(characters);
-			await dbContext.SaveChangesAsync();
-
 			await dbContext.SaveChangesAsync();
 
 			var handler = CreateHandler(dbContext, jikanServiceBuilder.Build());
@@ -775,8 +771,6 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			await dbContext.AddRangeAsync(characters);
 			await dbContext.SaveChangesAsync();
 
-			await dbContext.SaveChangesAsync();
-
 			var handler = CreateHandler(dbContext, jikanServiceBuilder.Build());
 
 			var command = new UpdateSeiyuuMessage
@@ -803,6 +797,1843 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 
 				jikanServiceBuilder.JikanClient.Verify(x => x.GetPerson(seiyuuMalId), Times.Once);
 				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnime(It.IsAny<long>()), Times.Never);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetCharacter(It.IsAny<long>()), Times.Never);
+			}
+		}
+
+		[Fact]
+		public async Task HandleAsync_GivenSeiyuuWithSingleNotInsertedRoleWithInsertedAnimeAndNotInsertedCharacter_ShouldInsertNewRoleAndNewCharacter()
+		{
+			// Given
+			var seiyuuId = Guid.NewGuid();
+			const long seiyuuMalId = 1;
+			const long animeMalId = 100;
+			const long characterMalId = 1000;
+			var dbContext = InMemoryDbProvider.GetDbContext();
+
+			const string returnedCharacterName = "PostUpdateName";
+			const string returnedCharacterAbout = "PostUpdateAbout";
+			const string returnedCharacterJapaneseName = "PostUpdateJapanese";
+			const string returnedCharacterImageUrl = "PostUpdateImageUrl";
+			const int returnedCharacterPopularity = 1;
+
+			var returnedSeiyuu = new Person
+			{
+				MalId = seiyuuMalId,
+				VoiceActingRoles = new List<VoiceActingRole>
+				{
+					new VoiceActingRole
+					{
+						Role = "Main",
+						Anime = new MALImageSubItem
+						{
+							MalId = animeMalId
+						},
+						Character = new MALImageSubItem
+						{
+							MalId = characterMalId
+						}
+					}
+				}
+			};
+
+			var returnedCharacter = new Character
+			{
+				MalId = characterMalId,
+				Name = returnedCharacterName,
+				About = returnedCharacterAbout,
+				NameKanji = returnedCharacterJapaneseName,
+				ImageURL = returnedCharacterImageUrl,
+				Nicknames = new List<string>(),
+				MemberFavorites = returnedCharacterPopularity
+			};
+
+			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu).WithCharacterReturned(returnedCharacter);
+
+			var seiyuu = new SeiyuuBuilder()
+				.WithId(seiyuuId)
+				.WithMalId(seiyuuMalId)
+				.WithName("PreUpdateSeiyuuName")
+				.WithAbout("PreUpdateSeiyuuAbout")
+				.WithJapaneseName("PreUpdateSeiyuuName")
+				.WithImageUrl("PreUpdateSeiyuuImage")
+				.WithPopularity(0)
+				.Build();
+
+			var anime = new AnimeBuilder()
+				.WithMalId(animeMalId)
+				.WithTitle("PreUpdateTitle")
+				.WithAbout("PreUpdateAbout")
+				.WithEnglishTitle("PreUpdateEnglish")
+				.WithJapaneseTitle("PreUpdateJapaneses")
+				.WithImageUrl("PreUpdateImage")
+				.WithAnimeStatus(x => x.WithName("Airing"))
+				.WithAnimeType(x => x.WithId(AnimeTypeId.TV))
+				.WithPopularity(0)
+				.Build();
+
+			await dbContext.AddAsync(seiyuu);
+			await dbContext.AddAsync(anime);
+			await dbContext.SaveChangesAsync();
+
+			var handler = CreateHandler(dbContext, jikanServiceBuilder.Build());
+
+			var command = new UpdateSeiyuuMessage
+			{
+				Id = seiyuuId,
+				MalId = seiyuuMalId
+			};
+
+			// When
+			await handler.HandleAsync(command);
+
+			// Then
+			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.Role).FirstAsync(x => x.MalId == seiyuuMalId);
+			var insertedCharacter = await dbContext.AnimeCharacters.FirstAsync(x => x.MalId == characterMalId);
+			using (new AssertionScope())
+			{
+				dbContext.AnimeRoles.Should().ContainSingle();
+				dbContext.AnimeCharacters.Should().ContainSingle();
+
+				updatedSeiyuu.Role.First().AnimeId.Should().Be(anime.Id);
+				updatedSeiyuu.Role.First().SeiyuuId.Should().Be(seiyuu.Id);
+				updatedSeiyuu.Role.First().CharacterId.Should().Be(insertedCharacter.Id);
+
+				insertedCharacter.MalId.Should().Be(characterMalId);
+				insertedCharacter.Name.Should().Be(returnedCharacterName);
+				insertedCharacter.About.Should().Be(returnedCharacterAbout);
+				insertedCharacter.KanjiName.Should().Be(returnedCharacterJapaneseName);
+				insertedCharacter.Popularity.Should().Be(returnedCharacterPopularity);
+				insertedCharacter.ImageUrl.Should().Be(returnedCharacterImageUrl);
+
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetPerson(seiyuuMalId), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnime(It.IsAny<long>()), Times.Never);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetCharacter(characterMalId), Times.Once);
+			}
+		}
+
+		[Fact]
+		public async Task HandleAsync_GivenSeiyuuWithSingleNotInsertedRoleWithInsertedAnimeAndNotInsertedCharacterAndNullFromCharacterRequest_ShouldNotInsertAnything()
+		{
+			// Given
+			var seiyuuId = Guid.NewGuid();
+			const long seiyuuMalId = 1;
+			const long animeMalId = 100;
+			const long characterMalId = 1000;
+			var dbContext = InMemoryDbProvider.GetDbContext();
+
+			var returnedSeiyuu = new Person
+			{
+				MalId = seiyuuMalId,
+				VoiceActingRoles = new List<VoiceActingRole>
+				{
+					new VoiceActingRole
+					{
+						Role = "Main",
+						Anime = new MALImageSubItem
+						{
+							MalId = animeMalId
+						},
+						Character = new MALImageSubItem
+						{
+							MalId = characterMalId
+						}
+					}
+				}
+			};
+
+			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu).WithCharacterReturned(null);
+
+			var seiyuu = new SeiyuuBuilder()
+				.WithId(seiyuuId)
+				.WithMalId(seiyuuMalId)
+				.WithName("PreUpdateSeiyuuName")
+				.WithAbout("PreUpdateSeiyuuAbout")
+				.WithJapaneseName("PreUpdateSeiyuuName")
+				.WithImageUrl("PreUpdateSeiyuuImage")
+				.WithPopularity(0)
+				.Build();
+
+			var anime = new AnimeBuilder()
+				.WithMalId(animeMalId)
+				.WithTitle("PreUpdateTitle")
+				.WithAbout("PreUpdateAbout")
+				.WithEnglishTitle("PreUpdateEnglish")
+				.WithJapaneseTitle("PreUpdateJapaneses")
+				.WithImageUrl("PreUpdateImage")
+				.WithAnimeStatus(x => x.WithName("Airing"))
+				.WithAnimeType(x => x.WithId(AnimeTypeId.TV))
+				.WithPopularity(0)
+				.Build();
+
+			await dbContext.AddAsync(seiyuu);
+			await dbContext.AddAsync(anime);
+			await dbContext.SaveChangesAsync();
+
+			var handler = CreateHandler(dbContext, jikanServiceBuilder.Build());
+
+			var command = new UpdateSeiyuuMessage
+			{
+				Id = seiyuuId,
+				MalId = seiyuuMalId
+			};
+
+			// When
+			await handler.HandleAsync(command);
+
+			// Then
+			using (new AssertionScope())
+			{
+				dbContext.AnimeRoles.Should().BeEmpty();
+				dbContext.AnimeCharacters.Should().BeEmpty();
+
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetPerson(seiyuuMalId), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnime(It.IsAny<long>()), Times.Never);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetCharacter(characterMalId), Times.Once);
+			}
+		}
+
+		[Theory]
+		[InlineData("")]
+		[InlineData(null)]
+		[InlineData("\t\t  \n \t   ")]
+		[InlineData("https://cdn.myanimelist.net/images/questionmark_23.gif")]
+		[InlineData("https://cdn.myanimelist.net/img/sp/icon/apple-touch-icon-256.png")]
+		public async Task HandleAsync_GivenSeiyuuWithSingleNotInsertedRoleWithInsertedAnimeAndNotInsertedCharacterWithIncorrectImage_ShouldInsertNewRoleAndNewCharacter(string characterImageUrl)
+		{
+			// Given
+			var seiyuuId = Guid.NewGuid();
+			const long seiyuuMalId = 1;
+			const long animeMalId = 100;
+			const long characterMalId = 1000;
+			var dbContext = InMemoryDbProvider.GetDbContext();
+
+			var returnedSeiyuu = new Person
+			{
+				MalId = seiyuuMalId,
+				VoiceActingRoles = new List<VoiceActingRole>
+				{
+					new VoiceActingRole
+					{
+						Role = "Main",
+						Anime = new MALImageSubItem
+						{
+							MalId = animeMalId
+						},
+						Character = new MALImageSubItem
+						{
+							MalId = characterMalId
+						}
+					}
+				}
+			};
+
+			var returnedCharacter = new Character
+			{
+				MalId = characterMalId,
+				ImageURL = characterImageUrl,
+			};
+
+			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu).WithCharacterReturned(returnedCharacter);
+
+			var seiyuu = new SeiyuuBuilder()
+				.WithId(seiyuuId)
+				.WithMalId(seiyuuMalId)
+				.WithName("PreUpdateSeiyuuName")
+				.WithAbout("PreUpdateSeiyuuAbout")
+				.WithJapaneseName("PreUpdateSeiyuuName")
+				.WithImageUrl("PreUpdateSeiyuuImage")
+				.WithPopularity(0)
+				.Build();
+
+			var anime = new AnimeBuilder()
+				.WithMalId(animeMalId)
+				.WithTitle("PreUpdateTitle")
+				.WithAbout("PreUpdateAbout")
+				.WithEnglishTitle("PreUpdateEnglish")
+				.WithJapaneseTitle("PreUpdateJapaneses")
+				.WithImageUrl("PreUpdateImage")
+				.WithAnimeStatus(x => x.WithName("Airing"))
+				.WithAnimeType(x => x.WithId(AnimeTypeId.TV))
+				.WithPopularity(0)
+				.Build();
+
+			await dbContext.AddAsync(seiyuu);
+			await dbContext.AddAsync(anime);
+			await dbContext.SaveChangesAsync();
+
+			var handler = CreateHandler(dbContext, jikanServiceBuilder.Build());
+
+			var command = new UpdateSeiyuuMessage
+			{
+				Id = seiyuuId,
+				MalId = seiyuuMalId
+			};
+
+			// When
+			await handler.HandleAsync(command);
+
+			// Then
+			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.Role).FirstAsync(x => x.MalId == seiyuuMalId);
+			var insertedCharacter = await dbContext.AnimeCharacters.FirstAsync(x => x.MalId == characterMalId);
+			using (new AssertionScope())
+			{
+				dbContext.AnimeRoles.Should().ContainSingle();
+				dbContext.AnimeCharacters.Should().ContainSingle();
+
+				updatedSeiyuu.Role.First().AnimeId.Should().Be(anime.Id);
+				updatedSeiyuu.Role.First().SeiyuuId.Should().Be(seiyuu.Id);
+				updatedSeiyuu.Role.First().CharacterId.Should().Be(insertedCharacter.Id);
+
+				insertedCharacter.MalId.Should().Be(characterMalId);
+				insertedCharacter.ImageUrl.Should().BeEmpty();
+
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetPerson(seiyuuMalId), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnime(It.IsAny<long>()), Times.Never);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetCharacter(characterMalId), Times.Once);
+			}
+		}
+
+		[Fact]
+		public async Task HandleAsync_GivenSeiyuuWithSingleNotInsertedRoleWithInsertedAnimeAndNotInsertedCharacterWithMultipleNicknames_ShouldInsertNewRoleAndNewCharacter()
+		{
+			// Given
+			var seiyuuId = Guid.NewGuid();
+			const long seiyuuMalId = 1;
+			const long animeMalId = 100;
+			const long characterMalId = 1000;
+			var dbContext = InMemoryDbProvider.GetDbContext();
+
+			const string returnedCharacterName = "PostUpdateName";
+			const string returnedCharacterAbout = "PostUpdateAbout";
+			const string returnedCharacterJapaneseName = "PostUpdateJapanese";
+			const string returnedCharacterImageUrl = "PostUpdateImageUrl";
+			const int returnedCharacterPopularity = 2;
+
+			var returnedSeiyuu = new Person
+			{
+				MalId = seiyuuMalId,
+				VoiceActingRoles = new List<VoiceActingRole>
+				{
+					new VoiceActingRole
+					{
+						Role = "Main",
+						Anime = new MALImageSubItem
+						{
+							MalId = animeMalId
+						},
+						Character = new MALImageSubItem
+						{
+							MalId = characterMalId
+						}
+					}
+				}
+			};
+
+			var returnedCharacter = new Character
+			{
+				MalId = characterMalId,
+				Name = returnedCharacterName,
+				About = returnedCharacterAbout,
+				NameKanji = returnedCharacterJapaneseName,
+				ImageURL = returnedCharacterImageUrl,
+				Nicknames = new List<string> { "Nickname 1", "Nickname 2", "Nickname 3" },
+				MemberFavorites = returnedCharacterPopularity
+			};
+
+			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu).WithCharacterReturned(returnedCharacter);
+
+			var seiyuu = new SeiyuuBuilder()
+				.WithId(seiyuuId)
+				.WithMalId(seiyuuMalId)
+				.WithName("PreUpdateSeiyuuName")
+				.WithAbout("PreUpdateSeiyuuAbout")
+				.WithJapaneseName("PreUpdateSeiyuuName")
+				.WithImageUrl("PreUpdateSeiyuuImage")
+				.WithPopularity(0)
+				.Build();
+
+			var anime = new AnimeBuilder()
+				.WithMalId(animeMalId)
+				.WithTitle("PreUpdateTitle")
+				.WithAbout("PreUpdateAbout")
+				.WithEnglishTitle("PreUpdateEnglish")
+				.WithJapaneseTitle("PreUpdateJapaneses")
+				.WithImageUrl("PreUpdateImage")
+				.WithAnimeStatus(x => x.WithName("Airing"))
+				.WithAnimeType(x => x.WithId(AnimeTypeId.TV))
+				.WithPopularity(0)
+				.Build();
+
+			await dbContext.AddAsync(seiyuu);
+			await dbContext.AddAsync(anime);
+			await dbContext.SaveChangesAsync();
+
+			var handler = CreateHandler(dbContext, jikanServiceBuilder.Build());
+
+			var command = new UpdateSeiyuuMessage
+			{
+				Id = seiyuuId,
+				MalId = seiyuuMalId
+			};
+
+			// When
+			await handler.HandleAsync(command);
+
+			// Then
+			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.Role).FirstAsync(x => x.MalId == seiyuuMalId);
+			var insertedCharacter = await dbContext.AnimeCharacters.FirstAsync(x => x.MalId == characterMalId);
+			using (new AssertionScope())
+			{
+				dbContext.AnimeRoles.Should().ContainSingle();
+				dbContext.AnimeCharacters.Should().ContainSingle();
+
+				updatedSeiyuu.Role.First().AnimeId.Should().Be(anime.Id);
+				updatedSeiyuu.Role.First().SeiyuuId.Should().Be(seiyuu.Id);
+				updatedSeiyuu.Role.First().CharacterId.Should().Be(insertedCharacter.Id);
+
+				insertedCharacter.MalId.Should().Be(characterMalId);
+				insertedCharacter.Name.Should().Be(returnedCharacterName);
+				insertedCharacter.KanjiName.Should().Be(returnedCharacterJapaneseName);
+				insertedCharacter.Popularity.Should().Be(returnedCharacterPopularity);
+				insertedCharacter.ImageUrl.Should().Be(returnedCharacterImageUrl);
+				insertedCharacter.Nicknames.Should().Be("Nickname 1;Nickname 2;Nickname 3");
+
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetPerson(seiyuuMalId), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnime(It.IsAny<long>()), Times.Never);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetCharacter(characterMalId), Times.Once);
+			}
+		}
+
+		[Fact]
+		public async Task HandleAsync_GivenSeiyuuWithSingleNotInsertedRoleWithNotInsertedAnimeAndInsertedCharacter_ShouldInsertNewRoleAndNewAnime()
+		{
+			// Given
+			var seiyuuId = Guid.NewGuid();
+			const long seiyuuMalId = 1;
+			const long animeMalId = 100;
+			const long characterMalId = 1000;
+			var dbContext = InMemoryDbProvider.GetDbContext();
+
+			const string returnedAnimeTitle = "PostUpdateTitle";
+			const string returnedAnimeAbout = "PostUpdateAbout";
+			const string returnedAnimeEnglishTitle = "PostUpdateEnglish";
+			const string returnedAnimeJapaneseTitle = "PostUpdateJapanese";
+			const string returnedAnimeImageUrl = "PostUpdateImageUrl";
+			const int returnedAnimePopularity = 3;
+
+			var returnedSeiyuu = new Person
+			{
+				MalId = seiyuuMalId,
+				VoiceActingRoles = new List<VoiceActingRole>
+				{
+					new VoiceActingRole
+					{
+						Role = "Main",
+						Anime = new MALImageSubItem
+						{
+							MalId = animeMalId
+						},
+						Character = new MALImageSubItem
+						{
+							MalId = characterMalId
+						}
+					}
+				}
+			};
+
+			var returnedAnime = new JikanDotNet.Anime
+			{
+				Title = returnedAnimeTitle,
+				Synopsis = returnedAnimeAbout,
+				TitleEnglish = returnedAnimeEnglishTitle,
+				TitleJapanese = returnedAnimeJapaneseTitle,
+				ImageURL = returnedAnimeImageUrl,
+				TitleSynonyms = new List<string>(),
+				Members = returnedAnimePopularity
+			};
+
+			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu).WithAnimeReturned(returnedAnime);
+
+			var seiyuu = new SeiyuuBuilder()
+				.WithId(seiyuuId)
+				.WithMalId(seiyuuMalId)
+				.WithName("PreUpdateSeiyuuName")
+				.WithAbout("PreUpdateSeiyuuAbout")
+				.WithJapaneseName("PreUpdateSeiyuuName")
+				.WithImageUrl("PreUpdateSeiyuuImage")
+				.WithPopularity(0)
+				.Build();
+
+			var character = new CharacterBuilder()
+				.WithMalId(characterMalId)
+				.WithName("PreUpdateName")
+				.WithAbout("PreUpdateAbout")
+				.WithKanjiName("PreUpdateJapanese")
+				.WithImageUrl("PreUpdateImageUrl")
+				.WithPopularity(0)
+				.Build();
+
+			await dbContext.AddAsync(seiyuu);
+			await dbContext.AddAsync(character);
+			await dbContext.SaveChangesAsync();
+
+			var handler = CreateHandler(dbContext, jikanServiceBuilder.Build());
+
+			var command = new UpdateSeiyuuMessage
+			{
+				Id = seiyuuId,
+				MalId = seiyuuMalId
+			};
+
+			// When
+			await handler.HandleAsync(command);
+
+			// Then
+			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.Role).FirstAsync(x => x.MalId == seiyuuMalId);
+			var insertedAnime = await dbContext.Animes.FirstAsync(x => x.MalId == animeMalId);
+			using (new AssertionScope())
+			{
+				dbContext.AnimeRoles.Should().ContainSingle();
+				dbContext.AnimeCharacters.Should().ContainSingle();
+
+				updatedSeiyuu.Role.First().AnimeId.Should().Be(insertedAnime.Id);
+				updatedSeiyuu.Role.First().SeiyuuId.Should().Be(seiyuu.Id);
+				updatedSeiyuu.Role.First().CharacterId.Should().Be(character.Id);
+
+				insertedAnime.MalId.Should().Be(animeMalId);
+				insertedAnime.About.Should().Be(returnedAnimeAbout);
+				insertedAnime.Title.Should().Be(returnedAnimeTitle);
+				insertedAnime.EnglishTitle.Should().Be(returnedAnimeEnglishTitle);
+				insertedAnime.KanjiTitle.Should().Be(returnedAnimeJapaneseTitle);
+				insertedAnime.Popularity.Should().Be(returnedAnimePopularity);
+				insertedAnime.ImageUrl.Should().Be(returnedAnimeImageUrl);
+
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetPerson(seiyuuMalId), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnime(animeMalId), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetCharacter(It.IsAny<long>()), Times.Never);
+			}
+		}
+
+		[Fact]
+		public async Task HandleAsync_GivenSeiyuuWithSingleNotInsertedRoleWithNotInsertedAnimeAndInsertedCharacterAndNullFromAnimeRequest_ShouldNotInsertAnything()
+		{
+			// Given
+			var seiyuuId = Guid.NewGuid();
+			const long seiyuuMalId = 1;
+			const long animeMalId = 100;
+			const long characterMalId = 1000;
+			var dbContext = InMemoryDbProvider.GetDbContext();
+
+			var returnedSeiyuu = new Person
+			{
+				MalId = seiyuuMalId,
+				VoiceActingRoles = new List<VoiceActingRole>
+				{
+					new VoiceActingRole
+					{
+						Role = "Main",
+						Anime = new MALImageSubItem
+						{
+							MalId = animeMalId
+						},
+						Character = new MALImageSubItem
+						{
+							MalId = characterMalId
+						}
+					}
+				}
+			};
+
+			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu).WithAnimeReturned(null);
+
+			var seiyuu = new SeiyuuBuilder()
+				.WithId(seiyuuId)
+				.WithMalId(seiyuuMalId)
+				.WithName("PreUpdateSeiyuuName")
+				.WithAbout("PreUpdateSeiyuuAbout")
+				.WithJapaneseName("PreUpdateSeiyuuName")
+				.WithImageUrl("PreUpdateSeiyuuImage")
+				.WithPopularity(0)
+				.Build();
+
+			var character = new CharacterBuilder()
+				.WithMalId(characterMalId)
+				.WithName("PreUpdateName")
+				.WithAbout("PreUpdateAbout")
+				.WithKanjiName("PreUpdateJapanese")
+				.WithImageUrl("PreUpdateImageUrl")
+				.WithPopularity(0)
+				.Build();
+
+			await dbContext.AddAsync(seiyuu);
+			await dbContext.AddAsync(character);
+			await dbContext.SaveChangesAsync();
+
+			var handler = CreateHandler(dbContext, jikanServiceBuilder.Build());
+
+			var command = new UpdateSeiyuuMessage
+			{
+				Id = seiyuuId,
+				MalId = seiyuuMalId
+			};
+
+			// When
+			await handler.HandleAsync(command);
+
+			// Then
+			using (new AssertionScope())
+			{
+				dbContext.AnimeRoles.Should().BeEmpty();
+				dbContext.Animes.Should().BeEmpty();
+
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetPerson(seiyuuMalId), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnime(animeMalId), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetCharacter(It.IsAny<long>()), Times.Never);
+			}
+		}
+
+		[Theory]
+		[InlineData("")]
+		[InlineData(null)]
+		[InlineData("\t\t  \n \t   ")]
+		[InlineData("https://cdn.myanimelist.net/images/questionmark_23.gif")]
+		[InlineData("https://cdn.myanimelist.net/img/sp/icon/apple-touch-icon-256.png")]
+		public async Task HandleAsync_GivenSeiyuuWithSingleNotInsertedRoleWithNotInsertedAnimeWithIncorrectImageAndInsertedCharacter_ShouldInsertNewRoleAndNewAnimeWithEmptyImage(string imageUrl)
+		{
+			// Given
+			var seiyuuId = Guid.NewGuid();
+			const long seiyuuMalId = 1;
+			const long animeMalId = 100;
+			const long characterMalId = 1000;
+			var dbContext = InMemoryDbProvider.GetDbContext();
+
+			var returnedSeiyuu = new Person
+			{
+				MalId = seiyuuMalId,
+				VoiceActingRoles = new List<VoiceActingRole>
+				{
+					new VoiceActingRole
+					{
+						Role = "Main",
+						Anime = new MALImageSubItem
+						{
+							MalId = animeMalId
+						},
+						Character = new MALImageSubItem
+						{
+							MalId = characterMalId
+						}
+					}
+				}
+			};
+
+			var returnedAnime = new JikanDotNet.Anime
+			{
+				ImageURL = imageUrl
+			};
+
+			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu).WithAnimeReturned(returnedAnime);
+
+			var seiyuu = new SeiyuuBuilder()
+				.WithId(seiyuuId)
+				.WithMalId(seiyuuMalId)
+				.WithName("PreUpdateSeiyuuName")
+				.WithAbout("PreUpdateSeiyuuAbout")
+				.WithJapaneseName("PreUpdateSeiyuuName")
+				.WithImageUrl("PreUpdateSeiyuuImage")
+				.WithPopularity(0)
+				.Build();
+
+			var character = new CharacterBuilder()
+				.WithMalId(characterMalId)
+				.WithName("PreUpdateName")
+				.WithAbout("PreUpdateAbout")
+				.WithKanjiName("PreUpdateJapanese")
+				.WithImageUrl("PreUpdateImageUrl")
+				.WithPopularity(0)
+				.Build();
+
+			await dbContext.AddAsync(seiyuu);
+			await dbContext.AddAsync(character);
+			await dbContext.SaveChangesAsync();
+
+			var handler = CreateHandler(dbContext, jikanServiceBuilder.Build());
+
+			var command = new UpdateSeiyuuMessage
+			{
+				Id = seiyuuId,
+				MalId = seiyuuMalId
+			};
+
+			// When
+			await handler.HandleAsync(command);
+
+			// Then
+			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.Role).FirstAsync(x => x.MalId == seiyuuMalId);
+			var insertedAnime = await dbContext.Animes.FirstAsync(x => x.MalId == animeMalId);
+			using (new AssertionScope())
+			{
+				dbContext.AnimeRoles.Should().ContainSingle();
+				dbContext.AnimeCharacters.Should().ContainSingle();
+
+				updatedSeiyuu.Role.First().AnimeId.Should().Be(insertedAnime.Id);
+				updatedSeiyuu.Role.First().SeiyuuId.Should().Be(seiyuu.Id);
+				updatedSeiyuu.Role.First().CharacterId.Should().Be(character.Id);
+
+				insertedAnime.MalId.Should().Be(animeMalId);
+				insertedAnime.ImageUrl.Should().BeEmpty();
+
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetPerson(seiyuuMalId), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnime(animeMalId), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetCharacter(It.IsAny<long>()), Times.Never);
+			}
+		}
+
+		[Fact]
+		public async Task HandleAsync_GivenSeiyuuWithSingleNotInsertedRoleWithNotInsertedAnimeWithManyTitleSynonymsAndInsertedCharacter_ShouldInsertNewRoleAndNewAnime()
+		{
+			// Given
+			var seiyuuId = Guid.NewGuid();
+			const long seiyuuMalId = 1;
+			const long animeMalId = 100;
+			const long characterMalId = 1000;
+			var dbContext = InMemoryDbProvider.GetDbContext();
+
+			var returnedSeiyuu = new Person
+			{
+				MalId = seiyuuMalId,
+				VoiceActingRoles = new List<VoiceActingRole>
+				{
+					new VoiceActingRole
+					{
+						Role = "Main",
+						Anime = new MALImageSubItem
+						{
+							MalId = animeMalId
+						},
+						Character = new MALImageSubItem
+						{
+							MalId = characterMalId
+						}
+					}
+				}
+			};
+
+			var returnedAnime = new JikanDotNet.Anime
+			{
+				TitleSynonyms = new List<string> { "Synonym 1", "Synonym 2", "Synonym 3" }
+			};
+
+			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu).WithAnimeReturned(returnedAnime);
+
+			var seiyuu = new SeiyuuBuilder()
+				.WithId(seiyuuId)
+				.WithMalId(seiyuuMalId)
+				.WithName("PreUpdateSeiyuuName")
+				.WithAbout("PreUpdateSeiyuuAbout")
+				.WithJapaneseName("PreUpdateSeiyuuName")
+				.WithImageUrl("PreUpdateSeiyuuImage")
+				.WithPopularity(0)
+				.Build();
+
+			var character = new CharacterBuilder()
+				.WithMalId(characterMalId)
+				.WithName("PreUpdateName")
+				.WithAbout("PreUpdateAbout")
+				.WithKanjiName("PreUpdateJapanese")
+				.WithImageUrl("PreUpdateImageUrl")
+				.WithPopularity(0)
+				.Build();
+
+			await dbContext.AddAsync(seiyuu);
+			await dbContext.AddAsync(character);
+			await dbContext.SaveChangesAsync();
+
+			var handler = CreateHandler(dbContext, jikanServiceBuilder.Build());
+
+			var command = new UpdateSeiyuuMessage
+			{
+				Id = seiyuuId,
+				MalId = seiyuuMalId
+			};
+
+			// When
+			await handler.HandleAsync(command);
+
+			// Then
+			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.Role).FirstAsync(x => x.MalId == seiyuuMalId);
+			var insertedAnime = await dbContext.Animes.FirstAsync(x => x.MalId == animeMalId);
+			using (new AssertionScope())
+			{
+				dbContext.AnimeRoles.Should().ContainSingle();
+				dbContext.AnimeCharacters.Should().ContainSingle();
+
+				updatedSeiyuu.Role.First().AnimeId.Should().Be(insertedAnime.Id);
+				updatedSeiyuu.Role.First().SeiyuuId.Should().Be(seiyuu.Id);
+				updatedSeiyuu.Role.First().CharacterId.Should().Be(character.Id);
+
+				insertedAnime.MalId.Should().Be(animeMalId);
+				insertedAnime.TitleSynonyms.Should().Be("Synonym 1;Synonym 2;Synonym 3");
+
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetPerson(seiyuuMalId), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnime(animeMalId), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetCharacter(It.IsAny<long>()), Times.Never);
+			}
+		}
+
+		[Fact]
+		public async Task HandleAsync_GivenSeiyuuWithSingleNotInsertedRoleWithNotInsertedAnimeWithUnknownTypeAndStatusAndInsertedCharacter_ShouldInsertNewRoleAndNewAnimeWithoutStatusAndType()
+		{
+			// Given
+			var seiyuuId = Guid.NewGuid();
+			const long seiyuuMalId = 1;
+			const long animeMalId = 100;
+			const long characterMalId = 1000;
+			var dbContext = InMemoryDbProvider.GetDbContext();
+
+			const string returnedAnimeTitle = "PostUpdateTitle";
+			const string returnedAnimeAbout = "PostUpdateAbout";
+			const string returnedAnimeEnglishTitle = "PostUpdateEnglish";
+			const string returnedAnimeJapaneseTitle = "PostUpdateJapanese";
+			const string returnedAnimeImageUrl = "PostUpdateImageUrl";
+			const int returnedAnimePopularity = 3;
+
+			var returnedSeiyuu = new Person
+			{
+				MalId = seiyuuMalId,
+				VoiceActingRoles = new List<VoiceActingRole>
+				{
+					new VoiceActingRole
+					{
+						Role = "Main",
+						Anime = new MALImageSubItem
+						{
+							MalId = animeMalId
+						},
+						Character = new MALImageSubItem
+						{
+							MalId = characterMalId
+						}
+					}
+				}
+			};
+
+			var returnedAnime = new JikanDotNet.Anime
+			{
+				Type = "test type",
+				Status = "test status"
+			};
+
+			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu).WithAnimeReturned(returnedAnime);
+
+			var seiyuu = new SeiyuuBuilder()
+				.WithId(seiyuuId)
+				.WithMalId(seiyuuMalId)
+				.WithName("PreUpdateSeiyuuName")
+				.WithAbout("PreUpdateSeiyuuAbout")
+				.WithJapaneseName("PreUpdateSeiyuuName")
+				.WithImageUrl("PreUpdateSeiyuuImage")
+				.WithPopularity(0)
+				.Build();
+
+			var character = new CharacterBuilder()
+				.WithMalId(characterMalId)
+				.WithName("PreUpdateName")
+				.WithAbout("PreUpdateAbout")
+				.WithKanjiName("PreUpdateJapanese")
+				.WithImageUrl("PreUpdateImageUrl")
+				.WithPopularity(0)
+				.Build();
+
+			await dbContext.AddAsync(seiyuu);
+			await dbContext.AddAsync(character);
+			await dbContext.SaveChangesAsync();
+
+			var handler = CreateHandler(dbContext, jikanServiceBuilder.Build());
+
+			var command = new UpdateSeiyuuMessage
+			{
+				Id = seiyuuId,
+				MalId = seiyuuMalId
+			};
+
+			// When
+			await handler.HandleAsync(command);
+
+			// Then
+			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.Role).FirstAsync(x => x.MalId == seiyuuMalId);
+			var insertedAnime = await dbContext.Animes.FirstAsync(x => x.MalId == animeMalId);
+			using (new AssertionScope())
+			{
+				dbContext.AnimeRoles.Should().ContainSingle();
+				dbContext.AnimeCharacters.Should().ContainSingle();
+
+				updatedSeiyuu.Role.First().AnimeId.Should().Be(insertedAnime.Id);
+				updatedSeiyuu.Role.First().SeiyuuId.Should().Be(seiyuu.Id);
+				updatedSeiyuu.Role.First().CharacterId.Should().Be(character.Id);
+
+				insertedAnime.MalId.Should().Be(animeMalId);
+				insertedAnime.StatusId.Should().BeNull();
+				insertedAnime.TypeId.Should().BeNull();
+
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetPerson(seiyuuMalId), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnime(animeMalId), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetCharacter(It.IsAny<long>()), Times.Never);
+			}
+		}
+
+		[Fact]
+		public async Task HandleAsync_GivenSeiyuuWithSingleNotInsertedRoleWithNotInsertedAnimeWithSeasonNotInDbAndInsertedCharacter_ShouldInsertNewRoleAndNewAnimeWithoutSeasonId()
+		{
+			// Given
+			var seiyuuId = Guid.NewGuid();
+			const long seiyuuMalId = 1;
+			const long animeMalId = 100;
+			const long characterMalId = 1000;
+			var dbContext = InMemoryDbProvider.GetDbContext();
+
+			const string returnedAnimeTitle = "PostUpdateTitle";
+			const string returnedAnimeAbout = "PostUpdateAbout";
+			const string returnedAnimeEnglishTitle = "PostUpdateEnglish";
+			const string returnedAnimeJapaneseTitle = "PostUpdateJapanese";
+			const string returnedAnimeImageUrl = "PostUpdateImageUrl";
+			const int returnedAnimePopularity = 3;
+
+			var returnedSeiyuu = new Person
+			{
+				MalId = seiyuuMalId,
+				VoiceActingRoles = new List<VoiceActingRole>
+				{
+					new VoiceActingRole
+					{
+						Role = "Main",
+						Anime = new MALImageSubItem
+						{
+							MalId = animeMalId
+						},
+						Character = new MALImageSubItem
+						{
+							MalId = characterMalId
+						}
+					}
+				}
+			};
+
+			var returnedAnime = new JikanDotNet.Anime
+			{
+				Premiered = "Winter 2001"
+			};
+
+			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu).WithAnimeReturned(returnedAnime);
+
+			var seiyuu = new SeiyuuBuilder()
+				.WithId(seiyuuId)
+				.WithMalId(seiyuuMalId)
+				.WithName("PreUpdateSeiyuuName")
+				.WithAbout("PreUpdateSeiyuuAbout")
+				.WithJapaneseName("PreUpdateSeiyuuName")
+				.WithImageUrl("PreUpdateSeiyuuImage")
+				.WithPopularity(0)
+				.Build();
+
+			var character = new CharacterBuilder()
+				.WithMalId(characterMalId)
+				.WithName("PreUpdateName")
+				.WithAbout("PreUpdateAbout")
+				.WithKanjiName("PreUpdateJapanese")
+				.WithImageUrl("PreUpdateImageUrl")
+				.WithPopularity(0)
+				.Build();
+
+			var season = new SeasonBuilder()
+				.WithId(10)
+				.WithYear(2000)
+				.WithName("Winter")
+				.Build();
+
+			await dbContext.AddAsync(seiyuu);
+			await dbContext.AddAsync(character);
+			await dbContext.AddAsync(season);
+			await dbContext.SaveChangesAsync();
+
+			var handler = CreateHandler(dbContext, jikanServiceBuilder.Build());
+
+			var command = new UpdateSeiyuuMessage
+			{
+				Id = seiyuuId,
+				MalId = seiyuuMalId
+			};
+
+			// When
+			await handler.HandleAsync(command);
+
+			// Then
+			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.Role).FirstAsync(x => x.MalId == seiyuuMalId);
+			var insertedAnime = await dbContext.Animes.FirstAsync(x => x.MalId == animeMalId);
+			using (new AssertionScope())
+			{
+				dbContext.AnimeRoles.Should().ContainSingle();
+				dbContext.AnimeCharacters.Should().ContainSingle();
+
+				updatedSeiyuu.Role.First().AnimeId.Should().Be(insertedAnime.Id);
+				updatedSeiyuu.Role.First().SeiyuuId.Should().Be(seiyuu.Id);
+				updatedSeiyuu.Role.First().CharacterId.Should().Be(character.Id);
+
+				insertedAnime.MalId.Should().Be(animeMalId);
+				insertedAnime.SeasonId.Should().BeNull();
+
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetPerson(seiyuuMalId), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnime(animeMalId), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetCharacter(It.IsAny<long>()), Times.Never);
+			}
+		}
+
+		[Fact]
+		public async Task HandleAsync_GivenSeiyuuWithSingleNotInsertedRoleWithNotInsertedAnimeWAndNotInsertedCharacter_ShouldInsertNewRoleAndNewCharacterAndNewAnime()
+		{
+			// Given
+			var seiyuuId = Guid.NewGuid();
+			const long seiyuuMalId = 1;
+			const long animeMalId = 100;
+			const long characterMalId = 1000;
+			var dbContext = InMemoryDbProvider.GetDbContext();
+
+			const string returnedCharacterName = "PostUpdateName";
+			const string returnedCharacterAbout = "PostUpdateAbout";
+			const string returnedCharacterJapaneseName = "PostUpdateJapanese";
+			const string returnedCharacterImageUrl = "PostUpdateImageUrl";
+			const int returnedCharacterPopularity = 1;
+
+			const string returnedAnimeTitle = "PostUpdateTitle";
+			const string returnedAnimeAbout = "PostUpdateAbout";
+			const string returnedAnimeEnglishTitle = "PostUpdateEnglish";
+			const string returnedAnimeJapaneseTitle = "PostUpdateJapanese";
+			const string returnedAnimeImageUrl = "PostUpdateImageUrl";
+			const int returnedAnimePopularity = 3;
+
+			var returnedSeiyuu = new Person
+			{
+				MalId = seiyuuMalId,
+				VoiceActingRoles = new List<VoiceActingRole>
+				{
+					new VoiceActingRole
+					{
+						Role = "Main",
+						Anime = new MALImageSubItem
+						{
+							MalId = animeMalId
+						},
+						Character = new MALImageSubItem
+						{
+							MalId = characterMalId
+						}
+					}
+				}
+			};
+
+			var returnedCharacter = new Character
+			{
+				MalId = characterMalId,
+				Name = returnedCharacterName,
+				About = returnedCharacterAbout,
+				NameKanji = returnedCharacterJapaneseName,
+				ImageURL = returnedCharacterImageUrl,
+				Nicknames = new List<string>(),
+				MemberFavorites = returnedCharacterPopularity
+			};
+
+			var returnedAnime = new JikanDotNet.Anime
+			{
+				Title = returnedAnimeTitle,
+				Synopsis = returnedAnimeAbout,
+				TitleEnglish = returnedAnimeEnglishTitle,
+				TitleJapanese = returnedAnimeJapaneseTitle,
+				ImageURL = returnedAnimeImageUrl,
+				TitleSynonyms = new List<string>(),
+				Members = returnedAnimePopularity
+			};
+
+			var jikanServiceBuilder = new JikanServiceBuilder()
+				.WithPersonReturned(returnedSeiyuu)
+				.WithCharacterReturned(returnedCharacter)
+				.WithAnimeReturned(returnedAnime);
+
+			var seiyuu = new SeiyuuBuilder()
+				.WithId(seiyuuId)
+				.WithMalId(seiyuuMalId)
+				.WithName("PreUpdateSeiyuuName")
+				.WithAbout("PreUpdateSeiyuuAbout")
+				.WithJapaneseName("PreUpdateSeiyuuName")
+				.WithImageUrl("PreUpdateSeiyuuImage")
+				.WithPopularity(0)
+				.Build();
+
+			await dbContext.AddAsync(seiyuu);
+			await dbContext.SaveChangesAsync();
+
+			var handler = CreateHandler(dbContext, jikanServiceBuilder.Build());
+
+			var command = new UpdateSeiyuuMessage
+			{
+				Id = seiyuuId,
+				MalId = seiyuuMalId
+			};
+
+			// When
+			await handler.HandleAsync(command);
+
+			// Then
+			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.Role).FirstAsync(x => x.MalId == seiyuuMalId);
+			var insertedCharacter = await dbContext.AnimeCharacters.FirstAsync(x => x.MalId == characterMalId);
+			var insertedAnime = await dbContext.Animes.FirstAsync(x => x.MalId == animeMalId);
+			using (new AssertionScope())
+			{
+				dbContext.AnimeRoles.Should().ContainSingle();
+				dbContext.AnimeCharacters.Should().ContainSingle();
+				dbContext.Animes.Should().ContainSingle();
+
+				updatedSeiyuu.Role.First().AnimeId.Should().Be(insertedAnime.Id);
+				updatedSeiyuu.Role.First().SeiyuuId.Should().Be(seiyuu.Id);
+				updatedSeiyuu.Role.First().CharacterId.Should().Be(insertedCharacter.Id);
+
+				insertedCharacter.MalId.Should().Be(characterMalId);
+				insertedCharacter.Name.Should().Be(returnedCharacterName);
+				insertedCharacter.About.Should().Be(returnedCharacterAbout);
+				insertedCharacter.KanjiName.Should().Be(returnedCharacterJapaneseName);
+				insertedCharacter.Popularity.Should().Be(returnedCharacterPopularity);
+				insertedCharacter.ImageUrl.Should().Be(returnedCharacterImageUrl);
+
+				insertedAnime.MalId.Should().Be(animeMalId);
+				insertedAnime.About.Should().Be(returnedAnimeAbout);
+				insertedAnime.Title.Should().Be(returnedAnimeTitle);
+				insertedAnime.EnglishTitle.Should().Be(returnedAnimeEnglishTitle);
+				insertedAnime.KanjiTitle.Should().Be(returnedAnimeJapaneseTitle);
+				insertedAnime.Popularity.Should().Be(returnedAnimePopularity);
+				insertedAnime.ImageUrl.Should().Be(returnedAnimeImageUrl);
+
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetPerson(seiyuuMalId), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnime(animeMalId), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetCharacter(characterMalId), Times.Once);
+			}
+		}
+
+		[Fact]
+		public async Task HandleAsync_GivenSeiyuuWithSingleNotInsertedRoleWithNotInsertedAnimeWAndNotInsertedCharacterWithNullFromAnimeRequest_ShouldInsertOnlyNewCharacter()
+		{
+			// Given
+			var seiyuuId = Guid.NewGuid();
+			const long seiyuuMalId = 1;
+			const long animeMalId = 100;
+			const long characterMalId = 1000;
+			var dbContext = InMemoryDbProvider.GetDbContext();
+
+			const string returnedCharacterName = "PostUpdateName";
+			const string returnedCharacterAbout = "PostUpdateAbout";
+			const string returnedCharacterJapaneseName = "PostUpdateJapanese";
+			const string returnedCharacterImageUrl = "PostUpdateImageUrl";
+			const int returnedCharacterPopularity = 1;
+			var returnedSeiyuu = new Person
+			{
+				MalId = seiyuuMalId,
+				VoiceActingRoles = new List<VoiceActingRole>
+				{
+					new VoiceActingRole
+					{
+						Role = "Main",
+						Anime = new MALImageSubItem
+						{
+							MalId = animeMalId
+						},
+						Character = new MALImageSubItem
+						{
+							MalId = characterMalId
+						}
+					}
+				}
+			};
+
+			var returnedCharacter = new Character
+			{
+				MalId = characterMalId,
+				Name = returnedCharacterName,
+				About = returnedCharacterAbout,
+				NameKanji = returnedCharacterJapaneseName,
+				ImageURL = returnedCharacterImageUrl,
+				Nicknames = new List<string>(),
+				MemberFavorites = returnedCharacterPopularity
+			};
+
+			var jikanServiceBuilder = new JikanServiceBuilder()
+				.WithPersonReturned(returnedSeiyuu)
+				.WithCharacterReturned(returnedCharacter)
+				.WithAnimeReturned(null);
+
+			var seiyuu = new SeiyuuBuilder()
+				.WithId(seiyuuId)
+				.WithMalId(seiyuuMalId)
+				.WithName("PreUpdateSeiyuuName")
+				.WithAbout("PreUpdateSeiyuuAbout")
+				.WithJapaneseName("PreUpdateSeiyuuName")
+				.WithImageUrl("PreUpdateSeiyuuImage")
+				.WithPopularity(0)
+				.Build();
+
+			await dbContext.AddAsync(seiyuu);
+			await dbContext.SaveChangesAsync();
+
+			var handler = CreateHandler(dbContext, jikanServiceBuilder.Build());
+
+			var command = new UpdateSeiyuuMessage
+			{
+				Id = seiyuuId,
+				MalId = seiyuuMalId
+			};
+
+			// When
+			await handler.HandleAsync(command);
+
+			// Then
+			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.Role).FirstAsync(x => x.MalId == seiyuuMalId);
+			var insertedCharacter = await dbContext.AnimeCharacters.FirstAsync(x => x.MalId == characterMalId);
+			using (new AssertionScope())
+			{
+				dbContext.AnimeRoles.Should().BeEmpty();
+				dbContext.AnimeCharacters.Should().ContainSingle();
+				dbContext.Animes.Should().BeEmpty();
+
+				updatedSeiyuu.Role.Should().BeEmpty();
+
+				insertedCharacter.MalId.Should().Be(characterMalId);
+				insertedCharacter.Name.Should().Be(returnedCharacterName);
+				insertedCharacter.About.Should().Be(returnedCharacterAbout);
+				insertedCharacter.KanjiName.Should().Be(returnedCharacterJapaneseName);
+				insertedCharacter.Popularity.Should().Be(returnedCharacterPopularity);
+				insertedCharacter.ImageUrl.Should().Be(returnedCharacterImageUrl);
+
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetPerson(seiyuuMalId), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnime(animeMalId), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetCharacter(characterMalId), Times.Once);
+			}
+		}
+
+		[Fact]
+		public async Task HandleAsync_GivenSeiyuuWithSingleNotInsertedRoleWithNotInsertedAnimeWAndNotInsertedCharacterWithNullFromCharacterRequest_ShouldInsertOnlyNewAnime()
+		{
+			// Given
+			var seiyuuId = Guid.NewGuid();
+			const long seiyuuMalId = 1;
+			const long animeMalId = 100;
+			const long characterMalId = 1000;
+			var dbContext = InMemoryDbProvider.GetDbContext();
+
+			const string returnedAnimeTitle = "PostUpdateTitle";
+			const string returnedAnimeAbout = "PostUpdateAbout";
+			const string returnedAnimeEnglishTitle = "PostUpdateEnglish";
+			const string returnedAnimeJapaneseTitle = "PostUpdateJapanese";
+			const string returnedAnimeImageUrl = "PostUpdateImageUrl";
+			const int returnedAnimePopularity = 3;
+
+			var returnedSeiyuu = new Person
+			{
+				MalId = seiyuuMalId,
+				VoiceActingRoles = new List<VoiceActingRole>
+				{
+					new VoiceActingRole
+					{
+						Role = "Main",
+						Anime = new MALImageSubItem
+						{
+							MalId = animeMalId
+						},
+						Character = new MALImageSubItem
+						{
+							MalId = characterMalId
+						}
+					}
+				}
+			};
+
+			var returnedAnime = new JikanDotNet.Anime
+			{
+				Title = returnedAnimeTitle,
+				Synopsis = returnedAnimeAbout,
+				TitleEnglish = returnedAnimeEnglishTitle,
+				TitleJapanese = returnedAnimeJapaneseTitle,
+				ImageURL = returnedAnimeImageUrl,
+				TitleSynonyms = new List<string>(),
+				Members = returnedAnimePopularity
+			};
+
+			var jikanServiceBuilder = new JikanServiceBuilder()
+				.WithPersonReturned(returnedSeiyuu)
+				.WithCharacterReturned(null)
+				.WithAnimeReturned(returnedAnime);
+
+			var seiyuu = new SeiyuuBuilder()
+				.WithId(seiyuuId)
+				.WithMalId(seiyuuMalId)
+				.WithName("PreUpdateSeiyuuName")
+				.WithAbout("PreUpdateSeiyuuAbout")
+				.WithJapaneseName("PreUpdateSeiyuuName")
+				.WithImageUrl("PreUpdateSeiyuuImage")
+				.WithPopularity(0)
+				.Build();
+
+			await dbContext.AddAsync(seiyuu);
+			await dbContext.SaveChangesAsync();
+
+			var handler = CreateHandler(dbContext, jikanServiceBuilder.Build());
+
+			var command = new UpdateSeiyuuMessage
+			{
+				Id = seiyuuId,
+				MalId = seiyuuMalId
+			};
+
+			// When
+			await handler.HandleAsync(command);
+
+			// Then
+			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.Role).FirstAsync(x => x.MalId == seiyuuMalId);
+			var insertedAnime = await dbContext.Animes.FirstAsync(x => x.MalId == animeMalId);
+			using (new AssertionScope())
+			{
+				dbContext.AnimeRoles.Should().BeEmpty();
+				dbContext.AnimeCharacters.Should().BeEmpty();
+				dbContext.Animes.Should().ContainSingle();
+
+				updatedSeiyuu.Role.Should().BeEmpty();
+
+				insertedAnime.MalId.Should().Be(animeMalId);
+				insertedAnime.About.Should().Be(returnedAnimeAbout);
+				insertedAnime.Title.Should().Be(returnedAnimeTitle);
+				insertedAnime.EnglishTitle.Should().Be(returnedAnimeEnglishTitle);
+				insertedAnime.KanjiTitle.Should().Be(returnedAnimeJapaneseTitle);
+				insertedAnime.Popularity.Should().Be(returnedAnimePopularity);
+				insertedAnime.ImageUrl.Should().Be(returnedAnimeImageUrl);
+
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetPerson(seiyuuMalId), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnime(animeMalId), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetCharacter(characterMalId), Times.Once);
+			}
+		}
+
+		[Fact]
+		public async Task HandleAsync_GivenSeiyuuWithMultipleNotInsertedRoleWithInsertedAnimeAndNotInsertedCharacter_ShouldInsertMultipleNewRolesAndMultipleNewCharacters()
+		{
+			// Given
+			var seiyuuId = Guid.NewGuid();
+			var anime1Id = Guid.NewGuid();
+			var anime2Id = Guid.NewGuid();
+			var character1Id = Guid.NewGuid();
+			var character2Id = Guid.NewGuid();
+			const long seiyuuMalId = 1;
+			const long anime1MalId = 100;
+			const long anime2MalId = 101;
+			const long character1MalId = 1000;
+			const long character2MalId = 1001;
+			var dbContext = InMemoryDbProvider.GetDbContext();
+
+			var returnedSeiyuu = new Person
+			{
+				MalId = seiyuuMalId,
+				VoiceActingRoles = new List<VoiceActingRole>
+				{
+					new VoiceActingRole
+					{
+						Role = "Main",
+						Anime = new MALImageSubItem
+						{
+							MalId = anime1MalId
+						},
+						Character = new MALImageSubItem
+						{
+							MalId = character1MalId
+						}
+					},
+					new VoiceActingRole
+					{
+						Role = "Supporting",
+						Anime = new MALImageSubItem
+						{
+							MalId = anime2MalId
+						},
+						Character = new MALImageSubItem
+						{
+							MalId = character2MalId
+						}
+					}
+				}
+			};
+
+			const string firstReturnedCharacterName = "PostUpdateNameCharacter1";
+			const string firstReturnedCharacterAbout = "PostUpdateAboutCharacter1";
+			const string firstReturnedCharacterJapaneseName = "PostUpdateJapaneseCharacter1";
+			const string firstReturnedCharacterImageUrl = "PostUpdateImageUrlCharacter1";
+			const int firstReturnedCharacterPopularity = 30;
+			const string secondReturnedCharacterName = "PostUpdateNameCharacter2";
+			const string secondReturnedCharacterAbout = "PostUpdateAboutCharacter2";
+			const string secondReturnedCharacterJapaneseName = "PostUpdateJapaneseCharacter2";
+			const string secondReturnedCharacterImageUrl = "PostUpdateImageUrlCharacter2";
+			const int secondReturnedCharacterPopularity = 42;
+
+			var firstReturnedCharacter = new Character
+			{
+				MalId = character1MalId,
+				Name = firstReturnedCharacterName,
+				About = firstReturnedCharacterAbout,
+				NameKanji = firstReturnedCharacterJapaneseName,
+				ImageURL = firstReturnedCharacterImageUrl,
+				Nicknames = new List<string>(),
+				MemberFavorites = firstReturnedCharacterPopularity
+			};
+			var secondReturnedCharacter = new Character
+			{
+				MalId = character1MalId,
+				Name = secondReturnedCharacterName,
+				About = secondReturnedCharacterAbout,
+				NameKanji = secondReturnedCharacterJapaneseName,
+				ImageURL = secondReturnedCharacterImageUrl,
+				Nicknames = new List<string>(),
+				MemberFavorites = secondReturnedCharacterPopularity
+			};
+
+			var jikanServiceBuilder = new JikanServiceBuilder()
+				.WithPersonReturned(returnedSeiyuu)
+				.WithTwoCharactersReturned(firstReturnedCharacter, secondReturnedCharacter);
+
+			var animeStatus = new AnimeStatusBuilder()
+				.WithId(AnimeStatusId.CurrentlyAiring)
+				.WithName("Airing")
+				.Build();
+			var animeType = new AnimeTypeBuilder()
+				.WithId(AnimeTypeId.TV)
+				.Build();
+
+			var seiyuu = new SeiyuuBuilder()
+				.WithId(seiyuuId)
+				.WithMalId(seiyuuMalId)
+				.WithName("PreUpdateSeiyuuName")
+				.WithAbout("PreUpdateSeiyuuAbout")
+				.WithJapaneseName("PreUpdateSeiyuuName")
+				.WithImageUrl("PreUpdateSeiyuuImage")
+				.WithPopularity(0)
+				.Build();
+
+			var animes = new List<Domain.Entities.Anime>
+			{
+				new AnimeBuilder()
+					.WithId(anime1Id)
+					.WithMalId(anime1MalId)
+					.WithTitle("PreUpdateTitle")
+					.WithAbout("PreUpdateAbout")
+					.WithEnglishTitle("PreUpdateEnglish")
+					.WithJapaneseTitle("PreUpdateJapaneses")
+					.WithImageUrl("PreUpdateImage")
+					.WithAnimeStatus(animeStatus)
+					.WithAnimeType(animeType)
+					.WithPopularity(0)
+					.Build(),
+				new AnimeBuilder()
+					.WithId(anime2Id)
+					.WithMalId(anime2MalId)
+					.WithTitle("PreUpdateTitle")
+					.WithAbout("PreUpdateAbout")
+					.WithEnglishTitle("PreUpdateEnglish")
+					.WithJapaneseTitle("PreUpdateJapaneses")
+					.WithImageUrl("PreUpdateImage")
+					.WithAnimeStatus(animeStatus)
+					.WithAnimeType(animeType)
+					.WithPopularity(0)
+					.Build()
+			};
+
+			await dbContext.AddAsync(seiyuu);
+			await dbContext.AddRangeAsync(animes);
+			await dbContext.SaveChangesAsync();
+
+			var handler = CreateHandler(dbContext, jikanServiceBuilder.Build());
+
+			var command = new UpdateSeiyuuMessage
+			{
+				Id = seiyuuId,
+				MalId = seiyuuMalId
+			};
+
+			// When
+			await handler.HandleAsync(command);
+
+			// Then
+			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.Role).FirstAsync(x => x.MalId == seiyuuMalId);
+			using (new AssertionScope())
+			{
+				dbContext.AnimeRoles.Should().HaveCount(2);
+				dbContext.AnimeCharacters.Should().HaveCount(2);
+
+				updatedSeiyuu.Role.First().AnimeId.Should().Be(anime1Id);
+				updatedSeiyuu.Role.Skip(1).First().AnimeId.Should().Be(anime2Id);
+				updatedSeiyuu.Role.First().CharacterId.Should().NotBeEmpty();
+				updatedSeiyuu.Role.Skip(1).First().CharacterId.Should().NotBeEmpty();
+				updatedSeiyuu.Role.First().SeiyuuId.Should().Be(seiyuu.Id);
+				updatedSeiyuu.Role.Skip(1).First().SeiyuuId.Should().Be(seiyuu.Id);
+
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetPerson(seiyuuMalId), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnime(It.IsAny<long>()), Times.Never);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetCharacter(It.IsAny<long>()), Times.Exactly(2));
+			}
+		}
+
+		[Fact]
+		public async Task HandleAsync_GivenSeiyuuWithMultipleNotInsertedRoleWithNotInsertedAnimeAndInsertedCharacter_ShouldInsertMultipleNewRolesAndMultipleNewAnime()
+		{
+			// Given
+			var seiyuuId = Guid.NewGuid();
+			var anime1Id = Guid.NewGuid();
+			var anime2Id = Guid.NewGuid();
+			var character1Id = Guid.NewGuid();
+			var character2Id = Guid.NewGuid();
+			const long seiyuuMalId = 1;
+			const long anime1MalId = 100;
+			const long anime2MalId = 101;
+			const long character1MalId = 1000;
+			const long character2MalId = 1001;
+			var dbContext = InMemoryDbProvider.GetDbContext();
+
+			var returnedSeiyuu = new Person
+			{
+				MalId = seiyuuMalId,
+				VoiceActingRoles = new List<VoiceActingRole>
+				{
+					new VoiceActingRole
+					{
+						Role = "Main",
+						Anime = new MALImageSubItem
+						{
+							MalId = anime1MalId
+						},
+						Character = new MALImageSubItem
+						{
+							MalId = character1MalId
+						}
+					},
+					new VoiceActingRole
+					{
+						Role = "Supporting",
+						Anime = new MALImageSubItem
+						{
+							MalId = anime2MalId
+						},
+						Character = new MALImageSubItem
+						{
+							MalId = character2MalId
+						}
+					}
+				}
+			};
+
+			const string firstReturnedAnimeName = "PostUpdateNameAnime1";
+			const string firstReturnedAnimeAbout = "PostUpdateAboutAnime1";
+			const string firstReturnedAnimeJapaneseName = "PostUpdateJapaneseAnime1";
+			const string firstReturnedAnimeImageUrl = "PostUpdateImageUrlAnime1";
+			const int firstReturnedAnimePopularity = 30;
+			const string secondReturnedAnimeName = "PostUpdateNameAnime2";
+			const string secondReturnedAnimeAbout = "PostUpdateAboutAnime2";
+			const string secondReturnedAnimeJapaneseName = "PostUpdateJapaneseAnime2";
+			const string secondReturnedAnimeImageUrl = "PostUpdateImageUrlAnime2";
+			const int secondReturnedAnimePopularity = 42;
+
+			var firstReturnedAnime = new JikanDotNet.Anime
+			{
+				MalId = anime1MalId,
+				Title = firstReturnedAnimeName,
+				Synopsis = firstReturnedAnimeAbout,
+				TitleJapanese = firstReturnedAnimeJapaneseName,
+				ImageURL = firstReturnedAnimeImageUrl,
+				TitleSynonyms = new List<string>(),
+				Popularity = firstReturnedAnimePopularity
+			};
+			var secondReturnedAnime = new JikanDotNet.Anime
+			{
+				MalId = anime2MalId,
+				Title = secondReturnedAnimeName,
+				Synopsis = secondReturnedAnimeAbout,
+				TitleJapanese = secondReturnedAnimeJapaneseName,
+				ImageURL = secondReturnedAnimeImageUrl,
+				TitleSynonyms = new List<string>(),
+				Popularity = secondReturnedAnimePopularity
+			};
+
+			var jikanServiceBuilder = new JikanServiceBuilder()
+				.WithPersonReturned(returnedSeiyuu)
+				.WithTwoAnimeReturned(firstReturnedAnime, secondReturnedAnime);
+
+			var animeStatus = new AnimeStatusBuilder()
+				.WithId(AnimeStatusId.CurrentlyAiring)
+				.WithName("Airing")
+				.Build();
+			var animeType = new AnimeTypeBuilder()
+				.WithId(AnimeTypeId.TV)
+				.Build();
+
+			var seiyuu = new SeiyuuBuilder()
+				.WithId(seiyuuId)
+				.WithMalId(seiyuuMalId)
+				.WithName("PreUpdateSeiyuuName")
+				.WithAbout("PreUpdateSeiyuuAbout")
+				.WithJapaneseName("PreUpdateSeiyuuName")
+				.WithImageUrl("PreUpdateSeiyuuImage")
+				.WithPopularity(0)
+				.Build();
+
+			var characters = new List<AnimeCharacter>
+			{
+				new CharacterBuilder()
+					.WithId(character1Id)
+					.WithMalId(character1MalId)
+					.WithName("PreUpdateName")
+					.WithAbout("PreUpdateAbout")
+					.WithKanjiName("PreUpdateJapanese")
+					.WithImageUrl("PreUpdateImageUrl")
+					.WithPopularity(0)
+					.Build(),
+				new CharacterBuilder()
+					.WithId(character2Id)
+					.WithMalId(character2MalId)
+					.WithName("PreUpdateName")
+					.WithAbout("PreUpdateAbout")
+					.WithKanjiName("PreUpdateJapanese")
+					.WithImageUrl("PreUpdateImageUrl")
+					.WithPopularity(0)
+					.Build()
+			};
+
+			await dbContext.AddAsync(seiyuu);
+			await dbContext.AddRangeAsync(characters);
+			await dbContext.SaveChangesAsync();
+
+			var handler = CreateHandler(dbContext, jikanServiceBuilder.Build());
+
+			var command = new UpdateSeiyuuMessage
+			{
+				Id = seiyuuId,
+				MalId = seiyuuMalId
+			};
+
+			// When
+			await handler.HandleAsync(command);
+
+			// Then
+			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.Role).FirstAsync(x => x.MalId == seiyuuMalId);
+			using (new AssertionScope())
+			{
+				dbContext.AnimeRoles.Should().HaveCount(2);
+				dbContext.AnimeCharacters.Should().HaveCount(2);
+				dbContext.Animes.Should().HaveCount(2);
+
+				updatedSeiyuu.Role.First().AnimeId.Should().NotBeEmpty();
+				updatedSeiyuu.Role.Skip(1).First().AnimeId.Should().NotBeEmpty();
+				updatedSeiyuu.Role.First().CharacterId.Should().Be(character1Id);
+				updatedSeiyuu.Role.Skip(1).First().CharacterId.Should().Be(character2Id);
+				updatedSeiyuu.Role.First().SeiyuuId.Should().Be(seiyuu.Id);
+				updatedSeiyuu.Role.Skip(1).First().SeiyuuId.Should().Be(seiyuu.Id);
+
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetPerson(seiyuuMalId), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnime(It.IsAny<long>()), Times.Exactly(2));
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetCharacter(It.IsAny<long>()), Times.Never);
+			}
+		}
+
+		[Fact]
+		public async Task HandleAsync_GivenSeiyuuWithMultipleNotInsertedRoleWithNotInsertedAnimeAndNotInsertedCharacter_ShouldInsertMultipleNewRolesAndMultipleNewAnimeAndMultpleNewCharacters()
+		{
+			// Given
+			var seiyuuId = Guid.NewGuid();
+			var anime1Id = Guid.NewGuid();
+			var anime2Id = Guid.NewGuid();
+			var character1Id = Guid.NewGuid();
+			var character2Id = Guid.NewGuid();
+			const long seiyuuMalId = 1;
+			const long anime1MalId = 100;
+			const long anime2MalId = 101;
+			const long character1MalId = 1000;
+			const long character2MalId = 1001;
+			var dbContext = InMemoryDbProvider.GetDbContext();
+
+			var returnedSeiyuu = new Person
+			{
+				MalId = seiyuuMalId,
+				VoiceActingRoles = new List<VoiceActingRole>
+				{
+					new VoiceActingRole
+					{
+						Role = "Main",
+						Anime = new MALImageSubItem
+						{
+							MalId = anime1MalId
+						},
+						Character = new MALImageSubItem
+						{
+							MalId = character1MalId
+						}
+					},
+					new VoiceActingRole
+					{
+						Role = "Supporting",
+						Anime = new MALImageSubItem
+						{
+							MalId = anime2MalId
+						},
+						Character = new MALImageSubItem
+						{
+							MalId = character2MalId
+						}
+					}
+				}
+			};
+
+			const string firstReturnedAnimeName = "PostUpdateNameAnime1";
+			const string firstReturnedAnimeAbout = "PostUpdateAboutAnime1";
+			const string firstReturnedAnimeJapaneseName = "PostUpdateJapaneseAnime1";
+			const string firstReturnedAnimeImageUrl = "PostUpdateImageUrlAnime1";
+			const int firstReturnedAnimePopularity = 30;
+			const string secondReturnedAnimeName = "PostUpdateNameAnime2";
+			const string secondReturnedAnimeAbout = "PostUpdateAboutAnime2";
+			const string secondReturnedAnimeJapaneseName = "PostUpdateJapaneseAnime2";
+			const string secondReturnedAnimeImageUrl = "PostUpdateImageUrlAnime2";
+			const int secondReturnedAnimePopularity = 42;
+
+			var firstReturnedAnime = new JikanDotNet.Anime
+			{
+				MalId = anime1MalId,
+				Title = firstReturnedAnimeName,
+				Synopsis = firstReturnedAnimeAbout,
+				TitleJapanese = firstReturnedAnimeJapaneseName,
+				ImageURL = firstReturnedAnimeImageUrl,
+				TitleSynonyms = new List<string>(),
+				Popularity = firstReturnedAnimePopularity
+			};
+			var secondReturnedAnime = new JikanDotNet.Anime
+			{
+				MalId = anime2MalId,
+				Title = secondReturnedAnimeName,
+				Synopsis = secondReturnedAnimeAbout,
+				TitleJapanese = secondReturnedAnimeJapaneseName,
+				ImageURL = secondReturnedAnimeImageUrl,
+				TitleSynonyms = new List<string>(),
+				Popularity = secondReturnedAnimePopularity
+			};
+
+
+			const string firstReturnedCharacterName = "PostUpdateNameCharacter1";
+			const string firstReturnedCharacterAbout = "PostUpdateAboutCharacter1";
+			const string firstReturnedCharacterJapaneseName = "PostUpdateJapaneseCharacter1";
+			const string firstReturnedCharacterImageUrl = "PostUpdateImageUrlCharacter1";
+			const int firstReturnedCharacterPopularity = 30;
+			const string secondReturnedCharacterName = "PostUpdateNameCharacter2";
+			const string secondReturnedCharacterAbout = "PostUpdateAboutCharacter2";
+			const string secondReturnedCharacterJapaneseName = "PostUpdateJapaneseCharacter2";
+			const string secondReturnedCharacterImageUrl = "PostUpdateImageUrlCharacter2";
+			const int secondReturnedCharacterPopularity = 42;
+
+			var firstReturnedCharacter = new Character
+			{
+				MalId = character1MalId,
+				Name = firstReturnedCharacterName,
+				About = firstReturnedCharacterAbout,
+				NameKanji = firstReturnedCharacterJapaneseName,
+				ImageURL = firstReturnedCharacterImageUrl,
+				Nicknames = new List<string>(),
+				MemberFavorites = firstReturnedCharacterPopularity
+			};
+			var secondReturnedCharacter = new Character
+			{
+				MalId = character1MalId,
+				Name = secondReturnedCharacterName,
+				About = secondReturnedCharacterAbout,
+				NameKanji = secondReturnedCharacterJapaneseName,
+				ImageURL = secondReturnedCharacterImageUrl,
+				Nicknames = new List<string>(),
+				MemberFavorites = secondReturnedCharacterPopularity
+			};
+
+			var jikanServiceBuilder = new JikanServiceBuilder()
+				.WithPersonReturned(returnedSeiyuu)
+				.WithTwoAnimeReturned(firstReturnedAnime, secondReturnedAnime)
+				.WithTwoCharactersReturned(firstReturnedCharacter, secondReturnedCharacter);
+
+			var animeStatus = new AnimeStatusBuilder()
+				.WithId(AnimeStatusId.CurrentlyAiring)
+				.WithName("Airing")
+				.Build();
+			var animeType = new AnimeTypeBuilder()
+				.WithId(AnimeTypeId.TV)
+				.Build();
+
+			var seiyuu = new SeiyuuBuilder()
+				.WithId(seiyuuId)
+				.WithMalId(seiyuuMalId)
+				.WithName("PreUpdateSeiyuuName")
+				.WithAbout("PreUpdateSeiyuuAbout")
+				.WithJapaneseName("PreUpdateSeiyuuName")
+				.WithImageUrl("PreUpdateSeiyuuImage")
+				.WithPopularity(0)
+				.Build();
+
+			var characters = new List<AnimeCharacter>
+			{
+				new CharacterBuilder()
+					.WithId(character1Id)
+					.WithMalId(character1MalId)
+					.WithName("PreUpdateName")
+					.WithAbout("PreUpdateAbout")
+					.WithKanjiName("PreUpdateJapanese")
+					.WithImageUrl("PreUpdateImageUrl")
+					.WithPopularity(0)
+					.Build(),
+				new CharacterBuilder()
+					.WithId(character2Id)
+					.WithMalId(character2MalId)
+					.WithName("PreUpdateName")
+					.WithAbout("PreUpdateAbout")
+					.WithKanjiName("PreUpdateJapanese")
+					.WithImageUrl("PreUpdateImageUrl")
+					.WithPopularity(0)
+					.Build()
+			};
+
+			await dbContext.AddAsync(seiyuu);
+			await dbContext.AddRangeAsync(characters);
+			await dbContext.SaveChangesAsync();
+
+			var handler = CreateHandler(dbContext, jikanServiceBuilder.Build());
+
+			var command = new UpdateSeiyuuMessage
+			{
+				Id = seiyuuId,
+				MalId = seiyuuMalId
+			};
+
+			// When
+			await handler.HandleAsync(command);
+
+			// Then
+			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.Role).FirstAsync(x => x.MalId == seiyuuMalId);
+			using (new AssertionScope())
+			{
+				dbContext.AnimeRoles.Should().HaveCount(2);
+				dbContext.AnimeCharacters.Should().HaveCount(2);
+				dbContext.Animes.Should().HaveCount(2);
+
+				updatedSeiyuu.Role.First().AnimeId.Should().NotBeEmpty();
+				updatedSeiyuu.Role.Skip(1).First().AnimeId.Should().NotBeEmpty();
+				updatedSeiyuu.Role.First().CharacterId.Should().NotBeEmpty();
+				updatedSeiyuu.Role.Skip(1).First().CharacterId.Should().NotBeEmpty();
+				updatedSeiyuu.Role.First().SeiyuuId.Should().Be(seiyuu.Id);
+				updatedSeiyuu.Role.Skip(1).First().SeiyuuId.Should().Be(seiyuu.Id);
+
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetPerson(seiyuuMalId), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnime(It.IsAny<long>()), Times.Exactly(2));
 				jikanServiceBuilder.JikanClient.Verify(x => x.GetCharacter(It.IsAny<long>()), Times.Never);
 			}
 		}
