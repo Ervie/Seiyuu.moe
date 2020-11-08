@@ -90,7 +90,7 @@ Resources:
   ScheduleAnimesUpdateRule:
     Type: AWS::Events::Rule
     Properties:
-      ScheduleExpression: cron(1/15 * 8 * ? *)
+      ScheduleExpression: cron(0/15 * 8 * ? *)
       State: !If
         - IsProdEnvironment
         - ENABLED
@@ -146,10 +146,69 @@ Resources:
             BatchSize: 1
             Queue: !GetAtt AnimeToUpdateQueue.Arn
 
+  ScheduleSeiyuuUpdateRule:
+    Type: AWS::Events::Rule
+    Properties:
+      ScheduleExpression: cron(0/15 * 14-20 * ? *)
+      State: !If
+        - IsProdEnvironment
+        - ENABLED
+        - DISABLED
+      Targets:
+        - Arn: !GetAtt ScheduleSeiyuuUpdate.Arn
+          Id: LambdaTarget
+
+  ScheduleSeiyuuUpdate:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: dotnetcore3.1
+      Description: Lambda for pushing seiyuu on queue for updating
+      FunctionName: ScheduleSeiyuuUpdate
+      Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.ScheduleSeiyuuLambda::InvokeAsync
+      MemorySize: 512
+      Timeout: 180
+      Role: !GetAtt ScheduleLambdaRole.Arn
+
+  SeiyuuToUpdateQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: SeiyuuToUpdateQueue
+      DelaySeconds: 0
+      ReceiveMessageWaitTimeSeconds: 20
+      RedrivePolicy: 
+        deadLetterTargetArn: !GetAtt SeiyuuToUpdateDLQ.Arn
+        maxReceiveCount: 3
+      VisibilityTimeout: 30
+
+  SeiyuuToUpdateDLQ:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: SeiyuuToUpdateDLQ
+      MessageRetentionPeriod: 1209600
+      ReceiveMessageWaitTimeSeconds: 0
+
+  UpdateSeiyuu:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: dotnetcore3.1
+      Description: Lambda for updating single chraracter
+      FunctionName: UpdateSeiyuu
+      Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.UpdateSeiyuuLambda::InvokeAsync
+      MemorySize: 256
+      Timeout: 30
+      ReservedConcurrentExecutions: 1
+      Role: !GetAtt UpdateLambdaRole.Arn
+      Events:
+        SqsEvent:
+          Type: SQS
+          Properties:
+            BatchSize: 1
+            Queue: !GetAtt SeiyuuToUpdateQueue.Arn
+
   ScheduleCharactersUpdateRule:
     Type: AWS::Events::Rule
     Properties:
-      ScheduleExpression: cron(1/15 * 14-20 * ? *)
+      ScheduleExpression: cron(0/15 0-20 ? * SUN *)
       State: !If
         - IsProdEnvironment
         - ENABLED
