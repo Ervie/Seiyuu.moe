@@ -14,25 +14,24 @@ using System.Threading.Tasks;
 
 namespace SeiyuuMoe.MalBackgroundJobs.Lambda.Function
 {
-	internal class UpdateSeiyuuLambda : BaseSqsLambda<UpdateSeiyuuMessage>
+	public class InsertSeiyuuLambda : BaseLambda
 	{
-		protected async override Task HandleAsync(UpdateSeiyuuMessage message)
+		protected async override Task HandleAsync()
 		{
-			Console.WriteLine($"UpdateSeiyuuLambda was invoked for seiyuu {message.Id}");
+			Console.WriteLine($"InsertSeiyuuLambda was invoked.");
 
 			var dbConfig = ConfigurationReader.DatabaseConfiguration;
 			using var dbContext = new SeiyuuMoeContext(dbConfig);
 
 			var handler = CreateHandler(dbContext);
-			await handler.HandleAsync(message);
+			await handler.HandleAsync();
 		}
 
-		private static UpdateSeiyuuHandler CreateHandler(SeiyuuMoeContext dbContext)
+		private static InsertSeiyuuHandler CreateHandler(SeiyuuMoeContext dbContext)
 		{
 			var animeRepository = new AnimeRepository(dbContext);
 			var seiyuuRepository = new SeiyuuRepository(dbContext);
 			var characterRepository = new CharacterRepository(dbContext);
-			var seiyuuRoleRepository = new SeiyuuRoleRepository(dbContext);
 			var animeRoleRepository = new AnimeRoleRepository(dbContext);
 			var seasonRepository = new SeasonRepository(dbContext);
 
@@ -40,7 +39,7 @@ namespace SeiyuuMoe.MalBackgroundJobs.Lambda.Function
 			var jikanClient = new Jikan(jikanUrl, true);
 			var jikanService = new JikanService(jikanClient);
 
-			return new UpdateSeiyuuHandler(seiyuuRepository, animeRepository, characterRepository, seiyuuRoleRepository, animeRoleRepository, seasonRepository, jikanService);
+			return new InsertSeiyuuHandler(seiyuuRepository, seasonRepository, characterRepository, animeRepository, animeRoleRepository, jikanService);
 		}
 	}
 }

@@ -12,7 +12,44 @@ Parameters:
 Conditions:
   IsProdEnvironment: !Equals [ !Ref EnvironmentType, prod ]
 
+Mappings:
+  Exports:
+    KmsKeyArn:
+      dev: seiyuu-moe-sec-dev-kms-key-arn
+      prod: seiyuu-moe-sec-prod-kms-key-arn
+    ApplicationSecurityGroupId:
+      dev: seiyuu-moe-sec-dev-app-security-group
+      prod: seiyuu-moe-sec-prod-app-security-group
+
 Resources:
+  JobsStateBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      VersioningConfiguration:
+        Status: Enabled
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              KMSMasterKeyID:
+                Fn::ImportValue: !FindInMap [ Exports, KmsKeyArn, !Ref EnvironmentType ]
+              SSEAlgorithm: aws:kms
+
+  JobsStateBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref JobsStateBucket
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Deny
+            Principal: '*'
+            Action: s3:PutObject
+            Resource: !Sub ${JobsStateBucket.Arn}/*
+            Condition:
+              StringNotEquals:
+                s3:x-amz-server-side-encryption-aws-kms-key-id:
+                  Fn::ImportValue: !FindInMap [ Exports, KmsKeyArn, !Ref EnvironmentType ]
+
   ScheduleLambdaRole:
     Type: AWS::IAM::Role
     Properties:
@@ -75,6 +112,23 @@ Resources:
                 Resource: 
                   - !GetAtt AnimeToUpdateQueue.Arn
                   - !GetAtt CharactersToUpdateQueue.Arn
+                  - !GetAtt SeiyuuToUpdateQueue.Arn
+        - PolicyName: AllowAccessToJobsStateBucket
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:PutObject
+                Resource: !Sub ${JobsStateBucket.Arn}/*
+              - Effect: Allow
+                Action: s3:ListBucket
+                Resource: !GetAtt JobsStateBucket.Arn
+              - Effect: Allow
+                Action: kms:Decrypt
+                Resource:
+                  Fn::ImportValue: !FindInMap [Exports, KmsKeyArn, !Ref EnvironmentType ]
 
   ParameterStoreAccessPolicy:
     Type: AWS::IAM::ManagedPolicy
@@ -301,6 +355,13 @@ Globals:
         AnimeToUpdateQueueUrl: !Ref AnimeToUpdateQueue
         CharactersToUpdateQueueUrl: !Ref CharactersToUpdateQueue
         StackName: !Ref AWS::StackName
+    VpcConfig:
+      SubnetIds:
+        - subnet-ff169695
+        - subnet-48aa5434
+        - subnet-06ae634a
+      SecurityGroupIds:
+        - Fn::ImportValue: !FindInMap [ Exports, ApplicationSecurityGroupId, !Ref EnvironmentType ]
     Tags:
       environment: !Ref EnvironmentType
       service-name: mal-bg-jobs

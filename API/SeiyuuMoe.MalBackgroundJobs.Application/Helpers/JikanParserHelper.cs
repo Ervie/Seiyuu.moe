@@ -1,5 +1,6 @@
 ﻿using SeiyuuMoe.Domain.Entities;
 using System;
+using System.Linq;
 
 namespace SeiyuuMoe.MalBackgroundJobs.Application.Helpers
 {
@@ -54,5 +55,12 @@ namespace SeiyuuMoe.MalBackgroundJobs.Application.Helpers
 
 			return (seasonName, airingYear);
 		}
+
+		public static bool IsJapanese(string japaneseName) => 
+			!string.IsNullOrWhiteSpace(japaneseName) && japaneseName.All(x =>
+					   x >= 0x4E00 && x <= 0x9FBF || // kanji
+					   x >= 0x3040 && x <= 0x309F || // hiragana
+					   x >= 0x30A0 && x <= 0x30FF || // katakana
+					   x == ' ');
 	}
 }

@@ -6,4 +6,5 @@ param(
 
 $ErrorActionPreference = "Stop"
 
+. $PSScriptRoot/deploy-security.ps1 $EnvironmentType
 . $PSScriptRoot/deploy-mal-bg-jobs.ps1 $EnvironmentType
