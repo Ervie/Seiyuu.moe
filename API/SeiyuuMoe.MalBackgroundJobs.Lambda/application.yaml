@@ -359,9 +359,9 @@ Globals:
         StackName: !Ref AWS::StackName
     VpcConfig:
       SubnetIds:
-        - subnet-ff169695
-        - subnet-48aa5434
-        - subnet-06ae634a
+        - subnet-06a875e91c6a5d89b
+        - subnet-0e1cec795f5a6a843
+        - subnet-0ed5c9801b29d1176
       SecurityGroupIds:
         - Fn::ImportValue: !FindInMap [ Exports, ApplicationSecurityGroupId, !Ref EnvironmentType ]
     Tags:
