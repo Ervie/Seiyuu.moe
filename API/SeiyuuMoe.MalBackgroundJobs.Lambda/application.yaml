@@ -354,6 +354,8 @@ Globals:
         EnvironmentType: !Ref EnvironmentType
         AnimeToUpdateQueueUrl: !Ref AnimeToUpdateQueue
         CharactersToUpdateQueueUrl: !Ref CharactersToUpdateQueue
+        SeiyuuToUpdateQueueUrl: !Ref SeiyuuToUpdateQueue
+        JobsStateBucket: !Ref JobsStateBucket
         StackName: !Ref AWS::StackName
     VpcConfig:
       SubnetIds:

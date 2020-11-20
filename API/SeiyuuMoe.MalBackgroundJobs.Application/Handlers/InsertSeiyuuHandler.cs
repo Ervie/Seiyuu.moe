@@ -1,6 +1,7 @@
 ﻿using SeiyuuMoe.Domain.Entities;
 using SeiyuuMoe.Domain.MalUpdateData;
 using SeiyuuMoe.Domain.Repositories;
+using SeiyuuMoe.Domain.S3;
 using SeiyuuMoe.Domain.Services;
 using SeiyuuMoe.Domain.SqsMessages;
 using SeiyuuMoe.MalBackgroundJobs.Application.Helpers;
@@ -13,36 +14,43 @@ namespace SeiyuuMoe.MalBackgroundJobs.Application.Handlers
 {
 	public class InsertSeiyuuHandler
 	{
+		private readonly int _insertSeiyuuBatchSize;
 		private readonly ISeiyuuRepository _seiyuuRepository;
 		private readonly ISeasonRepository _seasonRepository;
 		private readonly ICharacterRepository _characterRepository;
 		private readonly IAnimeRepository _animeRepository;
 		private readonly IAnimeRoleRepository _animeRoleRepository;
 		private readonly IMalApiService _malApiService;
+		private readonly IS3Service _s3Service;
 
 		public InsertSeiyuuHandler(
+			int insertSeiyuubatchSize,
 			ISeiyuuRepository seiyuuRepository,
 			ISeasonRepository seasonRepository,
 			ICharacterRepository characterRepository,
 			IAnimeRepository animeRepository,
 			IAnimeRoleRepository animeRoleRepository,
-			IMalApiService malApiService
+			IMalApiService malApiService,
+			IS3Service s3Service
 		)
 		{
+			_insertSeiyuuBatchSize = insertSeiyuubatchSize;
 			_seiyuuRepository = seiyuuRepository;
 			_seasonRepository = seasonRepository;
 			_characterRepository = characterRepository;
 			_animeRepository = animeRepository;
 			_animeRoleRepository = animeRoleRepository;
 			_malApiService = malApiService;
+			_s3Service = s3Service;
 		}
 
 		public async Task HandleAsync()
 		{
-			var lastSeiyuuId = 50000;
+			var bgJobsState = await _s3Service.GetBgJobsStateAsync(Environment.GetEnvironmentVariable("JobsStateBucket"));
+			var lastSeiyuuId = bgJobsState.LastCheckedSeiyuuMalId;
 
 			var seiyuuUpdateMessages = Enumerable
-				.Range(lastSeiyuuId + 1, lastSeiyuuId + 100)
+				.Range(lastSeiyuuId + 1, lastSeiyuuId + _insertSeiyuuBatchSize)
 				.Select(i => new UpdateSeiyuuMessage { Id = Guid.NewGuid(), MalId = i });
 
 			foreach (var seiyuuUpdateMessage in seiyuuUpdateMessages)
@@ -50,6 +58,9 @@ namespace SeiyuuMoe.MalBackgroundJobs.Application.Handlers
 				await Task.Delay(3 * 1000);
 				await InsertSingleSeiyuu(seiyuuUpdateMessage);
 			}
+
+			lastSeiyuuId += _insertSeiyuuBatchSize;
+			await _s3Service.PutBgJobsStateAsync(Environment.GetEnvironmentVariable("JobsStateBucket"), bgJobsState);
 		}
 
 		public async Task InsertSingleSeiyuu(UpdateSeiyuuMessage updateSeiyuuMessage)

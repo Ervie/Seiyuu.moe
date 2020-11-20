@@ -5,6 +5,7 @@ using SeiyuuMoe.Infrastructure.Characters;
 using SeiyuuMoe.Infrastructure.Configuration;
 using SeiyuuMoe.Infrastructure.Context;
 using SeiyuuMoe.Infrastructure.Jikan;
+using SeiyuuMoe.Infrastructure.S3;
 using SeiyuuMoe.Infrastructure.Seasons;
 using SeiyuuMoe.Infrastructure.Seiyuus;
 using SeiyuuMoe.MalBackgroundJobs.Application.Handlers;
@@ -29,6 +30,8 @@ namespace SeiyuuMoe.MalBackgroundJobs.Lambda.Function
 
 		private static InsertSeiyuuHandler CreateHandler(SeiyuuMoeContext dbContext)
 		{
+			var scheduleConfiguration = ConfigurationReader.MalBgJobsScheduleConfiguration;
+
 			var animeRepository = new AnimeRepository(dbContext);
 			var seiyuuRepository = new SeiyuuRepository(dbContext);
 			var characterRepository = new CharacterRepository(dbContext);
@@ -39,7 +42,18 @@ namespace SeiyuuMoe.MalBackgroundJobs.Lambda.Function
 			var jikanClient = new Jikan(jikanUrl, true);
 			var jikanService = new JikanService(jikanClient);
 
-			return new InsertSeiyuuHandler(seiyuuRepository, seasonRepository, characterRepository, animeRepository, animeRoleRepository, jikanService);
+			var s3Client = new S3Service();
+
+			return new InsertSeiyuuHandler(
+				scheduleConfiguration.DelayBetweenMessagesInSeconds,
+				seiyuuRepository,
+				seasonRepository,
+				characterRepository,
+				animeRepository,
+				animeRoleRepository,
+				jikanService,
+				s3Client
+			);
 		}
 	}
 }

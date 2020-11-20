@@ -2,8 +2,10 @@
 {
 	public class MalBgJobsScheduleConfiguration
 	{
-		public int BatchSize { get; set; }
+		public int UpdateBatchSize { get; set; }
 
 		public int DelayBetweenMessagesInSeconds { get; set; }
+
+		public int InsertSeiyuuBatchSize { get; set; }
 	}
 }

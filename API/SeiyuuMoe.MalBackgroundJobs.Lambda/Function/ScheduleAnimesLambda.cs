@@ -31,7 +31,7 @@ namespace SeiyuuMoe.MalBackgroundJobs.Lambda.Function
 			var scheduleConfiguration = ConfigurationReader.MalBgJobsScheduleConfiguration;
 
 			return new ScheduleAnimesHandler(
-				scheduleConfiguration.BatchSize,
+				scheduleConfiguration.UpdateBatchSize,
 				scheduleConfiguration.DelayBetweenMessagesInSeconds,
 				animeRepository,
 				animeUpdatePublisher
