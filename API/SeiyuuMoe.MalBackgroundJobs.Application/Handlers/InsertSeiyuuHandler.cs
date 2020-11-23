@@ -77,7 +77,7 @@ namespace SeiyuuMoe.MalBackgroundJobs.Application.Handlers
 
 			var updateData = await _malApiService.GetSeiyuuDataAsync(updateSeiyuuMessage.MalId);
 
-			if (updateData == null || !JikanParserHelper.IsJapanese(updateData.JapaneseName))
+			if (updateData == null || !JikanParserHelper.IsJapanese(updateData.JapaneseName) || !updateData.VoiceActingRoles.Any())
 			{
 				return;
 			}
