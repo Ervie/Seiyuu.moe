@@ -203,7 +203,7 @@ Resources:
   ScheduleSeiyuuUpdateRule:
     Type: AWS::Events::Rule
     Properties:
-      ScheduleExpression: cron(0/15 * 14-20 * ? *)
+      ScheduleExpression: cron(0/15 2-22 ? * SUN *)
       State: !If
         - IsProdEnvironment
         - ENABLED
@@ -262,7 +262,7 @@ Resources:
   ScheduleCharactersUpdateRule:
     Type: AWS::Events::Rule
     Properties:
-      ScheduleExpression: cron(0/15 0-20 ? * SUN *)
+      ScheduleExpression: cron(0/15 * 14-20 * ? *)
       State: !If
         - IsProdEnvironment
         - ENABLED
@@ -340,6 +340,29 @@ Resources:
       MemorySize: 512
       Timeout: 180
       Role: !GetAtt ScheduleLambdaRole.Arn
+
+  InsertSeiyuuRule:
+    Type: AWS::Events::Rule
+    Properties:
+      ScheduleExpression: cron(0 1 ? * SUN *)
+      State: !If
+        - IsProdEnvironment
+        - ENABLED
+        - DISABLED
+      Targets:
+        - Arn: !GetAtt InsertSeiyuu.Arn
+          Id: LambdaTarget
+  
+  InsertSeiyuu:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: dotnetcore3.1
+      Description: Lambda for inserting new seiyuu
+      FunctionName: InsertSeiyuu
+      Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.InsertSeiyuuLambda::InvokeAsync
+      MemorySize: 1024
+      Timeout: 900
+      Role: !GetAtt UpdateLambdaRole.Arn
 
 Globals:
   Function:

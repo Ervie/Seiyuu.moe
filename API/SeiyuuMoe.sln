@@ -27,6 +27,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deploy", "Deploy", "{9D9A36
 	ProjectSection(SolutionItems) = preProject
 		Deploy\common.psm1 = Deploy\common.psm1
 		Deploy\deploy-mal-bg-jobs.ps1 = Deploy\deploy-mal-bg-jobs.ps1
+		Deploy\deploy-security.ps1 = Deploy\deploy-security.ps1
 		deploy.ps1 = deploy.ps1
 	EndProjectSection
 EndProject
@@ -34,7 +35,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeiyuuMoe.MalBackgroundJobs
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeiyuuMoe.MalBackgroundJobs.Application", "SeiyuuMoe.MalBackgroundJobs.Application\SeiyuuMoe.MalBackgroundJobs.Application.csproj", "{A5153B9A-A323-46E8-BC34-283B11983353}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeiyuuMoe.MalBackgroundJobs.LocalLambdaRunner", "SeiyuuMoe.MalBackgroundJobs.LocalLambdaRunner\SeiyuuMoe.MalBackgroundJobs.LocalLambdaRunner.csproj", "{64CFBAC5-619B-43E7-B082-EEFCD06F8D61}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeiyuuMoe.MalBackgroundJobs.LocalLambdaRunner", "SeiyuuMoe.MalBackgroundJobs.LocalLambdaRunner\SeiyuuMoe.MalBackgroundJobs.LocalLambdaRunner.csproj", "{64CFBAC5-619B-43E7-B082-EEFCD06F8D61}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

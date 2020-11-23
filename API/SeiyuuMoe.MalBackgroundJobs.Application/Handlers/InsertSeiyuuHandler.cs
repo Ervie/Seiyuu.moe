@@ -15,6 +15,7 @@ namespace SeiyuuMoe.MalBackgroundJobs.Application.Handlers
 	public class InsertSeiyuuHandler
 	{
 		private readonly int _insertSeiyuuBatchSize;
+		private readonly int _delayBetweenCallsInSeconds;
 		private readonly ISeiyuuRepository _seiyuuRepository;
 		private readonly ISeasonRepository _seasonRepository;
 		private readonly ICharacterRepository _characterRepository;
@@ -24,7 +25,8 @@ namespace SeiyuuMoe.MalBackgroundJobs.Application.Handlers
 		private readonly IS3Service _s3Service;
 
 		public InsertSeiyuuHandler(
-			int insertSeiyuubatchSize,
+			int insertSeiyuuBatchSize,
+			int delayBetweenCallsInSeconds,
 			ISeiyuuRepository seiyuuRepository,
 			ISeasonRepository seasonRepository,
 			ICharacterRepository characterRepository,
@@ -34,7 +36,8 @@ namespace SeiyuuMoe.MalBackgroundJobs.Application.Handlers
 			IS3Service s3Service
 		)
 		{
-			_insertSeiyuuBatchSize = insertSeiyuubatchSize;
+			_insertSeiyuuBatchSize = insertSeiyuuBatchSize;
+			_delayBetweenCallsInSeconds = delayBetweenCallsInSeconds;
 			_seiyuuRepository = seiyuuRepository;
 			_seasonRepository = seasonRepository;
 			_characterRepository = characterRepository;
@@ -50,16 +53,16 @@ namespace SeiyuuMoe.MalBackgroundJobs.Application.Handlers
 			var lastSeiyuuId = bgJobsState.LastCheckedSeiyuuMalId;
 
 			var seiyuuUpdateMessages = Enumerable
-				.Range(lastSeiyuuId + 1, lastSeiyuuId + _insertSeiyuuBatchSize)
+				.Range(lastSeiyuuId + 1, _insertSeiyuuBatchSize)
 				.Select(i => new UpdateSeiyuuMessage { Id = Guid.NewGuid(), MalId = i });
 
 			foreach (var seiyuuUpdateMessage in seiyuuUpdateMessages)
 			{
-				await Task.Delay(3 * 1000);
+				await Task.Delay(_delayBetweenCallsInSeconds * 1000);
 				await InsertSingleSeiyuu(seiyuuUpdateMessage);
 			}
 
-			lastSeiyuuId += _insertSeiyuuBatchSize;
+			bgJobsState.LastCheckedSeiyuuMalId += _insertSeiyuuBatchSize;
 			await _s3Service.PutBgJobsStateAsync(Environment.GetEnvironmentVariable("JobsStateBucket"), bgJobsState);
 		}
 
@@ -67,7 +70,7 @@ namespace SeiyuuMoe.MalBackgroundJobs.Application.Handlers
 		{
 			var seiyuuToUpdate = await _seiyuuRepository.GetAsync(updateSeiyuuMessage.MalId);
 
-			if (seiyuuToUpdate == null)
+			if (seiyuuToUpdate != null)
 			{
 				return;
 			}
@@ -80,7 +83,6 @@ namespace SeiyuuMoe.MalBackgroundJobs.Application.Handlers
 			}
 
 			await InsertSeiyuuAsync(updateSeiyuuMessage, updateData);
-			await _seiyuuRepository.UpdateAsync(seiyuuToUpdate);
 
 			await InsertRolesAsync(updateSeiyuuMessage, updateData.VoiceActingRoles);
 		}

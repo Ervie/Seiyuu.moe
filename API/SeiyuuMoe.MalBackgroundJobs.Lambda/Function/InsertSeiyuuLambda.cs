@@ -46,6 +46,7 @@ namespace SeiyuuMoe.MalBackgroundJobs.Lambda.Function
 
 			return new InsertSeiyuuHandler(
 				scheduleConfiguration.DelayBetweenMessagesInSeconds,
+				scheduleConfiguration.DelayBetweenCallsInSeconds,
 				seiyuuRepository,
 				seasonRepository,
 				characterRepository,
