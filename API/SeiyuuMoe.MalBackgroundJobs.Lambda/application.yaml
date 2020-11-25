@@ -126,7 +126,9 @@ Resources:
                 Action: s3:ListBucket
                 Resource: !GetAtt JobsStateBucket.Arn
               - Effect: Allow
-                Action: kms:Decrypt
+                Action: 
+                  - kms:Decrypt
+                  - kms:GenerateDataKey
                 Resource:
                   Fn::ImportValue: !FindInMap [Exports, KmsKeyArn, !Ref EnvironmentType ]
 
@@ -337,7 +339,7 @@ Resources:
       Description: Lambda for updating seasons table
       FunctionName: UpdateSeasons
       Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.UpdateSeasonsLambda::InvokeAsync
-      MemorySize: 512
+      MemorySize: 256
       Timeout: 180
       Role: !GetAtt ScheduleLambdaRole.Arn
 
@@ -360,7 +362,7 @@ Resources:
       Description: Lambda for inserting new seiyuu
       FunctionName: InsertSeiyuu
       Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.InsertSeiyuuLambda::InvokeAsync
-      MemorySize: 1024
+      MemorySize: 256
       Timeout: 900
       Role: !GetAtt UpdateLambdaRole.Arn
 

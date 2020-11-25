@@ -45,7 +45,7 @@ namespace SeiyuuMoe.MalBackgroundJobs.Lambda.Function
 			var s3Client = new S3Service();
 
 			return new InsertSeiyuuHandler(
-				scheduleConfiguration.DelayBetweenMessagesInSeconds,
+				scheduleConfiguration.InsertSeiyuuBatchSize,
 				scheduleConfiguration.DelayBetweenCallsInSeconds,
 				seiyuuRepository,
 				seasonRepository,

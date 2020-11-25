@@ -59,6 +59,7 @@ namespace SeiyuuMoe.MalBackgroundJobs.Application.Handlers
 			foreach (var seiyuuUpdateMessage in seiyuuUpdateMessages)
 			{
 				await Task.Delay(_delayBetweenCallsInSeconds * 1000);
+				Console.WriteLine($"Checking malId {seiyuuUpdateMessage.MalId}");
 				await InsertSingleSeiyuu(seiyuuUpdateMessage);
 			}
 
@@ -100,6 +101,8 @@ namespace SeiyuuMoe.MalBackgroundJobs.Application.Handlers
 				Popularity = updateData.Popularity,
 				Birthday = updateData.Birthday,
 			};
+
+			Console.WriteLine($"Inserted seiyuu with malId {updateSeiyuuMessage.MalId} ({updateData.Name})");
 
 			await _seiyuuRepository.AddAsync(newSeiyuu);
 		}
@@ -156,6 +159,8 @@ namespace SeiyuuMoe.MalBackgroundJobs.Application.Handlers
 
 			await _characterRepository.AddAsync(newCharacter);
 
+			Console.WriteLine($"Inserted character with malId {malId} ({parsedData.Name})");
+
 			return newCharacter;
 		}
 
@@ -195,6 +200,8 @@ namespace SeiyuuMoe.MalBackgroundJobs.Application.Handlers
 			};
 
 			await _animeRepository.AddAsync(newAnime);
+
+			Console.WriteLine($"Inserted anime with malId {malId} ({parsedData.Title})");
 
 			return newAnime;
 		}
