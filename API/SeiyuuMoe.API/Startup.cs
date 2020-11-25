@@ -102,8 +102,8 @@ namespace SeiyuuMoe.API
 			//RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.UpdateAllSeiyuuAsync(), "0 0 1 * *");
 			//RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.UpdateAllAnimeAsync(), "0 0 8 * *");
 			//RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.UpdateAllCharactersAsync(), "0 0 15 * *");
-			RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.InsertNewSeiyuuAsync(), "0 0 * * 7");
-			RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.InsertOldSeiyuuAsync(), runNeverCronExpression);
+			//RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.InsertNewSeiyuuAsync(), "0 0 * * 7");
+			//RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.InsertOldSeiyuuAsync(), runNeverCronExpression);
 		}
 	}
 }
