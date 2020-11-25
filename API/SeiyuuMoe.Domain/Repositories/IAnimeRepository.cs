@@ -17,7 +17,7 @@ namespace SeiyuuMoe.Domain.Repositories
 
 		Task<IReadOnlyList<Anime>> GetAllAsync();
 
-		Task<IReadOnlyList<Anime>> GetAllAsync(Expression<Func<Anime, bool>> predicate);
+		Task<IReadOnlyList<Anime>> GetAllBySeasonAndTypeAsync(long seasonId, AnimeTypeId animeTypeId);
 
 		Task<PagedResult<Anime>> GetOrderedPageByPopularityAsync(Expression<Func<Anime, bool>> predicate, int page = 0, int pageSize = 10);
 

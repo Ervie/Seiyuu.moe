@@ -33,12 +33,12 @@ namespace SeiyuuMoe.Infrastructure.Animes
 			.Include(a => a.Season)
 			.ToListAsync();
 
-		public async Task<IReadOnlyList<Anime>> GetAllAsync(Expression<Func<Anime, bool>> predicate)
+		public async Task<IReadOnlyList<Anime>> GetAllBySeasonAndTypeAsync(long seasonId, AnimeTypeId animeTypeId)
 			=> await _dbContext.Animes
 			.Include(a => a.Type)
 			.Include(a => a.Status)
 			.Include(a => a.Season)
-			.Where(predicate)
+			.Where(x => x.SeasonId == seasonId && (x.TypeId == animeTypeId || animeTypeId == AnimeTypeId.AllTypes))
 			.ToListAsync();
 
 		public Task<int> GetAnimeCountAsync() => _dbContext.Animes.CountAsync();

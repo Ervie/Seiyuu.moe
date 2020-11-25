@@ -345,36 +345,47 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 		}
 
 		[Fact]
-		public async Task GetAllAsync_GivenMultipleAnimeWithEmptyPredicate_ShouldReturnAll()
+		public async Task GetAllBySeasonAndTypeAsync_GivenMultipleAnimeInSeasonWithType_ShouldReturnAll()
 		{
 			// Given
 			var dbContext = InMemoryDbProvider.GetDbContext();
 			var repository = new AnimeRepository(dbContext);
-			var anime1 = new AnimeBuilder().WithTitle("Test1").Build();
-			var anime2 = new AnimeBuilder().WithTitle("Test2").Build();
-			var anime3 = new AnimeBuilder().WithTitle("Test3").Build();
+			const int seasonId = 100;
+			const AnimeTypeId animeTypeId = AnimeTypeId.TV;
+			var animeType = new AnimeTypeBuilder().WithId(animeTypeId).Build();
+			var season = new SeasonBuilder().WithId(seasonId).WithName("Winter").WithYear(2000).Build();
+			var anime1 = new AnimeBuilder().WithTitle("Test1").WithSeason(season).WithAnimeType(animeType).Build();
+			var anime2 = new AnimeBuilder().WithTitle("Test2").WithSeason(season).WithAnimeType(animeType).Build();
+			var anime3 = new AnimeBuilder().WithTitle("Test3").WithSeason(season).WithAnimeType(animeType).Build();
 
+			await dbContext.AnimeSeasons.AddAsync(season);
 			await dbContext.Animes.AddAsync(anime1);
 			await dbContext.Animes.AddAsync(anime2);
 			await dbContext.Animes.AddAsync(anime3);
 			await dbContext.SaveChangesAsync();
 
 			// When
-			var result = await repository.GetAllAsync(x => true);
+			var result = await repository.GetAllBySeasonAndTypeAsync(seasonId, animeTypeId);
 
 			// Then
 			result.Should().HaveCount(3);
 		}
 
 		[Fact]
-		public async Task GetAllAsync_GivenMultipleAnimeWithPredicate_ShouldReturnPartial()
+		public async Task GetAllBySeasonAndTypeAsync_GivenMultipleAnimeOnlyOneInSeasonWithType_ShouldReturnSingle()
 		{
 			// Given
 			var dbContext = InMemoryDbProvider.GetDbContext();
 			var repository = new AnimeRepository(dbContext);
-			var anime1 = new AnimeBuilder().WithTitle("Test1").Build();
-			var anime2 = new AnimeBuilder().WithTitle("Test2").Build();
-			var anime3 = new AnimeBuilder().WithTitle("Test3").Build();
+			const int seasonId1 = 100;
+			const int seasonId2 = 101;
+			const AnimeTypeId animeTypeId = AnimeTypeId.TV;
+			var animeType = new AnimeTypeBuilder().WithId(animeTypeId).Build();
+			var season1 = new SeasonBuilder().WithId(seasonId1).WithName("Winter").WithYear(2000).Build();
+			var season2 = new SeasonBuilder().WithId(seasonId2).WithName("Spring").WithYear(2000).Build();
+			var anime1 = new AnimeBuilder().WithTitle("Test1").WithSeason(season1).WithAnimeType(animeType).Build();
+			var anime2 = new AnimeBuilder().WithTitle("Test2").WithSeason(season1).WithAnimeType(animeType).Build();
+			var anime3 = new AnimeBuilder().WithTitle("Test3").WithSeason(season2).WithAnimeType(animeType).Build();
 
 			await dbContext.Animes.AddAsync(anime1);
 			await dbContext.Animes.AddAsync(anime2);
@@ -382,7 +393,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			await dbContext.SaveChangesAsync();
 
 			// When
-			var result = await repository.GetAllAsync(x => x.Title.EndsWith("3"));
+			var result = await repository.GetAllBySeasonAndTypeAsync(seasonId2, animeTypeId);
 
 			// Then
 			result.Should().ContainSingle();
