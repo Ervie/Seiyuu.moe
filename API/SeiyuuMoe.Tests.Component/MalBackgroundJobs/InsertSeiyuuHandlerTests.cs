@@ -600,6 +600,117 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			dbContext.AnimeRoles.Should().BeEmpty();
 		}
 
+		[Fact]
+		public async Task HandleAsync_GivenNotExistingJapanesePersonWithSingleRoles_ShouldInsertNewSeiyuuWithRole()
+		{
+			// Given
+			const long animeMalId = 100;
+			const long characterMalId = 1000;
+			var dbContext = InMemoryDbProvider.GetDbContext();
+			const int startingSeiyuuMalId = 1;
+			var s3Service = new S3ServiceStub(startingSeiyuuMalId);
+
+			const string returnedSeiyuuName = "PostUpdateSeiyuuName";
+			const string returnedSeiyuuAbout = "PostUpdateSeiyuuAbout";
+			const string returnedSeiyuuGivenName = "花澤";
+			const string returnedSeiyuuFamilyNameName = "香菜";
+			const string returnedSeiyuuImageUrl = "PostUpdateSeiyuuImageUrl";
+			const int returnedSeiyuuPopularity = 1;
+			var returnedBirthdate = new DateTime(1990, 1, 1);
+
+			const string returnedCharacterName = "PostUpdateName";
+			const string returnedCharacterAbout = "PostUpdateAbout";
+			const string returnedCharacterJapaneseName = "PostUpdateJapanese";
+			const string returnedCharacterImageUrl = "PostUpdateImageUrl";
+			const int returnedCharacterPopularity = 1;
+
+			const string returnedAnimeTitle = "PostUpdateTitle";
+			const string returnedAnimeAbout = "PostUpdateAbout";
+			const string returnedAnimeEnglishTitle = "PostUpdateEnglish";
+			const string returnedAnimeJapaneseTitle = "PostUpdateJapanese";
+			const string returnedAnimeImageUrl = "PostUpdateImageUrl";
+			const int returnedAnimePopularity = 3;
+
+			var returnedSeiyuu = new Person
+			{
+				Name = returnedSeiyuuName,
+				More = returnedSeiyuuAbout,
+				GivenName = returnedSeiyuuGivenName,
+				FamilyName = returnedSeiyuuFamilyNameName,
+				ImageURL = returnedSeiyuuImageUrl,
+				MemberFavorites = returnedSeiyuuPopularity,
+				Birthday = returnedBirthdate,
+				VoiceActingRoles = new List<VoiceActingRole>
+				{
+					new VoiceActingRole
+					{
+						Role = "Main",
+						Anime = new MALImageSubItem
+						{
+							MalId = animeMalId
+						},
+						Character = new MALImageSubItem
+						{
+							MalId = characterMalId
+						}
+					}
+				}
+			};
+
+			var returnedCharacter = new Character
+			{
+				MalId = characterMalId,
+				Name = returnedCharacterName,
+				About = returnedCharacterAbout,
+				NameKanji = returnedCharacterJapaneseName,
+				ImageURL = returnedCharacterImageUrl,
+				Nicknames = new List<string>(),
+				MemberFavorites = returnedCharacterPopularity
+			};
+
+			var returnedAnime = new Anime
+			{
+				MalId = animeMalId,
+				Title = returnedAnimeTitle,
+				Synopsis = returnedAnimeAbout,
+				TitleEnglish = returnedAnimeEnglishTitle,
+				TitleJapanese = returnedAnimeJapaneseTitle,
+				ImageURL = returnedAnimeImageUrl,
+				TitleSynonyms = new List<string>(),
+				Members = returnedAnimePopularity
+			};
+
+
+			var jikanServiceBuilder = new JikanServiceBuilder()
+				.WithPersonReturned(returnedSeiyuu)
+				.WithCharacterReturned(returnedCharacter)
+				.WithAnimeReturned(returnedAnime);
+
+			var anime = new SeiyuuBuilder()
+				.WithMalId(startingSeiyuuMalId)
+				.Build();
+
+			await dbContext.AddAsync(anime);
+			await dbContext.SaveChangesAsync();
+
+			var handler = CreateHandler(dbContext, jikanServiceBuilder.Build(), s3Service, 1);
+
+			// When
+			await handler.HandleAsync();
+
+			// Then
+			jikanServiceBuilder.JikanClient.Verify(x => x.GetPerson(startingSeiyuuMalId + 1), Times.Once);
+			jikanServiceBuilder.JikanClient.Verify(x => x.GetAnime(animeMalId), Times.Once);
+			jikanServiceBuilder.JikanClient.Verify(x => x.GetCharacter(characterMalId), Times.Once);
+			using (new AssertionScope())
+			{
+				dbContext.Seiyuus.Should().HaveCount(2);
+				dbContext.Animes.Should().ContainSingle();
+				dbContext.AnimeCharacters.Should().ContainSingle();
+				dbContext.AnimeRoles.Should().ContainSingle();
+			}
+		}
+
 		private InsertSeiyuuHandler CreateHandler(SeiyuuMoeContext dbContext, JikanService jikanService, IS3Service s3Service, int insertSeiyuuBatchSize)
 		{
 			var animeRepository = new AnimeRepository(dbContext);
