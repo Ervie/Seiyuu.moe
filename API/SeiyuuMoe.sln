@@ -19,9 +19,23 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeiyuuMoe.Application", "Se
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeiyuuMoe.Infrastructure", "SeiyuuMoe.Infrastructure\SeiyuuMoe.Infrastructure.csproj", "{AE992BC2-5D76-4F9D-870C-10570B15BDAF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeiyuuMoe.Tests.Component", "Seiyuu.Tests.Component\SeiyuuMoe.Tests.Component.csproj", "{DE743EA5-F81B-4DBE-808C-AA91936BF6BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeiyuuMoe.Tests.Component", "SeiyuuMoe.Tests.Component\SeiyuuMoe.Tests.Component.csproj", "{DE743EA5-F81B-4DBE-808C-AA91936BF6BE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeiyuuMoe.Tests.Common", "SeiyuuMoe.Tests.Common\SeiyuuMoe.Tests.Common.csproj", "{26E7DB51-2BE0-46C9-B9DE-53A9CE587E9D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deploy", "Deploy", "{9D9A366B-EB7E-4FF3-8358-D1E9A04A89C2}"
+	ProjectSection(SolutionItems) = preProject
+		Deploy\common.psm1 = Deploy\common.psm1
+		Deploy\deploy-mal-bg-jobs.ps1 = Deploy\deploy-mal-bg-jobs.ps1
+		Deploy\deploy-security.ps1 = Deploy\deploy-security.ps1
+		deploy.ps1 = deploy.ps1
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeiyuuMoe.MalBackgroundJobs.Lambda", "SeiyuuMoe.MalBackgroundJobs.Lambda\SeiyuuMoe.MalBackgroundJobs.Lambda.csproj", "{E38B5666-CAB7-4451-96D6-3D961F8A6AAD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeiyuuMoe.MalBackgroundJobs.Application", "SeiyuuMoe.MalBackgroundJobs.Application\SeiyuuMoe.MalBackgroundJobs.Application.csproj", "{A5153B9A-A323-46E8-BC34-283B11983353}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeiyuuMoe.MalBackgroundJobs.LocalLambdaRunner", "SeiyuuMoe.MalBackgroundJobs.LocalLambdaRunner\SeiyuuMoe.MalBackgroundJobs.LocalLambdaRunner.csproj", "{64CFBAC5-619B-43E7-B082-EEFCD06F8D61}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +75,18 @@ Global
 		{26E7DB51-2BE0-46C9-B9DE-53A9CE587E9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{26E7DB51-2BE0-46C9-B9DE-53A9CE587E9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{26E7DB51-2BE0-46C9-B9DE-53A9CE587E9D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E38B5666-CAB7-4451-96D6-3D961F8A6AAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E38B5666-CAB7-4451-96D6-3D961F8A6AAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E38B5666-CAB7-4451-96D6-3D961F8A6AAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E38B5666-CAB7-4451-96D6-3D961F8A6AAD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5153B9A-A323-46E8-BC34-283B11983353}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5153B9A-A323-46E8-BC34-283B11983353}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5153B9A-A323-46E8-BC34-283B11983353}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5153B9A-A323-46E8-BC34-283B11983353}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64CFBAC5-619B-43E7-B082-EEFCD06F8D61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64CFBAC5-619B-43E7-B082-EEFCD06F8D61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64CFBAC5-619B-43E7-B082-EEFCD06F8D61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64CFBAC5-619B-43E7-B082-EEFCD06F8D61}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -70,6 +96,9 @@ Global
 		{CE52CF10-3F7C-424D-98B1-EBC69ECF7F4F} = {C9C9C35A-86E9-48F0-8BE7-594D3772E91A}
 		{DE743EA5-F81B-4DBE-808C-AA91936BF6BE} = {C9C9C35A-86E9-48F0-8BE7-594D3772E91A}
 		{26E7DB51-2BE0-46C9-B9DE-53A9CE587E9D} = {C9C9C35A-86E9-48F0-8BE7-594D3772E91A}
+		{E38B5666-CAB7-4451-96D6-3D961F8A6AAD} = {261D75A0-A7B7-4989-B862-AE3DB9D9C8F0}
+		{A5153B9A-A323-46E8-BC34-283B11983353} = {261D75A0-A7B7-4989-B862-AE3DB9D9C8F0}
+		{64CFBAC5-619B-43E7-B082-EEFCD06F8D61} = {261D75A0-A7B7-4989-B862-AE3DB9D9C8F0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0D18D8DE-F5C0-4254-B3F2-3B6F16384392}

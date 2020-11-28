@@ -1,0 +1,395 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Application stack for MAL Bg Jobs
+Transform: AWS::Serverless-2016-10-31
+
+Parameters:
+  EnvironmentType:
+    Type: String
+    AllowedValues:
+      - dev
+      - prod
+
+Conditions:
+  IsProdEnvironment: !Equals [ !Ref EnvironmentType, prod ]
+
+Mappings:
+  Exports:
+    KmsKeyArn:
+      dev: seiyuu-moe-sec-dev-kms-key-arn
+      prod: seiyuu-moe-sec-prod-kms-key-arn
+    ApplicationSecurityGroupId:
+      dev: seiyuu-moe-sec-dev-app-security-group
+      prod: seiyuu-moe-sec-prod-app-security-group
+
+Resources:
+  JobsStateBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      VersioningConfiguration:
+        Status: Enabled
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              KMSMasterKeyID:
+                Fn::ImportValue: !FindInMap [ Exports, KmsKeyArn, !Ref EnvironmentType ]
+              SSEAlgorithm: aws:kms
+
+  JobsStateBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref JobsStateBucket
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Deny
+            Principal: '*'
+            Action: s3:PutObject
+            Resource: !Sub ${JobsStateBucket.Arn}/*
+            Condition:
+              StringNotEquals:
+                s3:x-amz-server-side-encryption-aws-kms-key-id:
+                  Fn::ImportValue: !FindInMap [ Exports, KmsKeyArn, !Ref EnvironmentType ]
+
+  ScheduleLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - sts:AssumeRole
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
+        - arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess
+        - !Ref ParameterStoreAccessPolicy
+      Policies:
+        - PolicyName: AllowToPopulateSqs
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - sqs:SendMessage
+                  - sqs:SendMessageBatch
+                Resource: 
+                  - !GetAtt AnimeToUpdateQueue.Arn
+                  - !GetAtt CharactersToUpdateQueue.Arn
+  
+  UpdateLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - sts:AssumeRole
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
+        - arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess
+        - !Ref ParameterStoreAccessPolicy
+      Policies:
+        - PolicyName: AllowToReadFromSqs
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - sqs:SendMessage
+                  - sqs:DeleteMessage
+                  - sqs:ReceiveMessage
+                  - sqs:ChangeMessageVisibility
+                  - sqs:GetQueueAttributes
+                Resource: 
+                  - !GetAtt AnimeToUpdateQueue.Arn
+                  - !GetAtt CharactersToUpdateQueue.Arn
+                  - !GetAtt SeiyuuToUpdateQueue.Arn
+        - PolicyName: AllowAccessToJobsStateBucket
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:PutObject
+                Resource: !Sub ${JobsStateBucket.Arn}/*
+              - Effect: Allow
+                Action: s3:ListBucket
+                Resource: !GetAtt JobsStateBucket.Arn
+              - Effect: Allow
+                Action: 
+                  - kms:Decrypt
+                  - kms:GenerateDataKey
+                Resource:
+                  Fn::ImportValue: !FindInMap [Exports, KmsKeyArn, !Ref EnvironmentType ]
+
+  ParameterStoreAccessPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Description: Allows access to Parameter Store
+    Properties:
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action: ssm:GetParametersByPath
+            Resource: !Sub 'arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/*'
+
+  ScheduleAnimesUpdateRule:
+    Type: AWS::Events::Rule
+    Properties:
+      ScheduleExpression: cron(0/15 * 8 * ? *)
+      State: !If
+        - IsProdEnvironment
+        - ENABLED
+        - DISABLED
+      Targets:
+        - Arn: !GetAtt ScheduleAnimesUpdate.Arn
+          Id: LambdaTarget
+  
+  ScheduleAnimesUpdate:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: dotnetcore3.1
+      Description: Lambda for pushing animes on queue for updating
+      FunctionName: ScheduleAnimesUpdate
+      Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.ScheduleAnimesLambda::InvokeAsync
+      MemorySize: 512
+      Timeout: 180
+      Role: !GetAtt ScheduleLambdaRole.Arn
+
+  AnimeToUpdateQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: AnimeToUpdateQueue
+      DelaySeconds: 0
+      ReceiveMessageWaitTimeSeconds: 20
+      RedrivePolicy: 
+        deadLetterTargetArn: !GetAtt AnimeToUpdateDLQ.Arn
+        maxReceiveCount: 3
+      VisibilityTimeout: 30
+
+  AnimeToUpdateDLQ:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: AnimeToUpdateDLQ
+      MessageRetentionPeriod: 1209600
+      ReceiveMessageWaitTimeSeconds: 0
+
+  UpdateAnime:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: dotnetcore3.1
+      Description: Lambda for updating single anime
+      FunctionName: UpdateAnime
+      Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.UpdateAnimeLambda::InvokeAsync
+      MemorySize: 256
+      Timeout: 30
+      ReservedConcurrentExecutions: 1
+      Role: !GetAtt UpdateLambdaRole.Arn
+      Events:
+        SqsEvent:
+          Type: SQS
+          Properties:
+            BatchSize: 1
+            Queue: !GetAtt AnimeToUpdateQueue.Arn
+
+  ScheduleSeiyuuUpdateRule:
+    Type: AWS::Events::Rule
+    Properties:
+      ScheduleExpression: cron(0/15 2-22 ? * SUN *)
+      State: !If
+        - IsProdEnvironment
+        - ENABLED
+        - DISABLED
+      Targets:
+        - Arn: !GetAtt ScheduleSeiyuuUpdate.Arn
+          Id: LambdaTarget
+
+  ScheduleSeiyuuUpdate:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: dotnetcore3.1
+      Description: Lambda for pushing seiyuu on queue for updating
+      FunctionName: ScheduleSeiyuuUpdate
+      Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.ScheduleSeiyuuLambda::InvokeAsync
+      MemorySize: 512
+      Timeout: 180
+      Role: !GetAtt ScheduleLambdaRole.Arn
+
+  SeiyuuToUpdateQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: SeiyuuToUpdateQueue
+      DelaySeconds: 0
+      ReceiveMessageWaitTimeSeconds: 20
+      RedrivePolicy: 
+        deadLetterTargetArn: !GetAtt SeiyuuToUpdateDLQ.Arn
+        maxReceiveCount: 3
+      VisibilityTimeout: 30
+
+  SeiyuuToUpdateDLQ:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: SeiyuuToUpdateDLQ
+      MessageRetentionPeriod: 1209600
+      ReceiveMessageWaitTimeSeconds: 0
+
+  UpdateSeiyuu:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: dotnetcore3.1
+      Description: Lambda for updating single chraracter
+      FunctionName: UpdateSeiyuu
+      Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.UpdateSeiyuuLambda::InvokeAsync
+      MemorySize: 256
+      Timeout: 30
+      ReservedConcurrentExecutions: 1
+      Role: !GetAtt UpdateLambdaRole.Arn
+      Events:
+        SqsEvent:
+          Type: SQS
+          Properties:
+            BatchSize: 1
+            Queue: !GetAtt SeiyuuToUpdateQueue.Arn
+
+  ScheduleCharactersUpdateRule:
+    Type: AWS::Events::Rule
+    Properties:
+      ScheduleExpression: cron(0/15 * 14-20 * ? *)
+      State: !If
+        - IsProdEnvironment
+        - ENABLED
+        - DISABLED
+      Targets:
+        - Arn: !GetAtt ScheduleCharactersUpdate.Arn
+          Id: LambdaTarget
+
+  ScheduleCharactersUpdate:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: dotnetcore3.1
+      Description: Lambda for pushing characters on queue for updating
+      FunctionName: ScheduleCharactersUpdate
+      Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.ScheduleCharactersLambda::InvokeAsync
+      MemorySize: 512
+      Timeout: 180
+      Role: !GetAtt ScheduleLambdaRole.Arn
+
+  CharactersToUpdateQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: CharactersToUpdateQueue
+      DelaySeconds: 0
+      ReceiveMessageWaitTimeSeconds: 20
+      RedrivePolicy: 
+        deadLetterTargetArn: !GetAtt CharacterToUpdateDLQ.Arn
+        maxReceiveCount: 3
+      VisibilityTimeout: 30
+
+  CharacterToUpdateDLQ:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: CharacterToUpdateDLQ
+      MessageRetentionPeriod: 1209600
+      ReceiveMessageWaitTimeSeconds: 0
+
+  UpdateCharacter:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: dotnetcore3.1
+      Description: Lambda for updating single chraracter
+      FunctionName: UpdateCharacter
+      Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.UpdateCharacterLambda::InvokeAsync
+      MemorySize: 256
+      Timeout: 30
+      ReservedConcurrentExecutions: 1
+      Role: !GetAtt UpdateLambdaRole.Arn
+      Events:
+        SqsEvent:
+          Type: SQS
+          Properties:
+            BatchSize: 1
+            Queue: !GetAtt CharactersToUpdateQueue.Arn
+
+  UpdateSeasonsSchedule:
+    Type: AWS::Events::Rule
+    Properties:
+      ScheduleExpression: cron(0 0 1 * ? *)
+      State: !If
+        - IsProdEnvironment
+        - ENABLED
+        - DISABLED
+      Targets:
+        - Arn: !GetAtt UpdateSeasons.Arn
+          Id: LambdaTarget
+
+  UpdateSeasons:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: dotnetcore3.1
+      Description: Lambda for updating seasons table
+      FunctionName: UpdateSeasons
+      Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.UpdateSeasonsLambda::InvokeAsync
+      MemorySize: 256
+      Timeout: 180
+      Role: !GetAtt ScheduleLambdaRole.Arn
+
+  InsertSeiyuuRule:
+    Type: AWS::Events::Rule
+    Properties:
+      ScheduleExpression: cron(0 1 ? * SUN *)
+      State: !If
+        - IsProdEnvironment
+        - ENABLED
+        - DISABLED
+      Targets:
+        - Arn: !GetAtt InsertSeiyuu.Arn
+          Id: LambdaTarget
+  
+  InsertSeiyuu:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: dotnetcore3.1
+      Description: Lambda for inserting new seiyuu
+      FunctionName: InsertSeiyuu
+      Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.InsertSeiyuuLambda::InvokeAsync
+      MemorySize: 256
+      Timeout: 900
+      Role: !GetAtt UpdateLambdaRole.Arn
+
+Globals:
+  Function:
+    Runtime: dotnetcore3.1
+    MemorySize: 512
+    Timeout: 150
+    CodeUri: /bin/Release/netcore3.1/publish
+    Description: !Ref AWS::StackName
+    Tracing: Active
+    Environment:
+      Variables:
+        EnvironmentType: !Ref EnvironmentType
+        AnimeToUpdateQueueUrl: !Ref AnimeToUpdateQueue
+        CharactersToUpdateQueueUrl: !Ref CharactersToUpdateQueue
+        SeiyuuToUpdateQueueUrl: !Ref SeiyuuToUpdateQueue
+        JobsStateBucket: !Ref JobsStateBucket
+        StackName: !Ref AWS::StackName
+    ## Uncomment for private subnets. Costly solution
+    # VpcConfig:
+    #   SubnetIds:
+    #     - subnet-06a875e91c6a5d89b
+    #     - subnet-0e1cec795f5a6a843
+    #     - subnet-0ed5c9801b29d1176
+    #   SecurityGroupIds:
+    #     - Fn::ImportValue: !FindInMap [ Exports, ApplicationSecurityGroupId, !Ref EnvironmentType ]
+    Tags:
+      environment: !Ref EnvironmentType
+      service-name: mal-bg-jobs

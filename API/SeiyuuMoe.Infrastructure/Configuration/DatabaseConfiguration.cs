@@ -13,6 +13,6 @@
 		public string Database { get; set; }
 
 		public string ToConnectionString
-			=> $"Server={Host};Port={Port};Database={Database};Uid={User};Pwd={Password};";
+			=> $"Server={Host};Port={Port};Database={Database};Uid={User};Pwd={Password};Connect Timeout=600;";
 	}
 }

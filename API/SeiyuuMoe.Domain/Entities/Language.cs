@@ -5,7 +5,13 @@ namespace SeiyuuMoe.Domain.Entities
 	public partial class Language
 	{
 		[Key]
-		public long Id { get; set; }
+		public LanguageId Id { get; set; }
 		public string Description { get; set; }
+	}
+
+	public enum LanguageId: int
+	{
+		Japanese = 1,
+		Korean = 2
 	}
 }

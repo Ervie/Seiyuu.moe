@@ -23,7 +23,7 @@ namespace SeiyuuMoe.Application.Animes.Extensions
 					anime.About,
 					anime.AiringDate,
 					anime.Status?.Description ?? string.Empty,
-					anime.Type?.Description ?? string.Empty,
+					anime.Type?.Id.ToString() ?? string.Empty,
 					anime.Season != null
 						? anime.Season.Name + ' ' + anime.Season.Year
 						: string.Empty

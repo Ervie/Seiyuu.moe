@@ -22,9 +22,7 @@ namespace SeiyuuMoe.Application.Animes
 					anime.Title.ToLower().Contains(query.Title.ToLower()) ||
 					(!string.IsNullOrWhiteSpace(anime.KanjiTitle) && anime.KanjiTitle.ToLower().Contains(query.Title.ToLower())) ||
 					(!string.IsNullOrWhiteSpace(anime.EnglishTitle) && anime.EnglishTitle.ToLower().Contains(query.Title.ToLower())) ||
-					(!string.IsNullOrWhiteSpace(anime.TitleSynonyms) && anime.TitleSynonyms.ToLower().Contains(query.Title.ToLower())))
-				.And(query.SeasonId.HasValue, () => anime => query.SeasonId.Equals(anime.SeasonId.Value))
-				.And(query.AnimeTypeId.HasValue && query.AnimeTypeId.Value > 0, () => anime => query.AnimeTypeId.Equals(anime.TypeId.Value));
+					(!string.IsNullOrWhiteSpace(anime.TitleSynonyms) && anime.TitleSynonyms.ToLower().Contains(query.Title.ToLower())));
 		}
 	}
 }

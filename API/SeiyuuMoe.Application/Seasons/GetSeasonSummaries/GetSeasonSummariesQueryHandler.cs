@@ -1,7 +1,4 @@
-﻿using SeiyuuMoe.Application.Animes;
-using SeiyuuMoe.Application.Seasons;
-using SeiyuuMoe.Application.Seasons.Extensions;
-using SeiyuuMoe.Application.Seasons.GetSeasonSummaries;
+﻿using SeiyuuMoe.Application.Seasons.Extensions;
 using SeiyuuMoe.Domain.ComparisonEntities;
 using SeiyuuMoe.Domain.Entities;
 using SeiyuuMoe.Domain.Repositories;
@@ -17,21 +14,18 @@ namespace SeiyuuMoe.Application.Seasons.GetSeasonSummaries
 		private readonly ISeasonRepository _seasonRepository;
 		private readonly IAnimeRepository _animeRepository;
 		private readonly ISeasonRoleRepository _seasonRoleRepository;
-		private readonly IAnimeSearchCriteriaService _animeSearchCriteriaService;
 		private readonly ISeasonSearchCriteriaService _seasonSearchCriteriaService;
 
 		public GetSeasonSummariesQueryHandler(
 			ISeasonRepository seasonRepository,
 			IAnimeRepository animeRepository,
 			ISeasonRoleRepository roleRepository,
-			IAnimeSearchCriteriaService animeSearchCriteriaService,
 			ISeasonSearchCriteriaService seasonSearchCriteriaService
 			)
 		{
 			_seasonRepository = seasonRepository;
 			_animeRepository = animeRepository;
 			_seasonRoleRepository = roleRepository;
-			_animeSearchCriteriaService = animeSearchCriteriaService;
 			_seasonSearchCriteriaService = seasonSearchCriteriaService;
 		}
 
@@ -43,10 +37,11 @@ namespace SeiyuuMoe.Application.Seasons.GetSeasonSummaries
 
 			if (foundSeason != null)
 			{
-				query.Id = foundSeason.Id;
-				var animePredicate = _animeSearchCriteriaService.BuildExpression(query.ToSearchAnimeQuery());
+				var animeTypeId = query.TVSeriesOnly
+					? AnimeTypeId.TV
+					: AnimeTypeId.AllTypes;
 
-				var animeInSeason = await _animeRepository.GetAllAsync(animePredicate);
+				var animeInSeason = await _animeRepository.GetAllBySeasonAndTypeAsync(foundSeason.Id, animeTypeId);
 
 				if (animeInSeason.Any())
 				{

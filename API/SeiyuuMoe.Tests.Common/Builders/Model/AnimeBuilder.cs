@@ -18,8 +18,8 @@ namespace SeiyuuMoe.Tests.Common.Builders.Model
 		private long _malId;
 		private Guid _id;
 
-		private AnimeType _animeType;
 		private AnimeStatus _animeStatus;
+		private AnimeType _animeType;
 		private AnimeSeason _season;
 
 		private AnimeTypeBuilder _animeTypeBuilder;
@@ -103,16 +103,17 @@ namespace SeiyuuMoe.Tests.Common.Builders.Model
 			return this;
 		}
 
-		public AnimeBuilder WithAnimeType(AnimeTypeBuilder animeTypeBuilder)
-		{
-			_animeType = animeTypeBuilder.Build();
-			return this;
-		}
 
 		public AnimeBuilder WithAnimeType(Action<AnimeTypeBuilder> builderAction)
 		{
 			_animeTypeBuilder = new AnimeTypeBuilder();
 			builderAction(_animeTypeBuilder);
+			return this;
+		}
+
+		public AnimeBuilder WithAnimeType(AnimeType animeType)
+		{
+			_animeType = animeType;
 			return this;
 		}
 

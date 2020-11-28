@@ -10,8 +10,8 @@ npm-debug.log
 # Nuxt generate
 dist
 
-# IDE
-.idea
+# config
+API/SeiyuuMoe.API/appsettings.json
 
 # Suggested by @nuxtjs/pwa module
 sw.*

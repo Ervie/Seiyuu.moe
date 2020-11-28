@@ -1,0 +1,52 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Security stack for Seiyuu Moe
+
+Parameters:
+  EnvironmentType:
+    Type: String
+    AllowedValues:
+      - dev
+      - prod
+
+Resources:
+  KmsKey:
+    Type: AWS::KMS::Key
+    Properties:
+      Description: SeiyuuMoe KMS Key
+      KeyPolicy:
+        Version: 2012-10-17
+        Id: !Sub ${AWS::StackName}-kms-key
+        Statement:
+          - Sid: Allow all
+            Effect: Allow
+            Principal:
+              AWS: !Ref AWS::AccountId
+            Action: kms:*
+            Resource: '*'
+
+  KmsKeyAlias:
+    Type: AWS::KMS::Alias
+    Properties:
+      AliasName: !Sub alias/seiyuu-moe-kms-key-${EnvironmentType}
+      TargetKeyId: !GetAtt KmsKey.Arn
+
+  ApplicationSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: !Sub ${AWS::StackName} application security group
+      VpcId: vpc-9bec34f1
+      Tags:
+        - Key: Name
+          Value: !Sub Seiyuu Moe ${EnvironmentType} application security group
+
+Outputs:
+  KmsKeyArn:
+    Export:
+      Name: !Sub ${AWS::StackName}-kms-key-arn
+    Description: Seiyuu Moe KMS Key ARN
+    Value: !GetAtt KmsKey.Arn
+  ApplicationSecurityGroupId:
+    Description: Seiyuu Moe application security group
+    Value: !Ref ApplicationSecurityGroup
+    Export:
+      Name: !Sub ${AWS::StackName}-app-security-group

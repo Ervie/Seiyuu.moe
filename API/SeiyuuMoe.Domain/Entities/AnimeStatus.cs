@@ -11,9 +11,17 @@ namespace SeiyuuMoe.Domain.Entities
 		}
 
 		[Key]
-		public long Id { get; set; }
+		public AnimeStatusId Id { get; set; }
 		public string Description { get; set; }
 
 		public virtual ICollection<Anime> Anime { get; set; }
+	}
+
+	public enum AnimeStatusId: int
+	{
+		All = 0,
+		FinishedAiring = 1,
+		CurrentlyAiring = 2,
+		Notyetaired = 3
 	}
 }

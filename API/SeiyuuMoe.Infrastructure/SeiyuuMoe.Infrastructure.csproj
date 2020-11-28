@@ -4,25 +4,13 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Migrations\20200815190338_AddAutoGenerateIdentity.cs" />
-    <Compile Remove="Migrations\20200815190338_AddAutoGenerateIdentity.Designer.cs" />
-    <Compile Remove="Migrations\20200815190419_AddAutoGenerateIdentity.cs" />
-    <Compile Remove="Migrations\20200815190419_AddAutoGenerateIdentity.Designer.cs" />
-    <Compile Remove="Migrations\20200815190829_AddAutoGenerateIdentity.cs" />
-    <Compile Remove="Migrations\20200815190829_AddAutoGenerateIdentity.Designer.cs" />
-    <Compile Remove="Migrations\20200815195650_AddAutoGenerateIdentity.cs" />
-    <Compile Remove="Migrations\20200815195650_AddAutoGenerateIdentity.Designer.cs" />
-    <Compile Remove="Migrations\20200815200002_AddAutoGenerateIdentity.cs" />
-    <Compile Remove="Migrations\20200815200002_AddAutoGenerateIdentity.Designer.cs" />
-    <Compile Remove="Migrations\20200815200359_AddAutoGenerateIdentity.cs" />
-    <Compile Remove="Migrations\20200815200359_AddAutoGenerateIdentity.Designer.cs" />
-    <Compile Remove="Migrations\20200815200507_AddAutoGenerateIdentity.cs" />
-    <Compile Remove="Migrations\20200815200507_AddAutoGenerateIdentity.Designer.cs" />
-  </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Amazon.Extensions.Configuration.SystemsManager" Version="1.2.0" />
     <PackageReference Include="Autofac" Version="6.0.0" />
+    <PackageReference Include="AWSSDK.S3" Version="3.3.113.2" />
+    <PackageReference Include="AWSSDK.SQS" Version="3.3.103.26" />
+    <PackageReference Include="JikanDotNet" Version="1.5.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.8">

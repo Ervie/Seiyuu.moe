@@ -19,8 +19,6 @@ namespace SeiyuuMoe.JikanToDBParser
 	public class JikanParser : IJikanParser
 	{
 		private readonly IAnimeRepository _animeRepository;
-		private readonly IAnimeStatusRepository _animeStatusRepository;
-		private readonly IAnimeTypeRepository _animeTypeRepository;
 		private readonly IBlacklistedIdRepository _blacklistedIdRepository;
 		private readonly ICharacterRepository _characterRepository;
 
@@ -35,8 +33,6 @@ namespace SeiyuuMoe.JikanToDBParser
 			SeiyuuMoeConfiguration seiyuuMoeConfiguration,
 			ILoggingService loggingService,
 			IAnimeRepository animeRepository,
-			IAnimeStatusRepository animeStatusRepository,
-			IAnimeTypeRepository animeTypeRepository,
 			IBlacklistedIdRepository blacklistedIdRepository,
 			ICharacterRepository characterRepository,
 			IAnimeRoleRepository animeRoleRepository,
@@ -50,8 +46,6 @@ namespace SeiyuuMoe.JikanToDBParser
 			_animeRepository = animeRepository;
 			_seasonRepository = seasonRepository;
 			_seiyuuRepository = seiyuuRepository;
-			_animeTypeRepository = animeTypeRepository;
-			_animeStatusRepository = animeStatusRepository;
 			_blacklistedIdRepository = blacklistedIdRepository;
 			_characterRepository = characterRepository;
 			_animeRoleRepository = animeRoleRepository;
@@ -430,8 +424,8 @@ namespace SeiyuuMoe.JikanToDBParser
 				anime.TitleSynonyms = string.Join(';', animeParsedData.TitleSynonyms);
 			}
 
-			anime.TypeId = await MatchAnimeType(animeParsedData.Type);
-			anime.StatusId = await MatchAnimeStatus(animeParsedData.Status);
+			anime.TypeId = MatchAnimeType(animeParsedData.Type);
+			anime.StatusId = MatchAnimeStatus(animeParsedData.Status);
 			anime.SeasonId = string.IsNullOrEmpty(animeParsedData.Premiered)
 				? await MatchSeason(animeParsedData.Aired.From)
 				: await MatchSeason(animeParsedData.Premiered);
@@ -663,18 +657,18 @@ namespace SeiyuuMoe.JikanToDBParser
 
 		#region ForeignKeyMatching
 
-		private async Task<long?> MatchAnimeType(string typeName)
+		private AnimeTypeId? MatchAnimeType(string typeName)
 		{
-			var foundType = await _animeTypeRepository.GetByNameAsync(typeName);
+			Enum.TryParse(typeName, out AnimeTypeId result);
 
-			return foundType?.Id;
+			return result;
 		}
 
-		private async Task<long?> MatchAnimeStatus(string statusName)
+		private AnimeStatusId? MatchAnimeStatus(string statusName)
 		{
-			var foundStatus = await _animeStatusRepository.GetByNameAsync(statusName);
+			Enum.TryParse(statusName, out AnimeStatusId result);
 
-			return foundStatus?.Id;
+			return result;
 		}
 
 		private async Task<long?> MatchSeason(string seasonName)
@@ -778,8 +772,8 @@ namespace SeiyuuMoe.JikanToDBParser
 						await _animeRoleRepository.AddAsync(new AnimeRole
 						{
 							Id = Guid.NewGuid(),
-							LanguageId = 1, // Always japanese for now
-							RoleTypeId = voiceActingRole.Role.Equals("Main") ? 1 : 2,
+							LanguageId = LanguageId.Japanese, // Always japanese for now
+							RoleTypeId = voiceActingRole.Role.Equals("Main") ? AnimeRoleTypeId.Main : AnimeRoleTypeId.Supporting,
 							AnimeId = animeInDatabase.Id,
 							CharacterId = characterInDatabase.Id,
 							SeiyuuId = seiyuuId
@@ -825,8 +819,8 @@ namespace SeiyuuMoe.JikanToDBParser
 							EnglishTitle = animeFullData.TitleEnglish,
 							TitleSynonyms = titleSynonym,
 							AiringDate = animeFullData.Aired.From ?? DateTime.MinValue,
-							StatusId = await MatchAnimeStatus(animeFullData.Status),
-							TypeId = await MatchAnimeType(animeFullData.Type),
+							StatusId = MatchAnimeStatus(animeFullData.Status),
+							TypeId = MatchAnimeType(animeFullData.Type),
 							SeasonId = await MatchSeason(animeFullData.Premiered)
 						};
 

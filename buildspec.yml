@@ -1,0 +1,11 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - dotnet restore ./API/SeiyuuMoe.sln
+  build:
+    commands:
+      - dotnet build -c Release ./API/SeiyuuMoe.sln
+      - dotnet test -c Release ./API/SeiyuuMoe.Tests.Unit/SeiyuuMoe.Tests.Unit.csproj
+      - dotnet test -c Release ./API/SeiyuuMoe.Tests.Component/SeiyuuMoe.Tests.Component.csproj

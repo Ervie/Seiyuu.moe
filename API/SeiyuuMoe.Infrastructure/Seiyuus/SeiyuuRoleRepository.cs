@@ -23,9 +23,9 @@ namespace SeiyuuMoe.Infrastructure.Seiyuus
 			.Include(a => a.Anime)
 			.Include(a => a.Character)
 			.Include(a => a.Seiyuu)
-			.Where(x => x.LanguageId == 1
+			.Where(x => x.LanguageId == LanguageId.Japanese
 				&& x.SeiyuuId == seiyuuId
-				&& (!mainRolesOnly || x.RoleTypeId == 1))
+				&& (!mainRolesOnly || x.RoleTypeId == AnimeRoleTypeId.Main))
 			.ToListAsync();
 
 		public async Task<IReadOnlyList<AnimeRole>> GetAllSeiyuuRolesByMalIdAsync(long seiyuuMalId, bool mainRolesOnly)
@@ -33,9 +33,9 @@ namespace SeiyuuMoe.Infrastructure.Seiyuus
 			.Include(a => a.Anime)
 			.Include(a => a.Character)
 			.Include(a => a.Seiyuu)
-			.Where(x => x.LanguageId == 1
+			.Where(x => x.LanguageId == LanguageId.Japanese
 				&& x.Seiyuu.MalId == seiyuuMalId
-				&& (!mainRolesOnly || x.RoleTypeId == 1))
+				&& (!mainRolesOnly || x.RoleTypeId == AnimeRoleTypeId.Main))
 			.ToListAsync();
 	}
 }

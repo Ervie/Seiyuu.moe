@@ -1,16 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SeiyuuMoe.Domain.Entities;
 using SeiyuuMoe.Infrastructure.Configuration;
+using System;
 
 namespace SeiyuuMoe.Infrastructure.Context
 {
 	public partial class SeiyuuMoeContext : DbContext
 	{
 		private readonly DatabaseConfiguration _databaseConfiguration;
-
-		public SeiyuuMoeContext()
-		{
-		}
 
 		public SeiyuuMoeContext(DbContextOptions<SeiyuuMoeContext> options)
 			: base(options)
@@ -35,10 +32,11 @@ namespace SeiyuuMoe.Infrastructure.Context
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
-			if (!optionsBuilder.IsConfigured)
+			if (optionsBuilder.IsConfigured)
 			{
-				optionsBuilder.UseMySql(_databaseConfiguration.ToConnectionString);
+				return;
 			}
+			optionsBuilder.UseMySql(_databaseConfiguration.ToConnectionString);
 		}
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -55,6 +53,10 @@ namespace SeiyuuMoe.Infrastructure.Context
 
 				entity.Property(e => e.Title).IsRequired();
 
+				entity.Property(e => e.StatusId).HasConversion<int>();
+
+				entity.Property(e => e.TypeId).HasConversion<int>();
+
 				entity.HasOne(d => d.Season)
 					.WithMany(p => p.Anime)
 					.HasForeignKey(d => d.SeasonId)
@@ -69,23 +71,20 @@ namespace SeiyuuMoe.Infrastructure.Context
 					.WithMany(p => p.Anime)
 					.HasForeignKey(d => d.TypeId)
 					.OnDelete(DeleteBehavior.SetNull);
-			});
 
-			modelBuilder.Entity<AnimeCharacter>(entity =>
-			{
-				entity.HasIndex(e => e.MalId).IsUnique();
+				entity.Property(e => e.ModificationDate).HasColumnType("datetime").HasDefaultValueSql("current_timestamp()");
 			});
 
 			modelBuilder.Entity<AnimeStatus>(entity =>
 			{
-				entity.Property(e => e.Id).ValueGeneratedNever();
+				entity.Property(e => e.Id).HasConversion<int>();
 
 				entity.Property(e => e.Description).IsRequired();
 			});
 
 			modelBuilder.Entity<AnimeType>(entity =>
 			{
-				entity.Property(e => e.Id).ValueGeneratedNever();
+				entity.Property(e => e.Id).HasConversion<int>();
 
 				entity.Property(e => e.Description).IsRequired();
 			});
@@ -106,11 +105,13 @@ namespace SeiyuuMoe.Infrastructure.Context
 				entity.HasIndex(e => e.MalId).IsUnique();
 
 				entity.Property(e => e.Name).IsRequired();
+
+				entity.Property(e => e.ModificationDate).HasColumnType("datetime").HasDefaultValueSql("current_timestamp()");
 			});
 
 			modelBuilder.Entity<Language>(entity =>
 			{
-				entity.Property(e => e.Id).ValueGeneratedNever();
+				entity.Property(e => e.Id).HasConversion<int>();
 
 				entity.Property(e => e.Description).IsRequired();
 			});
@@ -118,6 +119,10 @@ namespace SeiyuuMoe.Infrastructure.Context
 			modelBuilder.Entity<AnimeRole>(entity =>
 			{
 				entity.Property(e => e.Id).HasDefaultValueSql("(uuid())");
+
+				entity.Property(e => e.LanguageId).HasConversion<int>();
+
+				entity.Property(e => e.RoleTypeId).HasConversion<int>();
 
 				entity.HasOne(d => d.Anime)
 					.WithMany(p => p.Role)
@@ -142,7 +147,7 @@ namespace SeiyuuMoe.Infrastructure.Context
 
 			modelBuilder.Entity<AnimeRoleType>(entity =>
 			{
-				entity.Property(e => e.Id).ValueGeneratedNever();
+				entity.Property(e => e.Id).HasConversion<int>();
 
 				entity.Property(e => e.Description).IsRequired();
 			});
@@ -158,6 +163,7 @@ namespace SeiyuuMoe.Infrastructure.Context
 				entity.Property(e => e.Id).HasDefaultValueSql("(uuid())");
 				entity.HasIndex(e => e.MalId).IsUnique();
 				entity.Property(e => e.Birthday).HasColumnType("DATE");
+				entity.Property(e => e.ModificationDate).HasColumnType("datetime").HasDefaultValueSql("current_timestamp()");
 
 				entity.Property(e => e.Name).IsRequired();
 			});

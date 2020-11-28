@@ -1,6 +1,5 @@
 ﻿using SeiyuuMoe.Application.Animes.Extensions;
 using SeiyuuMoe.Domain.Repositories;
-using SeiyuuMoe.Domain.WebEssentials;
 using System.Threading.Tasks;
 
 namespace SeiyuuMoe.Application.Animes.GetAnimeCardInfo

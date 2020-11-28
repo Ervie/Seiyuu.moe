@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.EntityFrameworkCore;
+using SeiyuuMoe.Domain.Entities;
 using SeiyuuMoe.Infrastructure.Animes;
 using SeiyuuMoe.Tests.Common.Builders.Model;
 using SeiyuuMoe.Tests.Common.Helpers;
@@ -41,8 +42,8 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			const string expectedJapaneseTitle = "期待される日本語タイトル";
 			const string expectedTitleSynonyms = "expectedTitleSynonyms";
 			const string expectedAbout = "ExpectedAbout";
-			const string expectedType = "ExpectedType";
 			const string expectedStatus = "ExpectedStatus";
+			var expectedType = AnimeTypeId.TV;
 			const long expectedMalId = 1;
 
 			var anime = new AnimeBuilder()
@@ -52,7 +53,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 				.WithJapaneseTitle(expectedJapaneseTitle)
 				.WithTitleSynonyms(expectedTitleSynonyms)
 				.WithAbout(expectedAbout)
-				.WithAnimeType(at => at.WithName(expectedType))
+				.WithAnimeType(at => at.WithId(expectedType))
 				.WithAnimeStatus(at => at.WithName(expectedStatus))
 				.Build();
 
@@ -74,7 +75,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 				newAnime.KanjiTitle.Should().Be(expectedJapaneseTitle);
 				newAnime.TitleSynonyms.Should().Be(expectedTitleSynonyms);
 				newAnime.About.Should().Be(expectedAbout);
-				newAnime.Type.Description.Should().Be(expectedType);
+				newAnime.Type.Id.Should().Be(expectedType);
 				newAnime.Status.Description.Should().Be(expectedStatus);
 			}
 		}
@@ -129,7 +130,13 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			// Then
 			var allAnimes = await dbContext.Animes.ToListAsync();
 
-			allAnimes.Should().ContainSingle().Which.Title.Should().Be("Updated");
+			using (new AssertionScope())
+			{
+				var updateAnime = allAnimes.SingleOrDefault();
+				updateAnime.Should().NotBeNull();
+				updateAnime.Title.Should().Be("Updated");
+				updateAnime.ModificationDate.Should().HaveDay(DateTime.UtcNow.Day);
+			}
 		}
 
 		[Fact]
@@ -218,7 +225,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var anime = new AnimeBuilder()
 				 .WithTitle("Test")
 				 .WithAnimeStatus(x => x.WithName("Airing"))
-				 .WithAnimeType(x => x.WithName("TV"))
+				 .WithAnimeType(x => x.WithId(AnimeTypeId.TV))
 				 .WithTitle("ExpectedTitle")
 				 .WithImageUrl("ExpectedImageUrl")
 				 .WithAbout("ExpectedAbout")
@@ -240,7 +247,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 				result.ImageUrl.Should().Be("ExpectedImageUrl");
 				result.About.Should().Be("ExpectedAbout");
 				result.Type.Should().NotBeNull();
-				result.Type.Description.Should().Be("TV");
+				result.Type.Id.Should().Be(AnimeTypeId.TV);
 				result.Status.Should().NotBeNull();
 				result.Status.Description.Should().Be("Airing");
 			}
@@ -287,7 +294,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var anime = new AnimeBuilder()
 				.WithTitle("Test")
 				.WithAnimeStatus(x => x.WithName("Airing"))
-				.WithAnimeType(x => x.WithName("TV"))
+				.WithAnimeType(x => x.WithId(AnimeTypeId.TV))
 				.WithSeason(x => x.WithName("Spring").WithYear(2020).Build())
 				.Build();
 
@@ -306,7 +313,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			{
 				addedAnime.Should().NotBeNull();
 				addedAnime.Type.Should().NotBeNull();
-				addedAnime.Type.Description.Should().Be("TV");
+				addedAnime.Type.Id.Should().Be(AnimeTypeId.TV);
 				addedAnime.Status.Should().NotBeNull();
 				addedAnime.Status.Description.Should().Be("Airing");
 				addedAnime.Season.Should().NotBeNull();
@@ -338,36 +345,47 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 		}
 
 		[Fact]
-		public async Task GetAllAsync_GivenMultipleAnimeWithEmptyPredicate_ShouldReturnAll()
+		public async Task GetAllBySeasonAndTypeAsync_GivenMultipleAnimeInSeasonWithType_ShouldReturnAll()
 		{
 			// Given
 			var dbContext = InMemoryDbProvider.GetDbContext();
 			var repository = new AnimeRepository(dbContext);
-			var anime1 = new AnimeBuilder().WithTitle("Test1").Build();
-			var anime2 = new AnimeBuilder().WithTitle("Test2").Build();
-			var anime3 = new AnimeBuilder().WithTitle("Test3").Build();
+			const int seasonId = 100;
+			const AnimeTypeId animeTypeId = AnimeTypeId.TV;
+			var animeType = new AnimeTypeBuilder().WithId(animeTypeId).Build();
+			var season = new SeasonBuilder().WithId(seasonId).WithName("Winter").WithYear(2000).Build();
+			var anime1 = new AnimeBuilder().WithTitle("Test1").WithSeason(season).WithAnimeType(animeType).Build();
+			var anime2 = new AnimeBuilder().WithTitle("Test2").WithSeason(season).WithAnimeType(animeType).Build();
+			var anime3 = new AnimeBuilder().WithTitle("Test3").WithSeason(season).WithAnimeType(animeType).Build();
 
+			await dbContext.AnimeSeasons.AddAsync(season);
 			await dbContext.Animes.AddAsync(anime1);
 			await dbContext.Animes.AddAsync(anime2);
 			await dbContext.Animes.AddAsync(anime3);
 			await dbContext.SaveChangesAsync();
 
 			// When
-			var result = await repository.GetAllAsync(x => true);
+			var result = await repository.GetAllBySeasonAndTypeAsync(seasonId, animeTypeId);
 
 			// Then
 			result.Should().HaveCount(3);
 		}
 
 		[Fact]
-		public async Task GetAllAsync_GivenMultipleAnimeWithPredicate_ShouldReturnPartial()
+		public async Task GetAllBySeasonAndTypeAsync_GivenMultipleAnimeOnlyOneInSeasonWithType_ShouldReturnSingle()
 		{
 			// Given
 			var dbContext = InMemoryDbProvider.GetDbContext();
 			var repository = new AnimeRepository(dbContext);
-			var anime1 = new AnimeBuilder().WithTitle("Test1").Build();
-			var anime2 = new AnimeBuilder().WithTitle("Test2").Build();
-			var anime3 = new AnimeBuilder().WithTitle("Test3").Build();
+			const int seasonId1 = 100;
+			const int seasonId2 = 101;
+			const AnimeTypeId animeTypeId = AnimeTypeId.TV;
+			var animeType = new AnimeTypeBuilder().WithId(animeTypeId).Build();
+			var season1 = new SeasonBuilder().WithId(seasonId1).WithName("Winter").WithYear(2000).Build();
+			var season2 = new SeasonBuilder().WithId(seasonId2).WithName("Spring").WithYear(2000).Build();
+			var anime1 = new AnimeBuilder().WithTitle("Test1").WithSeason(season1).WithAnimeType(animeType).Build();
+			var anime2 = new AnimeBuilder().WithTitle("Test2").WithSeason(season1).WithAnimeType(animeType).Build();
+			var anime3 = new AnimeBuilder().WithTitle("Test3").WithSeason(season2).WithAnimeType(animeType).Build();
 
 			await dbContext.Animes.AddAsync(anime1);
 			await dbContext.Animes.AddAsync(anime2);
@@ -375,7 +393,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			await dbContext.SaveChangesAsync();
 
 			// When
-			var result = await repository.GetAllAsync(x => x.Title.EndsWith("3"));
+			var result = await repository.GetAllBySeasonAndTypeAsync(seasonId2, animeTypeId);
 
 			// Then
 			result.Should().ContainSingle();

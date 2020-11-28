@@ -4,24 +4,16 @@ namespace SeiyuuMoe.Tests.Common.Builders.Model
 {
 	public class LanguageBuilder
 	{
-		private string _description;
-		private int _id;
+		private LanguageId _languageId;
 
 		public Language Build() => new Language
 		{
-			Description = _description,
-			Id = _id
+			Id = _languageId
 		};
 
-		public LanguageBuilder WithDescription(string description)
+		public LanguageBuilder WithLanguageId(LanguageId languageId)
 		{
-			_description = description;
-			return this;
-		}
-
-		public LanguageBuilder WithId(int id)
-		{
-			_id = id;
+			_languageId = languageId;
 			return this;
 		}
 	}

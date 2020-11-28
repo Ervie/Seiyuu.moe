@@ -20,19 +20,10 @@ namespace SeiyuuMoe.Infrastructure.Logger
 			_logger = LogManager.GetCurrentClassLogger();
 		}
 
-		public void Info(string message)
-		{
-			_logger.Log(LogLevel.Info, message);
-		}
+		public void Info(string message) => _logger.Log(LogLevel.Info, message);
 
-		public void Error(string message)
-		{
-			_logger.Log(LogLevel.Error, message);
-		}
+		public void Error(string message) => _logger.Log(LogLevel.Error, message);
 
-		public void Log(string message)
-		{
-			_logger.Log(LogLevel.Info, message);
-		}
+		public void Log(string message) => _logger.Log(LogLevel.Info, message);
 	}
 }

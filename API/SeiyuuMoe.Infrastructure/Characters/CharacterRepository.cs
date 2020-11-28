@@ -3,6 +3,8 @@ using SeiyuuMoe.Domain.Entities;
 using SeiyuuMoe.Domain.Repositories;
 using SeiyuuMoe.Domain.WebEssentials;
 using SeiyuuMoe.Infrastructure.Context;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -45,8 +47,17 @@ namespace SeiyuuMoe.Infrastructure.Characters
 			};
 		}
 
+		public async Task<IReadOnlyList<AnimeCharacter>> GetOlderThanModifiedDate(DateTime olderThan, int pageSize = 150)
+			=> await _dbContext.AnimeCharacters
+				.Where(x => x.ModificationDate < olderThan)
+				.OrderBy(x => x.ModificationDate)
+				.ThenBy(x => x.Id)
+				.Take(pageSize)
+				.ToListAsync();
+
 		public async Task UpdateAsync(AnimeCharacter character)
 		{
+			character.ModificationDate = DateTime.UtcNow;
 			_dbContext.Update(character);
 			await _dbContext.SaveChangesAsync();
 		}

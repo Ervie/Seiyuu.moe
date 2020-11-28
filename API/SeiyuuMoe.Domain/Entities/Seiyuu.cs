@@ -23,6 +23,7 @@ namespace SeiyuuMoe.Domain.Entities
 		public string KanjiName { get; set; }
 		public string About { get; set; }
 		public DateTime? Birthday { get; set; }
+		public DateTime ModificationDate { get; set; }
 
 		public virtual ICollection<AnimeRole> Role { get; set; }
 	}

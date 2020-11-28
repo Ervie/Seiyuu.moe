@@ -22,5 +22,7 @@ namespace SeiyuuMoe.Domain.Repositories
 		Task<int> GetSeiyuuCountAsync();
 
 		Task<long?> GetLastSeiyuuMalId();
+
+		Task<IReadOnlyList<Seiyuu>> GetOlderThanModifiedDate(DateTime olderThan, int pageSize = 150);
 	}
 }

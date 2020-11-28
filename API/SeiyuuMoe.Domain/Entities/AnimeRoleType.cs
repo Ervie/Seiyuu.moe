@@ -11,9 +11,16 @@ namespace SeiyuuMoe.Domain.Entities
 		}
 
 		[Key]
-		public long Id { get; set; }
+		public AnimeRoleTypeId Id { get; set; }
 		public string Description { get; set; }
 
 		public virtual ICollection<AnimeRole> Role { get; set; }
+	}
+
+	public enum AnimeRoleTypeId: int
+	{
+		All = 0,
+		Main = 1,
+		Supporting = 2
 	}
 }

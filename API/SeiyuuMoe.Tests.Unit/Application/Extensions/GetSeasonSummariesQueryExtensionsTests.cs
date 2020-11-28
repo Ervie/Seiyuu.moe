@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
 using SeiyuuMoe.Application.Seasons.Extensions;
-using SeiyuuMoe.Domain.Enums;
+using SeiyuuMoe.Domain.Entities;
 using SeiyuuMoe.Tests.Common.Builders.Queries;
 using Xunit;
 
@@ -49,9 +49,9 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Application.Extensions
 		}
 
 		[Theory]
-		[InlineData(false, AnimeTypeDictionary.AllTypes)]
-		[InlineData(true, AnimeTypeDictionary.TV)]
-		public void ToSearchAnimeQuery_GivenTvSeriesOnly_ShouldReturnQueryWithMappedAnimeType(bool tvSeriesOnly, AnimeTypeDictionary expectedAnimeType)
+		[InlineData(false, AnimeTypeId.AllTypes)]
+		[InlineData(true, AnimeTypeId.TV)]
+		public void ToSearchAnimeQuery_GivenTvSeriesOnly_ShouldReturnQueryWithMappedAnimeType(bool tvSeriesOnly, AnimeTypeId expectedAnimeType)
 		{
 			// Given
 			var query = new GetSeasonSummariesQueryBuilder()

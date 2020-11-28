@@ -24,9 +24,10 @@ namespace SeiyuuMoe.Domain.Entities
 		public string TitleSynonyms { get; set; }
 		public string About { get; set; }
 		public DateTime AiringDate { get; set; }
-		public long? StatusId { get; set; }
-		public long? TypeId { get; set; }
+		public AnimeStatusId? StatusId { get; set; }
+		public AnimeTypeId? TypeId { get; set; }
 		public long? SeasonId { get; set; }
+		public DateTime ModificationDate { get; set; }
 
 		public virtual AnimeSeason Season { get; set; }
 		public virtual AnimeStatus Status { get; set; }
