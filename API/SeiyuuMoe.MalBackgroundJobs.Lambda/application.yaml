@@ -25,6 +25,7 @@ Resources:
   JobsStateBucket:
     Type: AWS::S3::Bucket
     Properties:
+      BucketName: !Sub jobs-state-bucket-${EnvironmentType}
       VersioningConfiguration:
         Status: Enabled
       BucketEncryption:
@@ -147,6 +148,7 @@ Resources:
     Type: AWS::Events::Rule
     Properties:
       ScheduleExpression: cron(0/15 * 8 * ? *)
+      Name: !Sub schedule-animes-update-rule-${EnvironmentType}
       State: !If
         - IsProdEnvironment
         - ENABLED
@@ -160,7 +162,7 @@ Resources:
     Properties:
       Runtime: dotnetcore3.1
       Description: Lambda for pushing animes on queue for updating
-      FunctionName: ScheduleAnimesUpdate
+      FunctionName: !Sub schedule-animes-update-${EnvironmentType}
       Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.ScheduleAnimesLambda::InvokeAsync
       MemorySize: 512
       Timeout: 180
@@ -169,7 +171,7 @@ Resources:
   AnimeToUpdateQueue:
     Type: AWS::SQS::Queue
     Properties:
-      QueueName: AnimeToUpdateQueue
+      QueueName: !Sub anime-to-update-queue-${EnvironmentType}
       DelaySeconds: 0
       ReceiveMessageWaitTimeSeconds: 20
       RedrivePolicy: 
@@ -180,7 +182,7 @@ Resources:
   AnimeToUpdateDLQ:
     Type: AWS::SQS::Queue
     Properties:
-      QueueName: AnimeToUpdateDLQ
+      QueueName: !Sub  dlq-${EnvironmentType}
       MessageRetentionPeriod: 1209600
       ReceiveMessageWaitTimeSeconds: 0
 
@@ -189,7 +191,7 @@ Resources:
     Properties:
       Runtime: dotnetcore3.1
       Description: Lambda for updating single anime
-      FunctionName: UpdateAnime
+      FunctionName: !Sub update-anime-${EnvironmentType}
       Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.UpdateAnimeLambda::InvokeAsync
       MemorySize: 256
       Timeout: 30
@@ -206,6 +208,7 @@ Resources:
     Type: AWS::Events::Rule
     Properties:
       ScheduleExpression: cron(0/15 2-22 ? * SUN *)
+      Name: !Sub schedule-seiyuu-update-rule-${EnvironmentType}
       State: !If
         - IsProdEnvironment
         - ENABLED
@@ -219,7 +222,7 @@ Resources:
     Properties:
       Runtime: dotnetcore3.1
       Description: Lambda for pushing seiyuu on queue for updating
-      FunctionName: ScheduleSeiyuuUpdate
+      FunctionName: !Sub schedule-seiyuu-update-${EnvironmentType}
       Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.ScheduleSeiyuuLambda::InvokeAsync
       MemorySize: 512
       Timeout: 180
@@ -228,7 +231,7 @@ Resources:
   SeiyuuToUpdateQueue:
     Type: AWS::SQS::Queue
     Properties:
-      QueueName: SeiyuuToUpdateQueue
+      QueueName: !Sub seiyuu-to-update-queue-${EnvironmentType}
       DelaySeconds: 0
       ReceiveMessageWaitTimeSeconds: 20
       RedrivePolicy: 
@@ -239,7 +242,7 @@ Resources:
   SeiyuuToUpdateDLQ:
     Type: AWS::SQS::Queue
     Properties:
-      QueueName: SeiyuuToUpdateDLQ
+      QueueName: !Sub seiyuu-dlq-${EnvironmentType}
       MessageRetentionPeriod: 1209600
       ReceiveMessageWaitTimeSeconds: 0
 
@@ -248,7 +251,7 @@ Resources:
     Properties:
       Runtime: dotnetcore3.1
       Description: Lambda for updating single chraracter
-      FunctionName: UpdateSeiyuu
+      FunctionName: !Sub update-seiyuu-${EnvironmentType}
       Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.UpdateSeiyuuLambda::InvokeAsync
       MemorySize: 256
       Timeout: 30
@@ -265,6 +268,7 @@ Resources:
     Type: AWS::Events::Rule
     Properties:
       ScheduleExpression: cron(0/15 * 14-20 * ? *)
+      Name: !Sub schedule-characters-update-rule-${EnvironmentType}
       State: !If
         - IsProdEnvironment
         - ENABLED
@@ -278,7 +282,7 @@ Resources:
     Properties:
       Runtime: dotnetcore3.1
       Description: Lambda for pushing characters on queue for updating
-      FunctionName: ScheduleCharactersUpdate
+      FunctionName: !Sub schedule-characters-update-${EnvironmentType}
       Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.ScheduleCharactersLambda::InvokeAsync
       MemorySize: 512
       Timeout: 180
@@ -287,18 +291,18 @@ Resources:
   CharactersToUpdateQueue:
     Type: AWS::SQS::Queue
     Properties:
-      QueueName: CharactersToUpdateQueue
+      QueueName: !Sub characters-to-update-queue-${EnvironmentType}
       DelaySeconds: 0
       ReceiveMessageWaitTimeSeconds: 20
       RedrivePolicy: 
-        deadLetterTargetArn: !GetAtt CharacterToUpdateDLQ.Arn
+        deadLetterTargetArn: !GetAtt CharactersToUpdateDLQ.Arn
         maxReceiveCount: 3
       VisibilityTimeout: 30
 
-  CharacterToUpdateDLQ:
+  CharactersToUpdateDLQ:
     Type: AWS::SQS::Queue
     Properties:
-      QueueName: CharacterToUpdateDLQ
+      QueueName: !Sub characters-dlq-${EnvironmentType}
       MessageRetentionPeriod: 1209600
       ReceiveMessageWaitTimeSeconds: 0
 
@@ -307,7 +311,7 @@ Resources:
     Properties:
       Runtime: dotnetcore3.1
       Description: Lambda for updating single chraracter
-      FunctionName: UpdateCharacter
+      FunctionName: !Sub update-characters-${EnvironmentType}
       Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.UpdateCharacterLambda::InvokeAsync
       MemorySize: 256
       Timeout: 30
@@ -324,6 +328,7 @@ Resources:
     Type: AWS::Events::Rule
     Properties:
       ScheduleExpression: cron(0 0 1 * ? *)
+      Name: !Sub update-seasons-rule-${EnvironmentType}
       State: !If
         - IsProdEnvironment
         - ENABLED
@@ -337,7 +342,7 @@ Resources:
     Properties:
       Runtime: dotnetcore3.1
       Description: Lambda for updating seasons table
-      FunctionName: UpdateSeasons
+      FunctionName: !Sub update-seasons-${EnvironmentType}
       Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.UpdateSeasonsLambda::InvokeAsync
       MemorySize: 256
       Timeout: 180
@@ -347,6 +352,7 @@ Resources:
     Type: AWS::Events::Rule
     Properties:
       ScheduleExpression: cron(0 1 ? * SUN *)
+      Name: !Sub insert-seiyuu-rule-${EnvironmentType}
       State: !If
         - IsProdEnvironment
         - ENABLED
@@ -360,7 +366,7 @@ Resources:
     Properties:
       Runtime: dotnetcore3.1
       Description: Lambda for inserting new seiyuu
-      FunctionName: InsertSeiyuu
+      FunctionName: !Sub insert-seiyuu-${EnvironmentType}
       Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.InsertSeiyuuLambda::InvokeAsync
       MemorySize: 256
       Timeout: 900
