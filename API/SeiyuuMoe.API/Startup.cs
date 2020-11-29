@@ -11,7 +11,6 @@ using Microsoft.Extensions.Hosting;
 using SeiyuuMoe.Application;
 using SeiyuuMoe.Infrastructure;
 using SeiyuuMoe.Infrastructure.Configuration;
-using SeiyuuMoe.JikanToDBParser;
 using System;
 
 namespace SeiyuuMoe.API
@@ -53,7 +52,6 @@ namespace SeiyuuMoe.API
 			builder.RegisterModule(new InfrastructureModule());
 			builder.RegisterModule(new DomainModule());
 			builder.RegisterModule(new ApplicationModule());
-			builder.RegisterModule(new JikanParserModule());
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
