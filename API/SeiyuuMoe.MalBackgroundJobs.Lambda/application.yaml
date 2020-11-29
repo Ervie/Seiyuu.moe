@@ -156,6 +156,15 @@ Resources:
       Targets:
         - Arn: !GetAtt ScheduleAnimesUpdate.Arn
           Id: LambdaTarget
+
+  ScheduleAnimesUpdatePermission: 
+    Type: AWS::Lambda::Permission
+    Properties: 
+      FunctionName: !Ref ScheduleAnimesUpdate
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn: 
+        !GetAtt ScheduleAnimesUpdateRule.Arn
   
   ScheduleAnimesUpdate:
     Type: AWS::Serverless::Function
@@ -217,6 +226,15 @@ Resources:
         - Arn: !GetAtt ScheduleSeiyuuUpdate.Arn
           Id: LambdaTarget
 
+  ScheduleSeiyuuUpdatePermission: 
+    Type: AWS::Lambda::Permission
+    Properties: 
+      FunctionName: !Ref ScheduleSeiyuuUpdate
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn: 
+        !GetAtt ScheduleSeiyuuUpdateRule.Arn
+
   ScheduleSeiyuuUpdate:
     Type: AWS::Serverless::Function
     Properties:
@@ -276,6 +294,15 @@ Resources:
       Targets:
         - Arn: !GetAtt ScheduleCharactersUpdate.Arn
           Id: LambdaTarget
+  
+  ScheduleCharactersUpdatePermission: 
+    Type: AWS::Lambda::Permission
+    Properties: 
+      FunctionName: !Ref ScheduleCharactersUpdate
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn: 
+        !GetAtt ScheduleCharactersUpdateRule.Arn
 
   ScheduleCharactersUpdate:
     Type: AWS::Serverless::Function
@@ -336,6 +363,15 @@ Resources:
       Targets:
         - Arn: !GetAtt UpdateSeasons.Arn
           Id: LambdaTarget
+  
+  UpdateSeasonsPermission: 
+    Type: AWS::Lambda::Permission
+    Properties: 
+      FunctionName: !Ref UpdateSeasons
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn: 
+        !GetAtt UpdateSeasonsSchedule.Arn
 
   UpdateSeasons:
     Type: AWS::Serverless::Function
@@ -360,6 +396,15 @@ Resources:
       Targets:
         - Arn: !GetAtt InsertSeiyuu.Arn
           Id: LambdaTarget
+
+  InsertSeiyuuPermission: 
+    Type: AWS::Lambda::Permission
+    Properties: 
+      FunctionName: !Ref InsertSeiyuu
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn: 
+        !GetAtt InsertSeiyuuRule.Arn
   
   InsertSeiyuu:
     Type: AWS::Serverless::Function
