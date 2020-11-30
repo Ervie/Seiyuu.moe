@@ -80,6 +80,7 @@ Resources:
                 Resource: 
                   - !GetAtt AnimeToUpdateQueue.Arn
                   - !GetAtt CharactersToUpdateQueue.Arn
+                  - !GetAtt SeiyuuToUpdateQueue.Arn
   
   UpdateLambdaRole:
     Type: AWS::IAM::Role
@@ -143,6 +144,12 @@ Resources:
           - Effect: Allow
             Action: ssm:GetParametersByPath
             Resource: !Sub 'arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/*'
+          - Effect: Allow
+            Action: 
+              - kms:Decrypt
+              - kms:GenerateDataKey
+            Resource:
+              Fn::ImportValue: !FindInMap [Exports, KmsKeyArn, !Ref EnvironmentType ]
 
   ScheduleAnimesUpdateRule:
     Type: AWS::Events::Rule
