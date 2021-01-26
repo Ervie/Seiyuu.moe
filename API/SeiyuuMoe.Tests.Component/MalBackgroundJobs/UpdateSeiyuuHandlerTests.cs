@@ -1592,13 +1592,6 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			const long characterMalId = 1000;
 			var dbContext = InMemoryDbProvider.GetDbContext();
 
-			const string returnedAnimeTitle = "PostUpdateTitle";
-			const string returnedAnimeAbout = "PostUpdateAbout";
-			const string returnedAnimeEnglishTitle = "PostUpdateEnglish";
-			const string returnedAnimeJapaneseTitle = "PostUpdateJapanese";
-			const string returnedAnimeImageUrl = "PostUpdateImageUrl";
-			const int returnedAnimePopularity = 3;
-
 			var returnedSeiyuu = new Person
 			{
 				MalId = seiyuuMalId,
@@ -1692,13 +1685,6 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			const long animeMalId = 100;
 			const long characterMalId = 1000;
 			var dbContext = InMemoryDbProvider.GetDbContext();
-
-			const string returnedAnimeTitle = "PostUpdateTitle";
-			const string returnedAnimeAbout = "PostUpdateAbout";
-			const string returnedAnimeEnglishTitle = "PostUpdateEnglish";
-			const string returnedAnimeJapaneseTitle = "PostUpdateJapanese";
-			const string returnedAnimeImageUrl = "PostUpdateImageUrl";
-			const int returnedAnimePopularity = 3;
 
 			var returnedSeiyuu = new Person
 			{
