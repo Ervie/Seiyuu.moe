@@ -8,7 +8,7 @@ namespace SeiyuuMoe.Infrastructure.Context
 	{
 		public SeiyuuMoeContext CreateDbContext(string[] args)
 		{
-			Environment.SetEnvironmentVariable("StackName", "seiyuu-moe-mal-bg-jobs-dev");
+			Environment.SetEnvironmentVariable("EnvironmentType", "dev");
 
 			var databaseConfiguration = ConfigurationReader.DatabaseConfiguration;
 

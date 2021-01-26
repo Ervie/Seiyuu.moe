@@ -9,12 +9,12 @@ namespace SeiyuuMoe.Infrastructure.Configuration
 
 		static ConfigurationReader()
 		{
-			var stackName = Environment.GetEnvironmentVariable("StackName");
+			var environmentType = Environment.GetEnvironmentVariable("EnvironmentType");
 
 			var configurationBuilder = new ConfigurationBuilder()
 							.AddSystemsManager(config =>
 							{
-								config.Path = $"/{stackName}";
+								config.Path = $"/seiyuu-moe-{environmentType}";
 								config.ReloadAfter = TimeSpan.FromMinutes(5);
 							});
 

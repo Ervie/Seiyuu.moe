@@ -29,6 +29,7 @@ namespace SeiyuuMoe.Infrastructure.Context
 		public virtual DbSet<AnimeRoleType> AnimeRoleTypes { get; set; }
 		public virtual DbSet<AnimeSeason> AnimeSeasons { get; set; }
 		public virtual DbSet<Seiyuu> Seiyuus { get; set; }
+		public virtual DbSet<VisualNovel> VisualNovels { get; set; }
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
@@ -156,6 +157,17 @@ namespace SeiyuuMoe.Infrastructure.Context
 			{
 				entity.Property(e => e.Year).IsRequired();
 				entity.Property(e => e.Name).IsRequired();
+			});
+
+			modelBuilder.Entity<VisualNovel>(entity =>
+			{
+				entity.Property(e => e.Id).HasDefaultValueSql("(uuid())");
+
+				entity.HasIndex(e => e.VndbId).IsUnique();
+
+				entity.Property(e => e.Title).IsRequired();
+
+				entity.Property(e => e.ModificationDate).HasColumnType("datetime").HasDefaultValueSql("current_timestamp()");
 			});
 
 			modelBuilder.Entity<Seiyuu>(entity =>
