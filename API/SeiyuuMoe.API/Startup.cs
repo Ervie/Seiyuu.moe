@@ -1,7 +1,5 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using Hangfire;
-using Hangfire.MemoryStorage;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -37,10 +35,6 @@ namespace SeiyuuMoe.API
 			services.AddOptions();
 			services.AddControllers();
 			services.AddSingleton<IConfiguration>(Configuration);
-			services.AddHangfire(x => x.UseMemoryStorage(new MemoryStorageOptions
-			{
-				FetchNextJobTimeout = TimeSpan.FromDays(14)
-			}));
 		}
 
 		public void ConfigureContainer(ContainerBuilder builder)
@@ -72,10 +66,6 @@ namespace SeiyuuMoe.API
 			});
 
 			AutofacContainer = app.ApplicationServices.GetAutofacRoot();
-			app.UseHangfireServer();
-			app.UseHangfireDashboard("/api/jobs");
-
-			SetupRecurringJobs();
 
 			app.UseCors(builder => builder
 			.AllowAnyOrigin()
@@ -88,20 +78,6 @@ namespace SeiyuuMoe.API
 			{
 				endpoints.MapControllers();
 			});
-		}
-
-		private static void SetupRecurringJobs()
-		{
-			// Workaround for to never run automatically - set to run on 31st February. Expression for jobs on demand (run only manually).
-			const string runNeverCronExpression = "0 0 31 2 1";
-
-			//RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.UpdateSeasonsAsync(), Cron.Monthly);
-			//RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.ParseRolesAsync(), "0 12 * * 7");
-			//RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.UpdateAllSeiyuuAsync(), "0 0 1 * *");
-			//RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.UpdateAllAnimeAsync(), "0 0 8 * *");
-			//RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.UpdateAllCharactersAsync(), "0 0 15 * *");
-			//RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.InsertNewSeiyuuAsync(), "0 0 * * 7");
-			//RecurringJob.AddOrUpdate<IJikanParser>(jikanParser => jikanParser.InsertOldSeiyuuAsync(), runNeverCronExpression);
 		}
 	}
 }
