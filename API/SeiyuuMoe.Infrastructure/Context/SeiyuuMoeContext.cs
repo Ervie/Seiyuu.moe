@@ -30,6 +30,9 @@ namespace SeiyuuMoe.Infrastructure.Context
 		public virtual DbSet<AnimeSeason> AnimeSeasons { get; set; }
 		public virtual DbSet<Seiyuu> Seiyuus { get; set; }
 		public virtual DbSet<VisualNovel> VisualNovels { get; set; }
+		public virtual DbSet<VisualNovelCharacter> VisualNovelCharacters { get; set; }
+		public virtual DbSet<VisualNovelRole> VisualNovelRoles { get; set; }
+		public virtual DbSet<VisualNovelRoleType> VisualNovelRoleTypes { get; set; }
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
@@ -54,9 +57,9 @@ namespace SeiyuuMoe.Infrastructure.Context
 
 				entity.Property(e => e.Title).IsRequired();
 
-				entity.Property(e => e.StatusId).HasConversion<int>();
+				entity.Property(e => e.StatusId).HasConversion<long>();
 
-				entity.Property(e => e.TypeId).HasConversion<int>();
+				entity.Property(e => e.TypeId).HasConversion<long>();
 
 				entity.HasOne(d => d.Season)
 					.WithMany(p => p.Anime)
@@ -78,14 +81,14 @@ namespace SeiyuuMoe.Infrastructure.Context
 
 			modelBuilder.Entity<AnimeStatus>(entity =>
 			{
-				entity.Property(e => e.Id).HasConversion<int>();
+				entity.Property(e => e.Id).HasConversion<long>();
 
 				entity.Property(e => e.Description).IsRequired();
 			});
 
 			modelBuilder.Entity<AnimeType>(entity =>
 			{
-				entity.Property(e => e.Id).HasConversion<int>();
+				entity.Property(e => e.Id).HasConversion<long>();
 
 				entity.Property(e => e.Description).IsRequired();
 			});
@@ -112,7 +115,7 @@ namespace SeiyuuMoe.Infrastructure.Context
 
 			modelBuilder.Entity<Language>(entity =>
 			{
-				entity.Property(e => e.Id).HasConversion<int>();
+				entity.Property(e => e.Id).HasConversion<long>();
 
 				entity.Property(e => e.Description).IsRequired();
 			});
@@ -121,9 +124,9 @@ namespace SeiyuuMoe.Infrastructure.Context
 			{
 				entity.Property(e => e.Id).HasDefaultValueSql("(uuid())");
 
-				entity.Property(e => e.LanguageId).HasConversion<int>();
+				entity.Property(e => e.LanguageId).HasConversion<long>();
 
-				entity.Property(e => e.RoleTypeId).HasConversion<int>();
+				entity.Property(e => e.RoleTypeId).HasConversion<long>();
 
 				entity.HasOne(d => d.Anime)
 					.WithMany(p => p.Role)
@@ -141,14 +144,14 @@ namespace SeiyuuMoe.Infrastructure.Context
 					.OnDelete(DeleteBehavior.Cascade);
 
 				entity.HasOne(d => d.Seiyuu)
-					.WithMany(p => p.Role)
+					.WithMany(p => p.AnimeRoles)
 					.HasForeignKey(d => d.SeiyuuId)
 					.OnDelete(DeleteBehavior.Cascade);
 			});
 
 			modelBuilder.Entity<AnimeRoleType>(entity =>
 			{
-				entity.Property(e => e.Id).HasConversion<int>();
+				entity.Property(e => e.Id).HasConversion<long>();
 
 				entity.Property(e => e.Description).IsRequired();
 			});
@@ -170,10 +173,60 @@ namespace SeiyuuMoe.Infrastructure.Context
 				entity.Property(e => e.ModificationDate).HasColumnType("datetime").HasDefaultValueSql("current_timestamp()");
 			});
 
+			modelBuilder.Entity<VisualNovelRoleType>(entity =>
+			{
+				entity.Property(e => e.Id).HasConversion<long>();
+
+				entity.Property(e => e.Description).IsRequired();
+			});
+
+
+			modelBuilder.Entity<VisualNovelCharacter>(entity =>
+			{
+				entity.Property(e => e.Id).HasDefaultValueSql("(uuid())");
+
+				entity.HasIndex(e => e.VndbId).IsUnique();
+
+				entity.Property(e => e.Name).IsRequired();
+
+				entity.Property(e => e.ModificationDate).HasColumnType("datetime").HasDefaultValueSql("current_timestamp()");
+			});
+
+
+			modelBuilder.Entity<VisualNovelRole>(entity =>
+			{
+				entity.Property(e => e.Id).HasDefaultValueSql("(uuid())");
+
+				entity.Property(e => e.LanguageId).HasConversion<long>();
+
+				entity.Property(e => e.RoleTypeId).HasConversion<long>();
+
+				entity.HasOne(d => d.VisualNovel)
+					.WithMany(p => p.Role)
+					.HasForeignKey(d => d.VisualNovelId)
+					.OnDelete(DeleteBehavior.Cascade);
+
+				entity.HasOne(d => d.Character)
+					.WithMany(p => p.Role)
+					.HasForeignKey(d => d.CharacterId)
+					.OnDelete(DeleteBehavior.Cascade);
+
+				entity.HasOne(d => d.RoleType)
+					.WithMany(p => p.Role)
+					.HasForeignKey(d => d.RoleTypeId)
+					.OnDelete(DeleteBehavior.Cascade);
+
+				entity.HasOne(d => d.Seiyuu)
+					.WithMany(p => p.VisualNovelRoles)
+					.HasForeignKey(d => d.SeiyuuId)
+					.OnDelete(DeleteBehavior.Cascade);
+			});
+
 			modelBuilder.Entity<Seiyuu>(entity =>
 			{
 				entity.Property(e => e.Id).HasDefaultValueSql("(uuid())");
 				entity.HasIndex(e => e.MalId).IsUnique();
+				entity.HasIndex(e => e.VndbId).IsUnique();
 				entity.Property(e => e.Birthday).HasColumnType("DATE");
 				entity.Property(e => e.ModificationDate).HasColumnType("datetime").HasDefaultValueSql("current_timestamp()");
 

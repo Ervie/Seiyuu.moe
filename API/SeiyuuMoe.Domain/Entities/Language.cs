@@ -9,7 +9,7 @@ namespace SeiyuuMoe.Domain.Entities
 		public string Description { get; set; }
 	}
 
-	public enum LanguageId: int
+	public enum LanguageId: long
 	{
 		Japanese = 1,
 		Korean = 2

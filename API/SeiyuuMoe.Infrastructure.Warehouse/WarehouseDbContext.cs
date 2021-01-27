@@ -9,6 +9,11 @@ namespace SeiyuuMoe.Infrastructure.Warehouse
 		private readonly WarehouseDatabaseConfiguration _databaseConfiguration;
 
 		public DbSet<VndbVisualNovel> VisualNovels { get; set; }
+		public DbSet<VndbCharacter> Characters { get; set; }
+		public DbSet<VndbCharacterVisualNovel> CharacterVisualNovels { get; set; }
+		public DbSet<VndbStaff> Staffs { get; set; }
+		public DbSet<VndbStaffAlias> StaffAliases { get; set; }
+		public DbSet<VndbVisualNovelSeiyuu> VisualNovelSeiyuus { get; set; }
 
 		public WarehouseDbContext(WarehouseDatabaseConfiguration databaseConfiguration)
 		{

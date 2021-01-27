@@ -17,7 +17,7 @@ namespace SeiyuuMoe.Domain.Entities
 		public virtual ICollection<Anime> Anime { get; set; }
 	}
 
-	public enum AnimeTypeId: int
+	public enum AnimeTypeId: long
 	{
 		AllTypes = 0,
 		TV = 1,

@@ -17,7 +17,7 @@ namespace SeiyuuMoe.Domain.Entities
 		public virtual ICollection<Anime> Anime { get; set; }
 	}
 
-	public enum AnimeStatusId: int
+	public enum AnimeStatusId: long
 	{
 		All = 0,
 		FinishedAiring = 1,

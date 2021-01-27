@@ -4,10 +4,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SeiyuuMoe.Infrastructure.Warehouse.VndbEntities
 {
-	[Table("vn")]
-	public class VndbVisualNovel
+	[Table("chars")]
+	public class VndbCharacter
 	{
-		public VndbVisualNovel()
+		public VndbCharacter()
 		{
 			CharacterVisualNovels = new HashSet<VndbCharacterVisualNovel>();
 			VisualNovelSeiyuus = new HashSet<VndbVisualNovelSeiyuu>();
@@ -17,11 +17,11 @@ namespace SeiyuuMoe.Infrastructure.Warehouse.VndbEntities
 		[Column("id")]
 		public int Id { get; set; }
 
-		[Column("title")]
-		public string Title { get; set; }
+		[Column("name")]
+		public string Name { get; set; }
 
 		[Column("original")]
-		public string TitleOriginal { get; set; }
+		public string NameOriginal { get; set; }
 
 		[Column("alias")]
 		public string Alias { get; set; }

@@ -8,7 +8,8 @@ namespace SeiyuuMoe.Domain.Entities
 	{
 		public Seiyuu()
 		{
-			Role = new HashSet<AnimeRole>();
+			AnimeRoles = new HashSet<AnimeRole>();
+			VisualNovelRoles = new HashSet<VisualNovelRole>();
 		}
 
 		public string Name { get; set; }
@@ -17,6 +18,7 @@ namespace SeiyuuMoe.Domain.Entities
 		public Guid Id { get; set; }
 
 		public long MalId { get; set; }
+		public long? VndbId { get; set; }
 
 		public string ImageUrl { get; set; }
 		public long? Popularity { get; set; }
@@ -25,6 +27,7 @@ namespace SeiyuuMoe.Domain.Entities
 		public DateTime? Birthday { get; set; }
 		public DateTime ModificationDate { get; set; }
 
-		public virtual ICollection<AnimeRole> Role { get; set; }
+		public virtual ICollection<AnimeRole> AnimeRoles { get; set; }
+		public virtual ICollection<VisualNovelRole> VisualNovelRoles { get; set; }
 	}
 }

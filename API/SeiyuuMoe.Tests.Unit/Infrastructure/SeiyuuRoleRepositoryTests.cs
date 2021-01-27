@@ -106,7 +106,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 
 			var japanese = new LanguageBuilder().WithLanguageId(LanguageId.Japanese).Build();
 			var seiyuu = new SeiyuuBuilder().WithMalId(animeMalId).Build();
-			seiyuu.Role = new List<AnimeRole>
+			seiyuu.AnimeRoles = new List<AnimeRole>
 			{
 				new AnimeRoleBuilder().WithLanguage(japanese).Build(),
 				new AnimeRoleBuilder().WithLanguage(japanese).Build(),
@@ -138,7 +138,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var mainRole = new AnimeRoleTypeBuilder().WithId(AnimeRoleTypeId.Main).Build();
 			var supportingRole = new AnimeRoleTypeBuilder().WithId(AnimeRoleTypeId.Supporting).Build();
 
-			seiyuu.Role = new List<AnimeRole>
+			seiyuu.AnimeRoles = new List<AnimeRole>
 			{
 				new AnimeRoleBuilder().WithLanguage(japanese).WithRoleType(mainRole).Build(),
 				new AnimeRoleBuilder().WithLanguage(japanese).WithRoleType(supportingRole).Build(),
@@ -171,7 +171,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var mainRole = new AnimeRoleTypeBuilder().WithId(AnimeRoleTypeId.Main).Build();
 			var supportingRole = new AnimeRoleTypeBuilder().WithId(AnimeRoleTypeId.Supporting).Build();
 
-			seiyuu.Role = new List<AnimeRole>
+			seiyuu.AnimeRoles = new List<AnimeRole>
 			{
 				new AnimeRoleBuilder().WithLanguage(japanese).WithRoleType(mainRole).Build(),
 				new AnimeRoleBuilder().WithLanguage(japanese).WithRoleType(supportingRole).Build(),
@@ -285,7 +285,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 
 			var japanese = new LanguageBuilder().WithLanguageId(LanguageId.Japanese).Build();
 			var seiyuu = new SeiyuuBuilder().WithId(seiyuuId).Build();
-			seiyuu.Role = new List<AnimeRole>
+			seiyuu.AnimeRoles = new List<AnimeRole>
 			{
 				new AnimeRoleBuilder().WithLanguage(japanese).Build(),
 				new AnimeRoleBuilder().WithLanguage(japanese).Build(),
@@ -317,7 +317,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var mainRole = new AnimeRoleTypeBuilder().WithId(AnimeRoleTypeId.Main).Build();
 			var supportingRole = new AnimeRoleTypeBuilder().WithId(AnimeRoleTypeId.Supporting).Build();
 
-			seiyuu.Role = new List<AnimeRole>
+			seiyuu.AnimeRoles = new List<AnimeRole>
 			{
 				new AnimeRoleBuilder().WithLanguage(japanese).WithRoleType(mainRole).Build(),
 				new AnimeRoleBuilder().WithLanguage(japanese).WithRoleType(supportingRole).Build(),
@@ -350,7 +350,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			var mainRole = new AnimeRoleTypeBuilder().WithId(AnimeRoleTypeId.Main).Build();
 			var supportingRole = new AnimeRoleTypeBuilder().WithId(AnimeRoleTypeId.Supporting).Build();
 
-			seiyuu.Role = new List<AnimeRole>
+			seiyuu.AnimeRoles = new List<AnimeRole>
 			{
 				new AnimeRoleBuilder().WithLanguage(japanese).WithRoleType(mainRole).Build(),
 				new AnimeRoleBuilder().WithLanguage(japanese).WithRoleType(supportingRole).Build(),

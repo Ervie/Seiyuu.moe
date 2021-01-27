@@ -4,12 +4,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SeiyuuMoe.Infrastructure.Warehouse.VndbEntities
 {
-	[Table("vn")]
-	public class VndbVisualNovel
+	[Table("staff")]
+	public  class VndbStaff
 	{
-		public VndbVisualNovel()
+		public VndbStaff()
 		{
-			CharacterVisualNovels = new HashSet<VndbCharacterVisualNovel>();
+			Aliases = new HashSet<VndbStaffAlias>();
 			VisualNovelSeiyuus = new HashSet<VndbVisualNovelSeiyuu>();
 		}
 
@@ -17,14 +17,11 @@ namespace SeiyuuMoe.Infrastructure.Warehouse.VndbEntities
 		[Column("id")]
 		public int Id { get; set; }
 
-		[Column("title")]
-		public string Title { get; set; }
+		[Column("aid")]
+		public int StaffAliasId { get; set; }
 
-		[Column("original")]
-		public string TitleOriginal { get; set; }
-
-		[Column("alias")]
-		public string Alias { get; set; }
+		[Column("language")]
+		public string Language { get; set; }
 
 		[Column("image")]
 		public string Image { get; set; }
@@ -32,10 +29,7 @@ namespace SeiyuuMoe.Infrastructure.Warehouse.VndbEntities
 		[Column("desc")]
 		public string Description { get; set; }
 
-		[Column("c_votecount")]
-		public int VoteCount { get; set; }
-
-		public virtual ICollection<VndbCharacterVisualNovel> CharacterVisualNovels { get; set; }
+		public virtual ICollection<VndbStaffAlias> Aliases { get; set; }
 		public virtual ICollection<VndbVisualNovelSeiyuu> VisualNovelSeiyuus { get; set; }
 	}
 }

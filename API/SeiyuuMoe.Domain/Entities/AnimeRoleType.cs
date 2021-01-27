@@ -17,7 +17,7 @@ namespace SeiyuuMoe.Domain.Entities
 		public virtual ICollection<AnimeRole> Role { get; set; }
 	}
 
-	public enum AnimeRoleTypeId: int
+	public enum AnimeRoleTypeId: long
 	{
 		All = 0,
 		Main = 1,

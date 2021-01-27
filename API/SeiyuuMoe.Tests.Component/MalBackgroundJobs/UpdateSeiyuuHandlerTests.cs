@@ -485,14 +485,14 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			await handler.HandleAsync(command);
 
 			// Then
-			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.Role).FirstAsync(x => x.MalId == seiyuuMalId);
+			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.AnimeRoles).FirstAsync(x => x.MalId == seiyuuMalId);
 			using (new AssertionScope())
 			{
 				dbContext.AnimeRoles.Should().ContainSingle();
 
-				updatedSeiyuu.Role.First().AnimeId.Should().Be(anime.Id);
-				updatedSeiyuu.Role.First().CharacterId.Should().Be(character.Id);
-				updatedSeiyuu.Role.First().SeiyuuId.Should().Be(seiyuu.Id);
+				updatedSeiyuu.AnimeRoles.First().AnimeId.Should().Be(anime.Id);
+				updatedSeiyuu.AnimeRoles.First().CharacterId.Should().Be(character.Id);
+				updatedSeiyuu.AnimeRoles.First().SeiyuuId.Should().Be(seiyuu.Id);
 
 				jikanServiceBuilder.JikanClient.Verify(x => x.GetPerson(seiyuuMalId), Times.Once);
 				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnime(It.IsAny<long>()), Times.Never);
@@ -634,17 +634,17 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			await handler.HandleAsync(command);
 
 			// Then
-			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.Role).FirstAsync(x => x.MalId == seiyuuMalId);
+			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.AnimeRoles).FirstAsync(x => x.MalId == seiyuuMalId);
 			using (new AssertionScope())
 			{
 				dbContext.AnimeRoles.Should().HaveCount(2);
 
-				updatedSeiyuu.Role.First().AnimeId.Should().Be(anime1Id);
-				updatedSeiyuu.Role.Skip(1).First().AnimeId.Should().Be(anime2Id);
-				updatedSeiyuu.Role.First().CharacterId.Should().Be(character1Id);
-				updatedSeiyuu.Role.Skip(1).First().CharacterId.Should().Be(character2Id);
-				updatedSeiyuu.Role.First().SeiyuuId.Should().Be(seiyuu.Id);
-				updatedSeiyuu.Role.Skip(1).First().SeiyuuId.Should().Be(seiyuu.Id);
+				updatedSeiyuu.AnimeRoles.First().AnimeId.Should().Be(anime1Id);
+				updatedSeiyuu.AnimeRoles.Skip(1).First().AnimeId.Should().Be(anime2Id);
+				updatedSeiyuu.AnimeRoles.First().CharacterId.Should().Be(character1Id);
+				updatedSeiyuu.AnimeRoles.Skip(1).First().CharacterId.Should().Be(character2Id);
+				updatedSeiyuu.AnimeRoles.First().SeiyuuId.Should().Be(seiyuu.Id);
+				updatedSeiyuu.AnimeRoles.Skip(1).First().SeiyuuId.Should().Be(seiyuu.Id);
 
 				jikanServiceBuilder.JikanClient.Verify(x => x.GetPerson(seiyuuMalId), Times.Once);
 				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnime(It.IsAny<long>()), Times.Never);
@@ -783,17 +783,17 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			await handler.HandleAsync(command);
 
 			// Then
-			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.Role).FirstAsync(x => x.MalId == seiyuuMalId);
+			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.AnimeRoles).FirstAsync(x => x.MalId == seiyuuMalId);
 			using (new AssertionScope())
 			{
 				dbContext.AnimeRoles.Should().HaveCount(2);
 
-				updatedSeiyuu.Role.First().AnimeId.Should().Be(anime1Id);
-				updatedSeiyuu.Role.Skip(1).First().AnimeId.Should().Be(anime2Id);
-				updatedSeiyuu.Role.First().CharacterId.Should().Be(character1Id);
-				updatedSeiyuu.Role.Skip(1).First().CharacterId.Should().Be(character2Id);
-				updatedSeiyuu.Role.First().SeiyuuId.Should().Be(seiyuu.Id);
-				updatedSeiyuu.Role.Skip(1).First().SeiyuuId.Should().Be(seiyuu.Id);
+				updatedSeiyuu.AnimeRoles.First().AnimeId.Should().Be(anime1Id);
+				updatedSeiyuu.AnimeRoles.Skip(1).First().AnimeId.Should().Be(anime2Id);
+				updatedSeiyuu.AnimeRoles.First().CharacterId.Should().Be(character1Id);
+				updatedSeiyuu.AnimeRoles.Skip(1).First().CharacterId.Should().Be(character2Id);
+				updatedSeiyuu.AnimeRoles.First().SeiyuuId.Should().Be(seiyuu.Id);
+				updatedSeiyuu.AnimeRoles.Skip(1).First().SeiyuuId.Should().Be(seiyuu.Id);
 
 				jikanServiceBuilder.JikanClient.Verify(x => x.GetPerson(seiyuuMalId), Times.Once);
 				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnime(It.IsAny<long>()), Times.Never);
@@ -888,16 +888,16 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			await handler.HandleAsync(command);
 
 			// Then
-			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.Role).FirstAsync(x => x.MalId == seiyuuMalId);
+			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.AnimeRoles).FirstAsync(x => x.MalId == seiyuuMalId);
 			var insertedCharacter = await dbContext.AnimeCharacters.FirstAsync(x => x.MalId == characterMalId);
 			using (new AssertionScope())
 			{
 				dbContext.AnimeRoles.Should().ContainSingle();
 				dbContext.AnimeCharacters.Should().ContainSingle();
 
-				updatedSeiyuu.Role.First().AnimeId.Should().Be(anime.Id);
-				updatedSeiyuu.Role.First().SeiyuuId.Should().Be(seiyuu.Id);
-				updatedSeiyuu.Role.First().CharacterId.Should().Be(insertedCharacter.Id);
+				updatedSeiyuu.AnimeRoles.First().AnimeId.Should().Be(anime.Id);
+				updatedSeiyuu.AnimeRoles.First().SeiyuuId.Should().Be(seiyuu.Id);
+				updatedSeiyuu.AnimeRoles.First().CharacterId.Should().Be(insertedCharacter.Id);
 
 				insertedCharacter.MalId.Should().Be(characterMalId);
 				insertedCharacter.Name.Should().Be(returnedCharacterName);
@@ -1074,16 +1074,16 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			await handler.HandleAsync(command);
 
 			// Then
-			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.Role).FirstAsync(x => x.MalId == seiyuuMalId);
+			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.AnimeRoles).FirstAsync(x => x.MalId == seiyuuMalId);
 			var insertedCharacter = await dbContext.AnimeCharacters.FirstAsync(x => x.MalId == characterMalId);
 			using (new AssertionScope())
 			{
 				dbContext.AnimeRoles.Should().ContainSingle();
 				dbContext.AnimeCharacters.Should().ContainSingle();
 
-				updatedSeiyuu.Role.First().AnimeId.Should().Be(anime.Id);
-				updatedSeiyuu.Role.First().SeiyuuId.Should().Be(seiyuu.Id);
-				updatedSeiyuu.Role.First().CharacterId.Should().Be(insertedCharacter.Id);
+				updatedSeiyuu.AnimeRoles.First().AnimeId.Should().Be(anime.Id);
+				updatedSeiyuu.AnimeRoles.First().SeiyuuId.Should().Be(seiyuu.Id);
+				updatedSeiyuu.AnimeRoles.First().CharacterId.Should().Be(insertedCharacter.Id);
 
 				insertedCharacter.MalId.Should().Be(characterMalId);
 				insertedCharacter.ImageUrl.Should().BeEmpty();
@@ -1181,16 +1181,16 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			await handler.HandleAsync(command);
 
 			// Then
-			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.Role).FirstAsync(x => x.MalId == seiyuuMalId);
+			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.AnimeRoles).FirstAsync(x => x.MalId == seiyuuMalId);
 			var insertedCharacter = await dbContext.AnimeCharacters.FirstAsync(x => x.MalId == characterMalId);
 			using (new AssertionScope())
 			{
 				dbContext.AnimeRoles.Should().ContainSingle();
 				dbContext.AnimeCharacters.Should().ContainSingle();
 
-				updatedSeiyuu.Role.First().AnimeId.Should().Be(anime.Id);
-				updatedSeiyuu.Role.First().SeiyuuId.Should().Be(seiyuu.Id);
-				updatedSeiyuu.Role.First().CharacterId.Should().Be(insertedCharacter.Id);
+				updatedSeiyuu.AnimeRoles.First().AnimeId.Should().Be(anime.Id);
+				updatedSeiyuu.AnimeRoles.First().SeiyuuId.Should().Be(seiyuu.Id);
+				updatedSeiyuu.AnimeRoles.First().CharacterId.Should().Be(insertedCharacter.Id);
 
 				insertedCharacter.MalId.Should().Be(characterMalId);
 				insertedCharacter.Name.Should().Be(returnedCharacterName);
@@ -1290,16 +1290,16 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			await handler.HandleAsync(command);
 
 			// Then
-			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.Role).FirstAsync(x => x.MalId == seiyuuMalId);
+			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.AnimeRoles).FirstAsync(x => x.MalId == seiyuuMalId);
 			var insertedAnime = await dbContext.Animes.FirstAsync(x => x.MalId == animeMalId);
 			using (new AssertionScope())
 			{
 				dbContext.AnimeRoles.Should().ContainSingle();
 				dbContext.AnimeCharacters.Should().ContainSingle();
 
-				updatedSeiyuu.Role.First().AnimeId.Should().Be(insertedAnime.Id);
-				updatedSeiyuu.Role.First().SeiyuuId.Should().Be(seiyuu.Id);
-				updatedSeiyuu.Role.First().CharacterId.Should().Be(character.Id);
+				updatedSeiyuu.AnimeRoles.First().AnimeId.Should().Be(insertedAnime.Id);
+				updatedSeiyuu.AnimeRoles.First().SeiyuuId.Should().Be(seiyuu.Id);
+				updatedSeiyuu.AnimeRoles.First().CharacterId.Should().Be(character.Id);
 
 				insertedAnime.MalId.Should().Be(animeMalId);
 				insertedAnime.About.Should().Be(returnedAnimeAbout);
@@ -1470,16 +1470,16 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			await handler.HandleAsync(command);
 
 			// Then
-			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.Role).FirstAsync(x => x.MalId == seiyuuMalId);
+			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.AnimeRoles).FirstAsync(x => x.MalId == seiyuuMalId);
 			var insertedAnime = await dbContext.Animes.FirstAsync(x => x.MalId == animeMalId);
 			using (new AssertionScope())
 			{
 				dbContext.AnimeRoles.Should().ContainSingle();
 				dbContext.AnimeCharacters.Should().ContainSingle();
 
-				updatedSeiyuu.Role.First().AnimeId.Should().Be(insertedAnime.Id);
-				updatedSeiyuu.Role.First().SeiyuuId.Should().Be(seiyuu.Id);
-				updatedSeiyuu.Role.First().CharacterId.Should().Be(character.Id);
+				updatedSeiyuu.AnimeRoles.First().AnimeId.Should().Be(insertedAnime.Id);
+				updatedSeiyuu.AnimeRoles.First().SeiyuuId.Should().Be(seiyuu.Id);
+				updatedSeiyuu.AnimeRoles.First().CharacterId.Should().Be(character.Id);
 
 				insertedAnime.MalId.Should().Be(animeMalId);
 				insertedAnime.ImageUrl.Should().BeEmpty();
@@ -1562,16 +1562,16 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			await handler.HandleAsync(command);
 
 			// Then
-			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.Role).FirstAsync(x => x.MalId == seiyuuMalId);
+			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.AnimeRoles).FirstAsync(x => x.MalId == seiyuuMalId);
 			var insertedAnime = await dbContext.Animes.FirstAsync(x => x.MalId == animeMalId);
 			using (new AssertionScope())
 			{
 				dbContext.AnimeRoles.Should().ContainSingle();
 				dbContext.AnimeCharacters.Should().ContainSingle();
 
-				updatedSeiyuu.Role.First().AnimeId.Should().Be(insertedAnime.Id);
-				updatedSeiyuu.Role.First().SeiyuuId.Should().Be(seiyuu.Id);
-				updatedSeiyuu.Role.First().CharacterId.Should().Be(character.Id);
+				updatedSeiyuu.AnimeRoles.First().AnimeId.Should().Be(insertedAnime.Id);
+				updatedSeiyuu.AnimeRoles.First().SeiyuuId.Should().Be(seiyuu.Id);
+				updatedSeiyuu.AnimeRoles.First().CharacterId.Should().Be(character.Id);
 
 				insertedAnime.MalId.Should().Be(animeMalId);
 				insertedAnime.TitleSynonyms.Should().Be("Synonym 1;Synonym 2;Synonym 3");
@@ -1655,16 +1655,16 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			await handler.HandleAsync(command);
 
 			// Then
-			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.Role).FirstAsync(x => x.MalId == seiyuuMalId);
+			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.AnimeRoles).FirstAsync(x => x.MalId == seiyuuMalId);
 			var insertedAnime = await dbContext.Animes.FirstAsync(x => x.MalId == animeMalId);
 			using (new AssertionScope())
 			{
 				dbContext.AnimeRoles.Should().ContainSingle();
 				dbContext.AnimeCharacters.Should().ContainSingle();
 
-				updatedSeiyuu.Role.First().AnimeId.Should().Be(insertedAnime.Id);
-				updatedSeiyuu.Role.First().SeiyuuId.Should().Be(seiyuu.Id);
-				updatedSeiyuu.Role.First().CharacterId.Should().Be(character.Id);
+				updatedSeiyuu.AnimeRoles.First().AnimeId.Should().Be(insertedAnime.Id);
+				updatedSeiyuu.AnimeRoles.First().SeiyuuId.Should().Be(seiyuu.Id);
+				updatedSeiyuu.AnimeRoles.First().CharacterId.Should().Be(character.Id);
 
 				insertedAnime.MalId.Should().Be(animeMalId);
 				insertedAnime.StatusId.Should().BeNull();
@@ -1755,16 +1755,16 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			await handler.HandleAsync(command);
 
 			// Then
-			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.Role).FirstAsync(x => x.MalId == seiyuuMalId);
+			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.AnimeRoles).FirstAsync(x => x.MalId == seiyuuMalId);
 			var insertedAnime = await dbContext.Animes.FirstAsync(x => x.MalId == animeMalId);
 			using (new AssertionScope())
 			{
 				dbContext.AnimeRoles.Should().ContainSingle();
 				dbContext.AnimeCharacters.Should().ContainSingle();
 
-				updatedSeiyuu.Role.First().AnimeId.Should().Be(insertedAnime.Id);
-				updatedSeiyuu.Role.First().SeiyuuId.Should().Be(seiyuu.Id);
-				updatedSeiyuu.Role.First().CharacterId.Should().Be(character.Id);
+				updatedSeiyuu.AnimeRoles.First().AnimeId.Should().Be(insertedAnime.Id);
+				updatedSeiyuu.AnimeRoles.First().SeiyuuId.Should().Be(seiyuu.Id);
+				updatedSeiyuu.AnimeRoles.First().CharacterId.Should().Be(character.Id);
 
 				insertedAnime.MalId.Should().Be(animeMalId);
 				insertedAnime.SeasonId.Should().BeNull();
@@ -1870,7 +1870,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			await handler.HandleAsync(command);
 
 			// Then
-			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.Role).FirstAsync(x => x.MalId == seiyuuMalId);
+			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.AnimeRoles).FirstAsync(x => x.MalId == seiyuuMalId);
 			var insertedCharacter = await dbContext.AnimeCharacters.FirstAsync(x => x.MalId == characterMalId);
 			var insertedAnime = await dbContext.Animes.FirstAsync(x => x.MalId == animeMalId);
 			using (new AssertionScope())
@@ -1879,9 +1879,9 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				dbContext.AnimeCharacters.Should().ContainSingle();
 				dbContext.Animes.Should().ContainSingle();
 
-				updatedSeiyuu.Role.First().AnimeId.Should().Be(insertedAnime.Id);
-				updatedSeiyuu.Role.First().SeiyuuId.Should().Be(seiyuu.Id);
-				updatedSeiyuu.Role.First().CharacterId.Should().Be(insertedCharacter.Id);
+				updatedSeiyuu.AnimeRoles.First().AnimeId.Should().Be(insertedAnime.Id);
+				updatedSeiyuu.AnimeRoles.First().SeiyuuId.Should().Be(seiyuu.Id);
+				updatedSeiyuu.AnimeRoles.First().CharacterId.Should().Be(insertedCharacter.Id);
 
 				insertedCharacter.MalId.Should().Be(characterMalId);
 				insertedCharacter.Name.Should().Be(returnedCharacterName);
@@ -1980,7 +1980,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			await handler.HandleAsync(command);
 
 			// Then
-			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.Role).FirstAsync(x => x.MalId == seiyuuMalId);
+			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.AnimeRoles).FirstAsync(x => x.MalId == seiyuuMalId);
 			var insertedCharacter = await dbContext.AnimeCharacters.FirstAsync(x => x.MalId == characterMalId);
 			using (new AssertionScope())
 			{
@@ -1988,7 +1988,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				dbContext.AnimeCharacters.Should().ContainSingle();
 				dbContext.Animes.Should().BeEmpty();
 
-				updatedSeiyuu.Role.Should().BeEmpty();
+				updatedSeiyuu.AnimeRoles.Should().BeEmpty();
 
 				insertedCharacter.MalId.Should().Be(characterMalId);
 				insertedCharacter.Name.Should().Be(returnedCharacterName);
@@ -2081,7 +2081,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			await handler.HandleAsync(command);
 
 			// Then
-			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.Role).FirstAsync(x => x.MalId == seiyuuMalId);
+			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.AnimeRoles).FirstAsync(x => x.MalId == seiyuuMalId);
 			var insertedAnime = await dbContext.Animes.FirstAsync(x => x.MalId == animeMalId);
 			using (new AssertionScope())
 			{
@@ -2089,7 +2089,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				dbContext.AnimeCharacters.Should().BeEmpty();
 				dbContext.Animes.Should().ContainSingle();
 
-				updatedSeiyuu.Role.Should().BeEmpty();
+				updatedSeiyuu.AnimeRoles.Should().BeEmpty();
 
 				insertedAnime.MalId.Should().Be(animeMalId);
 				insertedAnime.About.Should().Be(returnedAnimeAbout);
@@ -2251,18 +2251,18 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			await handler.HandleAsync(command);
 
 			// Then
-			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.Role).FirstAsync(x => x.MalId == seiyuuMalId);
+			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.AnimeRoles).FirstAsync(x => x.MalId == seiyuuMalId);
 			using (new AssertionScope())
 			{
 				dbContext.AnimeRoles.Should().HaveCount(2);
 				dbContext.AnimeCharacters.Should().HaveCount(2);
 
-				updatedSeiyuu.Role.First().AnimeId.Should().Be(anime1Id);
-				updatedSeiyuu.Role.Skip(1).First().AnimeId.Should().Be(anime2Id);
-				updatedSeiyuu.Role.First().CharacterId.Should().NotBeEmpty();
-				updatedSeiyuu.Role.Skip(1).First().CharacterId.Should().NotBeEmpty();
-				updatedSeiyuu.Role.First().SeiyuuId.Should().Be(seiyuu.Id);
-				updatedSeiyuu.Role.Skip(1).First().SeiyuuId.Should().Be(seiyuu.Id);
+				updatedSeiyuu.AnimeRoles.First().AnimeId.Should().Be(anime1Id);
+				updatedSeiyuu.AnimeRoles.Skip(1).First().AnimeId.Should().Be(anime2Id);
+				updatedSeiyuu.AnimeRoles.First().CharacterId.Should().NotBeEmpty();
+				updatedSeiyuu.AnimeRoles.Skip(1).First().CharacterId.Should().NotBeEmpty();
+				updatedSeiyuu.AnimeRoles.First().SeiyuuId.Should().Be(seiyuu.Id);
+				updatedSeiyuu.AnimeRoles.Skip(1).First().SeiyuuId.Should().Be(seiyuu.Id);
 
 				jikanServiceBuilder.JikanClient.Verify(x => x.GetPerson(seiyuuMalId), Times.Once);
 				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnime(It.IsAny<long>()), Times.Never);
@@ -2410,19 +2410,19 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			await handler.HandleAsync(command);
 
 			// Then
-			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.Role).FirstAsync(x => x.MalId == seiyuuMalId);
+			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.AnimeRoles).FirstAsync(x => x.MalId == seiyuuMalId);
 			using (new AssertionScope())
 			{
 				dbContext.AnimeRoles.Should().HaveCount(2);
 				dbContext.AnimeCharacters.Should().HaveCount(2);
 				dbContext.Animes.Should().HaveCount(2);
 
-				updatedSeiyuu.Role.First().AnimeId.Should().NotBeEmpty();
-				updatedSeiyuu.Role.Skip(1).First().AnimeId.Should().NotBeEmpty();
-				updatedSeiyuu.Role.First().CharacterId.Should().Be(character1Id);
-				updatedSeiyuu.Role.Skip(1).First().CharacterId.Should().Be(character2Id);
-				updatedSeiyuu.Role.First().SeiyuuId.Should().Be(seiyuu.Id);
-				updatedSeiyuu.Role.Skip(1).First().SeiyuuId.Should().Be(seiyuu.Id);
+				updatedSeiyuu.AnimeRoles.First().AnimeId.Should().NotBeEmpty();
+				updatedSeiyuu.AnimeRoles.Skip(1).First().AnimeId.Should().NotBeEmpty();
+				updatedSeiyuu.AnimeRoles.First().CharacterId.Should().Be(character1Id);
+				updatedSeiyuu.AnimeRoles.Skip(1).First().CharacterId.Should().Be(character2Id);
+				updatedSeiyuu.AnimeRoles.First().SeiyuuId.Should().Be(seiyuu.Id);
+				updatedSeiyuu.AnimeRoles.Skip(1).First().SeiyuuId.Should().Be(seiyuu.Id);
 
 				jikanServiceBuilder.JikanClient.Verify(x => x.GetPerson(seiyuuMalId), Times.Once);
 				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnime(It.IsAny<long>()), Times.Exactly(2));
@@ -2604,19 +2604,19 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			await handler.HandleAsync(command);
 
 			// Then
-			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.Role).FirstAsync(x => x.MalId == seiyuuMalId);
+			var updatedSeiyuu = await dbContext.Seiyuus.Include(x => x.AnimeRoles).FirstAsync(x => x.MalId == seiyuuMalId);
 			using (new AssertionScope())
 			{
 				dbContext.AnimeRoles.Should().HaveCount(2);
 				dbContext.AnimeCharacters.Should().HaveCount(2);
 				dbContext.Animes.Should().HaveCount(2);
 
-				updatedSeiyuu.Role.First().AnimeId.Should().NotBeEmpty();
-				updatedSeiyuu.Role.Skip(1).First().AnimeId.Should().NotBeEmpty();
-				updatedSeiyuu.Role.First().CharacterId.Should().NotBeEmpty();
-				updatedSeiyuu.Role.Skip(1).First().CharacterId.Should().NotBeEmpty();
-				updatedSeiyuu.Role.First().SeiyuuId.Should().Be(seiyuu.Id);
-				updatedSeiyuu.Role.Skip(1).First().SeiyuuId.Should().Be(seiyuu.Id);
+				updatedSeiyuu.AnimeRoles.First().AnimeId.Should().NotBeEmpty();
+				updatedSeiyuu.AnimeRoles.Skip(1).First().AnimeId.Should().NotBeEmpty();
+				updatedSeiyuu.AnimeRoles.First().CharacterId.Should().NotBeEmpty();
+				updatedSeiyuu.AnimeRoles.Skip(1).First().CharacterId.Should().NotBeEmpty();
+				updatedSeiyuu.AnimeRoles.First().SeiyuuId.Should().Be(seiyuu.Id);
+				updatedSeiyuu.AnimeRoles.Skip(1).First().SeiyuuId.Should().Be(seiyuu.Id);
 
 				jikanServiceBuilder.JikanClient.Verify(x => x.GetPerson(seiyuuMalId), Times.Once);
 				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnime(It.IsAny<long>()), Times.Exactly(2));
