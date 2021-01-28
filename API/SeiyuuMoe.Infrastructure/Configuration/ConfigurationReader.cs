@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using SeiyuuMoe.Infrastructure.Warehouse;
 using System;
 
 namespace SeiyuuMoe.Infrastructure.Configuration
@@ -23,6 +24,9 @@ namespace SeiyuuMoe.Infrastructure.Configuration
 
 		public static DatabaseConfiguration DatabaseConfiguration
 			=> ReturnConfigSection<DatabaseConfiguration>("DatabaseConfiguration");
+
+		public static WarehouseDatabaseConfiguration WarehouseDatabaseConfiguration
+			=> ReturnConfigSection<WarehouseDatabaseConfiguration>("WarehouseDatabaseConfiguration");
 
 		public static MalBgJobsScheduleConfiguration MalBgJobsScheduleConfiguration
 			=> ReturnConfigSection<MalBgJobsScheduleConfiguration>("ScheduleConfiguration");

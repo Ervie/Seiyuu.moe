@@ -1,6 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
@@ -8,6 +9,7 @@
     <ProjectReference Include="..\SeiyuuMoe.Domain\SeiyuuMoe.Domain.csproj" />
     <ProjectReference Include="..\SeiyuuMoe.Infrastructure.Warehouse\SeiyuuMoe.Infrastructure.Warehouse.csproj" />
     <ProjectReference Include="..\SeiyuuMoe.Infrastructure\SeiyuuMoe.Infrastructure.csproj" />
+    <ProjectReference Include="..\SeiyuuMoe.VndbBackgroundJobs.Application\SeiyuuMoe.VndbBackgroundJobs.Application.csproj" />
   </ItemGroup>
 
 </Project>

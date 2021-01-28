@@ -4,7 +4,7 @@ using System;
 
 namespace SeiyuuMoe.Infrastructure.Warehouse
 {
-	internal class WarehouseDbContext : DbContext
+	public class WarehouseDbContext : DbContext
 	{
 		private readonly WarehouseDatabaseConfiguration _databaseConfiguration;
 

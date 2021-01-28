@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SeiyuuMoe.Domain\SeiyuuMoe.Domain.csproj" />
+    <ProjectReference Include="..\SeiyuuMoe.Infrastructure.Warehouse\SeiyuuMoe.Infrastructure.Warehouse.csproj" />
   </ItemGroup>
 
 </Project>
