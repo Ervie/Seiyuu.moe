@@ -3,7 +3,6 @@ using SeiyuuMoe.Infrastructure.VisualNovels;
 using SeiyuuMoe.Infrastructure.Warehouse;
 using SeiyuuMoe.Infrastructure.Warehouse.Repositories;
 using SeiyuuMoe.VndbBackgroundJobs.Application.Handlers;
-using System;
 using System.Collections.Generic;
 
 namespace SeiyuuMoe.VndbBackgroundJobs.Job.Factory

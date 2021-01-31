@@ -23,6 +23,8 @@ namespace SeiyuuMoe.VndbBackgroundJobs.Application.Handlers
 
 		public async Task HandleAsync()
 		{
+			Console.WriteLine("Started AddOrUpdateVisualNovelsHandler job");
+
 			var totalVndbVisualNovels = await _vndbVisualNovelRepository.GetCountAsync();
 
 			var batchCount = totalVndbVisualNovels / BatchSize + 1;
@@ -36,6 +38,8 @@ namespace SeiyuuMoe.VndbBackgroundJobs.Application.Handlers
 					await InsertOrUpdateVisualNovelAsync(vndbVisualNovel);
 				}
 			}
+
+			Console.WriteLine("Finished AddOrUpdateVisualNovelsHandler job");
 		}
 
 		private async Task InsertOrUpdateVisualNovelAsync(VndbVisualNovel vndbVisualNovel)
