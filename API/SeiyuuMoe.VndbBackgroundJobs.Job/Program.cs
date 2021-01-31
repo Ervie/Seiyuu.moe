@@ -11,6 +11,7 @@ namespace SeiyuuMoe.VndbBackgroundJobs.Job
 	{
 		static async Task Main(string[] args)
 		{
+			Environment.SetEnvironmentVariable("EnvironmentType", "dev"); //for testing only
 			Console.WriteLine("Starting Vndb jobs.");
 
 			var seiyuuMoeContext = new SeiyuuMoeContext(ConfigurationReader.DatabaseConfiguration);

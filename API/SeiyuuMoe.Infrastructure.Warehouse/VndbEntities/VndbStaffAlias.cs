@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SeiyuuMoe.Infrastructure.Warehouse.VndbEntities
 {
@@ -8,6 +9,7 @@ namespace SeiyuuMoe.Infrastructure.Warehouse.VndbEntities
 		[Column("id")]
 		public int Id { get; set; }
 
+		[Key]
 		[Column("aid")]
 		public int StaffAliasId { get; set; }
 

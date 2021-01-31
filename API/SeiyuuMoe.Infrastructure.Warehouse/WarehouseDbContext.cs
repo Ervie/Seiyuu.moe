@@ -32,6 +32,24 @@ namespace SeiyuuMoe.Infrastructure.Warehouse
 			{
 				modelBuilder.HasDefaultSchema(_databaseConfiguration.DbSchema);
 			}
+
+
+			modelBuilder.Entity<VndbCharacterVisualNovel>(entity =>
+			{
+				entity.HasNoKey();
+
+				//entity.HasOne(d => d.Character)
+				//	.WithMany(p => p.CharacterVisualNovels)
+				//	.HasForeignKey(d => d.CharacterId)
+				//	.OnDelete(DeleteBehavior.Cascade);
+
+				//entity.HasOne(d => d.VisualNovel)
+				//	.WithMany(p => p.CharacterVisualNovels)
+				//	.HasForeignKey(d => d.VisualNovelId)
+				//	.OnDelete(DeleteBehavior.Cascade);
+			});
+
+			modelBuilder.Entity<VndbVisualNovelSeiyuu>().HasKey(p => new { p.VisualNovelId, p.StaffId, p.CharacterId });
 		}
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
