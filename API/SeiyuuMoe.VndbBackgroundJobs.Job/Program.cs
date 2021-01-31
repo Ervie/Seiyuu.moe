@@ -9,7 +9,7 @@ namespace SeiyuuMoe.VndbBackgroundJobs.Job
 {
 	class Program
 	{
-		static async Task Main(string[] args)
+		private static async Task Main()
 		{
 			Environment.SetEnvironmentVariable("EnvironmentType", "dev"); //for testing only
 			Console.WriteLine("Starting Vndb jobs.");

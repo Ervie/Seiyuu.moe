@@ -9,7 +9,6 @@ namespace SeiyuuMoe.Infrastructure.Warehouse.VndbEntities
 	{
 		public VndbCharacter()
 		{
-			//CharacterVisualNovels = new HashSet<VndbCharacterVisualNovel>();
 			VisualNovelSeiyuus = new HashSet<VndbVisualNovelSeiyuu>();
 		}
 
@@ -32,10 +31,6 @@ namespace SeiyuuMoe.Infrastructure.Warehouse.VndbEntities
 		[Column("desc")]
 		public string Description { get; set; }
 
-		[Column("c_votecount")]
-		public int VoteCount { get; set; }
-
-		//public virtual ICollection<VndbCharacterVisualNovel> CharacterVisualNovels { get; set; }
 		public virtual ICollection<VndbVisualNovelSeiyuu> VisualNovelSeiyuus { get; set; }
 	}
 }

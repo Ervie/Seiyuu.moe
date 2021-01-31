@@ -9,6 +9,11 @@
 			$"{VndbFileServerBaseUrl}/cv/{GetImageSubPathFromImageId(imageId)}/{GetImageIdWithoutCategoryFromImageId(imageId)}.jpg" :
 			null;
 
+		public static string GenerateVndbCharacterImageUrlFromImageId(string imageId)
+			=> !string.IsNullOrWhiteSpace(imageId) ?
+			$"{VndbFileServerBaseUrl}/ch/{GetImageSubPathFromImageId(imageId)}/{GetImageIdWithoutCategoryFromImageId(imageId)}.jpg" :
+			null;
+
 		private static string GetImageSubPathFromImageId(string imageId)
 			=> imageId[^2..];
 
