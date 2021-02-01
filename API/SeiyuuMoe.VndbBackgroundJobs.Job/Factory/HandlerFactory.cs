@@ -29,6 +29,7 @@ namespace SeiyuuMoe.VndbBackgroundJobs.Job.Factory
 		private IVndbJobHandler CreateMatchSeiyuuHandler() =>
 			new MatchSeiyuuHandler(
 				new VndbStaffAliasRepository(_warehouseDbContext),
+				new VndbStaffRepository(_warehouseDbContext),
 				new SeiyuuRepository(_seiyuuMoeContext)
 			);
 
