@@ -1,4 +1,5 @@
 ﻿using SeiyuuMoe.Infrastructure.Context;
+using SeiyuuMoe.Infrastructure.Seiyuus;
 using SeiyuuMoe.Infrastructure.VisualNovels;
 using SeiyuuMoe.Infrastructure.Warehouse;
 using SeiyuuMoe.Infrastructure.Warehouse.Repositories;
@@ -20,9 +21,16 @@ namespace SeiyuuMoe.VndbBackgroundJobs.Job.Factory
 
 		public ICollection<IVndbJobHandler> CreateAllHandlers() => new List<IVndbJobHandler>
 		{
-			CreateAddOrUpdateVisualNovelsHandler(),
-			CreateAddOrUpdateCharactersHandler(),
+			//CreateAddOrUpdateVisualNovelsHandler(),
+			//CreateAddOrUpdateCharactersHandler(),
+			CreateMatchSeiyuuHandler()
 		};
+
+		private IVndbJobHandler CreateMatchSeiyuuHandler() =>
+			new MatchSeiyuuHandler(
+				new VndbStaffAliasRepository(_warehouseDbContext),
+				new SeiyuuRepository(_seiyuuMoeContext)
+			);
 
 		private IVndbJobHandler CreateAddOrUpdateCharactersHandler() =>
 			new AddOrUpdateVisualNovelCharactersHandler(

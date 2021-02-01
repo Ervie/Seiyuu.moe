@@ -7,20 +7,22 @@ namespace SeiyuuMoe.Infrastructure.Warehouse.VndbEntities
 	public class VndbVisualNovelSeiyuu
 	{
 		[Column("id")]
+		[ForeignKey(nameof(VisualNovel))]
 		public int VisualNovelId { get; set; }
 
 		[Column("aid")]
-		public int StaffId { get; set; }
+		[ForeignKey(nameof(SeiyuuAlias))]
+		public int SeiyuuAliasId { get; set; }
 
 		[Column("cid")]
+		[ForeignKey(nameof(Character))]
 		public int CharacterId { get; set; }
 
 		[Column("note")]
 		public string Note { get; set; }
 
-
 		public virtual VndbVisualNovel VisualNovel { get; set; }
 		public virtual VndbCharacter Character { get; set; }
-		public virtual VndbStaff Seiyuu { get; set; }
+		public virtual VndbStaffAlias SeiyuuAlias { get; set; }
 	}
 }

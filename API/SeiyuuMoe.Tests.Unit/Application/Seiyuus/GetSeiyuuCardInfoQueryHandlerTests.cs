@@ -23,7 +23,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Application.Seiyuus
 			var result = await handler.HandleAsync(new GetSeiyuuCardInfoQuery(seiyuuMalId));
 
 			// Then
-			mockRepository.Verify(x => x.GetAsync(seiyuuMalId), Times.Once);
+			mockRepository.Verify(x => x.GetByMalIdAsync(seiyuuMalId), Times.Once);
 			result.Should().BeNull();
 		}
 
@@ -33,14 +33,14 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Application.Seiyuus
 			// Given
 			const long seiyuuMalId = 0;
 			var mockRepository = new Mock<ISeiyuuRepository>();
-			mockRepository.Setup(x => x.GetAsync(seiyuuMalId)).ReturnsAsync(new SeiyuuBuilder().WithMalId(seiyuuMalId).Build());
+			mockRepository.Setup(x => x.GetByMalIdAsync(seiyuuMalId)).ReturnsAsync(new SeiyuuBuilder().WithMalId(seiyuuMalId).Build());
 			var handler = new GetSeiyuuCardInfoQueryHandler(mockRepository.Object);
 
 			// When
 			var result = await handler.HandleAsync(new GetSeiyuuCardInfoQuery(seiyuuMalId));
 
 			// Then
-			mockRepository.Verify(x => x.GetAsync(seiyuuMalId), Times.Once);
+			mockRepository.Verify(x => x.GetByMalIdAsync(seiyuuMalId), Times.Once);
 			result.Should().NotBeNull().And.BeOfType(typeof(SeiyuuCardDto));
 		}
 	}

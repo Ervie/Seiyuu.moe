@@ -31,8 +31,11 @@ namespace SeiyuuMoe.Infrastructure.Seiyuus
 
 		public Task<int> GetSeiyuuCountAsync() => _dbContext.Seiyuus.CountAsync();
 
-		public Task<Seiyuu> GetAsync(long seiyuuMalId)
+		public Task<Seiyuu> GetByMalIdAsync(long seiyuuMalId)
 			=> _dbContext.Seiyuus.FirstOrDefaultAsync(x => x.MalId == seiyuuMalId);
+
+		public Task<Seiyuu> GetByVndbIdAsync(int seiyuuVndbId)
+			=> _dbContext.Seiyuus.FirstOrDefaultAsync(x => x.VndbId == seiyuuVndbId);
 
 		public async Task<PagedResult<Seiyuu>> GetOrderedPageByPopularityAsync(Expression<Func<Seiyuu, bool>> predicate, int page = 0, int pageSize = 10)
 		{

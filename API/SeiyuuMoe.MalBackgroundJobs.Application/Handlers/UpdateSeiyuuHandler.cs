@@ -42,7 +42,7 @@ namespace SeiyuuMoe.MalBackgroundJobs.Application.Handlers
 
 		public async Task HandleAsync(UpdateSeiyuuMessage updateSeiyuuMessage)
 		{
-			var seiyuuToUpdate = await _seiyuuRepository.GetAsync(updateSeiyuuMessage.MalId);
+			var seiyuuToUpdate = await _seiyuuRepository.GetByMalIdAsync(updateSeiyuuMessage.MalId);
 
 			if (seiyuuToUpdate == null)
 			{

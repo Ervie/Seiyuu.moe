@@ -15,7 +15,7 @@ namespace SeiyuuMoe.Application.Seiyuus.GetSeiyuuCardInfo
 
 		public async Task<SeiyuuCardDto> HandleAsync(GetSeiyuuCardInfoQuery query)
 		{
-			var entity = await _seiyuuRepository.GetAsync(query.MalId);
+			var entity = await _seiyuuRepository.GetByMalIdAsync(query.MalId);
 
 			return entity.ToSeiyuuCardDto();
 		}

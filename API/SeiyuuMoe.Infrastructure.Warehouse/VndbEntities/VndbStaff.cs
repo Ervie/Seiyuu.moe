@@ -20,7 +20,7 @@ namespace SeiyuuMoe.Infrastructure.Warehouse.VndbEntities
 		[Column("aid")]
 		public int StaffAliasId { get; set; }
 
-		[Column("language")]
+		[Column("lang")]
 		public string Language { get; set; }
 
 		[Column("image")]

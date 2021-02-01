@@ -39,7 +39,7 @@ namespace SeiyuuMoe.Infrastructure.Warehouse
 				entity.HasNoKey();
 			});
 
-			modelBuilder.Entity<VndbVisualNovelSeiyuu>().HasKey(p => new { p.VisualNovelId, p.StaffId, p.CharacterId });
+			modelBuilder.Entity<VndbVisualNovelSeiyuu>().HasKey(p => new { p.VisualNovelId, p.SeiyuuAliasId, p.CharacterId });
 		}
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

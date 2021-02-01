@@ -172,21 +172,21 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 		}
 
 		[Fact]
-		public async Task GetAsync_GivenNoSeiyuu_ShouldReturnNull()
+		public async Task GetByMalIdAsync_GivenNoSeiyuu_ShouldReturnNull()
 		{
 			// Given
 			var dbContext = InMemoryDbProvider.GetDbContext();
 			var repository = new SeiyuuRepository(dbContext);
 
 			// When
-			var result = await repository.GetAsync(1);
+			var result = await repository.GetByMalIdAsync(1);
 
 			// Then
 			result.Should().BeNull();
 		}
 
 		[Fact]
-		public async Task GetAsync_GivenSeiyuuWithOtherId_ShouldReturnNull()
+		public async Task GetByMalIdAsync_GivenSeiyuuWithOtherId_ShouldReturnNull()
 		{
 			// Given
 			var dbContext = InMemoryDbProvider.GetDbContext();
@@ -197,14 +197,14 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			await dbContext.SaveChangesAsync();
 
 			// When
-			var result = await repository.GetAsync(2);
+			var result = await repository.GetByMalIdAsync(2);
 
 			// Then
 			result.Should().BeNull();
 		}
 
 		[Fact]
-		public async Task GetAsync_GivenExistingSeiyuuWithId_ShouldReturnResult()
+		public async Task GetByMalIdAsync_GivenExistingSeiyuuWithId_ShouldReturnResult()
 		{
 			// Given
 			var dbContext = InMemoryDbProvider.GetDbContext();
@@ -215,14 +215,14 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			await dbContext.SaveChangesAsync();
 
 			// When
-			var result = await repository.GetAsync(1);
+			var result = await repository.GetByMalIdAsync(1);
 
 			// Then
 			result.Should().NotBeNull();
 		}
 
 		[Fact]
-		public async Task GetAsync_GivenMultipleExistingSeiyuuOneOfWhichWithId_ShouldReturnResult()
+		public async Task GetByMalIdAsync_GivenMultipleExistingSeiyuuOneOfWhichWithId_ShouldReturnResult()
 		{
 			// Given
 			var dbContext = InMemoryDbProvider.GetDbContext();
@@ -241,7 +241,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			await dbContext.SaveChangesAsync();
 
 			// When
-			var result = await repository.GetAsync(3);
+			var result = await repository.GetByMalIdAsync(3);
 
 			// Then
 			result.Should().NotBeNull();
@@ -249,7 +249,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 		}
 
 		[Fact]
-		public async Task GetAsync_GivenExistingSeiyuuWithId_ShouldReturnResultWithEntities()
+		public async Task GetByMalIdAsync_GivenExistingSeiyuuWithId_ShouldReturnResultWithEntities()
 		{
 			// Given
 			const string expectedName = "ExpectedName";
@@ -277,7 +277,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
 			await dbContext.SaveChangesAsync();
 
 			// When
-			var result = await repository.GetAsync(1);
+			var result = await repository.GetByMalIdAsync(1);
 
 			// Then
 			using (new AssertionScope())

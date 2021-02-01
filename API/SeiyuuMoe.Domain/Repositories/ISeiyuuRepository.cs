@@ -9,7 +9,9 @@ namespace SeiyuuMoe.Domain.Repositories
 {
 	public interface ISeiyuuRepository
 	{
-		Task<Seiyuu> GetAsync(long seiyuuMalId);
+		Task<Seiyuu> GetByVndbIdAsync(int seiyuuVndbId);
+
+		Task<Seiyuu> GetByMalIdAsync(long seiyuuMalId);
 
 		Task<PagedResult<Seiyuu>> GetOrderedPageByPopularityAsync(Expression<Func<Seiyuu, bool>> predicate, int page = 0, int pageSize = 10);
 
