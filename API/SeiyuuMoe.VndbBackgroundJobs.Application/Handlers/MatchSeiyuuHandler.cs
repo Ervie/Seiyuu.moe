@@ -47,9 +47,14 @@ namespace SeiyuuMoe.VndbBackgroundJobs.Application.Handlers
 				return;
 			}
 
-			// TODO: match
 			var vndbSeiyuu = await _vndbStaffRepository.GetSeiyuuAsync(seiyuuId);
+			var matchedExistingSeiyuu = await _seiyuuRepository.GetByKanjiAsync(vndbSeiyuu.MainAlias.OriginalName);
 
+			if (matchedExistingSeiyuu != null)
+			{
+				matchedExistingSeiyuu.VndbId = vndbSeiyuu.Id;
+				await _seiyuuRepository.UpdateAsync(matchedExistingSeiyuu);
+			}
 		}
 	}
 }

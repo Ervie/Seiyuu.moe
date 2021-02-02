@@ -9,7 +9,6 @@ namespace SeiyuuMoe.Infrastructure.Warehouse.VndbEntities
 	{
 		public VndbStaff()
 		{
-			Aliases = new HashSet<VndbStaffAlias>();
 			VisualNovelSeiyuus = new HashSet<VndbVisualNovelSeiyuu>();
 		}
 
@@ -18,18 +17,16 @@ namespace SeiyuuMoe.Infrastructure.Warehouse.VndbEntities
 		public int Id { get; set; }
 
 		[Column("aid")]
-		public int StaffAliasId { get; set; }
+		[ForeignKey("aid")]
+		public int MainAliasId { get; set; }
 
 		[Column("lang")]
 		public string Language { get; set; }
 
-		[Column("image")]
-		public string Image { get; set; }
-
 		[Column("desc")]
 		public string Description { get; set; }
 
-		public virtual ICollection<VndbStaffAlias> Aliases { get; set; }
+		public virtual VndbStaffAlias MainAlias { get; set; }
 		public virtual ICollection<VndbVisualNovelSeiyuu> VisualNovelSeiyuus { get; set; }
 	}
 }

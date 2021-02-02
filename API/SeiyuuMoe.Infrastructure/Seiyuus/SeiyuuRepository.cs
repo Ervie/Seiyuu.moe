@@ -37,6 +37,9 @@ namespace SeiyuuMoe.Infrastructure.Seiyuus
 		public Task<Seiyuu> GetByVndbIdAsync(int seiyuuVndbId)
 			=> _dbContext.Seiyuus.FirstOrDefaultAsync(x => x.VndbId == seiyuuVndbId);
 
+		public Task<Seiyuu> GetByKanjiAsync(string kanjiName)
+			=> _dbContext.Seiyuus.FirstOrDefaultAsync(x => x.KanjiName == kanjiName);
+
 		public async Task<PagedResult<Seiyuu>> GetOrderedPageByPopularityAsync(Expression<Func<Seiyuu, bool>> predicate, int page = 0, int pageSize = 10)
 		{
 			var entities = _dbContext.Seiyuus.Where(predicate);

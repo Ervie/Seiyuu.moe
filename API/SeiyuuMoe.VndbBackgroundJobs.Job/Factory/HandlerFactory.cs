@@ -22,7 +22,7 @@ namespace SeiyuuMoe.VndbBackgroundJobs.Job.Factory
 		public ICollection<IVndbJobHandler> CreateAllHandlers() => new List<IVndbJobHandler>
 		{
 			//CreateAddOrUpdateVisualNovelsHandler(),
-			//CreateAddOrUpdateCharactersHandler(),
+			//CreateAddOrUpdateCharactersHandler(),k
 			CreateMatchSeiyuuHandler()
 		};
 

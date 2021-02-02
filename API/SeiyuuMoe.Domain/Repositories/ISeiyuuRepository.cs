@@ -13,6 +13,8 @@ namespace SeiyuuMoe.Domain.Repositories
 
 		Task<Seiyuu> GetByMalIdAsync(long seiyuuMalId);
 
+		Task<Seiyuu> GetByKanjiAsync(string kanjiName);
+
 		Task<PagedResult<Seiyuu>> GetOrderedPageByPopularityAsync(Expression<Func<Seiyuu, bool>> predicate, int page = 0, int pageSize = 10);
 
 		Task AddAsync(Seiyuu seiyuu);

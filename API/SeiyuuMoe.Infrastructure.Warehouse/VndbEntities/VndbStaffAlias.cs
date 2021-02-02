@@ -12,6 +12,7 @@ namespace SeiyuuMoe.Infrastructure.Warehouse.VndbEntities
 
 		[Key]
 		[Column("aid")]
+		[ForeignKey("staff_aid_fkey")]
 		public int StaffAliasId { get; set; }
 
 		[Column("name")]

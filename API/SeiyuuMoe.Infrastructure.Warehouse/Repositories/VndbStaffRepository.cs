@@ -16,7 +16,7 @@ namespace SeiyuuMoe.Infrastructure.Warehouse.Repositories
 
 		public Task<VndbStaff> GetSeiyuuAsync(int vndbId)
 			=> _warehouseDbContext.Staffs
-			.Include(x => x.Aliases)
+			.Include(x => x.MainAlias)
 			.FirstAsync(x => x.Id == vndbId);
 	}
 }
