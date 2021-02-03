@@ -26,7 +26,7 @@ namespace SeiyuuMoe.MalBackgroundJobs.Application.Handlers
 		{
 			var thresholdDate = DateTime.UtcNow.AddDays(-14);
 
-			var seiyuuToUpdate = await _seiyuuRepository.GetOlderThanModifiedDate(thresholdDate, _batchSize);
+			var seiyuuToUpdate = await _seiyuuRepository.GetOlderThanModifiedDateAsync(thresholdDate, _batchSize);
 
 			var publishTasks = seiyuuToUpdate.Select(
 				(a, i) => _seiyuuUpdatePublisher.PublishSeiyuuUpdateAsync(

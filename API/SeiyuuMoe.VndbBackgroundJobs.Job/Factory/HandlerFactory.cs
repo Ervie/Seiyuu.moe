@@ -23,8 +23,19 @@ namespace SeiyuuMoe.VndbBackgroundJobs.Job.Factory
 		{
 			//CreateAddOrUpdateVisualNovelsHandler(),
 			//CreateAddOrUpdateCharactersHandler(),k
-			CreateMatchSeiyuuHandler()
+			//CreateMatchSeiyuuHandler()
+			CreateInsertNewRolesHandler()
 		};
+
+		private IVndbJobHandler CreateInsertNewRolesHandler()
+			=> new InsertNewRolesHandler(
+				new SeiyuuRepository(_seiyuuMoeContext),
+				new VndbStaffAliasRepository(_warehouseDbContext),
+				new VisualNovelRepository(_seiyuuMoeContext),
+				new VisualNovelCharacterRepository(_seiyuuMoeContext),
+				new VisualNovelRoleRepository(_seiyuuMoeContext),
+				new VndbCharacterVisualNovelRepository(_warehouseDbContext)
+			);
 
 		private IVndbJobHandler CreateMatchSeiyuuHandler() =>
 			new MatchSeiyuuHandler(

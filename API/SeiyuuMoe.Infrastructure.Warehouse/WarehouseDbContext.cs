@@ -39,7 +39,12 @@ namespace SeiyuuMoe.Infrastructure.Warehouse
 				entity.HasNoKey();
 			});
 
-			modelBuilder.Entity<VndbVisualNovelSeiyuu>().HasKey(p => new { p.VisualNovelId, p.SeiyuuAliasId, p.CharacterId });
+			modelBuilder.Entity<VndbVisualNovelSeiyuu>().HasKey(p => new { p.VisualNovelId, p.StaffAliasId, p.CharacterId });
+			//modelBuilder.Entity<VndbVisualNovelSeiyuu>()
+			//	.HasOne(x => x.StaffAlias)
+			//	.WithMany(x => x.Roles)
+			//	.HasForeignKey(x => x.StaffAliasId)
+			//	.HasConstraintName("vn_seiyuu_aid_fkey");
 		}
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

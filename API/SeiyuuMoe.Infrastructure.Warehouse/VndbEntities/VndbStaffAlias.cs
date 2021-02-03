@@ -7,12 +7,16 @@ namespace SeiyuuMoe.Infrastructure.Warehouse.VndbEntities
 	[Table("staff_alias")]
 	public class VndbStaffAlias
 	{
+		public VndbStaffAlias()
+		{
+			Roles = new HashSet<VndbVisualNovelSeiyuu>();
+		}
+
 		[Column("id"), ForeignKey(nameof(Staff))]
 		public int Id { get; set; }
 
 		[Key]
 		[Column("aid")]
-		[ForeignKey("staff_aid_fkey")]
 		public int StaffAliasId { get; set; }
 
 		[Column("name")]
@@ -23,6 +27,6 @@ namespace SeiyuuMoe.Infrastructure.Warehouse.VndbEntities
 
 		public virtual VndbStaff Staff { get; set; }
 
-		public ICollection<VndbVisualNovelSeiyuu> Roles { get; set; }
+		public virtual ICollection<VndbVisualNovelSeiyuu> Roles { get; set; }
 	}
 }

@@ -11,8 +11,8 @@ namespace SeiyuuMoe.Infrastructure.Warehouse.VndbEntities
 		public int VisualNovelId { get; set; }
 
 		[Column("aid")]
-		[ForeignKey(nameof(SeiyuuAlias))]
-		public int SeiyuuAliasId { get; set; }
+		[ForeignKey(nameof(StaffAlias))]
+		public int StaffAliasId { get; set; }
 
 		[Column("cid")]
 		[ForeignKey(nameof(Character))]
@@ -23,6 +23,6 @@ namespace SeiyuuMoe.Infrastructure.Warehouse.VndbEntities
 
 		public virtual VndbVisualNovel VisualNovel { get; set; }
 		public virtual VndbCharacter Character { get; set; }
-		public virtual VndbStaffAlias SeiyuuAlias { get; set; }
+		public virtual VndbStaffAlias StaffAlias { get; set; }
 	}
 }

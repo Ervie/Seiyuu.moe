@@ -12,15 +12,12 @@ namespace SeiyuuMoe.Infrastructure.Warehouse.VndbEntities
 		public int VisualNovelId { get; set; }
 
 		[Column("rid")]
-		public int ReleaseId { get; set; }
+		public int? ReleaseId { get; set; }
 
 		[Column("spoil")]
-		public bool IsSpoiler { get; set; }
+		public short IsSpoiler { get; set; }
 
 		[Column("role")]
 		public string RoleType { get; set; }
-
-		public virtual VndbVisualNovel VisualNovel { get; set; }
-		public virtual VndbCharacter Character { get; set; }
 	}
 }

@@ -34,7 +34,7 @@ namespace SeiyuuMoe.Infrastructure.Seiyuus
 		public Task<Seiyuu> GetByMalIdAsync(long seiyuuMalId)
 			=> _dbContext.Seiyuus.FirstOrDefaultAsync(x => x.MalId == seiyuuMalId);
 
-		public Task<Seiyuu> GetByVndbIdAsync(int seiyuuVndbId)
+		public Task<Seiyuu> GetByVndbIdAsync(long seiyuuVndbId)
 			=> _dbContext.Seiyuus.FirstOrDefaultAsync(x => x.VndbId == seiyuuVndbId);
 
 		public Task<Seiyuu> GetByKanjiAsync(string kanjiName)
@@ -66,18 +66,24 @@ namespace SeiyuuMoe.Infrastructure.Seiyuus
 			await _dbContext.SaveChangesAsync();
 		}
 
-		public async Task<long?> GetLastSeiyuuMalId()
+		public async Task<long?> GetLastSeiyuuMalIdAsync()
 		{
 			var lastSeiyuu = await _dbContext.Seiyuus.OrderBy(x => x.MalId).LastOrDefaultAsync();
 			return lastSeiyuu?.MalId;
 		}
 
-		public async Task<IReadOnlyList<Seiyuu>> GetOlderThanModifiedDate(DateTime olderThan, int pageSize = 150)
+		public async Task<IReadOnlyList<Seiyuu>> GetOlderThanModifiedDateAsync(DateTime olderThan, int pageSize = 150)
 			=> await _dbContext.Seiyuus
 				.Where(x => x.ModificationDate < olderThan)
 				.OrderBy(x => x.ModificationDate)
 				.ThenBy(x => x.Id)
 				.Take(pageSize)
 				.ToListAsync();
+
+		public Task<List<long>> GetAllVndbIdsAsync()
+			=> _dbContext.Seiyuus
+			.Where(x => x.VndbId.HasValue)
+			.Select(x => x.VndbId.Value)
+			.ToListAsync();
 	}
 }

@@ -9,7 +9,7 @@ namespace SeiyuuMoe.Domain.Repositories
 {
 	public interface ISeiyuuRepository
 	{
-		Task<Seiyuu> GetByVndbIdAsync(int seiyuuVndbId);
+		Task<Seiyuu> GetByVndbIdAsync(long seiyuuVndbId);
 
 		Task<Seiyuu> GetByMalIdAsync(long seiyuuMalId);
 
@@ -25,8 +25,10 @@ namespace SeiyuuMoe.Domain.Repositories
 
 		Task<int> GetSeiyuuCountAsync();
 
-		Task<long?> GetLastSeiyuuMalId();
+		Task<long?> GetLastSeiyuuMalIdAsync();
 
-		Task<IReadOnlyList<Seiyuu>> GetOlderThanModifiedDate(DateTime olderThan, int pageSize = 150);
+		Task<IReadOnlyList<Seiyuu>> GetOlderThanModifiedDateAsync(DateTime olderThan, int pageSize = 150);
+
+		Task<List<long>> GetAllVndbIdsAsync();
 	}
 }

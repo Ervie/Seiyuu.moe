@@ -7,11 +7,6 @@ namespace SeiyuuMoe.Infrastructure.Warehouse.VndbEntities
 	[Table("staff")]
 	public  class VndbStaff
 	{
-		public VndbStaff()
-		{
-			VisualNovelSeiyuus = new HashSet<VndbVisualNovelSeiyuu>();
-		}
-
 		[Key]
 		[Column("id")]
 		public int Id { get; set; }
@@ -27,6 +22,5 @@ namespace SeiyuuMoe.Infrastructure.Warehouse.VndbEntities
 		public string Description { get; set; }
 
 		public virtual VndbStaffAlias MainAlias { get; set; }
-		public virtual ICollection<VndbVisualNovelSeiyuu> VisualNovelSeiyuus { get; set; }
 	}
 }
