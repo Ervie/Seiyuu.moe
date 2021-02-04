@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SeiyuuMoe.Application;
 using SeiyuuMoe.Infrastructure;
+using SeiyuuMoe.Infrastructure.Database;
 using SeiyuuMoe.Infrastructure.Database.Configuration;
 using System;
 
@@ -45,6 +46,7 @@ namespace SeiyuuMoe.API
 			builder.RegisterModule(new InfrastructureModule());
 			builder.RegisterModule(new DomainModule());
 			builder.RegisterModule(new ApplicationModule());
+			builder.RegisterModule(new DatabaseModule());
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

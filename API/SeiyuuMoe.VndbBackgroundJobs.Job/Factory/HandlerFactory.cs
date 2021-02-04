@@ -21,9 +21,9 @@ namespace SeiyuuMoe.VndbBackgroundJobs.Job.Factory
 
 		public ICollection<IVndbJobHandler> CreateAllHandlers() => new List<IVndbJobHandler>
 		{
-			//CreateAddOrUpdateVisualNovelsHandler(),
-			//CreateAddOrUpdateCharactersHandler(),k
-			//CreateMatchSeiyuuHandler()
+			CreateAddOrUpdateVisualNovelsHandler(),
+			CreateAddOrUpdateCharactersHandler(),
+			CreateMatchSeiyuuHandler(),
 			CreateInsertNewRolesHandler()
 		};
 
