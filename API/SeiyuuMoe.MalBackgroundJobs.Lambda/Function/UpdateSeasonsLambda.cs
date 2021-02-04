@@ -1,8 +1,9 @@
 ﻿using JikanDotNet;
 using SeiyuuMoe.Infrastructure.Configuration;
-using SeiyuuMoe.Infrastructure.Context;
+using SeiyuuMoe.Infrastructure.Database.Animes;
+using SeiyuuMoe.Infrastructure.Database.Configuration;
+using SeiyuuMoe.Infrastructure.Database.Context;
 using SeiyuuMoe.Infrastructure.Jikan;
-using SeiyuuMoe.Infrastructure.Seasons;
 using SeiyuuMoe.MalBackgroundJobs.Application.Handlers;
 using SeiyuuMoe.MalBackgroundJobs.Lambda.Base;
 using System;
@@ -16,7 +17,7 @@ namespace SeiyuuMoe.MalBackgroundJobs.Lambda.Function
 		{
 			Console.WriteLine("ScheduleAnimesLambda was invoked");
 
-			var dbConfig = ConfigurationReader.DatabaseConfiguration;
+			var dbConfig = DatabaseConfigurationReader.GetDatabaseConfiguration();
 			using var dbContext = new SeiyuuMoeContext(dbConfig);
 
 			var handler = CreateHandler(dbContext);

@@ -1,13 +1,11 @@
 ﻿using JikanDotNet;
-using SeiyuuMoe.Domain.SqsMessages;
-using SeiyuuMoe.Infrastructure.Animes;
-using SeiyuuMoe.Infrastructure.Characters;
 using SeiyuuMoe.Infrastructure.Configuration;
-using SeiyuuMoe.Infrastructure.Context;
+using SeiyuuMoe.Infrastructure.Database.Animes;
+using SeiyuuMoe.Infrastructure.Database.Configuration;
+using SeiyuuMoe.Infrastructure.Database.Context;
+using SeiyuuMoe.Infrastructure.Database.Seiyuus;
 using SeiyuuMoe.Infrastructure.Jikan;
 using SeiyuuMoe.Infrastructure.S3;
-using SeiyuuMoe.Infrastructure.Seasons;
-using SeiyuuMoe.Infrastructure.Seiyuus;
 using SeiyuuMoe.MalBackgroundJobs.Application.Handlers;
 using SeiyuuMoe.MalBackgroundJobs.Lambda.Base;
 using System;
@@ -21,7 +19,7 @@ namespace SeiyuuMoe.MalBackgroundJobs.Lambda.Function
 		{
 			Console.WriteLine($"InsertSeiyuuLambda was invoked.");
 
-			var dbConfig = ConfigurationReader.DatabaseConfiguration;
+			var dbConfig = DatabaseConfigurationReader.GetDatabaseConfiguration();
 			using var dbContext = new SeiyuuMoeContext(dbConfig);
 
 			var handler = CreateHandler(dbContext);

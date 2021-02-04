@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using SeiyuuMoe.Domain.Entities;
-using SeiyuuMoe.Infrastructure.Seiyuus;
+using SeiyuuMoe.Infrastructure.Database.Seiyuus;
 using SeiyuuMoe.Tests.Common.Builders.Model;
 using SeiyuuMoe.Tests.Common.Helpers;
 using System;

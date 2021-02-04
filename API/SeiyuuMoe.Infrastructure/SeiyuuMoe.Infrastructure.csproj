@@ -11,20 +11,12 @@
     <PackageReference Include="AWSSDK.S3" Version="3.3.113.2" />
     <PackageReference Include="AWSSDK.SQS" Version="3.3.103.26" />
     <PackageReference Include="JikanDotNet" Version="1.5.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.11" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.11" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.11">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Moq" Version="4.16.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="3.1.11" />
     <PackageReference Include="NLog" Version="4.7.7" />
-    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.2.4" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\SeiyuuMoe.Domain\SeiyuuMoe.Domain.csproj" />
-    <ProjectReference Include="..\SeiyuuMoe.Infrastructure.Warehouse\SeiyuuMoe.Infrastructure.Warehouse.csproj" />
   </ItemGroup>
 
 </Project>

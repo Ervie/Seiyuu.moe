@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SeiyuuMoe.Application;
 using SeiyuuMoe.Infrastructure;
-using SeiyuuMoe.Infrastructure.Configuration;
+using SeiyuuMoe.Infrastructure.Database.Configuration;
 using System;
 
 namespace SeiyuuMoe.API
@@ -39,9 +39,8 @@ namespace SeiyuuMoe.API
 
 		public void ConfigureContainer(ContainerBuilder builder)
 		{
-			var seiyuuMoeConfig = Configuration.GetSection("Config").Get<SeiyuuMoeConfiguration>();
-			builder.RegisterInstance(seiyuuMoeConfig).As<SeiyuuMoeConfiguration>();
-			builder.RegisterInstance(seiyuuMoeConfig.DatabaseConfiguration).As<DatabaseConfiguration>();
+			var seiyuuMoedbConfig = Configuration.GetSection("Config").Get<DatabaseConfiguration>();
+			builder.RegisterInstance(seiyuuMoedbConfig).As<DatabaseConfiguration>();
 
 			builder.RegisterModule(new InfrastructureModule());
 			builder.RegisterModule(new DomainModule());

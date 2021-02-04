@@ -1,6 +1,6 @@
-﻿using SeiyuuMoe.Infrastructure.Context;
-using SeiyuuMoe.Infrastructure.Seiyuus;
-using SeiyuuMoe.Infrastructure.VisualNovels;
+﻿using SeiyuuMoe.Infrastructure.Database.Context;
+using SeiyuuMoe.Infrastructure.Database.Seiyuus;
+using SeiyuuMoe.Infrastructure.Database.VisualNovels;
 using SeiyuuMoe.Infrastructure.Warehouse;
 using SeiyuuMoe.Infrastructure.Warehouse.Repositories;
 using SeiyuuMoe.VndbBackgroundJobs.Application.Handlers;

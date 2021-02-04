@@ -6,8 +6,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SeiyuuMoe.Domain\SeiyuuMoe.Domain.csproj" />
+    <ProjectReference Include="..\SeiyuuMoe.Infrastructure.Database\SeiyuuMoe.Infrastructure.Database.csproj" />
     <ProjectReference Include="..\SeiyuuMoe.Infrastructure.Warehouse\SeiyuuMoe.Infrastructure.Warehouse.csproj" />
-    <ProjectReference Include="..\SeiyuuMoe.Infrastructure\SeiyuuMoe.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

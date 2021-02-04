@@ -1,6 +1,6 @@
 ﻿using SeiyuuMoe.Application.Seiyuus.SearchSeiyuu;
 using SeiyuuMoe.Infrastructure.Extensions;
-using SeiyuuMoe.Infrastructure.Utilities;
+using SeiyuuMoe.Infrastructure.Database.Utilities;
 using System;
 using System.Linq.Expressions;
 

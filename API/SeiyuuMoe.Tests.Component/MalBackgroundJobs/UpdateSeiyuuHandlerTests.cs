@@ -5,12 +5,10 @@ using Microsoft.EntityFrameworkCore;
 using Moq;
 using SeiyuuMoe.Domain.Entities;
 using SeiyuuMoe.Domain.SqsMessages;
-using SeiyuuMoe.Infrastructure.Animes;
-using SeiyuuMoe.Infrastructure.Characters;
-using SeiyuuMoe.Infrastructure.Context;
+using SeiyuuMoe.Infrastructure.Database.Animes;
+using SeiyuuMoe.Infrastructure.Database.Context;
+using SeiyuuMoe.Infrastructure.Database.Seiyuus;
 using SeiyuuMoe.Infrastructure.Jikan;
-using SeiyuuMoe.Infrastructure.Seasons;
-using SeiyuuMoe.Infrastructure.Seiyuus;
 using SeiyuuMoe.MalBackgroundJobs.Application.Handlers;
 using SeiyuuMoe.Tests.Common.Builders.Jikan;
 using SeiyuuMoe.Tests.Common.Builders.Model;
@@ -2509,7 +2507,6 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				TitleSynonyms = new List<string>(),
 				Popularity = secondReturnedAnimePopularity
 			};
-
 
 			const string firstReturnedCharacterName = "PostUpdateNameCharacter1";
 			const string firstReturnedCharacterAbout = "PostUpdateAboutCharacter1";

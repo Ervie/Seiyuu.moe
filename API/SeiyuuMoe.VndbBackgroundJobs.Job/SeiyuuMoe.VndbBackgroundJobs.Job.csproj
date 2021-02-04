@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SeiyuuMoe.Domain\SeiyuuMoe.Domain.csproj" />
+    <ProjectReference Include="..\SeiyuuMoe.Infrastructure.Database\SeiyuuMoe.Infrastructure.Database.csproj" />
     <ProjectReference Include="..\SeiyuuMoe.Infrastructure.Warehouse\SeiyuuMoe.Infrastructure.Warehouse.csproj" />
     <ProjectReference Include="..\SeiyuuMoe.Infrastructure\SeiyuuMoe.Infrastructure.csproj" />
     <ProjectReference Include="..\SeiyuuMoe.VndbBackgroundJobs.Application\SeiyuuMoe.VndbBackgroundJobs.Application.csproj" />

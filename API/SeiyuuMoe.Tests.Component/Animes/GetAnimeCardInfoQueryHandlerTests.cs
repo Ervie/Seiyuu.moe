@@ -2,8 +2,8 @@
 using FluentAssertions.Execution;
 using SeiyuuMoe.Application.Animes.GetAnimeCardInfo;
 using SeiyuuMoe.Domain.Entities;
-using SeiyuuMoe.Infrastructure.Animes;
-using SeiyuuMoe.Infrastructure.Context;
+using SeiyuuMoe.Infrastructure.Database.Animes;
+using SeiyuuMoe.Infrastructure.Database.Context;
 using SeiyuuMoe.Tests.Common.Builders.Model;
 using SeiyuuMoe.Tests.Common.Helpers;
 using System.Threading.Tasks;

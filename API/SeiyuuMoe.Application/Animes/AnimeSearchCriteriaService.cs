@@ -1,6 +1,6 @@
 ﻿using SeiyuuMoe.Application.Animes.SearchAnime;
 using SeiyuuMoe.Domain.Entities;
-using SeiyuuMoe.Infrastructure.Utilities;
+using SeiyuuMoe.Infrastructure.Database.Utilities;
 using System;
 using System.Linq.Expressions;
 
