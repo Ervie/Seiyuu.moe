@@ -11,8 +11,10 @@ namespace SeiyuuMoe.Tests.Common.Builders.Model
 		private string _japaneseName = string.Empty;
 		private string _about = string.Empty;
 		private long _malId;
+		private long _vndbId;
 		private int _popularity;
 		private Guid _id;
+		private DateTime _modificationDate;
 
 		public Seiyuu Build() => new Seiyuu
 		{
@@ -20,10 +22,12 @@ namespace SeiyuuMoe.Tests.Common.Builders.Model
 			Name = _name,
 			ImageUrl = _imageUrl,
 			MalId = _malId,
+			VndbId = _vndbId,
 			Birthday = _birthday,
 			Popularity = _popularity,
 			KanjiName = _japaneseName,
-			About = _about
+			About = _about,
+			ModificationDate = _modificationDate
 		};
 
 
@@ -51,6 +55,12 @@ namespace SeiyuuMoe.Tests.Common.Builders.Model
 			return this;
 		}
 
+		public SeiyuuBuilder WithVndbId(long vndbId)
+		{
+			_vndbId = vndbId;
+			return this;
+		}
+
 		public SeiyuuBuilder WithBirthday(DateTime? birthday)
 		{
 			_birthday = birthday;
@@ -72,6 +82,11 @@ namespace SeiyuuMoe.Tests.Common.Builders.Model
 		public SeiyuuBuilder WithAbout(string about)
 		{
 			_about = about;
+			return this;
+		}
+		public SeiyuuBuilder WithModificationdDate(DateTime modificationDate)
+		{
+			_modificationDate = modificationDate;
 			return this;
 		}
 	}

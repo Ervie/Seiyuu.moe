@@ -293,6 +293,257 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure.Database
 		}
 
 		[Fact]
+		public async Task GetByVndbIdAsync_GivenNoSeiyuu_ShouldReturnNull()
+		{
+			// Given
+			var dbContext = InMemoryDbProvider.GetDbContext();
+			var repository = new SeiyuuRepository(dbContext);
+
+			// When
+			var result = await repository.GetByVndbIdAsync(1);
+
+			// Then
+			result.Should().BeNull();
+		}
+
+		[Fact]
+		public async Task GetByVndbIdAsync_GivenSeiyuuWithOtherId_ShouldReturnNull()
+		{
+			// Given
+			var dbContext = InMemoryDbProvider.GetDbContext();
+			var repository = new SeiyuuRepository(dbContext);
+			var seiyuu = new SeiyuuBuilder().WithVndbId(1).Build();
+
+			await dbContext.Seiyuus.AddAsync(seiyuu);
+			await dbContext.SaveChangesAsync();
+
+			// When
+			var result = await repository.GetByMalIdAsync(2);
+
+			// Then
+			result.Should().BeNull();
+		}
+
+		[Fact]
+		public async Task GetByVndbIdAsync_GivenExistingSeiyuuWithId_ShouldReturnResult()
+		{
+			// Given
+			var dbContext = InMemoryDbProvider.GetDbContext();
+			var repository = new SeiyuuRepository(dbContext);
+			var seiyuu = new SeiyuuBuilder().WithVndbId(1).Build();
+
+			await dbContext.Seiyuus.AddAsync(seiyuu);
+			await dbContext.SaveChangesAsync();
+
+			// When
+			var result = await repository.GetByVndbIdAsync(1);
+
+			// Then
+			result.Should().NotBeNull();
+		}
+
+		[Fact]
+		public async Task GetByVndbIdAsync_GivenMultipleExistingSeiyuuOneOfWhichWithId_ShouldReturnResult()
+		{
+			// Given
+			var dbContext = InMemoryDbProvider.GetDbContext();
+			var repository = new SeiyuuRepository(dbContext);
+			var seiyuu1 = new SeiyuuBuilder().WithVndbId(1).Build();
+			var seiyuu2 = new SeiyuuBuilder().WithVndbId(2).Build();
+			var seiyuu3 = new SeiyuuBuilder().WithVndbId(3).Build();
+			var seiyuu4 = new SeiyuuBuilder().WithVndbId(4).Build();
+			var seiyuu5 = new SeiyuuBuilder().WithVndbId(5).Build();
+
+			await dbContext.Seiyuus.AddAsync(seiyuu1);
+			await dbContext.Seiyuus.AddAsync(seiyuu2);
+			await dbContext.Seiyuus.AddAsync(seiyuu3);
+			await dbContext.Seiyuus.AddAsync(seiyuu4);
+			await dbContext.Seiyuus.AddAsync(seiyuu5);
+			await dbContext.SaveChangesAsync();
+
+			// When
+			var result = await repository.GetByVndbIdAsync(3);
+
+			// Then
+			result.Should().NotBeNull();
+			result.VndbId.Should().Be(3);
+		}
+
+		[Fact]
+		public async Task GetByVndbIdAsync_GivenExistingSeiyuuWithId_ShouldReturnResultWithEntities()
+		{
+			// Given
+			const string expectedName = "ExpectedName";
+			const string expectedImageUrl = "ExpectedImageUrl";
+			const string expectedKanjiName = "期待される日本語タイトル";
+			const string expectedAbout = "ExpectedAbout";
+			var expectedDateOfBirth = new DateTime(1990, 1, 1);
+			const int expectedPopularity = 1000;
+			const long expectedVndbId = 1;
+			const long expectedMalId = 3;
+
+			var seiyuu = new SeiyuuBuilder()
+				.WithName(expectedName)
+				.WithImageUrl(expectedImageUrl)
+				.WithVndbId(expectedVndbId)
+				.WithMalId(expectedMalId)
+				.WithJapaneseName(expectedKanjiName)
+				.WithAbout(expectedAbout)
+				.WithBirthday(expectedDateOfBirth)
+				.WithPopularity(expectedPopularity)
+				.Build();
+
+			var dbContext = InMemoryDbProvider.GetDbContext();
+			var repository = new SeiyuuRepository(dbContext);
+
+			await dbContext.Seiyuus.AddAsync(seiyuu);
+			await dbContext.SaveChangesAsync();
+
+			// When
+			var result = await repository.GetByVndbIdAsync(1);
+
+			// Then
+			using (new AssertionScope())
+			{
+				result.Should().NotBeNull();
+				result.Name.Should().Be(expectedName);
+				result.MalId.Should().Be(expectedMalId);
+				result.ImageUrl.Should().Be(expectedImageUrl);
+				result.MalId.Should().Be(expectedMalId);
+				result.KanjiName.Should().Be(expectedKanjiName);
+				result.Birthday.Should().Be(expectedDateOfBirth);
+				result.About.Should().Be(expectedAbout);
+				result.Popularity.Should().Be(expectedPopularity);
+			}
+		}
+
+		[Fact]
+		public async Task GetByKanjiAsync_GivenNoSeiyuu_ShouldReturnNull()
+		{
+			// Given
+			var dbContext = InMemoryDbProvider.GetDbContext();
+			var repository = new SeiyuuRepository(dbContext);
+
+			// When
+			var result = await repository.GetByKanjiAsync("期待される日本語タイトル");
+
+			// Then
+			result.Should().BeNull();
+		}
+
+		[Fact]
+		public async Task GetByKanjiAsync_GivenSeiyuuWithOtherId_ShouldReturnNull()
+		{
+			// Given
+			var dbContext = InMemoryDbProvider.GetDbContext();
+			var repository = new SeiyuuRepository(dbContext);
+			var seiyuu = new SeiyuuBuilder().WithJapaneseName("期待される").Build();
+
+			await dbContext.Seiyuus.AddAsync(seiyuu);
+			await dbContext.SaveChangesAsync();
+
+			// When
+			var result = await repository.GetByKanjiAsync("期待される日本語タイトル");
+
+			// Then
+			result.Should().BeNull();
+		}
+
+		[Fact]
+		public async Task GetByKanjiAsync_GivenExistingSeiyuuWithId_ShouldReturnResult()
+		{
+			// Given
+			var dbContext = InMemoryDbProvider.GetDbContext();
+			var repository = new SeiyuuRepository(dbContext);
+			var seiyuu = new SeiyuuBuilder().WithJapaneseName("期待される日本語タイトル").Build();
+
+			await dbContext.Seiyuus.AddAsync(seiyuu);
+			await dbContext.SaveChangesAsync();
+
+			// When
+			var result = await repository.GetByKanjiAsync("期待される日本語タイトル");
+
+			// Then
+			result.Should().NotBeNull();
+		}
+
+		[Fact]
+		public async Task GetByKanjiAsync_GivenMultipleExistingSeiyuuOneOfWhichWithId_ShouldReturnResult()
+		{
+			// Given
+			var dbContext = InMemoryDbProvider.GetDbContext();
+			var repository = new SeiyuuRepository(dbContext);
+			var seiyuu1 = new SeiyuuBuilder().WithJapaneseName("期待される日").Build();
+			var seiyuu2 = new SeiyuuBuilder().WithJapaneseName("期待される").Build();
+			var seiyuu3 = new SeiyuuBuilder().WithJapaneseName("期待され日").Build();
+			var seiyuu4 = new SeiyuuBuilder().WithJapaneseName("期待さる日").Build();
+			var seiyuu5 = new SeiyuuBuilder().WithJapaneseName("期待れる日").Build();
+
+			await dbContext.Seiyuus.AddAsync(seiyuu1);
+			await dbContext.Seiyuus.AddAsync(seiyuu2);
+			await dbContext.Seiyuus.AddAsync(seiyuu3);
+			await dbContext.Seiyuus.AddAsync(seiyuu4);
+			await dbContext.Seiyuus.AddAsync(seiyuu5);
+			await dbContext.SaveChangesAsync();
+
+			// When
+			var result = await repository.GetByKanjiAsync("期待され日");
+
+			// Then
+			result.Should().NotBeNull();
+			result.KanjiName.Should().Be("期待され日");
+		}
+
+		[Fact]
+		public async Task GetByKanjiAsync_GivenExistingSeiyuuWithId_ShouldReturnResultWithEntities()
+		{
+			// Given
+			const string expectedName = "ExpectedName";
+			const string expectedImageUrl = "ExpectedImageUrl";
+			const string expectedKanjiName = "期待される日本語タイトル";
+			const string expectedAbout = "ExpectedAbout";
+			var expectedDateOfBirth = new DateTime(1990, 1, 1);
+			const int expectedPopularity = 1000;
+			const long expectedVndbId = 1;
+			const long expectedMalId = 3;
+
+			var seiyuu = new SeiyuuBuilder()
+				.WithName(expectedName)
+				.WithImageUrl(expectedImageUrl)
+				.WithVndbId(expectedVndbId)
+				.WithMalId(expectedMalId)
+				.WithJapaneseName(expectedKanjiName)
+				.WithAbout(expectedAbout)
+				.WithBirthday(expectedDateOfBirth)
+				.WithPopularity(expectedPopularity)
+				.Build();
+
+			var dbContext = InMemoryDbProvider.GetDbContext();
+			var repository = new SeiyuuRepository(dbContext);
+
+			await dbContext.Seiyuus.AddAsync(seiyuu);
+			await dbContext.SaveChangesAsync();
+
+			// When
+			var result = await repository.GetByKanjiAsync("期待される日本語タイトル");
+
+			// Then
+			using (new AssertionScope())
+			{
+				result.Should().NotBeNull();
+				result.Name.Should().Be(expectedName);
+				result.MalId.Should().Be(expectedMalId);
+				result.ImageUrl.Should().Be(expectedImageUrl);
+				result.MalId.Should().Be(expectedMalId);
+				result.VndbId.Should().Be(expectedVndbId);
+				result.KanjiName.Should().Be(expectedKanjiName);
+				result.Birthday.Should().Be(expectedDateOfBirth);
+				result.About.Should().Be(expectedAbout);
+				result.Popularity.Should().Be(expectedPopularity);
+			}
+		}
+
+		[Fact]
 		public async Task GetAllIdsAsync_GivenNoSeiyuu_ShouldReturnEmpty()
 		{
 			// Given
@@ -413,7 +664,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure.Database
 			// When
 			var result = await repository.GetOrderedPageByPopularityAsync(x => true, 0, pageSize);
 
-			// Then// Then
+			// Then
 			using (new AssertionScope())
 			{
 				result.TotalCount.Should().Be(3);
@@ -443,7 +694,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure.Database
 			// When
 			var result = await repository.GetOrderedPageByPopularityAsync(x => true, pageNumber, pageSize);
 
-			// Then// Then
+			// Then
 			using (new AssertionScope())
 			{
 				result.TotalCount.Should().Be(3);
@@ -473,7 +724,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure.Database
 			// When
 			var result = await repository.GetOrderedPageByPopularityAsync(x => x.Name.EndsWith("1"), 0, pageSize);
 
-			// Then// Then
+			// Then
 			using (new AssertionScope())
 			{
 				result.TotalCount.Should().Be(1);
@@ -503,7 +754,7 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure.Database
 			// When
 			var result = await repository.GetOrderedPageByPopularityAsync(x => x.Name.EndsWith("1"), pageNumber, pageSize);
 
-			// Then// Then
+			// Then
 			using (new AssertionScope())
 			{
 				result.TotalCount.Should().Be(1);
@@ -511,6 +762,100 @@ namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure.Database
 				result.Page.Should().Be(pageNumber);
 				result.PageSize.Should().Be(pageSize);
 			}
+		}
+
+		[Fact]
+		public async Task GetOlderThanModifiedDate_GivenEmptyTable_ShouldReturnEmpty()
+		{
+			// Given
+			var dbContext = InMemoryDbProvider.GetDbContext();
+			var repository = new SeiyuuRepository(dbContext);
+
+			// When
+			var result = await repository.GetOlderThanModifiedDateAsync(DateTime.Now);
+
+			// Then
+			result.Should().BeEmpty();
+		}
+
+		[Fact]
+		public async Task GetOlderThanModifiedDate_GivenNewerThan_ShouldReturnEmpty()
+		{
+			// Given
+			var dbContext = InMemoryDbProvider.GetDbContext();
+			var repository = new SeiyuuRepository(dbContext);
+			var seiyuu1 = new SeiyuuBuilder().WithModificationdDate(DateTime.UtcNow.AddDays(1)).Build();
+			var seiyuu2 = new SeiyuuBuilder().WithModificationdDate(DateTime.UtcNow.AddDays(3)).Build();
+
+			await dbContext.Seiyuus.AddAsync(seiyuu1);
+			await dbContext.Seiyuus.AddAsync(seiyuu2);
+			await dbContext.SaveChangesAsync();
+
+			// When
+			var result = await repository.GetOlderThanModifiedDateAsync(DateTime.Now);
+
+			// Then
+			result.Should().BeEmpty();
+		}
+
+		[Fact]
+		public async Task GetOlderThanModifiedDate_GivenOlderThan_ShouldReturnBoth()
+		{
+			// Given
+			var dbContext = InMemoryDbProvider.GetDbContext();
+			var repository = new SeiyuuRepository(dbContext);
+			var seiyuu1 = new SeiyuuBuilder().WithModificationdDate(DateTime.UtcNow.AddDays(-1)).Build();
+			var seiyuu2 = new SeiyuuBuilder().WithModificationdDate(DateTime.UtcNow.AddDays(-3)).Build();
+
+			await dbContext.Seiyuus.AddAsync(seiyuu1);
+			await dbContext.Seiyuus.AddAsync(seiyuu2);
+			await dbContext.SaveChangesAsync();
+
+			// When
+			var result = await repository.GetOlderThanModifiedDateAsync(DateTime.Now);
+
+			// Then
+			result.Should().HaveCount(2);
+		}
+
+		[Fact]
+		public async Task GetOlderThanModifiedDate_GivenOlderAndNewerThan_ShouldOnlyReturnOlder()
+		{
+			// Given
+			var dbContext = InMemoryDbProvider.GetDbContext();
+			var repository = new SeiyuuRepository(dbContext);
+			var seiyuu1 = new SeiyuuBuilder().WithModificationdDate(DateTime.UtcNow.AddDays(1)).Build();
+			var seiyuu2 = new SeiyuuBuilder().WithModificationdDate(DateTime.UtcNow.AddDays(-1)).Build();
+
+			await dbContext.Seiyuus.AddAsync(seiyuu1);
+			await dbContext.Seiyuus.AddAsync(seiyuu2);
+			await dbContext.SaveChangesAsync();
+
+			// When
+			var result = await repository.GetOlderThanModifiedDateAsync(DateTime.Now);
+
+			// Then
+			result.Should().ContainSingle();
+		}
+
+		[Fact]
+		public async Task GetOlderThanModifiedDate_GivenOlderAndPagesize_ShouldOnlyReturnMaxPageSize()
+		{
+			// Given
+			var dbContext = InMemoryDbProvider.GetDbContext();
+			var repository = new SeiyuuRepository(dbContext);
+			var seiyuu1 = new SeiyuuBuilder().WithModificationdDate(DateTime.UtcNow.AddDays(-11)).Build();
+			var seiyuu2 = new SeiyuuBuilder().WithModificationdDate(DateTime.UtcNow.AddDays(-1)).Build();
+
+			await dbContext.Seiyuus.AddAsync(seiyuu1);
+			await dbContext.Seiyuus.AddAsync(seiyuu2);
+			await dbContext.SaveChangesAsync();
+
+			// When
+			var result = await repository.GetOlderThanModifiedDateAsync(DateTime.Now, 1);
+
+			// Then
+			result.Should().ContainSingle();
 		}
 	}
 }
