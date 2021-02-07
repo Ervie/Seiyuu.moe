@@ -11,7 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure
+namespace SeiyuuMoe.Tests.Unit.Tests.Infrastructure.Database
 {
 	public class SeiyuuRepositoryTests
 	{

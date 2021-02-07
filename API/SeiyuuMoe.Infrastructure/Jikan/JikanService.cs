@@ -73,7 +73,7 @@ namespace SeiyuuMoe.Infrastructure.Jikan
 			return new MalSeasonUpdateData(latestYear.Year, latestYear.Season.Last().ToString());
 		}
 
-		public async  Task<MalSeiyuuUpdateData> GetSeiyuuDataAsync(long malId)
+		public async Task<MalSeiyuuUpdateData> GetSeiyuuDataAsync(long malId)
 		{
 			var parsedData = await _jikanClient.GetPerson(malId);
 
