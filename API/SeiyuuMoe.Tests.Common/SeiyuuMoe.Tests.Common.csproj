@@ -12,6 +12,7 @@
   <ItemGroup>
     <ProjectReference Include="..\SeiyuuMoe.Application\SeiyuuMoe.Application.csproj" />
     <ProjectReference Include="..\SeiyuuMoe.Domain\SeiyuuMoe.Domain.csproj" />
+    <ProjectReference Include="..\SeiyuuMoe.Infrastructure.Warehouse\SeiyuuMoe.Infrastructure.Warehouse.csproj" />
   </ItemGroup>
 
 </Project>
