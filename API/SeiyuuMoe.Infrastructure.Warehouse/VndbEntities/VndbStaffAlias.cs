@@ -27,6 +27,8 @@ namespace SeiyuuMoe.Infrastructure.Warehouse.VndbEntities
 
 		public virtual VndbStaff Staff { get; set; }
 
+		public virtual VndbStaff MainStaff { get; set; }
+
 		public virtual ICollection<VndbVisualNovelSeiyuu> Roles { get; set; }
 	}
 }

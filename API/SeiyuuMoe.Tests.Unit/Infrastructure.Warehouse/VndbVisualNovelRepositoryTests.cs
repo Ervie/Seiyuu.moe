@@ -8,14 +8,14 @@ using Xunit;
 
 namespace SeiyuuMoe.Tests.Unit.Infrastructure.Warehouse
 {
-	public class VndbCharacterRepositoryTests
+	public class VndbVisualNovelRepositoryTests
 	{
 		[Fact]
 		public async Task GetCountAsync_GivenEmptyTable_ShouldReturnZero()
 		{
 			// Given
 			var warehouseContext = InMemoryDbProvider.GetWarehouseDbContext();
-			var repository = new VndbCharacterRepository(warehouseContext);
+			var repository = new VndbVisualNovelRepository(warehouseContext);
 
 			// When
 			var count = await repository.GetCountAsync();
@@ -25,14 +25,14 @@ namespace SeiyuuMoe.Tests.Unit.Infrastructure.Warehouse
 		}
 
 		[Fact]
-		public async Task GetCountAsync_GivenSingleCharacter_ShouldReturnOne()
+		public async Task GetCountAsync_GivenSingleVisualNovel_ShouldReturnOne()
 		{
 			// Given
 			var warehouseContext = InMemoryDbProvider.GetWarehouseDbContext();
-			var repository = new VndbCharacterRepository(warehouseContext);
+			var repository = new VndbVisualNovelRepository(warehouseContext);
 
-			var character = new VndbCharacter();
-			await warehouseContext.Characters.AddAsync(character);
+			var vn = new VndbVisualNovel();
+			await warehouseContext.VisualNovels.AddAsync(vn);
 			await warehouseContext.SaveChangesAsync();
 
 			// When
@@ -43,18 +43,18 @@ namespace SeiyuuMoe.Tests.Unit.Infrastructure.Warehouse
 		}
 
 		[Fact]
-		public async Task GetCountAsync_GivenMultipleCharacters_ShouldReturnThree()
+		public async Task GetCountAsync_GivenMultipleVisualNovel_ShouldReturnThree()
 		{
 			// Given
 			var warehouseContext = InMemoryDbProvider.GetWarehouseDbContext();
-			var repository = new VndbCharacterRepository(warehouseContext);
+			var repository = new VndbVisualNovelRepository(warehouseContext);
 
-			var character1 = new VndbCharacter();
-			var character2 = new VndbCharacter();
-			var character3 = new VndbCharacter();
-			await warehouseContext.Characters.AddAsync(character1);
-			await warehouseContext.Characters.AddAsync(character2);
-			await warehouseContext.Characters.AddAsync(character3);
+			var vn1 = new VndbVisualNovel();
+			var vn2 = new VndbVisualNovel();
+			var vn3 = new VndbVisualNovel();
+			await warehouseContext.VisualNovels.AddAsync(vn1);
+			await warehouseContext.VisualNovels.AddAsync(vn2);
+			await warehouseContext.VisualNovels.AddAsync(vn3);
 			await warehouseContext.SaveChangesAsync();
 
 			// When
@@ -69,7 +69,7 @@ namespace SeiyuuMoe.Tests.Unit.Infrastructure.Warehouse
 		{
 			// Given
 			var warehouseContext = InMemoryDbProvider.GetWarehouseDbContext();
-			var repository = new VndbCharacterRepository(warehouseContext);
+			var repository = new VndbVisualNovelRepository(warehouseContext);
 
 			// When
 			var result = await repository.GetOrderedPageByAsync();
@@ -83,18 +83,18 @@ namespace SeiyuuMoe.Tests.Unit.Infrastructure.Warehouse
 		}
 
 		[Fact]
-		public async Task GetOrderedPageAsync_GivenMultipleCharacter_ShouldReturnAll()
+		public async Task GetOrderedPageAsync_GivenMultipleVisualNovels_ShouldReturnAll()
 		{
 			// Given
 			var warehouseContext = InMemoryDbProvider.GetWarehouseDbContext();
-			var repository = new VndbCharacterRepository(warehouseContext);
+			var repository = new VndbVisualNovelRepository(warehouseContext);
 
-			var character1 = new VndbCharacter();
-			var character2 = new VndbCharacter();
-			var character3 = new VndbCharacter();
-			await warehouseContext.Characters.AddAsync(character1);
-			await warehouseContext.Characters.AddAsync(character2);
-			await warehouseContext.Characters.AddAsync(character3);
+			var vn1 = new VndbVisualNovel();
+			var vn2 = new VndbVisualNovel();
+			var vn3 = new VndbVisualNovel();
+			await warehouseContext.VisualNovels.AddAsync(vn1);
+			await warehouseContext.VisualNovels.AddAsync(vn2);
+			await warehouseContext.VisualNovels.AddAsync(vn3);
 			await warehouseContext.SaveChangesAsync();
 
 			// When
@@ -115,14 +115,14 @@ namespace SeiyuuMoe.Tests.Unit.Infrastructure.Warehouse
 			const int pageSize = 2;
 
 			var warehouseContext = InMemoryDbProvider.GetWarehouseDbContext();
-			var repository = new VndbCharacterRepository(warehouseContext);
+			var repository = new VndbVisualNovelRepository(warehouseContext);
 
-			var character1 = new VndbCharacter();
-			var character2 = new VndbCharacter();
-			var character3 = new VndbCharacter();
-			await warehouseContext.Characters.AddAsync(character1);
-			await warehouseContext.Characters.AddAsync(character2);
-			await warehouseContext.Characters.AddAsync(character3);
+			var vn1 = new VndbVisualNovel();
+			var vn2 = new VndbVisualNovel();
+			var vn3 = new VndbVisualNovel();
+			await warehouseContext.VisualNovels.AddAsync(vn1);
+			await warehouseContext.VisualNovels.AddAsync(vn2);
+			await warehouseContext.VisualNovels.AddAsync(vn3);
 			await warehouseContext.SaveChangesAsync();
 
 			// When
@@ -145,14 +145,14 @@ namespace SeiyuuMoe.Tests.Unit.Infrastructure.Warehouse
 			const int pageNumber = 1;
 
 			var warehouseContext = InMemoryDbProvider.GetWarehouseDbContext();
-			var repository = new VndbCharacterRepository(warehouseContext);
+			var repository = new VndbVisualNovelRepository(warehouseContext);
 
-			var character1 = new VndbCharacter();
-			var character2 = new VndbCharacter();
-			var character3 = new VndbCharacter();
-			await warehouseContext.Characters.AddAsync(character1);
-			await warehouseContext.Characters.AddAsync(character2);
-			await warehouseContext.Characters.AddAsync(character3);
+			var vn1 = new VndbVisualNovel();
+			var vn2 = new VndbVisualNovel();
+			var vn3 = new VndbVisualNovel();
+			await warehouseContext.VisualNovels.AddAsync(vn1);
+			await warehouseContext.VisualNovels.AddAsync(vn2);
+			await warehouseContext.VisualNovels.AddAsync(vn3);
 			await warehouseContext.SaveChangesAsync();
 
 			// When

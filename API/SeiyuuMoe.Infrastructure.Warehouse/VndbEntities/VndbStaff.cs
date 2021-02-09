@@ -5,8 +5,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace SeiyuuMoe.Infrastructure.Warehouse.VndbEntities
 {
 	[Table("staff")]
-	public  class VndbStaff
+	public class VndbStaff
 	{
+		public VndbStaff()
+		{
+			Aliases = new HashSet<VndbStaffAlias>();
+		}
+
 		[Key]
 		[Column("id")]
 		public int Id { get; set; }
@@ -22,5 +27,7 @@ namespace SeiyuuMoe.Infrastructure.Warehouse.VndbEntities
 		public string Description { get; set; }
 
 		public virtual VndbStaffAlias MainAlias { get; set; }
+
+		public virtual ICollection<VndbStaffAlias> Aliases { get; set; }
 	}
 }
