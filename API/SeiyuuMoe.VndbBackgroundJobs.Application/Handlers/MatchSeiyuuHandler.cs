@@ -1,8 +1,6 @@
 ﻿using SeiyuuMoe.Domain.Repositories;
 using SeiyuuMoe.Infrastructure.Warehouse.Repositories.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SeiyuuMoe.VndbBackgroundJobs.Application.Handlers

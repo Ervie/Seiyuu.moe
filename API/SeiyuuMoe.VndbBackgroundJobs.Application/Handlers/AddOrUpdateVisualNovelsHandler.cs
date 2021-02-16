@@ -58,7 +58,6 @@ namespace SeiyuuMoe.VndbBackgroundJobs.Application.Handlers
 
 		private async Task UpdateVisualNovelAsync(VisualNovel existingVisualNovel, VndbVisualNovel vndbVisualNovel)
 		{
-			existingVisualNovel.Id = Guid.NewGuid();
 			existingVisualNovel.VndbId = vndbVisualNovel.Id;
 			existingVisualNovel.Title = vndbVisualNovel.Title;
 			existingVisualNovel.TitleOriginal = vndbVisualNovel.TitleOriginal;

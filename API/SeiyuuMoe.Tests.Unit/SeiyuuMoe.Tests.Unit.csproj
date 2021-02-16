@@ -26,6 +26,7 @@
     <ProjectReference Include="..\SeiyuuMoe.Domain\SeiyuuMoe.Domain.csproj" />
     <ProjectReference Include="..\SeiyuuMoe.Infrastructure\SeiyuuMoe.Infrastructure.csproj" />
     <ProjectReference Include="..\SeiyuuMoe.Tests.Common\SeiyuuMoe.Tests.Common.csproj" />
+    <ProjectReference Include="..\SeiyuuMoe.VndbBackgroundJobs.Application\SeiyuuMoe.VndbBackgroundJobs.Application.csproj" />
   </ItemGroup>
 
 </Project>

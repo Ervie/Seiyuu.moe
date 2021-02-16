@@ -1,8 +1,8 @@
 ﻿namespace SeiyuuMoe.VndbBackgroundJobs.Application.Helpers
 {
-	internal static class VndbParserHelper
+	public static class VndbParserHelper
 	{
-		private const string VndbFileServerBaseUrl = "https://s2.vndb.org/";
+		private const string VndbFileServerBaseUrl = "https://s2.vndb.org";
 
 		public static string GenerateVndbVisualNovelImageUrlFromImageId(string imageId)
 			=> !string.IsNullOrWhiteSpace(imageId) ? 

@@ -175,7 +175,7 @@ namespace SeiyuuMoe.Tests.Component.Animes
 		}
 
 		[Fact]
-		public async Task HandleAsync_GivenMatchingSynonymsAnime_ShouldReturnMultipleResult()
+		public async Task HandleAsync_GivenMatchingSynonymsAnime_ShouldReturnSingleResult()
 		{
 			// Given
 			var query = new SearchAnimeQuery { Title = "Ghost" };
@@ -200,7 +200,7 @@ namespace SeiyuuMoe.Tests.Component.Animes
 		}
 
 		[Fact]
-		public async Task HandleAsync_GivenMatchingEnglishAnime_ShouldReturnMultipleResult()
+		public async Task HandleAsync_GivenMatchingEnglishAnime_ShouldReturnSingleResult()
 		{
 			// Given
 			var query = new SearchAnimeQuery { Title = "they cry" };
@@ -209,7 +209,7 @@ namespace SeiyuuMoe.Tests.Component.Animes
 			var animes = new List<Anime>
 			{
 				new AnimeBuilder().WithId(Guid.NewGuid()).WithMalId(1).WithTitle("Naruto").Build(),
-				new AnimeBuilder().WithId(Guid.NewGuid()).WithMalId(2).WithTitle("Higurashi no Naku Koro ni").WithJapaneseTitle("When They Cry").Build(),
+				new AnimeBuilder().WithId(Guid.NewGuid()).WithMalId(2).WithTitle("Higurashi no Naku Koro ni").WithEnglishTitle("When They Cry").Build(),
 				new AnimeBuilder().WithId(Guid.NewGuid()).WithMalId(3).WithTitle("One Piece").Build(),
 			};
 			await dbContext.AddRangeAsync(animes);
@@ -225,7 +225,7 @@ namespace SeiyuuMoe.Tests.Component.Animes
 		}
 
 		[Fact]
-		public async Task HandleAsync_GivenMatchingJapaneseAnime_ShouldReturnMultipleResult()
+		public async Task HandleAsync_GivenMatchingJapaneseAnime_ShouldReturnSingleResult()
 		{
 			// Given
 			var query = new SearchAnimeQuery { Title = "ひぐらしのな" };

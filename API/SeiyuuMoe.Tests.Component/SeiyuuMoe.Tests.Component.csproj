@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\SeiyuuMoe.MalBackgroundJobs.Application\SeiyuuMoe.MalBackgroundJobs.Application.csproj" />
     <ProjectReference Include="..\SeiyuuMoe.Tests.Common\SeiyuuMoe.Tests.Common.csproj" />
+    <ProjectReference Include="..\SeiyuuMoe.VndbBackgroundJobs.Application\SeiyuuMoe.VndbBackgroundJobs.Application.csproj" />
   </ItemGroup>
 
 </Project>

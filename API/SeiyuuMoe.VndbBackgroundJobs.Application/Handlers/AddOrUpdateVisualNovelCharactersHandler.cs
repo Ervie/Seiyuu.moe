@@ -61,7 +61,6 @@ namespace SeiyuuMoe.VndbBackgroundJobs.Application.Handlers
 
 		private async Task UpdateCharacterAsync(VisualNovelCharacter existingCharacter, VndbCharacter vndbCharacter)
 		{
-			existingCharacter.Id = Guid.NewGuid();
 			existingCharacter.VndbId = vndbCharacter.Id;
 			existingCharacter.Name = vndbCharacter.Name;
 			existingCharacter.KanjiName = vndbCharacter.NameOriginal;
