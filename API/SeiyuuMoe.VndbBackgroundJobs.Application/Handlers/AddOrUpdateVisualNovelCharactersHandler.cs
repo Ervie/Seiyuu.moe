@@ -66,7 +66,7 @@ namespace SeiyuuMoe.VndbBackgroundJobs.Application.Handlers
 			existingCharacter.KanjiName = vndbCharacter.NameOriginal;
 			existingCharacter.Nicknames = vndbCharacter.Alias;
 			existingCharacter.About = vndbCharacter.Description;
-			existingCharacter.ImageUrl = VndbParserHelper.GenerateVndbVisualNovelImageUrlFromImageId(vndbCharacter.Image);
+			existingCharacter.ImageUrl = VndbParserHelper.GenerateVndbCharacterImageUrlFromImageId(vndbCharacter.Image);
 
 			await _visualNovelCharacterRepository.UpdateAsync(existingCharacter);
 		}
