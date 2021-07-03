@@ -9,7 +9,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace SeiyuuMoe.Infrastructure.Animes
+namespace SeiyuuMoe.Infrastructure.Database.Animes
 {
 	public class AnimeRepository : IAnimeRepository
 	{

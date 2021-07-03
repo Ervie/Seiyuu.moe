@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace SeiyuuMoe.Domain.Entities
+namespace SeiyuuMoe.Infrastructure.Database.Entities
 {
-	public partial class Seiyuu
+	public partial class AnimeCharacter
 	{
-		public Seiyuu()
+		public AnimeCharacter()
 		{
 			Role = new HashSet<AnimeRole>();
 		}
@@ -14,7 +14,7 @@ namespace SeiyuuMoe.Domain.Entities
 		public string Name { get; set; }
 
 		[Key]
-		public Guid Id { get; set; }
+		public Guid Id{ get; set; }
 
 		public long MalId { get; set; }
 
@@ -22,7 +22,7 @@ namespace SeiyuuMoe.Domain.Entities
 		public long? Popularity { get; set; }
 		public string KanjiName { get; set; }
 		public string About { get; set; }
-		public DateTime? Birthday { get; set; }
+		public string Nicknames { get; set; }
 		public DateTime ModificationDate { get; set; }
 
 		public virtual ICollection<AnimeRole> Role { get; set; }

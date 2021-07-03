@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.Design;
-using SeiyuuMoe.Infrastructure.Configuration;
+using SeiyuuMoe.Infrastructure.Database.Configuration;
 using System;
 
-namespace SeiyuuMoe.Infrastructure.Context
+namespace SeiyuuMoe.Infrastructure.Database.Context
 {
 	public class SeiyuuMoeContextFactory : IDesignTimeDbContextFactory<SeiyuuMoeContext>
 	{

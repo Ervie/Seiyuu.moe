@@ -3,7 +3,7 @@ using SeiyuuMoe.Domain.Entities;
 using SeiyuuMoe.Infrastructure.Configuration;
 using System;
 
-namespace SeiyuuMoe.Infrastructure.Context
+namespace SeiyuuMoe.Infrastructure.Database.Context
 {
 	public partial class SeiyuuMoeContext : DbContext
 	{

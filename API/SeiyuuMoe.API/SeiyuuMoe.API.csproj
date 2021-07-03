@@ -15,11 +15,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="nlog.config" />
+    <Compile Remove="wwwroot\**" />
+    <Content Remove="wwwroot\**" />
+    <EmbeddedResource Remove="wwwroot\**" />
+    <None Remove="wwwroot\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\" />
+    <Content Remove="nlog.config" />
   </ItemGroup>
 
   <ItemGroup>

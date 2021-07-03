@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace SeiyuuMoe.Domain.Entities
+namespace SeiyuuMoe.Infrastructure.Database.Entities
 {
 	public class Blacklist
 	{
