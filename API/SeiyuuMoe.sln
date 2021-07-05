@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SeiyuuMoe.Jobs", "SeiyuuMoe
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{C9C9C35A-86E9-48F0-8BE7-594D3772E91A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeiyuuMoe.Tests.Unit", "SeiyuuMoe.Tests.Unit\SeiyuuMoe.Tests.Unit.csproj", "{CE52CF10-3F7C-424D-98B1-EBC69ECF7F4F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeiyuuMoe.Tests.Application", "SeiyuuMoe.Tests.Unit\SeiyuuMoe.Tests.Application.csproj", "{CE52CF10-3F7C-424D-98B1-EBC69ECF7F4F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeiyuuMoe.Domain", "SeiyuuMoe.Domain\SeiyuuMoe.Domain.csproj", "{50BF0998-61A5-4EDB-9B09-D17381CE7902}"
 EndProject
@@ -35,7 +35,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeiyuuMoe.MalBackgroundJobs
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeiyuuMoe.MalBackgroundJobs.LocalLambdaRunner", "SeiyuuMoe.MalBackgroundJobs.LocalLambdaRunner\SeiyuuMoe.MalBackgroundJobs.LocalLambdaRunner.csproj", "{64CFBAC5-619B-43E7-B082-EEFCD06F8D61}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeiyuuMoe.Infrastructure.Database", "SeiyuuMoe.Infrastructure.Database\SeiyuuMoe.Infrastructure.Database.csproj", "{2A545C11-831D-4129-8D5E-FD1E774287F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeiyuuMoe.Infrastructure.Database", "SeiyuuMoe.Infrastructure.Database\SeiyuuMoe.Infrastructure.Database.csproj", "{2A545C11-831D-4129-8D5E-FD1E774287F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeiyuuMoe.Tests.Domain", "Tests\SeiyuuMoe.Tests.Domain\SeiyuuMoe.Tests.Domain.csproj", "{26BF2F5E-2DF6-4FE0-8F1C-319CC23D7E5B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeiyuuMoe.Tests.Infrastructure.Database", "Tests\SeiyuuMoe.Tests.Infrastructure.Database\SeiyuuMoe.Tests.Infrastructure.Database.csproj", "{89CBE9C9-3C87-4991-8C6A-6149887FB38A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -87,6 +91,14 @@ Global
 		{2A545C11-831D-4129-8D5E-FD1E774287F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A545C11-831D-4129-8D5E-FD1E774287F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A545C11-831D-4129-8D5E-FD1E774287F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26BF2F5E-2DF6-4FE0-8F1C-319CC23D7E5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26BF2F5E-2DF6-4FE0-8F1C-319CC23D7E5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26BF2F5E-2DF6-4FE0-8F1C-319CC23D7E5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26BF2F5E-2DF6-4FE0-8F1C-319CC23D7E5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89CBE9C9-3C87-4991-8C6A-6149887FB38A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89CBE9C9-3C87-4991-8C6A-6149887FB38A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89CBE9C9-3C87-4991-8C6A-6149887FB38A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89CBE9C9-3C87-4991-8C6A-6149887FB38A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -98,6 +110,8 @@ Global
 		{E38B5666-CAB7-4451-96D6-3D961F8A6AAD} = {261D75A0-A7B7-4989-B862-AE3DB9D9C8F0}
 		{A5153B9A-A323-46E8-BC34-283B11983353} = {261D75A0-A7B7-4989-B862-AE3DB9D9C8F0}
 		{64CFBAC5-619B-43E7-B082-EEFCD06F8D61} = {261D75A0-A7B7-4989-B862-AE3DB9D9C8F0}
+		{26BF2F5E-2DF6-4FE0-8F1C-319CC23D7E5B} = {C9C9C35A-86E9-48F0-8BE7-594D3772E91A}
+		{89CBE9C9-3C87-4991-8C6A-6149887FB38A} = {C9C9C35A-86E9-48F0-8BE7-594D3772E91A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0D18D8DE-F5C0-4254-B3F2-3B6F16384392}

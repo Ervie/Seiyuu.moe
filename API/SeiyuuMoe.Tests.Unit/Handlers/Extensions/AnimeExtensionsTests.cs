@@ -6,7 +6,7 @@ using SeiyuuMoe.Tests.Common.Builders.Model;
 using System;
 using Xunit;
 
-namespace SeiyuuMoe.Tests.Unit.Tests.Application.Extensions
+namespace SeiyuuMoe.Tests.Application.Extensions
 {
 	public class AnimeExtensionsTests
 	{

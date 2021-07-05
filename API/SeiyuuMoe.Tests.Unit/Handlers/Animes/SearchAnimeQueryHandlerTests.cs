@@ -13,7 +13,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace SeiyuuMoe.Tests.Unit.Tests.Application.Animes
+namespace SeiyuuMoe.Tests.Application.Animes
 {
 	public class SearchAnimeQueryHandlerTests
 	{

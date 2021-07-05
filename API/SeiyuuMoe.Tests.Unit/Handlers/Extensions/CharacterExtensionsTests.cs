@@ -4,7 +4,7 @@ using SeiyuuMoe.Application.Characters.Extensions;
 using SeiyuuMoe.Tests.Common.Builders.Model;
 using Xunit;
 
-namespace SeiyuuMoe.Tests.Unit.Tests.Application.Extensions
+namespace SeiyuuMoe.Tests.Application.Extensions
 {
 	public class CharacterExtensionsTests
 	{

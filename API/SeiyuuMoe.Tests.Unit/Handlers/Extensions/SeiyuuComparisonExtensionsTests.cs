@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
-namespace SeiyuuMoe.Tests.Unit.Tests.Application.Extensions
+namespace SeiyuuMoe.Tests.Application.Extensions
 {
 	public class SeiyuuComparisonExtensionsTests
 	{

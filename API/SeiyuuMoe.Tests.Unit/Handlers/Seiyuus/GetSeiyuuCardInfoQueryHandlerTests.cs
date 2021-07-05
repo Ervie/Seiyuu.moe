@@ -7,7 +7,7 @@ using SeiyuuMoe.Tests.Common.Builders.Model;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace SeiyuuMoe.Tests.Unit.Tests.Application.Seiyuus
+namespace SeiyuuMoe.Tests.Application.Seiyuus
 {
 	public class GetSeiyuuCardInfoQueryHandlerTests
 	{
