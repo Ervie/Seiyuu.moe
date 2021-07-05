@@ -7,5 +7,7 @@ phases:
   build:
     commands:
       - dotnet build -c Release ./API/SeiyuuMoe.sln
-      - dotnet test -c Release ./API/SeiyuuMoe.Tests.Unit/SeiyuuMoe.Tests.Unit.csproj
+      - dotnet test -c Release ./API/SeiyuuMoe.Tests.Unit/SeiyuuMoe.Tests.Application.csproj
       - dotnet test -c Release ./API/SeiyuuMoe.Tests.Component/SeiyuuMoe.Tests.Component.csproj
+      - dotnet test -c Release ./API/Tests/SeiyuuMoe.Tests.Domain/SeiyuuMoe.Tests.Domain.csproj
+      - dotnet test -c Release ./API/Tests/SeiyuuMoe.Tests.Infrastructure.Database/SeiyuuMoe.Tests.Infrastructure.Database.csproj
