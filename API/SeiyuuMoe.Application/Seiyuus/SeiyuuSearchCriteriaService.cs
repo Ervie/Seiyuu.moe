@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace SeiyuuMoe.Application.Seiyuus
 {
-	internal class SeiyuuSearchCriteriaService : ISeiyuuSearchCriteriaService
+	public class SeiyuuSearchCriteriaService : ISeiyuuSearchCriteriaService
 	{
 		public Expression<Func<Domain.Entities.Seiyuu, bool>> BuildExpression(SearchSeiyuuQuery query)
 		{

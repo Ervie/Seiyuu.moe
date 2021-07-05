@@ -9,7 +9,7 @@ namespace SeiyuuMoe.Domain.ValueObjects.Base
 
 		public NumericalId(long value)
 		{
-			Guard.IsNotNegative(value, nameof(value));
+			Guard.IsPositive(value, nameof(value));
 			Value = value;
 		}
 
@@ -17,7 +17,7 @@ namespace SeiyuuMoe.Domain.ValueObjects.Base
 
 		public bool Equals(NumericalId? other)
 		{
-			if (ReferenceEquals(null, other))
+			if (other is null)
 			{
 				return false;
 			}

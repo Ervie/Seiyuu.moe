@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SeiyuuMoe.Domain.Entities;
 using SeiyuuMoe.Domain.Repositories;
-using SeiyuuMoe.Infrastructure.Context;
+using SeiyuuMoe.Infrastructure.Database.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SeiyuuMoe.Infrastructure.Seiyuus
+namespace SeiyuuMoe.Infrastructure.Database.Seiyuus
 {
 	public class SeiyuuRoleRepository : ISeiyuuRoleRepository
 	{

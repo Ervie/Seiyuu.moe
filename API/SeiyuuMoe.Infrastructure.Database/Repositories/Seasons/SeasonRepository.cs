@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SeiyuuMoe.Domain.Entities;
 using SeiyuuMoe.Domain.Repositories;
-using SeiyuuMoe.Infrastructure.Context;
+using SeiyuuMoe.Infrastructure.Database.Context;
 using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace SeiyuuMoe.Infrastructure.Seasons
+namespace SeiyuuMoe.Infrastructure.Database.Seasons
 {
 	public class SeasonRepository : ISeasonRepository
 	{

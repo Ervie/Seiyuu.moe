@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SeiyuuMoe.Domain.Entities;
 using SeiyuuMoe.Infrastructure.Configuration;
-using System;
 
 namespace SeiyuuMoe.Infrastructure.Database.Context
 {

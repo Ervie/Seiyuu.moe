@@ -1,8 +1,8 @@
 ﻿using JikanDotNet;
 using SeiyuuMoe.Domain.SqsMessages;
-using SeiyuuMoe.Infrastructure.Characters;
 using SeiyuuMoe.Infrastructure.Configuration;
-using SeiyuuMoe.Infrastructure.Context;
+using SeiyuuMoe.Infrastructure.Database.Characters;
+using SeiyuuMoe.Infrastructure.Database.Context;
 using SeiyuuMoe.Infrastructure.Jikan;
 using SeiyuuMoe.MalBackgroundJobs.Application.Handlers;
 using SeiyuuMoe.MalBackgroundJobs.Lambda.Base;

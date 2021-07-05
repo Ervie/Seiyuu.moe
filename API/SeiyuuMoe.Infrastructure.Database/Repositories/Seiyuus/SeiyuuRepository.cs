@@ -2,14 +2,14 @@
 using SeiyuuMoe.Domain.Entities;
 using SeiyuuMoe.Domain.Repositories;
 using SeiyuuMoe.Domain.WebEssentials;
-using SeiyuuMoe.Infrastructure.Context;
+using SeiyuuMoe.Infrastructure.Database.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace SeiyuuMoe.Infrastructure.Seiyuus
+namespace SeiyuuMoe.Infrastructure.Database.Seiyuus
 {
 	public class SeiyuuRepository : ISeiyuuRepository
 	{

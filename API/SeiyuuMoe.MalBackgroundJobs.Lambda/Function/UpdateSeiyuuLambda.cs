@@ -1,12 +1,12 @@
 ﻿using JikanDotNet;
 using SeiyuuMoe.Domain.SqsMessages;
-using SeiyuuMoe.Infrastructure.Animes;
-using SeiyuuMoe.Infrastructure.Characters;
 using SeiyuuMoe.Infrastructure.Configuration;
-using SeiyuuMoe.Infrastructure.Context;
+using SeiyuuMoe.Infrastructure.Database.Animes;
+using SeiyuuMoe.Infrastructure.Database.Characters;
+using SeiyuuMoe.Infrastructure.Database.Context;
+using SeiyuuMoe.Infrastructure.Database.Seasons;
+using SeiyuuMoe.Infrastructure.Database.Seiyuus;
 using SeiyuuMoe.Infrastructure.Jikan;
-using SeiyuuMoe.Infrastructure.Seasons;
-using SeiyuuMoe.Infrastructure.Seiyuus;
 using SeiyuuMoe.MalBackgroundJobs.Application.Handlers;
 using SeiyuuMoe.MalBackgroundJobs.Lambda.Base;
 using System;

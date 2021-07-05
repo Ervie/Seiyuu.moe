@@ -1,15 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SeiyuuMoe.Domain.Entities;
 using SeiyuuMoe.Domain.Repositories;
-using SeiyuuMoe.Infrastructure.Context;
+using SeiyuuMoe.Infrastructure.Database.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SeiyuuMoe.Infrastructure.Animes
+namespace SeiyuuMoe.Infrastructure.Database.Animes
 {
-	public class AnimeRoleRepository: IAnimeRoleRepository
+	public class AnimeRoleRepository : IAnimeRoleRepository
 	{
 		private readonly SeiyuuMoeContext _dbContext;
 

@@ -4,12 +4,12 @@ using JikanDotNet;
 using JikanDotNet.Exceptions;
 using Moq;
 using SeiyuuMoe.Domain.S3;
-using SeiyuuMoe.Infrastructure.Animes;
-using SeiyuuMoe.Infrastructure.Characters;
-using SeiyuuMoe.Infrastructure.Context;
+using SeiyuuMoe.Infrastructure.Database.Animes;
+using SeiyuuMoe.Infrastructure.Database.Characters;
+using SeiyuuMoe.Infrastructure.Database.Context;
+using SeiyuuMoe.Infrastructure.Database.Seasons;
+using SeiyuuMoe.Infrastructure.Database.Seiyuus;
 using SeiyuuMoe.Infrastructure.Jikan;
-using SeiyuuMoe.Infrastructure.Seasons;
-using SeiyuuMoe.Infrastructure.Seiyuus;
 using SeiyuuMoe.MalBackgroundJobs.Application.Handlers;
 using SeiyuuMoe.Tests.Common.Builders.Jikan;
 using SeiyuuMoe.Tests.Common.Builders.Model;
@@ -679,7 +679,6 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				TitleSynonyms = new List<string>(),
 				Members = returnedAnimePopularity
 			};
-
 
 			var jikanServiceBuilder = new JikanServiceBuilder()
 				.WithPersonReturned(returnedSeiyuu)

@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace SeiyuuMoe.Application.Seasons
 {
-	internal class SeasonSearchCriteriaService : ISeasonSearchCriteriaService
+	public class SeasonSearchCriteriaService : ISeasonSearchCriteriaService
 	{
 		public Expression<Func<AnimeSeason, bool>> BuildExpression(GetSeasonSummariesQuery query)
 		{

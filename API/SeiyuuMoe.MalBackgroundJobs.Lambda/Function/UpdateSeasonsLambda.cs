@@ -1,8 +1,8 @@
 ﻿using JikanDotNet;
 using SeiyuuMoe.Infrastructure.Configuration;
-using SeiyuuMoe.Infrastructure.Context;
+using SeiyuuMoe.Infrastructure.Database.Context;
+using SeiyuuMoe.Infrastructure.Database.Seasons;
 using SeiyuuMoe.Infrastructure.Jikan;
-using SeiyuuMoe.Infrastructure.Seasons;
 using SeiyuuMoe.MalBackgroundJobs.Application.Handlers;
 using SeiyuuMoe.MalBackgroundJobs.Lambda.Base;
 using System;

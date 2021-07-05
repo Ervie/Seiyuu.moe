@@ -46,7 +46,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SeiyuuMoe.Application\SeiyuuMoe.Application.csproj" />
-    <ProjectReference Include="..\SeiyuuMoe.Infrastructure\SeiyuuMoe.Infrastructure.csproj" />
+    <ProjectReference Include="..\SeiyuuMoe.Infrastructure.Database\SeiyuuMoe.Infrastructure.Database.csproj" />
   </ItemGroup>
 
   <ItemGroup>

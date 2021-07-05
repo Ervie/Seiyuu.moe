@@ -10,7 +10,7 @@ namespace SeiyuuMoe.Infrastructure.Database.Context
 		{
 			Environment.SetEnvironmentVariable("StackName", "seiyuu-moe-mal-bg-jobs-dev");
 
-			var databaseConfiguration = ConfigurationReader.DatabaseConfiguration;
+			var databaseConfiguration = DatabaseConfigurationReader.DatabaseConfiguration;
 
 			return new SeiyuuMoeContext(databaseConfiguration);
 		}

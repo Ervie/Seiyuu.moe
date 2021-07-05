@@ -1,7 +1,7 @@
 ﻿using Amazon.SQS;
-using SeiyuuMoe.Infrastructure.Animes;
 using SeiyuuMoe.Infrastructure.Configuration;
-using SeiyuuMoe.Infrastructure.Context;
+using SeiyuuMoe.Infrastructure.Database.Animes;
+using SeiyuuMoe.Infrastructure.Database.Context;
 using SeiyuuMoe.Infrastructure.Sns;
 using SeiyuuMoe.MalBackgroundJobs.Application.Handlers;
 using SeiyuuMoe.MalBackgroundJobs.Lambda.Base;

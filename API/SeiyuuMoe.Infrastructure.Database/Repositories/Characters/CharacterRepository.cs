@@ -2,13 +2,13 @@
 using SeiyuuMoe.Domain.Entities;
 using SeiyuuMoe.Domain.Repositories;
 using SeiyuuMoe.Domain.WebEssentials;
-using SeiyuuMoe.Infrastructure.Context;
+using SeiyuuMoe.Infrastructure.Database.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SeiyuuMoe.Infrastructure.Characters
+namespace SeiyuuMoe.Infrastructure.Database.Characters
 {
 	public class CharacterRepository : ICharacterRepository
 	{

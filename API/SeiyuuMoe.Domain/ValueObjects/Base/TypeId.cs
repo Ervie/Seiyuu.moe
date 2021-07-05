@@ -3,11 +3,11 @@ using System;
 
 namespace SeiyuuMoe.Domain.ValueObjects.Base
 {
-	public abstract class TypeId : IEquatable<TypeId>
+	public class TypeId : IEquatable<TypeId>
 	{
 		public Guid Value { get; }
 
-		protected TypeId(Guid value)
+		public TypeId(Guid value)
 		{
 			Guard.IsNotEmpty(value, nameof(TypeId));
 			Value = value;

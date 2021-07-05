@@ -21,11 +21,19 @@ namespace SeiyuuMoe.Domain.Validation
 			}
 		}
 
-		public static void IsNotNegative(long arg, string argumentName)
+		public static void IsPositive(long arg, string argumentName)
 		{
-			if (arg < 0)
+			if (arg < 1)
 			{
-				throw new ValidationException("Can't be less than zero.", argumentName);
+				throw new ValidationException("Must be a positive number.", argumentName);
+			}
+		}
+
+		public static void IsDate(DateTime arg, string argumentName)
+		{
+			if (arg.TimeOfDay != TimeSpan.Zero)
+			{
+				throw new ValidationException("Date cannot has time of day.", argumentName);
 			}
 		}
 

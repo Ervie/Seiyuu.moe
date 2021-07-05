@@ -1,15 +1,13 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using Hangfire;
-using Hangfire.MemoryStorage;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SeiyuuMoe.API.DI;
 using SeiyuuMoe.Application;
-using SeiyuuMoe.Infrastructure;
 using SeiyuuMoe.Infrastructure.Configuration;
 using System;
 
@@ -46,7 +44,7 @@ namespace SeiyuuMoe.API
 			builder.RegisterInstance(seiyuuMoeConfig.DatabaseConfiguration).As<DatabaseConfiguration>();
 
 			builder.RegisterModule(new InfrastructureModule());
-			builder.RegisterModule(new DomainModule());
+			builder.RegisterModule(new DatabaseModule());
 			builder.RegisterModule(new ApplicationModule());
 		}
 

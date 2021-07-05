@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SeiyuuMoe.Infrastructure.Context;
+using SeiyuuMoe.Infrastructure.Database.Context;
 using System;
 
 namespace SeiyuuMoe.Tests.Common.Helpers

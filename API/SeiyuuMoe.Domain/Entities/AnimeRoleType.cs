@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace SeiyuuMoe.Infrastructure.Database.Entities
+namespace SeiyuuMoe.Domain.Entities
 {
 	public partial class AnimeRoleType
 	{

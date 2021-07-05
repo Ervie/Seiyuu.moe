@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SeiyuuMoe.Infrastructure.Database\SeiyuuMoe.Infrastructure.Database.csproj" />
     <ProjectReference Include="..\SeiyuuMoe.Infrastructure\SeiyuuMoe.Infrastructure.csproj" />
     <ProjectReference Include="..\SeiyuuMoe.MalBackgroundJobs.Application\SeiyuuMoe.MalBackgroundJobs.Application.csproj" />
   </ItemGroup>
