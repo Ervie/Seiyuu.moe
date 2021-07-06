@@ -17,7 +17,6 @@ namespace SeiyuuMoe.Application.Animes
 		private Expression<Func<Anime, bool>> ExtendExpressionWithSearchCriteria(Expression<Func<Anime, bool>> predicate, SearchAnimeQuery query)
 		{
 			return predicate
-				.And(query.MalId != null && query.MalId.Count > 0, () => anime => query.MalId.Contains(anime.MalId))
 				.And(!string.IsNullOrWhiteSpace(query.Title), () => anime =>
 					anime.Title.ToLower().Contains(query.Title.ToLower()) ||
 					(!string.IsNullOrWhiteSpace(anime.KanjiTitle) && anime.KanjiTitle.ToLower().Contains(query.Title.ToLower())) ||

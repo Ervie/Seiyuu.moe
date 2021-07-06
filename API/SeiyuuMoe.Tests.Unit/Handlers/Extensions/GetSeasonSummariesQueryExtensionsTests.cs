@@ -22,7 +22,6 @@ namespace SeiyuuMoe.Tests.Application.Extensions
 			using (new AssertionScope())
 			{
 				searchAnimeQuery.Should().NotBeNull();
-				searchAnimeQuery.MalId.Should().BeNull();
 				searchAnimeQuery.AnimeTypeId.Should().Be(default);
 				searchAnimeQuery.SeasonId.Should().Be(default);
 			}

@@ -11,3 +11,4 @@ phases:
       - dotnet test -c Release ./API/SeiyuuMoe.Tests.Component/SeiyuuMoe.Tests.Component.csproj
       - dotnet test -c Release ./API/Tests/SeiyuuMoe.Tests.Domain/SeiyuuMoe.Tests.Domain.csproj
       - dotnet test -c Release ./API/Tests/SeiyuuMoe.Tests.Infrastructure.Database/SeiyuuMoe.Tests.Infrastructure.Database.csproj
+      - dotnet test -c Release ./API/Tests/SeiyuuMoe.Tests.E2E/SeiyuuMoe.Tests.E2E.csproj
