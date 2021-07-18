@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace SeiyuuMoe.Application.Animes.SearchAnime
+﻿namespace SeiyuuMoe.Application.Animes.SearchAnime
 {
 	public class SearchAnimeQuery
 	{

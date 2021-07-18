@@ -1,5 +1,6 @@
 using FluentAssertions;
 using FluentAssertions.Execution;
+using SeiyuuMoe.Application.AnimeComparisons.CompareAnime;
 using SeiyuuMoe.Application.Animes.SearchAnime;
 using SeiyuuMoe.Tests.E2E;
 using SeiyuuMoe.Tests.E2E.Apis;
@@ -46,7 +47,7 @@ namespace SeiyuuMoe.Tests.Tests.E2E
 		}
 
 		[Fact]
-		public async Task GetSearchEntries_ExistingAnime_ShouldReturnCardInfo()
+		public async Task GetSearchEntries_ExistingAnime_ShouldReturnSearchEntries()
 		{
 			// Given
 			const int cowboyBebopId = 1;
@@ -68,6 +69,44 @@ namespace SeiyuuMoe.Tests.Tests.E2E
 			firstResult.Title.Should().Be("Cowboy Bebop");
 			firstResult.ImageUrl.Should().NotBeNullOrWhiteSpace();
 			firstResult.MalId.Should().Be(cowboyBebopId);
+		}
+
+		[Fact]
+		public async Task GetSearchEntries_NotExistingAnime_ShouldReturnEmptyCollection()
+		{
+			// Given
+			var api = new AnimeApi(requester);
+
+			var query = new SearchAnimeQuery
+			{
+				Title = "qwertyuiopasdghjkl"
+			};
+
+			// When
+			var apiResult = await api.GetSearchEntriesAsync(query);
+
+			// Then
+			apiResult.Results.Should().BeEmpty();
+		}
+
+		[Fact]
+		public async Task GetComparison_ExistingAnime_ShouldReturnComparisonEntities()
+		{
+			// Given
+			const int bleachId = 269;
+			const int deathNoteId = 1535;
+			var api = new AnimeApi(requester);
+
+			var query = new CompareAnimeQuery
+			{
+				AnimeMalIds = new List<long> { bleachId, deathNoteId }
+			};
+
+			// When
+			var apiResult = await api.GetComparison(query);
+
+			// Then
+			apiResult.Count.Should().Be(7);
 		}
 	}
 }
