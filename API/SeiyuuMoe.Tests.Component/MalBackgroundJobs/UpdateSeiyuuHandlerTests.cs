@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
+using AnimeCharacter = SeiyuuMoe.Domain.Entities.AnimeCharacter;
 
 namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 {
@@ -59,7 +60,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			// Given
 			const int malId = 1;
 			var dbContext = InMemoryDbProvider.GetDbContext();
-			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(null); ;
+			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(null, null); ;
 
 			var anime = new SeiyuuBuilder()
 				.WithMalId(malId)
@@ -118,7 +119,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				Birthday = returnedBirthdate
 			};
 
-			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu); ;
+			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu, null); ;
 
 			var seiyuu = new SeiyuuBuilder()
 				.WithMalId(malId)
@@ -180,7 +181,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				},
 			};
 
-			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu); ;
+			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu, null); ;
 
 			var seiyuu = new SeiyuuBuilder()
 				.WithMalId(malId)
@@ -229,25 +230,25 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 
 			var returnedSeiyuu = new Person
 			{
-				MalId = seiyuuMalId,
-				VoiceActingRoles = new List<VoiceActingRole>
+				MalId = seiyuuMalId
+			};
+			var returnedRoles = new List<VoiceActingRole>
+			{
+				new VoiceActingRole
 				{
-					new VoiceActingRole
+					Role = "Main",
+					Anime = new MalImageSubItem
 					{
-						Role = "Main",
-						Anime = new MALImageSubItem
-						{
-							MalId = animeMalId
-						},
-						Character = new MALImageSubItem
-						{
-							MalId = characterMalId
-						}
+						MalId = animeMalId
+					},
+					Character = new MalImageSubItem()
+					{
+						MalId = characterMalId
 					}
 				}
 			};
 
-			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu); ;
+			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu, returnedRoles); ;
 
 			var role = new AnimeRoleBuilder()
 				.WithSeiyuu(x => x
@@ -314,36 +315,37 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			var returnedSeiyuu = new Person
 			{
 				MalId = seiyuuMalId,
-				VoiceActingRoles = new List<VoiceActingRole>
+			};
+
+			var returnedRoles = new List<VoiceActingRole>
+			{
+				new VoiceActingRole
 				{
-					new VoiceActingRole
+					Role = "Main",
+					Anime = new MalImageSubItem
 					{
-						Role = "Main",
-						Anime = new MALImageSubItem
-						{
-							MalId = anime1MalId
-						},
-						Character = new MALImageSubItem
-						{
-							MalId = character1MalId
-						}
+						MalId = anime1MalId
 					},
-					new VoiceActingRole
+					Character = new MalImageSubItem()
 					{
-						Role = "Supporting",
-						Anime = new MALImageSubItem
-						{
-							MalId = anime2MalId
-						},
-						Character = new MALImageSubItem
-						{
-							MalId = character2MalId
-						}
+						MalId = character1MalId
+					}
+				},
+				new VoiceActingRole
+				{
+					Role = "Supporting",
+					Anime = new MalImageSubItem
+					{
+						MalId = anime2MalId
+					},
+					Character = new MalImageSubItem()
+					{
+						MalId = character2MalId
 					}
 				}
 			};
-
-			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu);
+			
+			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu, returnedRoles);
 			var japanese = new LanguageBuilder().WithLanguageId(LanguageId.Japanese).Build();
 			var seiyuu = new SeiyuuBuilder()
 				.WithId(seiyuuId)
@@ -423,25 +425,26 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 
 			var returnedSeiyuu = new Person
 			{
-				MalId = seiyuuMalId,
-				VoiceActingRoles = new List<VoiceActingRole>
+				MalId = seiyuuMalId
+			};
+			
+			var returnedRoles = new List<VoiceActingRole>
+			{
+				new VoiceActingRole
 				{
-					new VoiceActingRole
+					Role = "Main",
+					Anime = new MalImageSubItem
 					{
-						Role = "Main",
-						Anime = new MALImageSubItem
-						{
-							MalId = animeMalId
-						},
-						Character = new MALImageSubItem
-						{
-							MalId = characterMalId
-						}
+						MalId = animeMalId
+					},
+					Character = new MalImageSubItem()
+					{
+						MalId = characterMalId
 					}
 				}
 			};
 
-			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu); ;
+			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu, returnedRoles); ;
 
 			var seiyuu = new SeiyuuBuilder()
 				.WithId(seiyuuId)
@@ -524,37 +527,38 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 
 			var returnedSeiyuu = new Person
 			{
-				MalId = seiyuuMalId,
-				VoiceActingRoles = new List<VoiceActingRole>
+				MalId = seiyuuMalId
+			};
+
+			var returnedRoles = new List<VoiceActingRole>
+			{
+				new VoiceActingRole
 				{
-					new VoiceActingRole
+					Role = "Main",
+					Anime = new MalImageSubItem
 					{
-						Role = "Main",
-						Anime = new MALImageSubItem
-						{
-							MalId = anime1MalId
-						},
-						Character = new MALImageSubItem
-						{
-							MalId = character1MalId
-						}
+						MalId = anime1MalId
 					},
-					new VoiceActingRole
+					Character = new MalImageSubItem()
 					{
-						Role = "Supporting",
-						Anime = new MALImageSubItem
-						{
-							MalId = anime2MalId
-						},
-						Character = new MALImageSubItem
-						{
-							MalId = character2MalId
-						}
+						MalId = character1MalId
+					}
+				},
+				new VoiceActingRole
+				{
+					Role = "Supporting",
+					Anime = new MalImageSubItem
+					{
+						MalId = anime2MalId
+					},
+					Character = new MalImageSubItem()
+					{
+						MalId = character2MalId
 					}
 				}
 			};
-
-			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu); ;
+			
+			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu, returnedRoles); ;
 			var animeStatus = new AnimeStatusBuilder()
 				.WithId(AnimeStatusId.CurrentlyAiring)
 				.WithName("Airing")
@@ -676,37 +680,38 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 
 			var returnedSeiyuu = new Person
 			{
-				MalId = seiyuuMalId,
-				VoiceActingRoles = new List<VoiceActingRole>
+				MalId = seiyuuMalId
+			};
+			
+			var returnedRoles = new List<VoiceActingRole>
+			{
+				new VoiceActingRole
 				{
-					new VoiceActingRole
+					Role = "Main",
+					Anime = new MalImageSubItem
 					{
-						Role = "Main",
-						Anime = new MALImageSubItem
-						{
-							MalId = anime1MalId
-						},
-						Character = new MALImageSubItem
-						{
-							MalId = character1MalId
-						}
+						MalId = anime1MalId
 					},
-					new VoiceActingRole
+					Character = new MalImageSubItem()
 					{
-						Role = "Supporting",
-						Anime = new MALImageSubItem
-						{
-							MalId = anime2MalId
-						},
-						Character = new MALImageSubItem
-						{
-							MalId = character2MalId
-						}
+						MalId = character1MalId
+					}
+				},
+				new VoiceActingRole
+				{
+					Role = "Supporting",
+					Anime = new MalImageSubItem
+					{
+						MalId = anime2MalId
+					},
+					Character = new MalImageSubItem()
+					{
+						MalId = character2MalId
 					}
 				}
 			};
 
-			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu); ;
+			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu, returnedRoles); ;
 			var animeStatus = new AnimeStatusBuilder()
 				.WithId(AnimeStatusId.CurrentlyAiring)
 				.WithName("Airing")
@@ -825,20 +830,20 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 
 			var returnedSeiyuu = new Person
 			{
-				MalId = seiyuuMalId,
-				VoiceActingRoles = new List<VoiceActingRole>
+				MalId = seiyuuMalId
+			};
+			var returnedRoles = new List<VoiceActingRole>
+			{
+				new VoiceActingRole
 				{
-					new VoiceActingRole
+					Role = "Main",
+					Anime = new MalImageSubItem
 					{
-						Role = "Main",
-						Anime = new MALImageSubItem
-						{
-							MalId = animeMalId
-						},
-						Character = new MALImageSubItem
-						{
-							MalId = characterMalId
-						}
+						MalId = animeMalId
+					},
+					Character = new MalImageSubItem()
+					{
+						MalId = characterMalId
 					}
 				}
 			};
@@ -857,7 +862,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				Favorites = returnedCharacterPopularity
 			};
 
-			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu).WithCharacterReturned(returnedCharacter);
+			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu, returnedRoles).WithCharacterReturned(returnedCharacter);
 
 			var seiyuu = new SeiyuuBuilder()
 				.WithId(seiyuuId)
@@ -933,25 +938,25 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 
 			var returnedSeiyuu = new Person
 			{
-				MalId = seiyuuMalId,
-				VoiceActingRoles = new List<VoiceActingRole>
+				MalId = seiyuuMalId
+			};
+			var returnedRoles = new List<VoiceActingRole>
+			{
+				new VoiceActingRole
 				{
-					new VoiceActingRole
+					Role = "Main",
+					Anime = new MalImageSubItem
 					{
-						Role = "Main",
-						Anime = new MALImageSubItem
-						{
-							MalId = animeMalId
-						},
-						Character = new MALImageSubItem
-						{
-							MalId = characterMalId
-						}
+						MalId = animeMalId
+					},
+					Character = new MalImageSubItem()
+					{
+						MalId = characterMalId
 					}
 				}
 			};
 
-			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu).WithCharacterReturned(null);
+			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu, returnedRoles).WithCharacterReturned(null);
 
 			var seiyuu = new SeiyuuBuilder()
 				.WithId(seiyuuId)
@@ -1019,24 +1024,24 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 
 			var returnedSeiyuu = new Person
 			{
-				MalId = seiyuuMalId,
-				VoiceActingRoles = new List<VoiceActingRole>
+				MalId = seiyuuMalId
+			};
+			var returnedRoles = new List<VoiceActingRole>
+			{
+				new VoiceActingRole
 				{
-					new VoiceActingRole
+					Role = "Main",
+					Anime = new MalImageSubItem
 					{
-						Role = "Main",
-						Anime = new MALImageSubItem
-						{
-							MalId = animeMalId
-						},
-						Character = new MALImageSubItem
-						{
-							MalId = characterMalId
-						}
+						MalId = animeMalId
+					},
+					Character = new MalImageSubItem()
+					{
+						MalId = characterMalId
 					}
 				}
 			};
-
+			
 			var returnedCharacter = new Character
 			{
 				MalId = characterMalId,
@@ -1046,7 +1051,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				},
 			};
 
-			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu).WithCharacterReturned(returnedCharacter);
+			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu, returnedRoles).WithCharacterReturned(returnedCharacter);
 
 			var seiyuu = new SeiyuuBuilder()
 				.WithId(seiyuuId)
@@ -1124,24 +1129,24 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 
 			var returnedSeiyuu = new Person
 			{
-				MalId = seiyuuMalId,
-				VoiceActingRoles = new List<VoiceActingRole>
+				MalId = seiyuuMalId
+			};
+			var returnedRoles = new List<VoiceActingRole>
+			{
+				new VoiceActingRole
 				{
-					new VoiceActingRole
+					Role = "Main",
+					Anime = new MalImageSubItem
 					{
-						Role = "Main",
-						Anime = new MALImageSubItem
-						{
-							MalId = animeMalId
-						},
-						Character = new MALImageSubItem
-						{
-							MalId = characterMalId
-						}
+						MalId = animeMalId
+					},
+					Character = new MalImageSubItem()
+					{
+						MalId = characterMalId
 					}
 				}
 			};
-
+			
 			var returnedCharacter = new Character
 			{
 				MalId = characterMalId,
@@ -1156,7 +1161,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				Favorites = returnedCharacterPopularity
 			};
 
-			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu).WithCharacterReturned(returnedCharacter);
+			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu, returnedRoles).WithCharacterReturned(returnedCharacter);
 
 			var seiyuu = new SeiyuuBuilder()
 				.WithId(seiyuuId)
@@ -1239,24 +1244,24 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 
 			var returnedSeiyuu = new Person
 			{
-				MalId = seiyuuMalId,
-				VoiceActingRoles = new List<VoiceActingRole>
+				MalId = seiyuuMalId
+			};
+			var returnedRoles = new List<VoiceActingRole>
+			{
+				new VoiceActingRole
 				{
-					new VoiceActingRole
+					Role = "Main",
+					Anime = new MalImageSubItem
 					{
-						Role = "Main",
-						Anime = new MALImageSubItem
-						{
-							MalId = animeMalId
-						},
-						Character = new MALImageSubItem
-						{
-							MalId = characterMalId
-						}
+						MalId = animeMalId
+					},
+					Character = new MalImageSubItem()
+					{
+						MalId = characterMalId
 					}
 				}
 			};
-
+			
 			var returnedAnime = new JikanDotNet.Anime
 			{
 				Title = returnedAnimeTitle,
@@ -1271,7 +1276,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				Members = returnedAnimePopularity
 			};
 
-			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu).WithAnimeReturned(returnedAnime);
+			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu, returnedRoles).WithAnimeReturned(returnedAnime);
 
 			var seiyuu = new SeiyuuBuilder()
 				.WithId(seiyuuId)
@@ -1345,25 +1350,25 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 
 			var returnedSeiyuu = new Person
 			{
-				MalId = seiyuuMalId,
-				VoiceActingRoles = new List<VoiceActingRole>
+				MalId = seiyuuMalId
+			};
+			var returnedRoles = new List<VoiceActingRole>
+			{
+				new VoiceActingRole
 				{
-					new VoiceActingRole
+					Role = "Main",
+					Anime = new MalImageSubItem
 					{
-						Role = "Main",
-						Anime = new MALImageSubItem
-						{
-							MalId = animeMalId
-						},
-						Character = new MALImageSubItem
-						{
-							MalId = characterMalId
-						}
+						MalId = animeMalId
+					},
+					Character = new MalImageSubItem()
+					{
+						MalId = characterMalId
 					}
 				}
 			};
-
-			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu).WithAnimeReturned(null);
+			
+			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu, returnedRoles).WithAnimeReturned(null);
 
 			var seiyuu = new SeiyuuBuilder()
 				.WithId(seiyuuId)
@@ -1428,24 +1433,24 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 
 			var returnedSeiyuu = new Person
 			{
-				MalId = seiyuuMalId,
-				VoiceActingRoles = new List<VoiceActingRole>
+				MalId = seiyuuMalId
+			};
+			var returnedRoles = new List<VoiceActingRole>
+			{
+				new VoiceActingRole
 				{
-					new VoiceActingRole
+					Role = "Main",
+					Anime = new MalImageSubItem
 					{
-						Role = "Main",
-						Anime = new MALImageSubItem
-						{
-							MalId = animeMalId
-						},
-						Character = new MALImageSubItem
-						{
-							MalId = characterMalId
-						}
+						MalId = animeMalId
+					},
+					Character = new MalImageSubItem()
+					{
+						MalId = characterMalId
 					}
 				}
 			};
-
+			
 			var returnedAnime = new JikanDotNet.Anime
 			{
 				Images = new ImagesSet
@@ -1454,7 +1459,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				}
 			};
 
-			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu).WithAnimeReturned(returnedAnime);
+			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu, returnedRoles).WithAnimeReturned(returnedAnime);
 
 			var seiyuu = new SeiyuuBuilder()
 				.WithId(seiyuuId)
@@ -1523,30 +1528,30 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 
 			var returnedSeiyuu = new Person
 			{
-				MalId = seiyuuMalId,
-				VoiceActingRoles = new List<VoiceActingRole>
+				MalId = seiyuuMalId
+			};
+			var returnedRoles = new List<VoiceActingRole>
+			{
+				new VoiceActingRole
 				{
-					new VoiceActingRole
+					Role = "Main",
+					Anime = new MalImageSubItem
 					{
-						Role = "Main",
-						Anime = new MALImageSubItem
-						{
-							MalId = animeMalId
-						},
-						Character = new MALImageSubItem
-						{
-							MalId = characterMalId
-						}
+						MalId = animeMalId
+					},
+					Character = new MalImageSubItem()
+					{
+						MalId = characterMalId
 					}
 				}
 			};
-
+			
 			var returnedAnime = new JikanDotNet.Anime
 			{
 				TitleSynonyms = new List<string> { "Synonym 1", "Synonym 2", "Synonym 3" }
 			};
 
-			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu).WithAnimeReturned(returnedAnime);
+			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu, returnedRoles).WithAnimeReturned(returnedAnime);
 
 			var seiyuu = new SeiyuuBuilder()
 				.WithId(seiyuuId)
@@ -1613,40 +1618,33 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			const long characterMalId = 1000;
 			var dbContext = InMemoryDbProvider.GetDbContext();
 
-			const string returnedAnimeTitle = "PostUpdateTitle";
-			const string returnedAnimeAbout = "PostUpdateAbout";
-			const string returnedAnimeEnglishTitle = "PostUpdateEnglish";
-			const string returnedAnimeJapaneseTitle = "PostUpdateJapanese";
-			const string returnedAnimeImageUrl = "PostUpdateImageUrl";
-			const int returnedAnimePopularity = 3;
-
 			var returnedSeiyuu = new Person
 			{
-				MalId = seiyuuMalId,
-				VoiceActingRoles = new List<VoiceActingRole>
+				MalId = seiyuuMalId
+			};
+			var returnedRoles = new List<VoiceActingRole>
+			{
+				new VoiceActingRole
 				{
-					new VoiceActingRole
+					Role = "Main",
+					Anime = new MalImageSubItem
 					{
-						Role = "Main",
-						Anime = new MALImageSubItem
-						{
-							MalId = animeMalId
-						},
-						Character = new MALImageSubItem
-						{
-							MalId = characterMalId
-						}
+						MalId = animeMalId
+					},
+					Character = new MalImageSubItem()
+					{
+						MalId = characterMalId
 					}
 				}
 			};
-
+			
 			var returnedAnime = new JikanDotNet.Anime
 			{
 				Type = "test type",
 				Status = "test status"
 			};
 
-			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu).WithAnimeReturned(returnedAnime);
+			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu, returnedRoles).WithAnimeReturned(returnedAnime);
 
 			var seiyuu = new SeiyuuBuilder()
 				.WithId(seiyuuId)
@@ -1714,40 +1712,33 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			const long characterMalId = 1000;
 			var dbContext = InMemoryDbProvider.GetDbContext();
 
-			const string returnedAnimeTitle = "PostUpdateTitle";
-			const string returnedAnimeAbout = "PostUpdateAbout";
-			const string returnedAnimeEnglishTitle = "PostUpdateEnglish";
-			const string returnedAnimeJapaneseTitle = "PostUpdateJapanese";
-			const string returnedAnimeImageUrl = "PostUpdateImageUrl";
-			const int returnedAnimePopularity = 3;
-
 			var returnedSeiyuu = new Person
 			{
-				MalId = seiyuuMalId,
-				VoiceActingRoles = new List<VoiceActingRole>
+				MalId = seiyuuMalId
+			};
+			var returnedRoles = new List<VoiceActingRole>
+			{
+				new VoiceActingRole
 				{
-					new VoiceActingRole
+					Role = "Main",
+					Anime = new MalImageSubItem
 					{
-						Role = "Main",
-						Anime = new MALImageSubItem
-						{
-							MalId = animeMalId
-						},
-						Character = new MALImageSubItem
-						{
-							MalId = characterMalId
-						}
+						MalId = animeMalId
+					},
+					Character = new MalImageSubItem()
+					{
+						MalId = characterMalId
 					}
 				}
 			};
-
+			
 			var returnedAnime = new JikanDotNet.Anime
 			{
 				Season = Season.Winter,
 				Year = 2001
 			};
 
-			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu).WithAnimeReturned(returnedAnime);
+			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu, returnedRoles).WithAnimeReturned(returnedAnime);
 
 			var seiyuu = new SeiyuuBuilder()
 				.WithId(seiyuuId)
@@ -1836,24 +1827,24 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 
 			var returnedSeiyuu = new Person
 			{
-				MalId = seiyuuMalId,
-				VoiceActingRoles = new List<VoiceActingRole>
+				MalId = seiyuuMalId
+			};
+			var returnedRoles = new List<VoiceActingRole>
+			{
+				new VoiceActingRole
 				{
-					new VoiceActingRole
+					Role = "Main",
+					Anime = new MalImageSubItem
 					{
-						Role = "Main",
-						Anime = new MALImageSubItem
-						{
-							MalId = animeMalId
-						},
-						Character = new MALImageSubItem
-						{
-							MalId = characterMalId
-						}
+						MalId = animeMalId
+					},
+					Character = new MalImageSubItem()
+					{
+						MalId = characterMalId
 					}
 				}
 			};
-
+			
 			var returnedCharacter = new Character
 			{
 				MalId = characterMalId,
@@ -1883,7 +1874,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			};
 
 			var jikanServiceBuilder = new JikanServiceBuilder()
-				.WithPersonReturned(returnedSeiyuu)
+				.WithPersonReturned(returnedSeiyuu, returnedRoles)
 				.WithCharacterReturned(returnedCharacter)
 				.WithAnimeReturned(returnedAnime);
 
@@ -1963,24 +1954,24 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			const int returnedCharacterPopularity = 1;
 			var returnedSeiyuu = new Person
 			{
-				MalId = seiyuuMalId,
-				VoiceActingRoles = new List<VoiceActingRole>
+				MalId = seiyuuMalId
+			};
+			var returnedRoles = new List<VoiceActingRole>
+			{
+				new VoiceActingRole
 				{
-					new VoiceActingRole
+					Role = "Main",
+					Anime = new MalImageSubItem
 					{
-						Role = "Main",
-						Anime = new MALImageSubItem
-						{
-							MalId = animeMalId
-						},
-						Character = new MALImageSubItem
-						{
-							MalId = characterMalId
-						}
+						MalId = animeMalId
+					},
+					Character = new MalImageSubItem()
+					{
+						MalId = characterMalId
 					}
 				}
 			};
-
+			
 			var returnedCharacter = new Character
 			{
 				MalId = characterMalId,
@@ -1996,7 +1987,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			};
 
 			var jikanServiceBuilder = new JikanServiceBuilder()
-				.WithPersonReturned(returnedSeiyuu)
+				.WithPersonReturned(returnedSeiyuu, returnedRoles)
 				.WithCharacterReturned(returnedCharacter)
 				.WithAnimeReturned(null);
 
@@ -2067,24 +2058,24 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 
 			var returnedSeiyuu = new Person
 			{
-				MalId = seiyuuMalId,
-				VoiceActingRoles = new List<VoiceActingRole>
+				MalId = seiyuuMalId
+			};
+			var returnedRoles = new List<VoiceActingRole>
+			{
+				new VoiceActingRole
 				{
-					new VoiceActingRole
+					Role = "Main",
+					Anime = new MalImageSubItem
 					{
-						Role = "Main",
-						Anime = new MALImageSubItem
-						{
-							MalId = animeMalId
-						},
-						Character = new MALImageSubItem
-						{
-							MalId = characterMalId
-						}
+						MalId = animeMalId
+					},
+					Character = new MalImageSubItem()
+					{
+						MalId = characterMalId
 					}
 				}
 			};
-
+			
 			var returnedAnime = new JikanDotNet.Anime
 			{
 				Title = returnedAnimeTitle,
@@ -2100,7 +2091,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			};
 
 			var jikanServiceBuilder = new JikanServiceBuilder()
-				.WithPersonReturned(returnedSeiyuu)
+				.WithPersonReturned(returnedSeiyuu, returnedRoles)
 				.WithCharacterReturned(null)
 				.WithAnimeReturned(returnedAnime);
 
@@ -2171,36 +2162,35 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 
 			var returnedSeiyuu = new Person
 			{
-				MalId = seiyuuMalId,
-				VoiceActingRoles = new List<VoiceActingRole>
+				MalId = seiyuuMalId
+			};
+			var returnedRoles = new List<VoiceActingRole>
+			{
+				new VoiceActingRole
 				{
-					new VoiceActingRole
+					Role = "Main",
+					Anime = new MalImageSubItem
 					{
-						Role = "Main",
-						Anime = new MALImageSubItem
-						{
-							MalId = anime1MalId
-						},
-						Character = new MALImageSubItem
-						{
-							MalId = character1MalId
-						}
+						MalId = anime1MalId
 					},
-					new VoiceActingRole
+					Character = new MalImageSubItem()
 					{
-						Role = "Supporting",
-						Anime = new MALImageSubItem
-						{
-							MalId = anime2MalId
-						},
-						Character = new MALImageSubItem
-						{
-							MalId = character2MalId
-						}
+						MalId = character1MalId
+					}
+				},
+				new VoiceActingRole
+				{
+					Role = "Supporting",
+					Anime = new MalImageSubItem
+					{
+						MalId = anime2MalId
+					},
+					Character = new MalImageSubItem()
+					{
+						MalId = character2MalId
 					}
 				}
 			};
-
 			const string firstReturnedCharacterName = "PostUpdateNameCharacter1";
 			const string firstReturnedCharacterAbout = "PostUpdateAboutCharacter1";
 			const string firstReturnedCharacterJapaneseName = "PostUpdateJapaneseCharacter1";
@@ -2240,7 +2230,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			};
 
 			var jikanServiceBuilder = new JikanServiceBuilder()
-				.WithPersonReturned(returnedSeiyuu)
+				.WithPersonReturned(returnedSeiyuu, returnedRoles)
 				.WithTwoCharactersReturned(firstReturnedCharacter, secondReturnedCharacter);
 
 			var animeStatus = new AnimeStatusBuilder()
@@ -2342,32 +2332,32 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 
 			var returnedSeiyuu = new Person
 			{
-				MalId = seiyuuMalId,
-				VoiceActingRoles = new List<VoiceActingRole>
+				MalId = seiyuuMalId
+			};
+			var returnedRoles = new List<VoiceActingRole>
+			{
+				new VoiceActingRole
 				{
-					new VoiceActingRole
+					Role = "Main",
+					Anime = new MalImageSubItem
 					{
-						Role = "Main",
-						Anime = new MALImageSubItem
-						{
-							MalId = anime1MalId
-						},
-						Character = new MALImageSubItem
-						{
-							MalId = character1MalId
-						}
+						MalId = anime1MalId
 					},
-					new VoiceActingRole
+					Character = new MalImageSubItem()
 					{
-						Role = "Supporting",
-						Anime = new MALImageSubItem
-						{
-							MalId = anime2MalId
-						},
-						Character = new MALImageSubItem
-						{
-							MalId = character2MalId
-						}
+						MalId = character1MalId
+					}
+				},
+				new VoiceActingRole
+				{
+					Role = "Supporting",
+					Anime = new MalImageSubItem
+					{
+						MalId = anime2MalId
+					},
+					Character = new MalImageSubItem()
+					{
+						MalId = character2MalId
 					}
 				}
 			};
@@ -2411,7 +2401,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			};
 
 			var jikanServiceBuilder = new JikanServiceBuilder()
-				.WithPersonReturned(returnedSeiyuu)
+				.WithPersonReturned(returnedSeiyuu, returnedRoles)
 				.WithTwoAnimeReturned(firstReturnedAnime, secondReturnedAnime);
 
 			var animeStatus = new AnimeStatusBuilder()
@@ -2508,32 +2498,32 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 
 			var returnedSeiyuu = new Person
 			{
-				MalId = seiyuuMalId,
-				VoiceActingRoles = new List<VoiceActingRole>
+				MalId = seiyuuMalId
+			};
+			var returnedRoles = new List<VoiceActingRole>
+			{
+				new VoiceActingRole
 				{
-					new VoiceActingRole
+					Role = "Main",
+					Anime = new MalImageSubItem
 					{
-						Role = "Main",
-						Anime = new MALImageSubItem
-						{
-							MalId = anime1MalId
-						},
-						Character = new MALImageSubItem
-						{
-							MalId = character1MalId
-						}
+						MalId = anime1MalId
 					},
-					new VoiceActingRole
+					Character = new MalImageSubItem()
 					{
-						Role = "Supporting",
-						Anime = new MALImageSubItem
-						{
-							MalId = anime2MalId
-						},
-						Character = new MALImageSubItem
-						{
-							MalId = character2MalId
-						}
+						MalId = character1MalId
+					}
+				},
+				new VoiceActingRole
+				{
+					Role = "Supporting",
+					Anime = new MalImageSubItem
+					{
+						MalId = anime2MalId
+					},
+					Character = new MalImageSubItem()
+					{
+						MalId = character2MalId
 					}
 				}
 			};
@@ -2615,7 +2605,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			};
 
 			var jikanServiceBuilder = new JikanServiceBuilder()
-				.WithPersonReturned(returnedSeiyuu)
+				.WithPersonReturned(returnedSeiyuu, returnedRoles)
 				.WithTwoAnimeReturned(firstReturnedAnime, secondReturnedAnime)
 				.WithTwoCharactersReturned(firstReturnedCharacter, secondReturnedCharacter);
 

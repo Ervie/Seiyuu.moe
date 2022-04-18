@@ -56,12 +56,12 @@ namespace SeiyuuMoe.Tests.Common.Builders.Jikan
 			return this;
 		}
 
-		public JikanServiceBuilder WithPersonReturned(Person person)
+		public JikanServiceBuilder WithPersonReturned(Person person, ICollection<VoiceActingRole> voiceActingRoles)
 		{
 			JikanClient.Setup(x => x.GetPersonAsync(It.IsAny<long>()))
 				.ReturnsAsync(new BaseJikanResponse<Person>() {Data = person});
 			JikanClient.Setup(x => x.GetPersonVoiceActingRolesAsync(It.IsAny<long>()))
-				.ReturnsAsync(new BaseJikanResponse<Person>() {Data = person});
+				.ReturnsAsync(new BaseJikanResponse<ICollection<VoiceActingRole>>() {Data = voiceActingRoles});
 			return this;
 		}
 
