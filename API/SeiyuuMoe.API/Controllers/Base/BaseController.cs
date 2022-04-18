@@ -24,7 +24,7 @@ namespace SeiyuuMoe.API.Controllers.Base
 			catch (Exception ex)
 			{
 				_loggingService.Log($"Internal Error: {ex.GetType().Name}, Message: {ex.GetFullMessage()}, stack trace: {ex.StackTrace}");
-				throw ex;
+				throw;
 			}
 		}
 	}
