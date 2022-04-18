@@ -37,7 +37,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			await handler.HandleAsync();
 
 			// Then
-			jikanServiceBuilder.JikanClient.Verify(x => x.GetPerson(2), Times.Once);
+			jikanServiceBuilder.JikanClient.Verify(x => x.GetPersonAsync(2), Times.Once);
 		}
 
 		[Fact]
@@ -54,7 +54,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			await handler.HandleAsync();
 
 			// Then
-			jikanServiceBuilder.JikanClient.Verify(x => x.GetPerson(lastId + 1), Times.Once);
+			jikanServiceBuilder.JikanClient.Verify(x => x.GetPersonAsync(lastId + 1), Times.Once);
 		}
 
 		[Fact]
@@ -72,11 +72,11 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			// Then
 			using (new AssertionScope())
 			{
-				jikanServiceBuilder.JikanClient.Verify(x => x.GetPerson(2), Times.Once);
-				jikanServiceBuilder.JikanClient.Verify(x => x.GetPerson(3), Times.Once);
-				jikanServiceBuilder.JikanClient.Verify(x => x.GetPerson(4), Times.Once);
-				jikanServiceBuilder.JikanClient.Verify(x => x.GetPerson(5), Times.Once);
-				jikanServiceBuilder.JikanClient.Verify(x => x.GetPerson(6), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetPersonAsync(2), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetPersonAsync(3), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetPersonAsync(4), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetPersonAsync(5), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetPersonAsync(6), Times.Once);
 			}
 		}
 
@@ -138,7 +138,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			await handler.HandleAsync();
 
 			// Then
-			jikanServiceBuilder.JikanClient.Verify(x => x.GetPerson(It.IsAny<int>()), Times.Never);
+			jikanServiceBuilder.JikanClient.Verify(x => x.GetPersonAsync(It.IsAny<int>()), Times.Never);
 			dbContext.Seiyuus.Should().ContainSingle();
 		}
 
@@ -169,7 +169,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				await action.Should().ThrowExactlyAsync<JikanRequestException>();
 				dbContext.Seiyuus.Should().ContainSingle();
 			}
-			jikanServiceBuilder.JikanClient.Verify(x => x.GetPerson(startingMalId + 1), Times.Once);
+			jikanServiceBuilder.JikanClient.Verify(x => x.GetPersonAsync(startingMalId + 1), Times.Once);
 		}
 
 		[Fact]
@@ -194,7 +194,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			await handler.HandleAsync();
 
 			// Then
-			jikanServiceBuilder.JikanClient.Verify(x => x.GetPerson(startingMalId + 1), Times.Once);
+			jikanServiceBuilder.JikanClient.Verify(x => x.GetPersonAsync(startingMalId + 1), Times.Once);
 			dbContext.Seiyuus.Should().ContainSingle();
 		}
 
@@ -217,10 +217,13 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			var returnedSeiyuu = new Person
 			{
 				Name = returnedSeiyuuName,
-				More = returnedSeiyuuAbout,
+				About = returnedSeiyuuAbout,
 				GivenName = returnedSeiyuuGivenName,
 				FamilyName = returnedSeiyuuFamilyNameName,
-				ImageURL = returnedSeiyuuImageUrl,
+				Images =new ImagesSet
+				{
+					JPG = new Image { ImageUrl = returnedSeiyuuImageUrl }
+				},
 				MemberFavorites = returnedSeiyuuPopularity,
 				Birthday = returnedBirthdate
 			};
@@ -240,7 +243,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			await handler.HandleAsync();
 
 			// Then
-			jikanServiceBuilder.JikanClient.Verify(x => x.GetPerson(startingMalId + 1), Times.Once);
+			jikanServiceBuilder.JikanClient.Verify(x => x.GetPersonAsync(startingMalId + 1), Times.Once);
 			dbContext.Seiyuus.Should().ContainSingle();
 		}
 
@@ -263,10 +266,13 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			var returnedSeiyuu = new Person
 			{
 				Name = returnedSeiyuuName,
-				More = returnedSeiyuuAbout,
+				About = returnedSeiyuuAbout,
 				GivenName = returnedSeiyuuGivenName,
 				FamilyName = returnedSeiyuuFamilyNameName,
-				ImageURL = returnedSeiyuuImageUrl,
+				Images =new ImagesSet
+				{
+					JPG = new Image { ImageUrl = returnedSeiyuuImageUrl }
+				},
 				MemberFavorites = returnedSeiyuuPopularity,
 				Birthday = returnedBirthdate
 			};
@@ -286,7 +292,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			await handler.HandleAsync();
 
 			// Then
-			jikanServiceBuilder.JikanClient.Verify(x => x.GetPerson(startingMalId + 1), Times.Once);
+			jikanServiceBuilder.JikanClient.Verify(x => x.GetPersonAsync(startingMalId + 1), Times.Once);
 			dbContext.Seiyuus.Should().ContainSingle();
 		}
 
@@ -311,10 +317,13 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			var returnedSeiyuu = new Person
 			{
 				Name = returnedSeiyuuName,
-				More = returnedSeiyuuAbout,
+				About = returnedSeiyuuAbout,
 				GivenName = returnedSeiyuuGivenName,
 				FamilyName = returnedSeiyuuFamilyNameName,
-				ImageURL = returnedSeiyuuImageUrl,
+				Images =new ImagesSet
+				{
+					JPG = new Image { ImageUrl = returnedSeiyuuImageUrl }
+				},
 				MemberFavorites = returnedSeiyuuPopularity,
 				Birthday = returnedBirthdate,
 				VoiceActingRoles = new List<VoiceActingRole>
@@ -349,7 +358,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			await handler.HandleAsync();
 
 			// Then
-			jikanServiceBuilder.JikanClient.Verify(x => x.GetPerson(startingSeiyuuMalId + 1), Times.Once);
+			jikanServiceBuilder.JikanClient.Verify(x => x.GetPersonAsync(startingSeiyuuMalId + 1), Times.Once);
 			dbContext.Seiyuus.Should().ContainSingle();
 		}
 
@@ -374,10 +383,13 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			var returnedSeiyuu = new Person
 			{
 				Name = returnedSeiyuuName,
-				More = returnedSeiyuuAbout,
+				About = returnedSeiyuuAbout,
 				GivenName = returnedSeiyuuGivenName,
 				FamilyName = returnedSeiyuuFamilyNameName,
-				ImageURL = returnedSeiyuuImageUrl,
+				Images =new ImagesSet
+				{
+					JPG = new Image { ImageUrl = returnedSeiyuuImageUrl }
+				},
 				MemberFavorites = returnedSeiyuuPopularity,
 				Birthday = returnedBirthdate,
 				VoiceActingRoles = new List<VoiceActingRole>
@@ -415,9 +427,9 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			await handler.HandleAsync();
 
 			// Then
-			jikanServiceBuilder.JikanClient.Verify(x => x.GetPerson(startingSeiyuuMalId + 1), Times.Once);
-			jikanServiceBuilder.JikanClient.Verify(x => x.GetAnime(animeMalId), Times.Once);
-			jikanServiceBuilder.JikanClient.Verify(x => x.GetCharacter(characterMalId), Times.Once);
+			jikanServiceBuilder.JikanClient.Verify(x => x.GetPersonAsync(startingSeiyuuMalId + 1), Times.Once);
+			jikanServiceBuilder.JikanClient.Verify(x => x.GetAnimeAsync(animeMalId), Times.Once);
+			jikanServiceBuilder.JikanClient.Verify(x => x.GetCharacterAsync(characterMalId), Times.Once);
 			dbContext.Seiyuus.Should().HaveCount(2);
 			dbContext.AnimeRoles.Should().BeEmpty();
 		}
@@ -450,10 +462,13 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			var returnedSeiyuu = new Person
 			{
 				Name = returnedSeiyuuName,
-				More = returnedSeiyuuAbout,
+				About = returnedSeiyuuAbout,
 				GivenName = returnedSeiyuuGivenName,
 				FamilyName = returnedSeiyuuFamilyNameName,
-				ImageURL = returnedSeiyuuImageUrl,
+				Images =new ImagesSet
+				{
+					JPG = new Image { ImageUrl = returnedSeiyuuImageUrl }
+				},
 				MemberFavorites = returnedSeiyuuPopularity,
 				Birthday = returnedBirthdate,
 				VoiceActingRoles = new List<VoiceActingRole>
@@ -480,7 +495,10 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				Synopsis = returnedAnimeAbout,
 				TitleEnglish = returnedAnimeEnglishTitle,
 				TitleJapanese = returnedAnimeJapaneseTitle,
-				ImageURL = returnedAnimeImageUrl,
+				Images =new ImagesSet
+				{
+					JPG = new Image { ImageUrl = returnedAnimeImageUrl }
+				},
 				TitleSynonyms = new List<string>(),
 				Members = returnedAnimePopularity
 			};
@@ -503,9 +521,9 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			await handler.HandleAsync();
 
 			// Then
-			jikanServiceBuilder.JikanClient.Verify(x => x.GetPerson(startingSeiyuuMalId + 1), Times.Once);
-			jikanServiceBuilder.JikanClient.Verify(x => x.GetAnime(animeMalId), Times.Once);
-			jikanServiceBuilder.JikanClient.Verify(x => x.GetCharacter(characterMalId), Times.Once);
+			jikanServiceBuilder.JikanClient.Verify(x => x.GetPersonAsync(startingSeiyuuMalId + 1), Times.Once);
+			jikanServiceBuilder.JikanClient.Verify(x => x.GetAnimeAsync(animeMalId), Times.Once);
+			jikanServiceBuilder.JikanClient.Verify(x => x.GetCharacterAsync(characterMalId), Times.Once);
 			dbContext.Seiyuus.Should().HaveCount(2);
 			dbContext.Animes.Should().ContainSingle();
 			dbContext.AnimeCharacters.Should().BeEmpty();
@@ -539,10 +557,13 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			var returnedSeiyuu = new Person
 			{
 				Name = returnedSeiyuuName,
-				More = returnedSeiyuuAbout,
+				About = returnedSeiyuuAbout,
 				GivenName = returnedSeiyuuGivenName,
 				FamilyName = returnedSeiyuuFamilyNameName,
-				ImageURL = returnedSeiyuuImageUrl,
+				Images =new ImagesSet
+				{
+					JPG = new Image { ImageUrl = returnedSeiyuuImageUrl }
+				},
 				MemberFavorites = returnedSeiyuuPopularity,
 				Birthday = returnedBirthdate,
 				VoiceActingRoles = new List<VoiceActingRole>
@@ -568,9 +589,12 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				Name = returnedCharacterName,
 				About = returnedCharacterAbout,
 				NameKanji = returnedCharacterJapaneseName,
-				ImageURL = returnedCharacterImageUrl,
+				Images =new ImagesSet
+				{
+					JPG = new Image { ImageUrl = returnedCharacterImageUrl }
+				},
 				Nicknames = new List<string>(),
-				MemberFavorites = returnedCharacterPopularity
+				Favorites = returnedCharacterPopularity
 			};
 
 			var jikanServiceBuilder = new JikanServiceBuilder()
@@ -591,9 +615,9 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			await handler.HandleAsync();
 
 			// Then
-			jikanServiceBuilder.JikanClient.Verify(x => x.GetPerson(startingSeiyuuMalId + 1), Times.Once);
-			jikanServiceBuilder.JikanClient.Verify(x => x.GetAnime(animeMalId), Times.Once);
-			jikanServiceBuilder.JikanClient.Verify(x => x.GetCharacter(characterMalId), Times.Once);
+			jikanServiceBuilder.JikanClient.Verify(x => x.GetPersonAsync(startingSeiyuuMalId + 1), Times.Once);
+			jikanServiceBuilder.JikanClient.Verify(x => x.GetAnimeAsync(animeMalId), Times.Once);
+			jikanServiceBuilder.JikanClient.Verify(x => x.GetCharacterAsync(characterMalId), Times.Once);
 			dbContext.Seiyuus.Should().HaveCount(2);
 			dbContext.Animes.Should().BeEmpty();
 			dbContext.AnimeCharacters.Should().ContainSingle();
@@ -634,10 +658,13 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			var returnedSeiyuu = new Person
 			{
 				Name = returnedSeiyuuName,
-				More = returnedSeiyuuAbout,
+				About = returnedSeiyuuAbout,
 				GivenName = returnedSeiyuuGivenName,
 				FamilyName = returnedSeiyuuFamilyNameName,
-				ImageURL = returnedSeiyuuImageUrl,
+				Images =new ImagesSet
+				{
+					JPG = new Image { ImageUrl = returnedSeiyuuImageUrl }
+				},
 				MemberFavorites = returnedSeiyuuPopularity,
 				Birthday = returnedBirthdate,
 				VoiceActingRoles = new List<VoiceActingRole>
@@ -663,9 +690,12 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				Name = returnedCharacterName,
 				About = returnedCharacterAbout,
 				NameKanji = returnedCharacterJapaneseName,
-				ImageURL = returnedCharacterImageUrl,
+				Images =new ImagesSet
+				{
+					JPG = new Image { ImageUrl = returnedCharacterImageUrl }
+				},
 				Nicknames = new List<string>(),
-				MemberFavorites = returnedCharacterPopularity
+				Favorites = returnedCharacterPopularity
 			};
 
 			var returnedAnime = new Anime
@@ -675,7 +705,10 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				Synopsis = returnedAnimeAbout,
 				TitleEnglish = returnedAnimeEnglishTitle,
 				TitleJapanese = returnedAnimeJapaneseTitle,
-				ImageURL = returnedAnimeImageUrl,
+				Images =new ImagesSet
+				{
+					JPG = new Image { ImageUrl = returnedAnimeImageUrl }
+				},
 				TitleSynonyms = new List<string>(),
 				Members = returnedAnimePopularity
 			};
@@ -698,9 +731,9 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			await handler.HandleAsync();
 
 			// Then
-			jikanServiceBuilder.JikanClient.Verify(x => x.GetPerson(startingSeiyuuMalId + 1), Times.Once);
-			jikanServiceBuilder.JikanClient.Verify(x => x.GetAnime(animeMalId), Times.Once);
-			jikanServiceBuilder.JikanClient.Verify(x => x.GetCharacter(characterMalId), Times.Once);
+			jikanServiceBuilder.JikanClient.Verify(x => x.GetPersonAsync(startingSeiyuuMalId + 1), Times.Once);
+			jikanServiceBuilder.JikanClient.Verify(x => x.GetAnimeAsync(animeMalId), Times.Once);
+			jikanServiceBuilder.JikanClient.Verify(x => x.GetCharacterAsync(characterMalId), Times.Once);
 			using (new AssertionScope())
 			{
 				dbContext.Seiyuus.Should().HaveCount(2);

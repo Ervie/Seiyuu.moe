@@ -43,7 +43,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			using (new AssertionScope())
 			{
 				await action.Should().NotThrowAsync();
-				jikanServiceBuilder.JikanClient.Verify(x => x.GetCharacter(It.IsAny<long>()), Times.Never);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetCharacterAsync(It.IsAny<long>()), Times.Never);
 			}
 		}
 
@@ -77,7 +77,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			using (new AssertionScope())
 			{
 				await action.Should().NotThrowAsync();
-				jikanServiceBuilder.JikanClient.Verify(x => x.GetCharacter(malId), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetCharacterAsync(malId), Times.Once);
 			}
 		}
 
@@ -111,7 +111,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			using (new AssertionScope())
 			{
 				await action.Should().ThrowExactlyAsync<JikanRequestException>();
-				jikanServiceBuilder.JikanClient.Verify(x => x.GetCharacter(malId), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetCharacterAsync(malId), Times.Once);
 			}
 		}
 
@@ -132,9 +132,12 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				Name = returnedName,
 				About = returnedAbout,
 				NameKanji = returnedJapaneseName,
-				ImageURL = returnedImageUrl,
+				Images = new ImagesSet
+				{
+					JPG = new Image { ImageUrl = returnedImageUrl }
+				},
 				Nicknames = new List<string>(),
-				MemberFavorites = returnedPopularity
+				Favorites = returnedPopularity
 			};
 
 			var dbContext = InMemoryDbProvider.GetDbContext();
@@ -173,7 +176,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				updatedCharacter.ImageUrl.Should().Be(returnedImageUrl);
 				updatedCharacter.Popularity.Should().Be(returnedPopularity);
 
-				jikanServiceBuilder.JikanClient.Verify(x => x.GetCharacter(malId), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetCharacterAsync(malId), Times.Once);
 			}
 		}
 
@@ -225,7 +228,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			{
 				updatedCharacter.ImageUrl.Should().BeEmpty();
 
-				jikanServiceBuilder.JikanClient.Verify(x => x.GetCharacter(malId), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetCharacterAsync(malId), Times.Once);
 			}
 		}
 
@@ -274,7 +277,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			{
 				updatedCharacter.Nicknames.Should().Be("Nickname 1;Nickname 2;Nickname 3");
 
-				jikanServiceBuilder.JikanClient.Verify(x => x.GetCharacter(malId), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetCharacterAsync(malId), Times.Once);
 			}
 		}
 

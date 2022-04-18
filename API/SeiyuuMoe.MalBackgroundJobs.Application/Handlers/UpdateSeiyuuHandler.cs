@@ -56,13 +56,15 @@ namespace SeiyuuMoe.MalBackgroundJobs.Application.Handlers
 				return;
 			}
 
-			UpdateCharacter(seiyuuToUpdate, updateData);
+			UpdatePerson(seiyuuToUpdate, updateData);
 			await _seiyuuRepository.UpdateAsync(seiyuuToUpdate);
 
-			await UpdateRolesAsync(updateSeiyuuMessage, updateData.VoiceActingRoles);
+			var rolesUpdateDate = await _malApiService.GetSeiyuuVoiceActingRolesAsync(updateSeiyuuMessage.MalId);
+
+			await UpdateRolesAsync(updateSeiyuuMessage, rolesUpdateDate);
 		}
 
-		private void UpdateCharacter(Seiyuu seiyuuToUpdate, MalSeiyuuUpdateData updateData)
+		private void UpdatePerson(Seiyuu seiyuuToUpdate, MalSeiyuuUpdateData updateData)
 		{
 			seiyuuToUpdate.Name = updateData.Name;
 			seiyuuToUpdate.About = updateData.About;
@@ -162,9 +164,9 @@ namespace SeiyuuMoe.MalBackgroundJobs.Application.Handlers
 				TitleSynonyms = !string.IsNullOrWhiteSpace(parsedData.TitleSynonyms) ? parsedData.TitleSynonyms : string.Empty,
 				StatusId = JikanParserHelper.GetUpdatedAnimeStatus(null, parsedData.Status),
 				TypeId = JikanParserHelper.GetUpdatedAnimeType(null, parsedData.Type),
-				SeasonId = string.IsNullOrEmpty(parsedData.Season)
+				SeasonId = string.IsNullOrEmpty(parsedData.SeasonName)
 				? await MatchSeasonByDateAsync(parsedData.AiringDate)
-				: await MatchSeasonBySeasonAsync(parsedData.Season)
+				: await MatchSeasonBySeasonAsync(parsedData.SeasonName, parsedData.SeasonYear)
 			};
 
 			await _animeRepository.AddAsync(newAnime);
@@ -172,16 +174,14 @@ namespace SeiyuuMoe.MalBackgroundJobs.Application.Handlers
 			return newAnime;
 		}
 
-		private async Task<long?> MatchSeasonBySeasonAsync(string seasonName)
+		private async Task<long?> MatchSeasonBySeasonAsync(string seasonName, int? seasonYear)
 		{
-			(string, int)? season = JikanParserHelper.GetSeasonPartsByName(seasonName);
-
-			if (season is null)
+			if (seasonYear is null)
 			{
 				return null;
 			}
 
-			var foundSeason = await _seasonRepository.GetAsync(x => x.Name.ToLower().Equals(season.Value.Item1.ToLower()) && x.Year.Equals(season.Value.Item2));
+			var foundSeason = await _seasonRepository.GetAsync(x => x.Name.ToLower().Equals(seasonName.ToLower()) && x.Year.Equals(seasonYear.Value));
 			return foundSeason?.Id;
 		}
 

@@ -9,7 +9,7 @@
     <PackageReference Include="Amazon.Extensions.Configuration.SystemsManager" Version="2.1.0" />
     <PackageReference Include="AWSSDK.S3" Version="3.7.1.8" />
     <PackageReference Include="AWSSDK.SQS" Version="3.7.0.37" />
-    <PackageReference Include="JikanDotNet" Version="1.5.6" />
+    <PackageReference Include="JikanDotNet" Version="2.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.16" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.16" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.16">

@@ -44,7 +44,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			using (new AssertionScope())
 			{
 				await action.Should().NotThrowAsync();
-				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnime(It.IsAny<long>()), Times.Never);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnimeAsync(It.IsAny<long>()), Times.Never);
 			}
 		}
 
@@ -78,7 +78,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			using (new AssertionScope())
 			{
 				await action.Should().NotThrowAsync();
-				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnime(malId), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnimeAsync(malId), Times.Once);
 			}
 		}
 
@@ -112,7 +112,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			using (new AssertionScope())
 			{
 				await action.Should().ThrowExactlyAsync<JikanRequestException>();
-				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnime(malId), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnimeAsync(malId), Times.Once);
 			}
 		}
 
@@ -135,7 +135,10 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				Synopsis = returnedAbout,
 				TitleEnglish = returnedEnglishTitle,
 				TitleJapanese = returnedJapaneseTitle,
-				ImageURL = returnedImageUrl,
+				Images = new ImagesSet
+				{
+					JPG = new Image { ImageUrl = returnedImageUrl }
+				},
 				TitleSynonyms = new List<string>(),
 				Members = returnedPopularity
 			};
@@ -178,7 +181,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				updatedAnime.ImageUrl.Should().Be(returnedImageUrl);
 				updatedAnime.Popularity.Should().Be(returnedPopularity);
 
-				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnime(malId), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnimeAsync(malId), Times.Once);
 			}
 		}
 
@@ -195,7 +198,10 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 
 			var returnedAnime = new Anime
 			{
-				ImageURL = imageUrl
+				Images = new ImagesSet
+				{
+					JPG = new Image { ImageUrl = imageUrl }
+				}
 			};
 
 			var jikanServiceBuilder = new JikanServiceBuilder().WithAnimeReturned(returnedAnime);
@@ -231,7 +237,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			{
 				updatedAnime.ImageUrl.Should().BeEmpty();
 
-				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnime(malId), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnimeAsync(malId), Times.Once);
 			}
 		}
 
@@ -281,7 +287,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			{
 				updatedAnime.TitleSynonyms.Should().Be("Synonym 1;Synonym 2;Synonym 3");
 
-				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnime(malId), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnimeAsync(malId), Times.Once);
 			}
 		}
 
@@ -333,7 +339,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				updatedAnime.TypeId.Should().Be(Domain.Entities.AnimeTypeId.TV);
 				updatedAnime.StatusId.Should().Be(Domain.Entities.AnimeStatusId.CurrentlyAiring);
 
-				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnime(malId), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnimeAsync(malId), Times.Once);
 			}
 		}
 
@@ -385,70 +391,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				updatedAnime.TypeId.Should().Be(Domain.Entities.AnimeTypeId.Movie);
 				updatedAnime.StatusId.Should().Be(Domain.Entities.AnimeStatusId.Notyetaired);
 
-				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnime(malId), Times.Once);
-			}
-		}
-
-		[Theory]
-		[InlineData("Winter2000")]
-		[InlineData("Winterr 2000")]
-		[InlineData("Winter eeee")]
-		[InlineData("Winter 2000Winter")]
-		[InlineData("Minter 2000")]
-		[InlineData("Winter, 2000")]
-		public async Task HandleAsync_GivenIncorrectSeasonName_ShouldNotUpdateSeasonId(string seasonName)
-		{
-			// Given
-			const int malId = 1;
-
-			var returnedAnime = new Anime
-			{
-				Premiered = seasonName
-			};
-
-			var jikanServiceBuilder = new JikanServiceBuilder().WithAnimeReturned(returnedAnime);
-
-			var dbContext = InMemoryDbProvider.GetDbContext();
-			var anime = new AnimeBuilder()
-				.WithMalId(malId)
-				.WithTitle("PreUpdateTitle")
-				.WithAbout("PreUpdateAbout")
-				.WithEnglishTitle("PreUpdateEnglish")
-				.WithJapaneseTitle("PreUpdateJapaneses")
-				.WithImageUrl("PreUpdateImage")
-				.WithAnimeStatus(x => x.WithName("Airing"))
-				.WithAnimeType(x => x.WithId(Domain.Entities.AnimeTypeId.TV))
-				.WithPopularity(0)
-				.Build();
-
-			var season = new SeasonBuilder()
-				.WithId(10)
-				.WithYear(2000)
-				.WithName("Winter")
-				.Build();
-
-			await dbContext.AddAsync(anime);
-			await dbContext.AddAsync(season);
-			await dbContext.SaveChangesAsync();
-
-			var handler = CreateHandler(dbContext, jikanServiceBuilder.Build());
-
-			var command = new UpdateAnimeMessage
-			{
-				Id = Guid.NewGuid(),
-				MalId = malId
-			};
-
-			// When
-			await handler.HandleAsync(command);
-
-			// Then
-			var updatedAnime = await dbContext.Animes.FirstAsync(x => x.MalId == malId);
-			using (new AssertionScope())
-			{
-				updatedAnime.SeasonId.Should().BeNull();
-
-				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnime(malId), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnimeAsync(malId), Times.Once);
 			}
 		}
 
@@ -460,7 +403,8 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 
 			var returnedAnime = new Anime
 			{
-				Premiered = "Winter 2001"
+				Season = Season.Winter,
+				Year = 2001
 			};
 
 			var jikanServiceBuilder = new JikanServiceBuilder().WithAnimeReturned(returnedAnime);
@@ -505,7 +449,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			{
 				updatedAnime.SeasonId.Should().BeNull();
 
-				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnime(malId), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnimeAsync(malId), Times.Once);
 			}
 		}
 
@@ -517,7 +461,8 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 
 			var returnedAnime = new Anime
 			{
-				Premiered = "Winter 2000"
+				Season = Season.Winter,
+				Year = 2000
 			};
 
 			var jikanServiceBuilder = new JikanServiceBuilder().WithAnimeReturned(returnedAnime);
@@ -562,7 +507,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			{
 				updatedAnime.SeasonId.Should().Be(10);
 
-				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnime(malId), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnimeAsync(malId), Times.Once);
 			}
 		}
 
@@ -574,7 +519,8 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 
 			var returnedAnime = new Anime
 			{
-				Premiered = "Winter 2000",
+				Season = Season.Winter,
+				Year = 2000,
 				Aired = new TimePeriod
 				{
 					From = new DateTime(2001, 1, 1)
@@ -624,7 +570,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			{
 				updatedAnime.SeasonId.Should().Be(10);
 
-				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnime(malId), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnimeAsync(malId), Times.Once);
 			}
 		}
 
@@ -636,7 +582,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 
 			var returnedAnime = new Anime
 			{
-				Premiered = string.Empty,
+				Season = null,
 				Aired = new TimePeriod
 				{
 					From = new DateTime(2001, 1, 1)
@@ -686,7 +632,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			{
 				updatedAnime.SeasonId.Should().Be(12);
 
-				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnime(malId), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnimeAsync(malId), Times.Once);
 			}
 		}
 
@@ -718,7 +664,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 
 			var returnedAnime = new Anime
 			{
-				Premiered = string.Empty,
+				Season = null,
 				Aired = new TimePeriod
 				{
 					From = fromAiringDate
@@ -770,7 +716,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			{
 				updatedAnime.SeasonId.Should().Be(expectedSeasonId);
 
-				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnime(malId), Times.Once);
+				jikanServiceBuilder.JikanClient.Verify(x => x.GetAnimeAsync(malId), Times.Once);
 			}
 		}
 

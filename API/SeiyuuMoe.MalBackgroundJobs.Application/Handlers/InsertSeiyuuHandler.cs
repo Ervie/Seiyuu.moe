@@ -76,16 +76,16 @@ namespace SeiyuuMoe.MalBackgroundJobs.Application.Handlers
 				return;
 			}
 
-			var updateData = await _malApiService.GetSeiyuuDataAsync(updateSeiyuuMessage.MalId);
+			var seiyuuData = await _malApiService.GetSeiyuuDataAsync(updateSeiyuuMessage.MalId);
+			var rolesData = await _malApiService.GetSeiyuuVoiceActingRolesAsync(updateSeiyuuMessage.MalId);
 
-			if (updateData == null || !JikanParserHelper.IsJapanese(updateData.JapaneseName) || !updateData.VoiceActingRoles.Any())
+			if (seiyuuData == null || !JikanParserHelper.IsJapanese(seiyuuData.JapaneseName) || rolesData is null || !rolesData.Any())
 			{
 				return;
 			}
 
-			await InsertSeiyuuAsync(updateSeiyuuMessage, updateData);
-
-			await InsertRolesAsync(updateSeiyuuMessage, updateData.VoiceActingRoles);
+			await InsertSeiyuuAsync(updateSeiyuuMessage, seiyuuData);
+			await InsertRolesAsync(updateSeiyuuMessage, rolesData);
 		}
 
 		private async Task InsertSeiyuuAsync(UpdateSeiyuuMessage updateSeiyuuMessage, MalSeiyuuUpdateData updateData)
@@ -194,9 +194,9 @@ namespace SeiyuuMoe.MalBackgroundJobs.Application.Handlers
 				TitleSynonyms = !string.IsNullOrWhiteSpace(parsedData.TitleSynonyms) ? parsedData.TitleSynonyms : string.Empty,
 				StatusId = JikanParserHelper.GetUpdatedAnimeStatus(null, parsedData.Status),
 				TypeId = JikanParserHelper.GetUpdatedAnimeType(null, parsedData.Type),
-				SeasonId = string.IsNullOrEmpty(parsedData.Season)
+				SeasonId = string.IsNullOrEmpty(parsedData.SeasonName)
 				? await MatchSeasonByDateAsync(parsedData.AiringDate)
-				: await MatchSeasonBySeasonAsync(parsedData.Season)
+				: await MatchSeasonBySeasonAsync(parsedData.SeasonName, parsedData.SeasonYear)
 			};
 
 			await _animeRepository.AddAsync(newAnime);
@@ -206,16 +206,14 @@ namespace SeiyuuMoe.MalBackgroundJobs.Application.Handlers
 			return newAnime;
 		}
 
-		private async Task<long?> MatchSeasonBySeasonAsync(string seasonName)
+		private async Task<long?> MatchSeasonBySeasonAsync(string seasonName, int? seasonYear)
 		{
-			(string, int)? season = JikanParserHelper.GetSeasonPartsByName(seasonName);
-
-			if (season is null)
+			if (seasonYear is null)
 			{
 				return null;
 			}
 
-			var foundSeason = await _seasonRepository.GetAsync(x => x.Name.ToLower().Equals(season.Value.Item1.ToLower()) && x.Year.Equals(season.Value.Item2));
+			var foundSeason = await _seasonRepository.GetAsync(x => x.Name.ToLower().Equals(seasonName.ToLower()) && x.Year.Equals(seasonYear.Value));
 			return foundSeason?.Id;
 		}
 

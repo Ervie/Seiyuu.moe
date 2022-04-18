@@ -24,7 +24,9 @@ namespace SeiyuuMoe.Domain.MalUpdateData
 
 		public string Status { get; private set; }
 
-		public string Season { get; private set; }
+		public string SeasonName { get; private set; }
+		
+		public int? SeasonYear { get; private set; }
 
 		public MalAnimeUpdateData(
 			string title,
@@ -37,7 +39,8 @@ namespace SeiyuuMoe.Domain.MalUpdateData
 			DateTime? airingDate,
 			string type,
 			string status,
-			string season
+			string seasonName,
+			int? seasonYear
 		)
 		{
 			Title = title;
@@ -50,7 +53,8 @@ namespace SeiyuuMoe.Domain.MalUpdateData
 			AiringDate = airingDate;
 			Type = type;
 			Status = status;
-			Season = season;
+			SeasonName = seasonName;
+			SeasonYear = SeasonYear;
 		}
 	}
 }

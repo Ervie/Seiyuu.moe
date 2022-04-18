@@ -26,7 +26,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 
 			var returnedLastSeason = new SeasonArchive
 			{
-				Season = new List<Seasons> { Seasons.Winter },
+				Season = new List<Season> { Season.Winter },
 				Year = 2000
 			};
 
@@ -61,13 +61,6 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 		{
 			// Given
 			var dbContext = InMemoryDbProvider.GetDbContext();
-
-			var returnedLastSeason = new SeasonArchive
-			{
-				Season = new List<Seasons> { Seasons.Winter },
-				Year = 2000
-			};
-
 			var jikanServiceBuilder = new JikanServiceBuilder().WithGetSeasonArchiveThrowing();
 			var handler = CreateHandler(dbContext, jikanServiceBuilder.Build());
 
@@ -90,7 +83,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 
 			var returnedLastSeason = new SeasonArchive
 			{
-				Season = new List<Seasons> { Seasons.Winter },
+				Season = new List<Season> { Season.Winter },
 				Year = 2000
 			};
 
@@ -121,7 +114,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 
 			var returnedLastSeason = new SeasonArchive
 			{
-				Season = new List<Seasons> { Seasons.Spring },
+				Season = new List<Season> { Season.Spring },
 				Year = 2000
 			};
 
@@ -152,7 +145,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 
 			var returnedLastSeason = new SeasonArchive
 			{
-				Season = new List<Seasons> { Seasons.Winter, Seasons.Spring },
+				Season = new List<Season> { Season.Winter, Season.Spring },
 				Year = 2000
 			};
 
@@ -179,7 +172,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 
 			var returnedLastSeason = new SeasonArchive
 			{
-				Season = new List<Seasons> { Seasons.Winter, Seasons.Spring, Seasons.Summer, Seasons.Fall },
+				Season = new List<Season> { Season.Winter, Season.Spring, Season.Summer, Season.Fall },
 				Year = 2000
 			};
 

@@ -1,5 +1,6 @@
-﻿using SeiyuuMoe.Domain.MalUpdateData;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using SeiyuuMoe.Domain.MalUpdateData;
 
 namespace SeiyuuMoe.Domain.Services
 {
@@ -12,5 +13,7 @@ namespace SeiyuuMoe.Domain.Services
 		Task<MalCharacterUpdateData> GetCharacterDataAsync(long malId);
 
 		Task<MalSeiyuuUpdateData> GetSeiyuuDataAsync(long malId);
+		
+		Task<ICollection<MalVoiceActingRoleUpdateData>> GetSeiyuuVoiceActingRolesAsync(long malId);
 	}
 }

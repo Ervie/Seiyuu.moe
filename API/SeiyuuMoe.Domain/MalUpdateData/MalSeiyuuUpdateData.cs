@@ -17,9 +17,7 @@ namespace SeiyuuMoe.Domain.MalUpdateData
 
 		public DateTime? Birthday { get; private set; }
 
-		public ICollection<MalVoiceActingRoleUpdateData> VoiceActingRoles { get; private set; }
-
-		public MalSeiyuuUpdateData(string name, string about, string japaneseName, string imageUrl, int? popularity, DateTime? birthday, ICollection<MalVoiceActingRoleUpdateData> voiceActingRoles)
+		public MalSeiyuuUpdateData(string name, string about, string japaneseName, string imageUrl, int? popularity, DateTime? birthday)
 		{
 			Name = name;
 			About = about;
@@ -27,7 +25,6 @@ namespace SeiyuuMoe.Domain.MalUpdateData
 			ImageUrl = imageUrl;
 			Popularity = popularity;
 			Birthday = birthday;
-			VoiceActingRoles = voiceActingRoles;
 		}
 	}
 }

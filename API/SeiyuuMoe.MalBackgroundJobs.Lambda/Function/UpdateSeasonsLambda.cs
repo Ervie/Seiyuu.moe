@@ -7,6 +7,7 @@ using SeiyuuMoe.MalBackgroundJobs.Application.Handlers;
 using SeiyuuMoe.MalBackgroundJobs.Lambda.Base;
 using System;
 using System.Threading.Tasks;
+using JikanDotNet.Config;
 
 namespace SeiyuuMoe.MalBackgroundJobs.Lambda.Function
 {
@@ -27,8 +28,9 @@ namespace SeiyuuMoe.MalBackgroundJobs.Lambda.Function
 		{
 			var seasonRepository = new SeasonRepository(dbContext);
 
-			var jikanUrl = ConfigurationReader.JikanUrl;
-			var jikanClient = new Jikan(jikanUrl);
+			var jikanUrl = ConfigurationReader.JikanUrl;;
+			var jikanConfiguration = new JikanClientConfiguration { Endpoint = jikanUrl, SuppressException = true };
+			var jikanClient = new Jikan(jikanConfiguration);
 			var jikanService = new JikanService(jikanClient);
 
 			return new UpdateSeasonsHandler(seasonRepository, jikanService);
