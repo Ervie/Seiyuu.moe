@@ -11,7 +11,7 @@ Write-Host "Deploying background jobs to $EnvironmentType environment.";
 
 dotnet lambda deploy-serverless `
   --project-location $PSScriptRoot/../SeiyuuMoe.MalBackgroundJobs `
-  --framework 'netcoreapp3.1' `
+  --framework 'net6.0' `
   --stack-name seiyuu-moe-mal-bg-jobs-$EnvironmentType `
   --s3-bucket seiyuu-moe-deploy-$EnvironmentType `
   --s3-prefix mal-bg-jobs-$EnvironmentType/ `

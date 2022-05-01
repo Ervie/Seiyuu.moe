@@ -176,7 +176,7 @@ Resources:
   ScheduleAnimesUpdate:
     Type: AWS::Serverless::Function
     Properties:
-      Runtime: dotnetcore3.1
+      Runtime: dotnet6
       Description: Lambda for pushing animes on queue for updating
       FunctionName: !Sub schedule-animes-update-${EnvironmentType}
       Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.ScheduleAnimesLambda::InvokeAsync
@@ -205,7 +205,7 @@ Resources:
   UpdateAnime:
     Type: AWS::Serverless::Function
     Properties:
-      Runtime: dotnetcore3.1
+      Runtime: dotnet6
       Description: Lambda for updating single anime
       FunctionName: !Sub update-anime-${EnvironmentType}
       Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.UpdateAnimeLambda::InvokeAsync
@@ -245,7 +245,7 @@ Resources:
   ScheduleSeiyuuUpdate:
     Type: AWS::Serverless::Function
     Properties:
-      Runtime: dotnetcore3.1
+      Runtime: dotnet6
       Description: Lambda for pushing seiyuu on queue for updating
       FunctionName: !Sub schedule-seiyuu-update-${EnvironmentType}
       Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.ScheduleSeiyuuLambda::InvokeAsync
@@ -274,12 +274,12 @@ Resources:
   UpdateSeiyuu:
     Type: AWS::Serverless::Function
     Properties:
-      Runtime: dotnetcore3.1
+      Runtime: dotnet6
       Description: Lambda for updating single chraracter
       FunctionName: !Sub update-seiyuu-${EnvironmentType}
       Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.UpdateSeiyuuLambda::InvokeAsync
       MemorySize: 256
-      Timeout: 30
+      Timeout: 300
       ReservedConcurrentExecutions: 1
       Role: !GetAtt UpdateLambdaRole.Arn
       Events:
@@ -314,7 +314,7 @@ Resources:
   ScheduleCharactersUpdate:
     Type: AWS::Serverless::Function
     Properties:
-      Runtime: dotnetcore3.1
+      Runtime: dotnet6
       Description: Lambda for pushing characters on queue for updating
       FunctionName: !Sub schedule-characters-update-${EnvironmentType}
       Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.ScheduleCharactersLambda::InvokeAsync
@@ -343,7 +343,7 @@ Resources:
   UpdateCharacter:
     Type: AWS::Serverless::Function
     Properties:
-      Runtime: dotnetcore3.1
+      Runtime: dotnet6
       Description: Lambda for updating single chraracter
       FunctionName: !Sub update-characters-${EnvironmentType}
       Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.UpdateCharacterLambda::InvokeAsync
@@ -383,7 +383,7 @@ Resources:
   UpdateSeasons:
     Type: AWS::Serverless::Function
     Properties:
-      Runtime: dotnetcore3.1
+      Runtime: dotnet6
       Description: Lambda for updating seasons table
       FunctionName: !Sub update-seasons-${EnvironmentType}
       Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.UpdateSeasonsLambda::InvokeAsync
@@ -416,7 +416,7 @@ Resources:
   InsertSeiyuu:
     Type: AWS::Serverless::Function
     Properties:
-      Runtime: dotnetcore3.1
+      Runtime: dotnet6
       Description: Lambda for inserting new seiyuu
       FunctionName: !Sub insert-seiyuu-${EnvironmentType}
       Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.InsertSeiyuuLambda::InvokeAsync
@@ -426,10 +426,10 @@ Resources:
 
 Globals:
   Function:
-    Runtime: dotnetcore3.1
+    Runtime: dotnet6
     MemorySize: 512
     Timeout: 150
-    CodeUri: /bin/Release/netcore3.1/publish
+    CodeUri: /bin/Release/net6.0/publish
     Description: !Ref AWS::StackName
     Tracing: Active
     Environment:

@@ -20,7 +20,7 @@ namespace SeiyuuMoe.Infrastructure.Jikan
 		{
 			var parsedData = await _jikanClient.GetAnimeAsync(malId);
 
-			if (parsedData is null)
+			if (parsedData?.Data is null)
 			{
 				return null;
 			}
@@ -45,7 +45,7 @@ namespace SeiyuuMoe.Infrastructure.Jikan
 		{
 			var parsedData = await _jikanClient.GetCharacterAsync(malId);
 
-			if (parsedData is null)
+			if (parsedData?.Data is null)
 			{
 				return null;
 			}
@@ -64,7 +64,7 @@ namespace SeiyuuMoe.Infrastructure.Jikan
 		{
 			var parsedData = await _jikanClient.GetSeasonArchiveAsync();
 
-			if (parsedData is null)
+			if (parsedData?.Data is null)
 			{
 				return null;
 			}
@@ -78,7 +78,7 @@ namespace SeiyuuMoe.Infrastructure.Jikan
 		{
 			var parsedData = await _jikanClient.GetPersonAsync(malId);
 
-			if (parsedData is null)
+			if (parsedData?.Data is null)
 			{
 				return null;
 			}
@@ -97,7 +97,7 @@ namespace SeiyuuMoe.Infrastructure.Jikan
 		{
 			var parsedData = await _jikanClient.GetPersonVoiceActingRolesAsync(malId);
 
-			if (parsedData is null)
+			if (parsedData?.Data is null)
 			{
 				return new List<MalVoiceActingRoleUpdateData>();
 			}

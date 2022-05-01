@@ -15,7 +15,7 @@ using JikanDotNet.Config;
 
 namespace SeiyuuMoe.MalBackgroundJobs.Lambda.Function
 {
-	internal class UpdateSeiyuuLambda : BaseSqsLambda<UpdateSeiyuuMessage>
+	public class UpdateSeiyuuLambda : BaseSqsLambda<UpdateSeiyuuMessage>
 	{
 		protected async override Task HandleAsync(UpdateSeiyuuMessage message)
 		{

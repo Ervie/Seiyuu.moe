@@ -54,7 +54,7 @@ namespace SeiyuuMoe.Domain.MalUpdateData
 			Type = type;
 			Status = status;
 			SeasonName = seasonName;
-			SeasonYear = SeasonYear;
+			SeasonYear = seasonYear;
 		}
 	}
 }
