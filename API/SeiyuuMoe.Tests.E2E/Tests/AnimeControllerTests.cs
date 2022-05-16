@@ -9,7 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace SeiyuuMoe.Tests.Tests.E2E
+namespace SeiyuuMoe.Tests.E2E.Tests
 {
 	public class AnimeControllerTests : BaseSetupClass
 	{
