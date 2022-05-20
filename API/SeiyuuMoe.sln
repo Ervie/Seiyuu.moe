@@ -26,7 +26,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deploy", "Deploy", "{9D9A36
 		Deploy\common.psm1 = Deploy\common.psm1
 		Deploy\deploy-mal-bg-jobs.ps1 = Deploy\deploy-mal-bg-jobs.ps1
 		Deploy\deploy-security.ps1 = Deploy\deploy-security.ps1
-		deploy.ps1 = deploy.ps1
+		Deploy\deploy.ps1 = Deploy\deploy.ps1
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeiyuuMoe.MalBackgroundJobs.Lambda", "SeiyuuMoe.MalBackgroundJobs.Lambda\SeiyuuMoe.MalBackgroundJobs.Lambda.csproj", "{E38B5666-CAB7-4451-96D6-3D961F8A6AAD}"
