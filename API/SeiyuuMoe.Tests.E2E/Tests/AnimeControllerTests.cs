@@ -2,7 +2,6 @@ using FluentAssertions;
 using FluentAssertions.Execution;
 using SeiyuuMoe.Application.AnimeComparisons.CompareAnime;
 using SeiyuuMoe.Application.Animes.SearchAnime;
-using SeiyuuMoe.Tests.E2E;
 using SeiyuuMoe.Tests.E2E.Apis;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +10,7 @@ using Xunit;
 
 namespace SeiyuuMoe.Tests.E2E.Tests
 {
+	
 	public class AnimeControllerTests : BaseSetupClass
 	{
 		[Fact]

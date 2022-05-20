@@ -6,7 +6,7 @@ using SeiyuuMoe.Domain.WebEssentials;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace SeiyuuMoe.Tests.E2E.Apis
+namespace SeiyuuMoe.Tests.E2E.Apis.Interfaces
 {
 	[BasePath("anime")]
 	public interface IAnimeApi

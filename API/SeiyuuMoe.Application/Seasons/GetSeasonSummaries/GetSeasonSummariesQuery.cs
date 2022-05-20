@@ -14,8 +14,6 @@ namespace SeiyuuMoe.Application.Seasons.GetSeasonSummaries
 
 		public long? Id { get; set; }
 
-		public ICollection<long> AnimeIds { get; set; }
-
 		public int Page { get; set; }
 
 		public int PageSize { get; set; }
