@@ -43,7 +43,7 @@
     <v-footer height="auto" app fixed class="styledFooter" v-show="$vuetify.breakpoint.mdAndUp">
        <v-card flat tile class="flex primary" height="40px">
         <span class="primary justify-center ">
-          &copy;2018 — 2021 -
+          &copy;2018 — {{ currentYear }} -
           <strong>Seiyuu.Moe</strong>
         </span>
       </v-card>
@@ -67,6 +67,7 @@
         ],
         miniVariant: false,
         title: 'Seiyuu.Moe',
+        currentYear: new Date().getFullYear()
       }
     }
   }
