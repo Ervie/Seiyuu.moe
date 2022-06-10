@@ -32,7 +32,7 @@ module.exports = {
 
   env: {
     baseUrl: "http://localhost:3000",
-    apiUrl: "http://localhost:5000",
+    apiUrl: "https://localhost:5001",
   },
 
   /*
