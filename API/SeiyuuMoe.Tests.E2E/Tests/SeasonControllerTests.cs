@@ -19,6 +19,6 @@ public class SeasonControllerTests: BaseSetupClass
         var apiResult = await api.GetSeasonSummaryAsync(query);
 
         // Then
-        apiResult.TotalCount.Should().Be(232);
+        apiResult.TotalCount.Should().Be(237);
     }
 }
