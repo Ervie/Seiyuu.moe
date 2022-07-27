@@ -56,6 +56,7 @@ module.exports = {
     '@/plugins/vuelidate',
     '@/plugins/mixinCommonMethods',
     '@/plugins/fontAwesome.js',
+    '@/plugins/gtag'
   ],
 
   /*
@@ -66,10 +67,7 @@ module.exports = {
     '@nuxtjs/axios',
     'nuxt-clipboard2',
     '@nuxtjs/dotenv',
-    '@nuxtjs/pwa',
-    ['@nuxtjs/google-analytics', {
-      id: 'UA-114739960-4'
-    }]
+    '@nuxtjs/pwa'
   ],
   /*
   ** Axios module configuration

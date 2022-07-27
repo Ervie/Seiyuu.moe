@@ -21,14 +21,14 @@
     "@fortawesome/free-solid-svg-icons": "^5.14.0",
     "@fortawesome/vue-fontawesome": "^0.1.10",
     "@nuxtjs/axios": "^5.12.1",
-    "@nuxtjs/google-analytics": "^2.2.0",
     "axios": "^0.21.1",
     "decode-html": "^2.0.0",
     "npm": "^6.14.7",
     "nuxt": "^2.14.2",
     "nuxt-clipboard2": "^0.2.1",
     "vuelidate": "^0.7.5",
-    "vuetify": "^1.5.24"
+    "vuetify": "^1.5.24",
+    "vue-gtag": "^1.5.24"
   },
   "devDependencies": {
     "@nuxtjs/dotenv": "^1.4.1",
