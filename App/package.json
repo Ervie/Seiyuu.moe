@@ -24,7 +24,7 @@
     "axios": "^0.21.1",
     "decode-html": "^2.0.0",
     "npm": "^6.14.7",
-    "nuxt": "^2.14.2",
+    "nuxt": "^3.0.0",
     "nuxt-clipboard2": "^0.2.1",
     "vuelidate": "^0.7.5",
     "vuetify": "^1.5.24",
@@ -39,6 +39,6 @@
     "eslint-loader": "^4.0.2",
     "eslint-plugin-vue": "^6.2.2",
     "stylus": "^0.54.8",
-    "stylus-loader": "^3.0.2"
+    "stylus-loader": "^7.1.0"
   }
 }
