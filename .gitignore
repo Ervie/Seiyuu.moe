@@ -13,6 +13,9 @@ dist
 # config
 API/SeiyuuMoe.API/appsettings.json
 
+# macOS metadata
+._*
+
 # Suggested by @nuxtjs/pwa module
 sw.*
 todo\.txt
