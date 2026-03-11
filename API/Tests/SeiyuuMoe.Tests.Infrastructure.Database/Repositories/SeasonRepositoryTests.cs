@@ -73,7 +73,7 @@ namespace SeiyuuMoe.Tests.Infrastructure.Database
 			Func<Task> func = repository.Awaiting(x => x.AddAsync(new SeasonBuilder().WithId(1).Build()));
 
 			// Then
-			func.Should().Throw<Exception>();
+			await func.Should().ThrowAsync<Exception>();
 		}
 
 		[Fact]

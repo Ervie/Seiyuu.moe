@@ -35,7 +35,7 @@ namespace SeiyuuMoe.Infrastructure.Database.Context
 			{
 				return;
 			}
-			optionsBuilder.UseMySql(_databaseConfiguration.ToConnectionString);
+			optionsBuilder.UseMySql(MySqlServerVersion.AutoDetect(_databaseConfiguration.ToConnectionString));
 		}
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)

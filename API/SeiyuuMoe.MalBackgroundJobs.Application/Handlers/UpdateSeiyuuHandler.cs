@@ -1,4 +1,4 @@
-﻿using SeiyuuMoe.Domain.Entities;
+using SeiyuuMoe.Domain.Entities;
 using SeiyuuMoe.Domain.MalUpdateData;
 using SeiyuuMoe.Domain.Repositories;
 using SeiyuuMoe.Domain.Services;
@@ -122,7 +122,7 @@ namespace SeiyuuMoe.MalBackgroundJobs.Application.Handlers
 				Id = Guid.NewGuid(),
 				MalId = malId,
 				ImageUrl = parsedData.ImageUrl,
-				Name = parsedData.Name,
+				Name = parsedData.Name ?? string.Empty,
 				Popularity = parsedData.Popularity,
 				About = parsedData.About,
 				KanjiName = parsedData.JapaneseName,
@@ -154,7 +154,7 @@ namespace SeiyuuMoe.MalBackgroundJobs.Application.Handlers
 			{
 				Id = Guid.NewGuid(),
 				MalId = malId,
-				Title = parsedData.Title,
+				Title = parsedData.Title ?? string.Empty,
 				ImageUrl = parsedData.ImageUrl,
 				About = parsedData.About,
 				AiringDate = parsedData.AiringDate ?? DateTime.MinValue,

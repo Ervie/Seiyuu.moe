@@ -37,8 +37,7 @@ namespace SeiyuuMoe.MalBackgroundJobs.Lambda.Function
 			var animeRoleRepository = new AnimeRoleRepository(dbContext);
 			var seasonRepository = new SeasonRepository(dbContext);
 
-			var jikanUrl = ConfigurationReader.JikanUrl;
-			var jikanConfiguration = new JikanClientConfiguration { Endpoint = jikanUrl, SuppressException = true };
+			var jikanConfiguration = new JikanClientConfiguration {  SuppressException = true };
 			var jikanClient = new Jikan(jikanConfiguration);
 			var jikanService = new JikanService(jikanClient);
 

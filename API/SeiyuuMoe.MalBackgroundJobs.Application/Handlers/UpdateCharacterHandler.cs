@@ -1,4 +1,4 @@
-﻿using SeiyuuMoe.Domain.Entities;
+using SeiyuuMoe.Domain.Entities;
 using SeiyuuMoe.Domain.MalUpdateData;
 using SeiyuuMoe.Domain.Repositories;
 using SeiyuuMoe.Domain.Services;
@@ -40,7 +40,7 @@ namespace SeiyuuMoe.MalBackgroundJobs.Application.Handlers
 
 		private void UpdateCharacter(AnimeCharacter characterToUpdate, MalCharacterUpdateData updateData)
 		{
-			characterToUpdate.Name = updateData.Name;
+			characterToUpdate.Name = updateData.Name ?? characterToUpdate.Name ?? string.Empty;
 			characterToUpdate.About = updateData.About;
 			characterToUpdate.KanjiName = updateData.JapaneseName;
 			characterToUpdate.ImageUrl = updateData.ImageUrl;

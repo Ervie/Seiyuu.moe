@@ -1,39 +1,45 @@
-﻿using Microsoft.Extensions.Configuration;
 using System;
+using Microsoft.Extensions.Configuration;
 
 namespace SeiyuuMoe.Infrastructure.Configuration
 {
 	public static class ConfigurationReader
 	{
-		private static readonly IConfigurationRoot Config;
+		private static readonly IConfigurationRoot Config = BuildConfiguration();
 
-		static ConfigurationReader()
+		private static IConfigurationRoot BuildConfiguration()
 		{
 			var stackName = Environment.GetEnvironmentVariable("StackName");
 
-			var configurationBuilder = new ConfigurationBuilder()
-							.AddSystemsManager(config =>
-							{
-								config.Path = $"/{stackName}";
-								config.ReloadAfter = TimeSpan.FromMinutes(5);
-							});
+			if (string.IsNullOrWhiteSpace(stackName))
+			{
+				throw new InvalidOperationException("Environment variable 'StackName' must be set to load configuration from AWS Systems Manager.");
+			}
 
-			Config = configurationBuilder.Build();
+			var configurationBuilder = new ConfigurationBuilder()
+				.AddSystemsManager(config =>
+				{
+					config.Path = $"/{stackName}";
+					config.ReloadAfter = TimeSpan.FromMinutes(5);
+				});
+
+			return configurationBuilder.Build();
 		}
 
 		public static DatabaseConfiguration DatabaseConfiguration
-			=> ReturnConfigSection<DatabaseConfiguration>("DatabaseConfiguration");
+			=> Config
+				.GetRequiredSection("DatabaseConfiguration")
+				.Get<DatabaseConfiguration>()
+				?? throw new InvalidOperationException("Configuration section 'DatabaseConfiguration' is missing or invalid.");
 
 		public static MalBgJobsScheduleConfiguration MalBgJobsScheduleConfiguration
-			=> ReturnConfigSection<MalBgJobsScheduleConfiguration>("ScheduleConfiguration");
+			=> Config
+				.GetRequiredSection("ScheduleConfiguration")
+				.Get<MalBgJobsScheduleConfiguration>()
+				?? throw new InvalidOperationException("Configuration section 'ScheduleConfiguration' is missing or invalid.");
 
-		public static string JikanUrl => Config["JikanUrl"];
-
-		private static T ReturnConfigSection<T>(string sectionName) where T : new()
-		{
-			var sectionObject = new T();
-			Config.GetSection(sectionName).Bind(sectionObject);
-			return sectionObject;
-		}
+		public static string JikanUrl
+			=> Config["JikanUrl"]
+				?? throw new InvalidOperationException("Configuration value 'JikanUrl' is missing.");
 	}
 }

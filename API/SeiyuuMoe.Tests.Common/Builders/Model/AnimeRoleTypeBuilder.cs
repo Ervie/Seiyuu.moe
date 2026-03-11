@@ -1,10 +1,10 @@
-﻿using SeiyuuMoe.Domain.Entities;
+using SeiyuuMoe.Domain.Entities;
 
 namespace SeiyuuMoe.Tests.Common.Builders.Model
 {
 	public class AnimeRoleTypeBuilder
 	{
-		private string _description;
+		private string _description = "Main";
 		private AnimeRoleTypeId _id;
 
 		public AnimeRoleType Build() => new AnimeRoleType

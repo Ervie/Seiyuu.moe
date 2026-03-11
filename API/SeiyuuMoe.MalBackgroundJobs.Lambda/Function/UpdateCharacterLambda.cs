@@ -29,8 +29,7 @@ namespace SeiyuuMoe.MalBackgroundJobs.Lambda.Function
 		{
 			var characterRepository = new CharacterRepository(dbContext);
 
-			var jikanUrl = ConfigurationReader.JikanUrl;;
-			var jikanConfiguration = new JikanClientConfiguration { Endpoint = jikanUrl, SuppressException = true };
+			var jikanConfiguration = new JikanClientConfiguration {  SuppressException = true };
 			var jikanClient = new Jikan(jikanConfiguration);
 			var jikanService = new JikanService(jikanClient);
 

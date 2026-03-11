@@ -77,7 +77,7 @@ namespace SeiyuuMoe.Tests.Infrastructure.Database
 			Func<Task> func = repository.Awaiting(x => x.AddAsync(new BlacklistedIdBuilder().WithId(animeId).Build()));
 
 			// Then
-			func.Should().Throw<Exception>();
+			await func.Should().ThrowAsync<Exception>();
 		}
 	}
 }

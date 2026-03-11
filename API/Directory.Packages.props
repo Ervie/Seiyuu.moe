@@ -1,33 +1,34 @@
 <Project>
   <ItemGroup>
-    <PackageVersion Include="Amazon.Extensions.Configuration.SystemsManager" Version="2.1.0" />
-    <PackageVersion Include="Amazon.Lambda.Core" Version="2.0.0" />
-    <PackageVersion Include="Amazon.Lambda.Serialization.Json" Version="2.0.0" />
-    <PackageVersion Include="Amazon.Lambda.SQSEvents" Version="2.0.0" />
-    <PackageVersion Include="AWSSDK.S3" Version="3.7.1.8" />
-    <PackageVersion Include="AWSSDK.SQS" Version="3.7.0.37" />
-    <PackageVersion Include="AWSSDK.XRay" Version="3.7.0.36" />
-    <PackageVersion Include="AWSXRayRecorder.Handlers.AwsSdk" Version="2.8.3" />
-    <PackageVersion Include="Autofac" Version="6.2.0" />
-    <PackageVersion Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
-    <PackageVersion Include="coverlet.collector" Version="3.0.3" />
-    <PackageVersion Include="FluentAssertions" Version="5.10.3" />
-    <PackageVersion Include="FluentValidation" Version="10.2.3" />
-    <PackageVersion Include="JikanDotNet" Version="2.2.0" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="3.1.16" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.16" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.16" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.16" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration" Version="3.1.16" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="3.1.16" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="16.10.0" />
-    <PackageVersion Include="Moq" Version="4.16.1" />
-    <PackageVersion Include="NLog" Version="4.7.10" />
-    <PackageVersion Include="Pomelo.EntityFrameworkCore.MySql" Version="3.2.6" />
-    <PackageVersion Include="RestEase" Version="1.5.5" />
-    <PackageVersion Include="xunit" Version="2.4.1" />
-    <PackageVersion Include="xunit.extensibility.core" Version="2.4.1" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="2.4.3" />
+    <PackageVersion Include="Amazon.Extensions.Configuration.SystemsManager" Version="7.1.0" />
+    <PackageVersion Include="Amazon.Lambda.Core" Version="2.8.1" />
+    <PackageVersion Include="Amazon.Lambda.Serialization.Json" Version="2.2.1" />
+    <PackageVersion Include="Amazon.Lambda.SQSEvents" Version="2.2.1" />
+    <PackageVersion Include="AWSSDK.S3" Version="4.0.17.2" />
+    <PackageVersion Include="AWSSDK.SQS" Version="4.0.0.20" />
+    <PackageVersion Include="AWSSDK.XRay" Version="4.0.0.17" />
+    <PackageVersion Include="AWSXRayRecorder.Handlers.AwsSdk" Version="2.14.0" />
+    <PackageVersion Include="Autofac" Version="8.1.0" />
+    <PackageVersion Include="Autofac.Extensions.DependencyInjection" Version="10.0.0" />
+    <PackageVersion Include="coverlet.collector" Version="8.0.0" />
+    <PackageVersion Include="FluentAssertions" Version="7.2.0" />
+    <PackageVersion Include="FluentValidation" Version="12.1.1" />
+    <PackageVersion Include="JikanDotNet" Version="2.10.2" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.3" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="10.0.3" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.3" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.3" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration" Version="10.0.3" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="10.0.3" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.3" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />
+    <PackageVersion Include="Moq" Version="4.18.2" />
+    <PackageVersion Include="NLog" Version="6.0.3" />
+    <PackageVersion Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
+    <PackageVersion Include="RestEase" Version="1.6.4" />
+    <PackageVersion Include="xunit" Version="2.9.3" />
+    <PackageVersion Include="xunit.extensibility.core" Version="2.9.3" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
   </ItemGroup>
 </Project>
 

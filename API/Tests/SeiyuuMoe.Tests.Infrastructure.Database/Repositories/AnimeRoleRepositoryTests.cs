@@ -101,7 +101,7 @@ namespace SeiyuuMoe.Tests.Infrastructure.Database
 			Func<Task> func = repository.Awaiting(x => x.AddAsync(role2));
 
 			// Then
-			func.Should().NotThrow<Exception>();
+			await func.Should().NotThrowAsync<Exception>();
 		}
 
 		[Fact]

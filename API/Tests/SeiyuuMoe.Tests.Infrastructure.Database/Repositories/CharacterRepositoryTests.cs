@@ -74,7 +74,7 @@ namespace SeiyuuMoe.Tests.Infrastructure.Database
 		}
 
 		[Fact]
-		public void UpdateAsync_GivenNotExistingCharacter_ShouldThrowExcepton()
+		public async Task UpdateAsync_GivenNotExistingCharacter_ShouldThrowExcepton()
 		{
 			// Given
 			var id = Guid.NewGuid();
@@ -85,7 +85,7 @@ namespace SeiyuuMoe.Tests.Infrastructure.Database
 			Func<Task> func = repository.Awaiting(x => x.UpdateAsync(new CharacterBuilder().WithId(id).Build()));
 
 			// Then
-			func.Should().Throw<Exception>();
+			await func.Should().ThrowAsync<Exception>();
 		}
 
 		[Fact]
@@ -130,7 +130,7 @@ namespace SeiyuuMoe.Tests.Infrastructure.Database
 			Func<Task> func = repository.Awaiting(x => x.AddAsync(new CharacterBuilder().WithId(id).Build()));
 
 			// Then
-			func.Should().Throw<Exception>();
+			await func.Should().ThrowAsync<Exception>();
 		}
 
 		[Fact]

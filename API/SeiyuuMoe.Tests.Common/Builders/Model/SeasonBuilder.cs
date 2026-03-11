@@ -1,11 +1,11 @@
-﻿using SeiyuuMoe.Domain.Entities;
+using SeiyuuMoe.Domain.Entities;
 
 namespace SeiyuuMoe.Tests.Common.Builders.Model
 {
 	public class SeasonBuilder
 	{
-		private string _name;
-		private int _year;
+		private string _name = "Season";
+		private int _year = 2000;
 		private long _id;
 
 		public AnimeSeason Build() => new AnimeSeason

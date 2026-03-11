@@ -1,4 +1,4 @@
-﻿using SeiyuuMoe.Domain.Entities;
+using SeiyuuMoe.Domain.Entities;
 using System;
 
 namespace SeiyuuMoe.Tests.Common.Builders.Model
@@ -7,8 +7,8 @@ namespace SeiyuuMoe.Tests.Common.Builders.Model
 	{
 		private long _malId;
 		private Guid _id;
-		private string _reason;
-		private string _entityType;
+		private string _reason = "Test reason";
+		private string _entityType = "Anime";
 
 		public Blacklist Build()
 			=> new Blacklist

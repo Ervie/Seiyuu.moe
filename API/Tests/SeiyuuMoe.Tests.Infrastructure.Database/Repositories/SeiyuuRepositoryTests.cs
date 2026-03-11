@@ -92,11 +92,11 @@ namespace SeiyuuMoe.Tests.Infrastructure.Database
 			Func<Task> func = repository.Awaiting(x => x.AddAsync(new SeiyuuBuilder().WithId(animeId).Build()));
 
 			// Then
-			func.Should().Throw<Exception>();
+			await func.Should().ThrowAsync<Exception>();
 		}
 
 		[Fact]
-		public void UpdateAsync_GivenNotExistingSeiyuu_ShouldThrowExcepton()
+		public async Task UpdateAsync_GivenNotExistingSeiyuu_ShouldThrowExcepton()
 		{
 			// Given
 			var id = Guid.NewGuid();
@@ -107,7 +107,7 @@ namespace SeiyuuMoe.Tests.Infrastructure.Database
 			Func<Task> func = repository.Awaiting(x => x.UpdateAsync(new SeiyuuBuilder().WithId(id).Build()));
 
 			// Then
-			func.Should().Throw<Exception>();
+			await func.Should().ThrowAsync<Exception>();
 		}
 
 		[Fact]
