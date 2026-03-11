@@ -42,7 +42,7 @@ dotnet build --configuration Release
 dotnet SeiyuuMoe.API.dll
 ```
 
-Require .Net 6.0 installed.
+Require .Net 10.0 installed.
 
 ## Features
 

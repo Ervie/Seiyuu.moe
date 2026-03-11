@@ -1,0 +1,32 @@
+<Solution>
+  <Folder Name="/Deploy/">
+    <File Path="Deploy/common.psm1" />
+    <File Path="Deploy/deploy-mal-bg-jobs.ps1" />
+    <File Path="Deploy/deploy-security.ps1" />
+    <File Path="Deploy/deploy.ps1" />
+  </Folder>
+  <Folder Name="/SeiyuuMoe.Jobs/">
+    <Project Path="SeiyuuMoe.MalBackgroundJobs.Application/SeiyuuMoe.MalBackgroundJobs.Application.csproj" />
+    <Project Path="SeiyuuMoe.MalBackgroundJobs.Lambda/SeiyuuMoe.MalBackgroundJobs.Lambda.csproj" />
+    <Project Path="SeiyuuMoe.MalBackgroundJobs.LocalLambdaRunner/SeiyuuMoe.MalBackgroundJobs.LocalLambdaRunner.csproj" />
+  </Folder>
+  <Folder Name="/Solution Files/">
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="Schema.sql" />
+  </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="SeiyuuMoe.Tests.Common/SeiyuuMoe.Tests.Common.csproj" />
+    <Project Path="SeiyuuMoe.Tests.Component/SeiyuuMoe.Tests.Component.csproj" />
+    <Project Path="SeiyuuMoe.Tests.E2E/SeiyuuMoe.Tests.E2E.csproj" />
+    <Project Path="SeiyuuMoe.Tests.Unit/SeiyuuMoe.Tests.Application.csproj" />
+    <Project Path="Tests/SeiyuuMoe.Tests.Domain/SeiyuuMoe.Tests.Domain.csproj" />
+    <Project Path="Tests/SeiyuuMoe.Tests.Infrastructure.Database/SeiyuuMoe.Tests.Infrastructure.Database.csproj" />
+    <Project Path="Tests/SeiyuuMoe.Tests.Integration/SeiyuuMoe.Tests.Integration.csproj" />
+  </Folder>
+  <Project Path="SeiyuuMoe.API/SeiyuuMoe.API.csproj" />
+  <Project Path="SeiyuuMoe.Application/SeiyuuMoe.Application.csproj" />
+  <Project Path="SeiyuuMoe.Domain/SeiyuuMoe.Domain.csproj" />
+  <Project Path="SeiyuuMoe.Infrastructure.Database/SeiyuuMoe.Infrastructure.Database.csproj" />
+  <Project Path="SeiyuuMoe.Infrastructure/SeiyuuMoe.Infrastructure.csproj" />
+</Solution>
