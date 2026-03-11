@@ -176,7 +176,6 @@ Resources:
   ScheduleAnimesUpdate:
     Type: AWS::Serverless::Function
     Properties:
-      Runtime: dotnet10
       Description: Lambda for pushing animes on queue for updating
       FunctionName: !Sub schedule-animes-update-${EnvironmentType}
       Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.ScheduleAnimesLambda::InvokeAsync
@@ -205,7 +204,6 @@ Resources:
   UpdateAnime:
     Type: AWS::Serverless::Function
     Properties:
-      Runtime: dotnet10
       Description: Lambda for updating single anime
       FunctionName: !Sub update-anime-${EnvironmentType}
       Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.UpdateAnimeLambda::InvokeAsync
@@ -245,7 +243,6 @@ Resources:
   ScheduleSeiyuuUpdate:
     Type: AWS::Serverless::Function
     Properties:
-      Runtime: dotnet10
       Description: Lambda for pushing seiyuu on queue for updating
       FunctionName: !Sub schedule-seiyuu-update-${EnvironmentType}
       Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.ScheduleSeiyuuLambda::InvokeAsync
@@ -274,7 +271,6 @@ Resources:
   UpdateSeiyuu:
     Type: AWS::Serverless::Function
     Properties:
-      Runtime: dotnet10
       Description: Lambda for updating single chraracter
       FunctionName: !Sub update-seiyuu-${EnvironmentType}
       Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.UpdateSeiyuuLambda::InvokeAsync
@@ -314,7 +310,6 @@ Resources:
   ScheduleCharactersUpdate:
     Type: AWS::Serverless::Function
     Properties:
-      Runtime: dotnet10
       Description: Lambda for pushing characters on queue for updating
       FunctionName: !Sub schedule-characters-update-${EnvironmentType}
       Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.ScheduleCharactersLambda::InvokeAsync
@@ -343,7 +338,6 @@ Resources:
   UpdateCharacter:
     Type: AWS::Serverless::Function
     Properties:
-      Runtime: dotnet10
       Description: Lambda for updating single chraracter
       FunctionName: !Sub update-characters-${EnvironmentType}
       Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.UpdateCharacterLambda::InvokeAsync
@@ -383,7 +377,6 @@ Resources:
   UpdateSeasons:
     Type: AWS::Serverless::Function
     Properties:
-      Runtime: dotnet10
       Description: Lambda for updating seasons table
       FunctionName: !Sub update-seasons-${EnvironmentType}
       Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.UpdateSeasonsLambda::InvokeAsync
@@ -416,7 +409,6 @@ Resources:
   InsertSeiyuu:
     Type: AWS::Serverless::Function
     Properties:
-      Runtime: dotnet10
       Description: Lambda for inserting new seiyuu
       FunctionName: !Sub insert-seiyuu-${EnvironmentType}
       Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.InsertSeiyuuLambda::InvokeAsync
@@ -429,7 +421,7 @@ Globals:
     Runtime: dotnet10
     MemorySize: 512
     Timeout: 150
-    CodeUri: /bin/Release/net10.0/publish
+    CodeUri: ./bin/Release/net10.0/publish
     Description: !Ref AWS::StackName
     Tracing: Active
     Environment:
@@ -440,14 +432,6 @@ Globals:
         SeiyuuToUpdateQueueUrl: !Ref SeiyuuToUpdateQueue
         JobsStateBucket: !Ref JobsStateBucket
         StackName: !Ref AWS::StackName
-    ## Uncomment for private subnets. Costly solution
-    # VpcConfig:
-    #   SubnetIds:
-    #     - subnet-06a875e91c6a5d89b
-    #     - subnet-0e1cec795f5a6a843
-    #     - subnet-0ed5c9801b29d1176
-    #   SecurityGroupIds:
-    #     - Fn::ImportValue: !FindInMap [ Exports, ApplicationSecurityGroupId, !Ref EnvironmentType ]
     Tags:
       environment: !Ref EnvironmentType
       service-name: mal-bg-jobs

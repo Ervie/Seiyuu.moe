@@ -10,7 +10,7 @@ Import-Module $PSScriptRoot/common.psm1 -Force
 Write-Host "Deploying background jobs to $EnvironmentType environment.";
 
 dotnet lambda deploy-serverless `
-  --project-location $PSScriptRoot/../SeiyuuMoe.MalBackgroundJobs `
+  --project-location $PSScriptRoot/../SeiyuuMoe.MalBackgroundJobs.Lambda `
   --framework 'net10.0' `
   --stack-name seiyuu-moe-mal-bg-jobs-$EnvironmentType `
   --s3-bucket seiyuu-moe-deploy-$EnvironmentType `

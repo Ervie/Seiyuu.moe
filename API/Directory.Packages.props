@@ -1,4 +1,8 @@
 <Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageVersion Include="Amazon.Extensions.Configuration.SystemsManager" Version="7.1.0" />
     <PackageVersion Include="Amazon.Lambda.Core" Version="2.8.1" />
