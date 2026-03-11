@@ -1,4 +1,4 @@
-﻿using Amazon.SQS;
+using Amazon.SQS;
 using SeiyuuMoe.Infrastructure.Configuration;
 using SeiyuuMoe.Infrastructure.Database.Characters;
 using SeiyuuMoe.Infrastructure.Database.Context;
@@ -32,7 +32,6 @@ namespace SeiyuuMoe.MalBackgroundJobs.Lambda.Function
 
 			return new ScheduleCharactersHandler(
 				scheduleConfiguration.UpdateBatchSize,
-				scheduleConfiguration.DelayBetweenMessagesInSeconds,
 				characterRepository,
 				characterUpdatePublisher
 			);

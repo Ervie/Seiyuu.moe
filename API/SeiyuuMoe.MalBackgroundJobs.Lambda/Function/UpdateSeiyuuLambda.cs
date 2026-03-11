@@ -1,4 +1,4 @@
-﻿using JikanDotNet;
+using JikanDotNet;
 using SeiyuuMoe.Domain.SqsMessages;
 using SeiyuuMoe.Infrastructure.Configuration;
 using SeiyuuMoe.Infrastructure.Database.Animes;
@@ -17,6 +17,16 @@ namespace SeiyuuMoe.MalBackgroundJobs.Lambda.Function
 {
 	public class UpdateSeiyuuLambda : BaseSqsLambda<UpdateSeiyuuMessage>
 	{
+		private static readonly IJikan JikanClient;
+		private static readonly JikanService JikanService;
+
+		static UpdateSeiyuuLambda()
+		{
+			var jikanConfiguration = new JikanClientConfiguration { SuppressException = true };
+			JikanClient = new Jikan(jikanConfiguration);
+			JikanService = new JikanService(JikanClient);
+		}
+
 		protected async override Task HandleAsync(UpdateSeiyuuMessage message)
 		{
 			Console.WriteLine($"UpdateSeiyuuLambda was invoked for seiyuu {message.Id}");
@@ -37,11 +47,7 @@ namespace SeiyuuMoe.MalBackgroundJobs.Lambda.Function
 			var animeRoleRepository = new AnimeRoleRepository(dbContext);
 			var seasonRepository = new SeasonRepository(dbContext);
 
-			var jikanConfiguration = new JikanClientConfiguration {  SuppressException = true };
-			var jikanClient = new Jikan(jikanConfiguration);
-			var jikanService = new JikanService(jikanClient);
-
-			return new UpdateSeiyuuHandler(seiyuuRepository, animeRepository, characterRepository, seiyuuRoleRepository, animeRoleRepository, seasonRepository, jikanService);
+			return new UpdateSeiyuuHandler(seiyuuRepository, animeRepository, characterRepository, seiyuuRoleRepository, animeRoleRepository, seasonRepository, JikanService);
 		}
 	}
 }

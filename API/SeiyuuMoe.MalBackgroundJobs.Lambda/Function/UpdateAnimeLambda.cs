@@ -1,4 +1,4 @@
-﻿using JikanDotNet;
+using JikanDotNet;
 using SeiyuuMoe.Domain.SqsMessages;
 using SeiyuuMoe.Infrastructure.Configuration;
 using SeiyuuMoe.Infrastructure.Database.Animes;
@@ -15,6 +15,16 @@ namespace SeiyuuMoe.MalBackgroundJobs.Lambda.Function
 {
 	public class UpdateAnimeLambda : BaseSqsLambda<UpdateAnimeMessage>
 	{
+		private static readonly IJikan JikanClient;
+		private static readonly JikanService JikanService;
+
+		static UpdateAnimeLambda()
+		{
+			var jikanConfiguration = new JikanClientConfiguration { SuppressException = true };
+			JikanClient = new Jikan(jikanConfiguration);
+			JikanService = new JikanService(JikanClient);
+		}
+
 		protected async override Task HandleAsync(UpdateAnimeMessage message)
 		{
 			Console.WriteLine($"UpdateAnimeLambda was invoked for anime {message.Id}");
@@ -30,12 +40,8 @@ namespace SeiyuuMoe.MalBackgroundJobs.Lambda.Function
 		{
 			var animeRepository = new AnimeRepository(dbContext);
 			var seasonRepository = new SeasonRepository(dbContext);
-
-			var jikanConfiguration = new JikanClientConfiguration {  SuppressException = true };
-			var jikanClient = new Jikan(jikanConfiguration);
-			var jikanService = new JikanService(jikanClient);
-
-			return new UpdateAnimeHandler(animeRepository, seasonRepository, jikanService);
+			
+			return new UpdateAnimeHandler(animeRepository, seasonRepository, JikanService);
 		}
 	}
 }

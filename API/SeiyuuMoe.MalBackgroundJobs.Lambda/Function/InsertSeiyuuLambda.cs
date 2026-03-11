@@ -1,4 +1,4 @@
-﻿using JikanDotNet;
+using JikanDotNet;
 using SeiyuuMoe.Infrastructure.Configuration;
 using SeiyuuMoe.Infrastructure.Database.Animes;
 using SeiyuuMoe.Infrastructure.Database.Characters;
@@ -17,6 +17,16 @@ namespace SeiyuuMoe.MalBackgroundJobs.Lambda.Function
 {
 	public class InsertSeiyuuLambda : BaseLambda
 	{
+		private static readonly IJikan JikanClient;
+		private static readonly JikanService JikanService;
+
+		static InsertSeiyuuLambda()
+		{
+			var jikanConfiguration = new JikanClientConfiguration { SuppressException = true };
+			JikanClient = new Jikan(jikanConfiguration);
+			JikanService = new JikanService(JikanClient);
+		}
+
 		protected async override Task HandleAsync()
 		{
 			Console.WriteLine($"InsertSeiyuuLambda was invoked.");
@@ -38,10 +48,6 @@ namespace SeiyuuMoe.MalBackgroundJobs.Lambda.Function
 			var animeRoleRepository = new AnimeRoleRepository(dbContext);
 			var seasonRepository = new SeasonRepository(dbContext);
 
-			var jikanConfiguration = new JikanClientConfiguration {  SuppressException = true };
-			var jikanClient = new Jikan(jikanConfiguration);
-			var jikanService = new JikanService(jikanClient);
-
 			var s3Client = new S3Service();
 
 			return new InsertSeiyuuHandler(
@@ -52,7 +58,7 @@ namespace SeiyuuMoe.MalBackgroundJobs.Lambda.Function
 				characterRepository,
 				animeRepository,
 				animeRoleRepository,
-				jikanService,
+				JikanService,
 				s3Client
 			);
 		}

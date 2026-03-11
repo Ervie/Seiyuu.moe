@@ -1,4 +1,4 @@
-﻿using SeiyuuMoe.Domain.Publishers;
+using SeiyuuMoe.Domain.Publishers;
 using SeiyuuMoe.Domain.Repositories;
 using SeiyuuMoe.Domain.SqsMessages;
 using System;
@@ -10,14 +10,12 @@ namespace SeiyuuMoe.MalBackgroundJobs.Application.Handlers
 	public class ScheduleAnimesHandler
 	{
 		private readonly int _batchSize;
-		private readonly int _delayBetweenMessages;
 		private readonly IAnimeRepository _animeRepository;
 		private readonly IAnimeUpdatePublisher _animeUpdatePublisher;
 
-		public ScheduleAnimesHandler(int batchSize, int delayBetweenMessages, IAnimeRepository animeRepository, IAnimeUpdatePublisher animeUpdatePublisher)
+		public ScheduleAnimesHandler(int batchSize, IAnimeRepository animeRepository, IAnimeUpdatePublisher animeUpdatePublisher)
 		{
 			_batchSize = batchSize;
-			_delayBetweenMessages = delayBetweenMessages;
 			_animeRepository = animeRepository;
 			_animeUpdatePublisher = animeUpdatePublisher;
 		}
@@ -29,9 +27,8 @@ namespace SeiyuuMoe.MalBackgroundJobs.Application.Handlers
 			var animesToUpdate = await _animeRepository.GetOlderThanModifiedDate(thresholdDate, _batchSize);
 
 			var publishTasks = animesToUpdate.Select(
-				(a, i) => _animeUpdatePublisher.PublishAnimeUpdateAsync(
-					new UpdateAnimeMessage { Id = a.Id, MalId = a.MalId },
-					i * _delayBetweenMessages
+				a => _animeUpdatePublisher.PublishAnimeUpdateAsync(
+					new UpdateAnimeMessage { Id = a.Id, MalId = a.MalId }
 				)
 			);
 

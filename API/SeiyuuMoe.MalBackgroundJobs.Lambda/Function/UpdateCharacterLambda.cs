@@ -1,4 +1,4 @@
-﻿using JikanDotNet;
+using JikanDotNet;
 using SeiyuuMoe.Domain.SqsMessages;
 using SeiyuuMoe.Infrastructure.Configuration;
 using SeiyuuMoe.Infrastructure.Database.Characters;
@@ -14,6 +14,16 @@ namespace SeiyuuMoe.MalBackgroundJobs.Lambda.Function
 {
 	public class UpdateCharacterLambda : BaseSqsLambda<UpdateCharacterMessage>
 	{
+		private static readonly IJikan JikanClient;
+		private static readonly JikanService JikanService;
+
+		static UpdateCharacterLambda()
+		{
+			var jikanConfiguration = new JikanClientConfiguration { SuppressException = true };
+			JikanClient = new Jikan(jikanConfiguration);
+			JikanService = new JikanService(JikanClient);
+		}
+
 		protected async override Task HandleAsync(UpdateCharacterMessage message)
 		{
 			Console.WriteLine($"UpdateCharacterLambda was invoked for character {message.Id}");
@@ -29,11 +39,7 @@ namespace SeiyuuMoe.MalBackgroundJobs.Lambda.Function
 		{
 			var characterRepository = new CharacterRepository(dbContext);
 
-			var jikanConfiguration = new JikanClientConfiguration {  SuppressException = true };
-			var jikanClient = new Jikan(jikanConfiguration);
-			var jikanService = new JikanService(jikanClient);
-
-			return new UpdateCharacterHandler(characterRepository, jikanService);
+			return new UpdateCharacterHandler(characterRepository, JikanService);
 		}
 	}
 }

@@ -262,7 +262,7 @@ Resources:
       RedrivePolicy: 
         deadLetterTargetArn: !GetAtt SeiyuuToUpdateDLQ.Arn
         maxReceiveCount: 3
-      VisibilityTimeout: 30
+      VisibilityTimeout: 1800
 
   SeiyuuToUpdateDLQ:
     Type: AWS::SQS::Queue

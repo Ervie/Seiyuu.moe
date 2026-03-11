@@ -1,4 +1,4 @@
-﻿using JikanDotNet;
+using JikanDotNet;
 using SeiyuuMoe.Infrastructure.Configuration;
 using SeiyuuMoe.Infrastructure.Database.Context;
 using SeiyuuMoe.Infrastructure.Database.Seasons;
@@ -13,6 +13,16 @@ namespace SeiyuuMoe.MalBackgroundJobs.Lambda.Function
 {
 	public class UpdateSeasonsLambda : BaseLambda
 	{
+		private static readonly IJikan JikanClient;
+		private static readonly JikanService JikanService;
+
+		static UpdateSeasonsLambda()
+		{
+			var jikanConfiguration = new JikanClientConfiguration { SuppressException = true };
+			JikanClient = new Jikan(jikanConfiguration);
+			JikanService = new JikanService(JikanClient);
+		}
+
 		protected override async Task HandleAsync()
 		{
 			Console.WriteLine("ScheduleAnimesLambda was invoked");
@@ -28,11 +38,7 @@ namespace SeiyuuMoe.MalBackgroundJobs.Lambda.Function
 		{
 			var seasonRepository = new SeasonRepository(dbContext);
 
-			var jikanConfiguration = new JikanClientConfiguration {  SuppressException = true };
-			var jikanClient = new Jikan(jikanConfiguration);
-			var jikanService = new JikanService(jikanClient);
-
-			return new UpdateSeasonsHandler(seasonRepository, jikanService);
+			return new UpdateSeasonsHandler(seasonRepository, JikanService);
 		}
 	}
 }

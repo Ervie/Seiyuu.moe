@@ -1,4 +1,4 @@
-﻿using Amazon.SQS;
+using Amazon.SQS;
 using Amazon.SQS.Model;
 using SeiyuuMoe.Domain.Publishers;
 using SeiyuuMoe.Domain.SqsMessages;
@@ -18,13 +18,12 @@ namespace SeiyuuMoe.Infrastructure.Sqs
 			_queueUrl = queueArn;
 		}
 
-		public async Task PublishCharacterUpdateAsync(UpdateCharacterMessage updateCharacterMessage, int delayInSeconds = 0)
+		public async Task PublishCharacterUpdateAsync(UpdateCharacterMessage updateCharacterMessage)
 		{
 			var sendMessageRequest = new SendMessageRequest
 			{
 				MessageBody = JsonSerializer.Serialize(updateCharacterMessage),
-				QueueUrl = _queueUrl,
-				DelaySeconds = delayInSeconds
+				QueueUrl = _queueUrl
 			};
 
 			await _sqsService.SendMessageAsync(sendMessageRequest);
