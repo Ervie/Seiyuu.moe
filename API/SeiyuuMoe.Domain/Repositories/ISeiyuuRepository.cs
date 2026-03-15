@@ -1,4 +1,5 @@
 using SeiyuuMoe.Domain.Entities;
+using SeiyuuMoe.Domain.ScheduleItems;
 using SeiyuuMoe.Domain.WebEssentials;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,6 @@ namespace SeiyuuMoe.Domain.Repositories
 
 		Task<long?> GetLastSeiyuuMalId();
 
-		Task<IReadOnlyList<Seiyuu>> GetOlderThanModifiedDate(DateTime olderThan, int pageSize = 150, DateTime? afterModificationDate = null, Guid? afterId = null);
+		Task<IReadOnlyList<SeiyuuScheduleItem>> GetOlderThanModifiedDate(DateTime olderThan, int pageSize = 150, DateTime? afterModificationDate = null, Guid? afterId = null);
 	}
 }

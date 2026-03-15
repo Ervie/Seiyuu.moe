@@ -1,4 +1,5 @@
 using SeiyuuMoe.Domain.Entities;
+using SeiyuuMoe.Domain.ScheduleItems;
 using SeiyuuMoe.Domain.WebEssentials;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ namespace SeiyuuMoe.Domain.Repositories
 
 		Task<PagedResult<Anime>> GetOrderedPageByAsync(Expression<Func<Anime, bool>> predicate, int page = 0, int pageSize = 10);
 
-		Task<IReadOnlyList<Anime>> GetOlderThanModifiedDate(DateTime olderThan, int pageSize = 150, DateTime? afterModificationDate = null, Guid? afterId = null);
+		Task<IReadOnlyList<AnimeScheduleItem>> GetOlderThanModifiedDate(DateTime olderThan, int pageSize = 150, DateTime? afterModificationDate = null, Guid? afterId = null);
 
 		Task<int> GetAnimeCountAsync();
 	}
