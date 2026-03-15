@@ -1,7 +1,8 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.EntityFrameworkCore;
 using SeiyuuMoe.Domain.Entities;
+using SeiyuuMoe.Domain.ScheduleItems;
 using SeiyuuMoe.Infrastructure.Database.Animes;
 using SeiyuuMoe.Tests.Common.Builders.Model;
 using SeiyuuMoe.Tests.Common.Helpers;
@@ -813,6 +814,108 @@ namespace SeiyuuMoe.Tests.Infrastructure.Database
 				result.Results.Last().Title.Should().Be("Test3");
 				result.Results.Last().Popularity.Should().Be(30);
 			}
+		}
+
+		[Fact]
+		public async Task GetOlderThanModifiedDate_GivenNoAnime_ShouldReturnEmpty()
+		{
+			// Given
+			var dbContext = InMemoryDbProvider.GetDbContext();
+			var repository = new AnimeRepository(dbContext);
+			var thresholdDate = DateTime.UtcNow.AddDays(-31);
+
+			// When
+			var result = await repository.GetOlderThanModifiedDate(thresholdDate, 100);
+
+			// Then
+			result.Should().BeEmpty();
+		}
+
+		[Fact]
+		public async Task GetOlderThanModifiedDate_GivenAnimeOlderThanThreshold_ShouldReturnScheduleItemsWithRelevantColumnsOnly()
+		{
+			// Given
+			var dbContext = InMemoryDbProvider.GetDbContext();
+			var repository = new AnimeRepository(dbContext);
+			var thresholdDate = DateTime.UtcNow.AddDays(-31);
+			var oldDate = DateTime.UtcNow.AddDays(-40);
+			var anime1 = new AnimeBuilder().WithTitle("Test1").WithMalId(1).Build();
+			anime1.ModificationDate = oldDate;
+			var anime2 = new AnimeBuilder().WithTitle("Test2").WithMalId(2).Build();
+			anime2.ModificationDate = oldDate;
+
+			await dbContext.Animes.AddAsync(anime1);
+			await dbContext.Animes.AddAsync(anime2);
+			await dbContext.SaveChangesAsync();
+
+			// When
+			var result = await repository.GetOlderThanModifiedDate(thresholdDate, 10);
+
+			// Then
+			result.Should().HaveCount(2);
+			result.Should().AllBeOfType<AnimeScheduleItem>();
+			result.Select(x => x.Id).Should().Contain(new[] { anime1.Id, anime2.Id });
+			result.Select(x => x.MalId).Should().Contain(new[] { 1L, 2L });
+			result.Should().OnlyContain(x => x.ModificationDate == oldDate);
+		}
+
+		[Fact]
+		public async Task GetOlderThanModifiedDate_GivenPageSize_ShouldRespectBatchSize()
+		{
+			// Given
+			var dbContext = InMemoryDbProvider.GetDbContext();
+			var repository = new AnimeRepository(dbContext);
+			var thresholdDate = DateTime.UtcNow.AddDays(-31);
+			var oldDate = DateTime.UtcNow.AddDays(-40);
+			var anime1 = new AnimeBuilder().WithTitle("Test1").WithMalId(1).Build();
+			anime1.ModificationDate = oldDate;
+			var anime2 = new AnimeBuilder().WithTitle("Test2").WithMalId(2).Build();
+			anime2.ModificationDate = oldDate;
+			var anime3 = new AnimeBuilder().WithTitle("Test3").WithMalId(3).Build();
+			anime3.ModificationDate = oldDate;
+
+			await dbContext.Animes.AddAsync(anime1);
+			await dbContext.Animes.AddAsync(anime2);
+			await dbContext.Animes.AddAsync(anime3);
+			await dbContext.SaveChangesAsync();
+
+			// When
+			var result = await repository.GetOlderThanModifiedDate(thresholdDate, 2);
+
+			// Then
+			result.Should().HaveCount(2);
+		}
+
+		[Fact]
+		public async Task GetOlderThanModifiedDate_GivenCursor_ShouldReturnNextPage()
+		{
+			// Given
+			var dbContext = InMemoryDbProvider.GetDbContext();
+			var repository = new AnimeRepository(dbContext);
+			var thresholdDate = DateTime.UtcNow.AddDays(-31);
+			var oldDate = DateTime.UtcNow.AddDays(-40);
+			var anime1 = new AnimeBuilder().WithTitle("Test1").WithMalId(1).Build();
+			anime1.ModificationDate = oldDate;
+			var anime2 = new AnimeBuilder().WithTitle("Test2").WithMalId(2).Build();
+			anime2.ModificationDate = oldDate;
+			var anime3 = new AnimeBuilder().WithTitle("Test3").WithMalId(3).Build();
+			anime3.ModificationDate = oldDate;
+
+			await dbContext.Animes.AddAsync(anime1);
+			await dbContext.Animes.AddAsync(anime2);
+			await dbContext.Animes.AddAsync(anime3);
+			await dbContext.SaveChangesAsync();
+
+			var firstPage = await repository.GetOlderThanModifiedDate(thresholdDate, 2);
+			var lastInFirstPage = firstPage[firstPage.Count - 1];
+
+			// When
+			var secondPage = await repository.GetOlderThanModifiedDate(thresholdDate, 2, lastInFirstPage.ModificationDate, lastInFirstPage.Id);
+
+			// Then
+			secondPage.Should().HaveCount(1);
+			secondPage[0].Id.Should().NotBe(firstPage[0].Id);
+			secondPage[0].Id.Should().NotBe(firstPage[1].Id);
 		}
 	}
 }

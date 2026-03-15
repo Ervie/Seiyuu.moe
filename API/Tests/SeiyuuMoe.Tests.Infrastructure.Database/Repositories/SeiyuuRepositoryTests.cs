@@ -1,7 +1,8 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.EntityFrameworkCore;
 using SeiyuuMoe.Domain.Entities;
+using SeiyuuMoe.Domain.ScheduleItems;
 using SeiyuuMoe.Infrastructure.Database.Seiyuus;
 using SeiyuuMoe.Tests.Common.Builders.Model;
 using SeiyuuMoe.Tests.Common.Helpers;
@@ -511,6 +512,108 @@ namespace SeiyuuMoe.Tests.Infrastructure.Database
 				result.Page.Should().Be(pageNumber);
 				result.PageSize.Should().Be(pageSize);
 			}
+		}
+
+		[Fact]
+		public async Task GetOlderThanModifiedDate_GivenNoSeiyuu_ShouldReturnEmpty()
+		{
+			// Given
+			var dbContext = InMemoryDbProvider.GetDbContext();
+			var repository = new SeiyuuRepository(dbContext);
+			var thresholdDate = DateTime.UtcNow.AddDays(-14);
+
+			// When
+			var result = await repository.GetOlderThanModifiedDate(thresholdDate, 100);
+
+			// Then
+			result.Should().BeEmpty();
+		}
+
+		[Fact]
+		public async Task GetOlderThanModifiedDate_GivenSeiyuuOlderThanThreshold_ShouldReturnScheduleItemsWithRelevantColumnsOnly()
+		{
+			// Given
+			var dbContext = InMemoryDbProvider.GetDbContext();
+			var repository = new SeiyuuRepository(dbContext);
+			var thresholdDate = DateTime.UtcNow.AddDays(-14);
+			var oldDate = DateTime.UtcNow.AddDays(-20);
+			var seiyuu1 = new SeiyuuBuilder().WithName("Test1").WithMalId(1).Build();
+			seiyuu1.ModificationDate = oldDate;
+			var seiyuu2 = new SeiyuuBuilder().WithName("Test2").WithMalId(2).Build();
+			seiyuu2.ModificationDate = oldDate;
+
+			await dbContext.Seiyuus.AddAsync(seiyuu1);
+			await dbContext.Seiyuus.AddAsync(seiyuu2);
+			await dbContext.SaveChangesAsync();
+
+			// When
+			var result = await repository.GetOlderThanModifiedDate(thresholdDate, 10);
+
+			// Then
+			result.Should().HaveCount(2);
+			result.Should().AllBeOfType<SeiyuuScheduleItem>();
+			result.Select(x => x.Id).Should().Contain(new[] { seiyuu1.Id, seiyuu2.Id });
+			result.Select(x => x.MalId).Should().Contain(new[] { 1L, 2L });
+			result.Should().OnlyContain(x => x.ModificationDate == oldDate);
+		}
+
+		[Fact]
+		public async Task GetOlderThanModifiedDate_GivenPageSize_ShouldRespectBatchSize()
+		{
+			// Given
+			var dbContext = InMemoryDbProvider.GetDbContext();
+			var repository = new SeiyuuRepository(dbContext);
+			var thresholdDate = DateTime.UtcNow.AddDays(-14);
+			var oldDate = DateTime.UtcNow.AddDays(-20);
+			var seiyuu1 = new SeiyuuBuilder().WithName("Test1").WithMalId(1).Build();
+			seiyuu1.ModificationDate = oldDate;
+			var seiyuu2 = new SeiyuuBuilder().WithName("Test2").WithMalId(2).Build();
+			seiyuu2.ModificationDate = oldDate;
+			var seiyuu3 = new SeiyuuBuilder().WithName("Test3").WithMalId(3).Build();
+			seiyuu3.ModificationDate = oldDate;
+
+			await dbContext.Seiyuus.AddAsync(seiyuu1);
+			await dbContext.Seiyuus.AddAsync(seiyuu2);
+			await dbContext.Seiyuus.AddAsync(seiyuu3);
+			await dbContext.SaveChangesAsync();
+
+			// When
+			var result = await repository.GetOlderThanModifiedDate(thresholdDate, 2);
+
+			// Then
+			result.Should().HaveCount(2);
+		}
+
+		[Fact]
+		public async Task GetOlderThanModifiedDate_GivenCursor_ShouldReturnNextPage()
+		{
+			// Given
+			var dbContext = InMemoryDbProvider.GetDbContext();
+			var repository = new SeiyuuRepository(dbContext);
+			var thresholdDate = DateTime.UtcNow.AddDays(-14);
+			var oldDate = DateTime.UtcNow.AddDays(-20);
+			var seiyuu1 = new SeiyuuBuilder().WithName("Test1").WithMalId(1).Build();
+			seiyuu1.ModificationDate = oldDate;
+			var seiyuu2 = new SeiyuuBuilder().WithName("Test2").WithMalId(2).Build();
+			seiyuu2.ModificationDate = oldDate;
+			var seiyuu3 = new SeiyuuBuilder().WithName("Test3").WithMalId(3).Build();
+			seiyuu3.ModificationDate = oldDate;
+
+			await dbContext.Seiyuus.AddAsync(seiyuu1);
+			await dbContext.Seiyuus.AddAsync(seiyuu2);
+			await dbContext.Seiyuus.AddAsync(seiyuu3);
+			await dbContext.SaveChangesAsync();
+
+			var firstPage = await repository.GetOlderThanModifiedDate(thresholdDate, 2);
+			var lastInFirstPage = firstPage[firstPage.Count - 1];
+
+			// When
+			var secondPage = await repository.GetOlderThanModifiedDate(thresholdDate, 2, lastInFirstPage.ModificationDate, lastInFirstPage.Id);
+
+			// Then
+			secondPage.Should().HaveCount(1);
+			secondPage[0].Id.Should().NotBe(firstPage[0].Id);
+			secondPage[0].Id.Should().NotBe(firstPage[1].Id);
 		}
 	}
 }
