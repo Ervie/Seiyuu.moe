@@ -1,4 +1,4 @@
-﻿using SeiyuuMoe.Domain.Entities;
+using SeiyuuMoe.Domain.Entities;
 using SeiyuuMoe.Domain.WebEssentials;
 using System;
 using System.Collections.Generic;
@@ -16,7 +16,7 @@ namespace SeiyuuMoe.Domain.Repositories
 
 		Task<PagedResult<AnimeCharacter>> GetPageAsync(int page = 0, int pageSize = 100);
 
-		Task<IReadOnlyList<AnimeCharacter>> GetOlderThanModifiedDate(DateTime olderThan, int pageSize = 150);
+		Task<IReadOnlyList<AnimeCharacter>> GetOlderThanModifiedDate(DateTime olderThan, int pageSize = 150, DateTime? afterModificationDate = null, Guid? afterId = null);
 
 		Task<int> GetCountAsync();
 	}

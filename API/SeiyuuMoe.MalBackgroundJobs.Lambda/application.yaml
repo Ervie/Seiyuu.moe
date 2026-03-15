@@ -154,7 +154,7 @@ Resources:
   ScheduleAnimesUpdateRule:
     Type: AWS::Events::Rule
     Properties:
-      ScheduleExpression: cron(0/15 * 8 * ? *)
+      ScheduleExpression: cron(0 8 * * ? *)
       Name: !Sub schedule-animes-update-rule-${EnvironmentType}
       State: !If
         - IsProdEnvironment
@@ -180,7 +180,7 @@ Resources:
       FunctionName: !Sub schedule-animes-update-${EnvironmentType}
       Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.ScheduleAnimesLambda::InvokeAsync
       MemorySize: 512
-      Timeout: 180
+      Timeout: 900
       Role: !GetAtt ScheduleLambdaRole.Arn
 
   AnimeToUpdateQueue:
@@ -221,7 +221,7 @@ Resources:
   ScheduleSeiyuuUpdateRule:
     Type: AWS::Events::Rule
     Properties:
-      ScheduleExpression: cron(0/15 2-22 ? * SUN *)
+      ScheduleExpression: cron(0 12 ? * SUN *)
       Name: !Sub schedule-seiyuu-update-rule-${EnvironmentType}
       State: !If
         - IsProdEnvironment
@@ -247,7 +247,7 @@ Resources:
       FunctionName: !Sub schedule-seiyuu-update-${EnvironmentType}
       Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.ScheduleSeiyuuLambda::InvokeAsync
       MemorySize: 512
-      Timeout: 180
+      Timeout: 900
       Role: !GetAtt ScheduleLambdaRole.Arn
 
   SeiyuuToUpdateQueue:
@@ -288,7 +288,7 @@ Resources:
   ScheduleCharactersUpdateRule:
     Type: AWS::Events::Rule
     Properties:
-      ScheduleExpression: cron(0/15 * 14-20 * ? *)
+      ScheduleExpression: cron(0 14 * * ? *)
       Name: !Sub schedule-characters-update-rule-${EnvironmentType}
       State: !If
         - IsProdEnvironment
@@ -314,7 +314,7 @@ Resources:
       FunctionName: !Sub schedule-characters-update-${EnvironmentType}
       Handler: SeiyuuMoe.MalBackgroundJobs.Lambda::SeiyuuMoe.MalBackgroundJobs.Lambda.Function.ScheduleCharactersLambda::InvokeAsync
       MemorySize: 512
-      Timeout: 180
+      Timeout: 900
       Role: !GetAtt ScheduleLambdaRole.Arn
 
   CharactersToUpdateQueue:

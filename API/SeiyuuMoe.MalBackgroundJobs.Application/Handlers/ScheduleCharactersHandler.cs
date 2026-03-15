@@ -23,16 +23,33 @@ namespace SeiyuuMoe.MalBackgroundJobs.Application.Handlers
 		public async Task HandleAsync()
 		{
 			var thresholdDate = DateTime.UtcNow.AddDays(-31);
+			DateTime? afterModificationDate = null;
+			Guid? afterId = null;
 
-			var charactersToUpdate = await _characterRepository.GetOlderThanModifiedDate(thresholdDate, _batchSize);
+			while (true)
+			{
+				var batch = await _characterRepository.GetOlderThanModifiedDate(thresholdDate, _batchSize, afterModificationDate, afterId);
+				if (batch.Count == 0)
+				{
+					break;
+				}
 
-			var publishTasks = charactersToUpdate.Select(
-				a => _charactersUpdatePublisher.PublishCharacterUpdateAsync(
-					new UpdateCharacterMessage { Id = a.Id, MalId = a.MalId }
-				)
-			);
+				var publishTasks = batch.Select(
+					a => _charactersUpdatePublisher.PublishCharacterUpdateAsync(
+						new UpdateCharacterMessage { Id = a.Id, MalId = a.MalId }
+					)
+				);
+				await Task.WhenAll(publishTasks);
 
-			await Task.WhenAll(publishTasks);
+				var last = batch[batch.Count - 1];
+				afterModificationDate = last.ModificationDate;
+				afterId = last.Id;
+
+				if (batch.Count < _batchSize)
+				{
+					break;
+				}
+			}
 		}
 	}
 }

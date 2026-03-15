@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using SeiyuuMoe.Domain.Entities;
 using SeiyuuMoe.Domain.Repositories;
 using SeiyuuMoe.Domain.WebEssentials;
@@ -66,12 +66,22 @@ namespace SeiyuuMoe.Infrastructure.Database.Seiyuus
 			return lastSeiyuu?.MalId;
 		}
 
-		public async Task<IReadOnlyList<Seiyuu>> GetOlderThanModifiedDate(DateTime olderThan, int pageSize = 150)
-			=> await _dbContext.Seiyuus
-				.Where(x => x.ModificationDate < olderThan)
+		public async Task<IReadOnlyList<Seiyuu>> GetOlderThanModifiedDate(DateTime olderThan, int pageSize = 150, DateTime? afterModificationDate = null, Guid? afterId = null)
+		{
+			var query = _dbContext.Seiyuus.Where(x => x.ModificationDate < olderThan);
+
+			if (afterModificationDate.HasValue && afterId.HasValue)
+			{
+				query = query.Where(x =>
+					x.ModificationDate > afterModificationDate.Value ||
+					(x.ModificationDate == afterModificationDate.Value && x.Id.CompareTo(afterId.Value) > 0));
+			}
+
+			return await query
 				.OrderBy(x => x.ModificationDate)
 				.ThenBy(x => x.Id)
 				.Take(pageSize)
 				.ToListAsync();
+		}
 	}
 }
