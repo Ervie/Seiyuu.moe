@@ -34,12 +34,8 @@ namespace SeiyuuMoe.MalBackgroundJobs.Application.Handlers
 					break;
 				}
 
-				var publishTasks = batch.Select(
-					a => _charactersUpdatePublisher.PublishCharacterUpdateAsync(
-						new UpdateCharacterMessage { Id = a.Id, MalId = a.MalId }
-					)
-				);
-				await Task.WhenAll(publishTasks);
+				var messages = batch.Select(a => new UpdateCharacterMessage { Id = a.Id, MalId = a.MalId }).ToList();
+				await _charactersUpdatePublisher.PublishCharacterUpdatesAsync(messages);
 
 				var last = batch[batch.Count - 1];
 				afterModificationDate = last.ModificationDate;

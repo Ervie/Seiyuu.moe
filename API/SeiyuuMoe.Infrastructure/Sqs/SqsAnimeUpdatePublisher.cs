@@ -2,6 +2,9 @@ using Amazon.SQS;
 using Amazon.SQS.Model;
 using SeiyuuMoe.Domain.Publishers;
 using SeiyuuMoe.Domain.SqsMessages;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -9,6 +12,8 @@ namespace SeiyuuMoe.Infrastructure.Sns
 {
 	public class SqsAnimeUpdatePublisher : IAnimeUpdatePublisher
 	{
+		private const int MaxQueueBatchSize = 10;
+
 		private readonly IAmazonSQS _sqsService;
 		private readonly string _queueUrl;
 
@@ -18,15 +23,30 @@ namespace SeiyuuMoe.Infrastructure.Sns
 			_queueUrl = queueArn;
 		}
 
-		public async Task PublishAnimeUpdateAsync(UpdateAnimeMessage updateAnimeMessage)
+		public async Task PublishAnimeUpdatesAsync(IReadOnlyList<UpdateAnimeMessage> messages)
 		{
-			var sendMessageRequest = new SendMessageRequest
+			if (messages.Count == 0)
 			{
-				MessageBody = JsonSerializer.Serialize(updateAnimeMessage),
-				QueueUrl = _queueUrl
-			};
+				return;
+			}
 
-			await _sqsService.SendMessageAsync(sendMessageRequest);
+			for (var i = 0; i < messages.Count; i += MaxQueueBatchSize)
+			{
+				var chunk = messages.Skip(i).Take(MaxQueueBatchSize).ToList();
+				var entries = chunk.Select((m, idx) => new SendMessageBatchRequestEntry
+				{
+					Id = (i + idx).ToString(),
+					MessageBody = JsonSerializer.Serialize(m)
+				}).ToList();
+
+				var request = new SendMessageBatchRequest
+				{
+					QueueUrl = _queueUrl,
+					Entries = entries
+				};
+
+				await _sqsService.SendMessageBatchAsync(request);
+			}
 		}
 	}
 }
