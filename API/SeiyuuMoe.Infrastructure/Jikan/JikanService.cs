@@ -1,6 +1,7 @@
-﻿using JikanDotNet;
+using JikanDotNet;
 using SeiyuuMoe.Domain.MalUpdateData;
 using SeiyuuMoe.Domain.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -25,12 +26,14 @@ namespace SeiyuuMoe.Infrastructure.Jikan
 				return null;
 			}
 
+			var animeTitles = parsedData.Data.Titles;
+
 			return new MalAnimeUpdateData(
-				parsedData.Data.Title,
+				GetMainTitle(animeTitles),
 				parsedData.Data.Synopsis,
-				parsedData.Data.TitleEnglish,
-				parsedData.Data.TitleJapanese,
-				(parsedData.Data.TitleSynonyms != null && parsedData.Data.TitleSynonyms.Any()) ? string.Join(';', parsedData.Data.TitleSynonyms) : string.Empty,
+				GetTitleByType(animeTitles, "English"),
+				GetTitleByType(animeTitles, "Japanese"),
+				GetSynonyms(animeTitles),
 				parsedData.Data.Members,
 				EmptyStringIfPlaceholder(parsedData.Data.Images?.JPG?.ImageUrl),
 				parsedData.Data.Aired?.From,
@@ -118,6 +121,36 @@ namespace SeiyuuMoe.Infrastructure.Jikan
 				imageUrl.Equals("https://cdn.myanimelist.net/img/sp/icon/apple-touch-icon-256.png");
 
 			return isEmptyOrPlaceholder ? string.Empty : imageUrl;
+		}
+
+		private static string GetMainTitle(ICollection<TitleEntry> titles)
+		{
+			var defaultTitle = GetTitleByType(titles, "Default");
+
+			if (!string.IsNullOrWhiteSpace(defaultTitle))
+			{
+				return defaultTitle;
+			}
+
+			return titles?.Select(x => x?.Title).FirstOrDefault(x => !string.IsNullOrWhiteSpace(x));
+		}
+
+		private static string GetTitleByType(ICollection<TitleEntry> titles, string type)
+			=> titles?.FirstOrDefault(
+				x => x != null
+					&& !string.IsNullOrWhiteSpace(x.Type)
+					&& x.Type.Equals(type, StringComparison.OrdinalIgnoreCase)
+			)?.Title;
+
+		private static string GetSynonyms(ICollection<TitleEntry> titles)
+		{
+			var synonyms = titles?
+				.Where(x => x != null && !string.IsNullOrWhiteSpace(x.Type) && x.Type.Equals("Synonym", StringComparison.OrdinalIgnoreCase))
+				.Select(x => x.Title)
+				.Where(x => !string.IsNullOrWhiteSpace(x))
+				.ToList();
+
+			return synonyms != null && synonyms.Any() ? string.Join(';', synonyms) : string.Empty;
 		}
 	}
 }

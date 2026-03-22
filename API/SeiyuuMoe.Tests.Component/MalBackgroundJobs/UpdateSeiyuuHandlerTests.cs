@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using FluentAssertions.Execution;
 using JikanDotNet;
 using Microsoft.EntityFrameworkCore;
@@ -1264,15 +1264,12 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			
 			var returnedAnime = new JikanDotNet.Anime
 			{
-				Title = returnedAnimeTitle,
 				Synopsis = returnedAnimeAbout,
-				TitleEnglish = returnedAnimeEnglishTitle,
-				TitleJapanese = returnedAnimeJapaneseTitle,
+				Titles = AnimeTitlesBuilder.Build(returnedAnimeTitle, returnedAnimeEnglishTitle, returnedAnimeJapaneseTitle),
 				Images = new ImagesSet
 				{
 					JPG = new Image { ImageUrl = returnedAnimeImageUrl }
 				},
-				TitleSynonyms = new List<string>(),
 				Members = returnedAnimePopularity
 			};
 
@@ -1548,7 +1545,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			
 			var returnedAnime = new JikanDotNet.Anime
 			{
-				TitleSynonyms = new List<string> { "Synonym 1", "Synonym 2", "Synonym 3" }
+				Titles = AnimeTitlesBuilder.Build(titleSynonyms: new List<string> { "Synonym 1", "Synonym 2", "Synonym 3" })
 			};
 
 			var jikanServiceBuilder = new JikanServiceBuilder().WithPersonReturned(returnedSeiyuu, returnedRoles).WithAnimeReturned(returnedAnime);
@@ -1861,15 +1858,12 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 
 			var returnedAnime = new JikanDotNet.Anime
 			{
-				Title = returnedAnimeTitle,
 				Synopsis = returnedAnimeAbout,
-				TitleEnglish = returnedAnimeEnglishTitle,
-				TitleJapanese = returnedAnimeJapaneseTitle,
+				Titles = AnimeTitlesBuilder.Build(returnedAnimeTitle, returnedAnimeEnglishTitle, returnedAnimeJapaneseTitle),
 				Images = new ImagesSet
 				{
 					JPG = new Image { ImageUrl = returnedAnimeImageUrl }
 				},
-				TitleSynonyms = new List<string>(),
 				Members = returnedAnimePopularity
 			};
 
@@ -2078,15 +2072,12 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			
 			var returnedAnime = new JikanDotNet.Anime
 			{
-				Title = returnedAnimeTitle,
 				Synopsis = returnedAnimeAbout,
-				TitleEnglish = returnedAnimeEnglishTitle,
-				TitleJapanese = returnedAnimeJapaneseTitle,
+				Titles = AnimeTitlesBuilder.Build(returnedAnimeTitle, returnedAnimeEnglishTitle, returnedAnimeJapaneseTitle),
 				Images = new ImagesSet
 				{
 					JPG = new Image { ImageUrl = returnedAnimeImageUrl }
 				},
-				TitleSynonyms = new List<string>(),
 				Members = returnedAnimePopularity
 			};
 
@@ -2376,27 +2367,23 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			var firstReturnedAnime = new JikanDotNet.Anime
 			{
 				MalId = anime1MalId,
-				Title = firstReturnedAnimeName,
 				Synopsis = firstReturnedAnimeAbout,
-				TitleJapanese = firstReturnedAnimeJapaneseName,
+				Titles = AnimeTitlesBuilder.Build(firstReturnedAnimeName, japaneseTitle: firstReturnedAnimeJapaneseName),
 				Images = new ImagesSet
 				{
 					JPG = new Image { ImageUrl = firstReturnedAnimeImageUrl }
 				},
-				TitleSynonyms = new List<string>(),
 				Popularity = firstReturnedAnimePopularity
 			};
 			var secondReturnedAnime = new JikanDotNet.Anime
 			{
 				MalId = anime2MalId,
-				Title = secondReturnedAnimeName,
 				Synopsis = secondReturnedAnimeAbout,
-				TitleJapanese = secondReturnedAnimeJapaneseName,
+				Titles = AnimeTitlesBuilder.Build(secondReturnedAnimeName, japaneseTitle: secondReturnedAnimeJapaneseName),
 				Images = new ImagesSet
 				{
 					JPG = new Image { ImageUrl = secondReturnedAnimeImageUrl }
 				},
-				TitleSynonyms = new List<string>(),
 				Popularity = secondReturnedAnimePopularity
 			};
 
@@ -2542,27 +2529,23 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			var firstReturnedAnime = new JikanDotNet.Anime
 			{
 				MalId = anime1MalId,
-				Title = firstReturnedAnimeName,
 				Synopsis = firstReturnedAnimeAbout,
-				TitleJapanese = firstReturnedAnimeJapaneseName,
+				Titles = AnimeTitlesBuilder.Build(firstReturnedAnimeName, japaneseTitle: firstReturnedAnimeJapaneseName),
 				Images = new ImagesSet
 				{
 					JPG = new Image { ImageUrl = firstReturnedAnimeImageUrl }
 				},
-				TitleSynonyms = new List<string>(),
 				Popularity = firstReturnedAnimePopularity
 			};
 			var secondReturnedAnime = new JikanDotNet.Anime
 			{
 				MalId = anime2MalId,
-				Title = secondReturnedAnimeName,
 				Synopsis = secondReturnedAnimeAbout,
-				TitleJapanese = secondReturnedAnimeJapaneseName,
+				Titles = AnimeTitlesBuilder.Build(secondReturnedAnimeName, japaneseTitle: secondReturnedAnimeJapaneseName),
 				Images = new ImagesSet
 				{
 					JPG = new Image { ImageUrl = secondReturnedAnimeImageUrl }
 				},
-				TitleSynonyms = new List<string>(),
 				Popularity = secondReturnedAnimePopularity
 			};
 

@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using FluentAssertions.Execution;
 using JikanDotNet;
 using JikanDotNet.Exceptions;
@@ -131,15 +131,12 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 
 			var returnedAnime = new Anime
 			{
-				Title = returnedTitle,
 				Synopsis = returnedAbout,
-				TitleEnglish = returnedEnglishTitle,
-				TitleJapanese = returnedJapaneseTitle,
+				Titles = AnimeTitlesBuilder.Build(returnedTitle, returnedEnglishTitle, returnedJapaneseTitle),
 				Images = new ImagesSet
 				{
 					JPG = new Image { ImageUrl = returnedImageUrl }
 				},
-				TitleSynonyms = new List<string>(),
 				Members = returnedPopularity
 			};
 
@@ -251,7 +248,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 
 			var returnedAnime = new Anime
 			{
-				TitleSynonyms = returnedSynonyms
+				Titles = AnimeTitlesBuilder.Build(titleSynonyms: returnedSynonyms)
 			};
 
 			var jikanServiceBuilder = new JikanServiceBuilder().WithAnimeReturned(returnedAnime);
