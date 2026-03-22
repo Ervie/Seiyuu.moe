@@ -1,4 +1,4 @@
-﻿using Amazon.Lambda.SQSEvents;
+using Amazon.Lambda.SQSEvents;
 using System;
 using System.Linq;
 using System.Text.Json;
@@ -10,8 +10,6 @@ namespace SeiyuuMoe.MalBackgroundJobs.Lambda.Base
 	{
 		public async Task InvokeAsync(SQSEvent @event)
 		{
-			XRayTracing.Configure();
-
 			try
 			{
 				var sqsMessage = @event.Records.Single();

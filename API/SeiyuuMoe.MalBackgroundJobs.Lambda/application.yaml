@@ -66,7 +66,6 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
         - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
-        - arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess
         - !Ref ParameterStoreAccessPolicy
       Policies:
         - PolicyName: AllowToPopulateSqs
@@ -97,7 +96,6 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
         - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
-        - arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess
         - !Ref ParameterStoreAccessPolicy
       Policies:
         - PolicyName: AllowToReadFromSqs
@@ -423,7 +421,6 @@ Globals:
     Timeout: 150
     CodeUri: ./bin/Release/net10.0/publish
     Description: !Ref AWS::StackName
-    Tracing: Active
     Environment:
       Variables:
         EnvironmentType: !Ref EnvironmentType

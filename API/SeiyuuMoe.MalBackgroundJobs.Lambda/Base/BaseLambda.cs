@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 
 namespace SeiyuuMoe.MalBackgroundJobs.Lambda.Base
@@ -7,8 +7,6 @@ namespace SeiyuuMoe.MalBackgroundJobs.Lambda.Base
 	{
 		public async Task InvokeAsync()
 		{
-			XRayTracing.Configure();
-
 			try
 			{
 				await HandleAsync();
