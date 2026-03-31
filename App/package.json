@@ -24,7 +24,7 @@
     "axios": "^0.21.2",
     "decode-html": "^2.0.0",
     "npm": "^9.4.1",
-    "nuxt": "^3.1.2",
+    "nuxt": "^3.4.3",
     "nuxt-clipboard2": "^0.2.1",
     "vuelidate": "^0.7.5",
     "vuetify": "^1.5.24",
