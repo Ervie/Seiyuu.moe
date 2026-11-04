@@ -39,7 +39,7 @@ Backend tests are split by scope:
 - `Tests/SeiyuuMoe.Tests.Domain` covers domain comparison entities.
 - `Tests/SeiyuuMoe.Tests.Infrastructure.Database` covers repository persistence behavior.
 - `Tests/SeiyuuMoe.Tests.Integration` covers Tenrai client integration.
-- `SeiyuuMoe.Tests.Common` contains shared builders, stubs, helpers, and test data.
+- `SeiyuuMoe.Tests.Common` contains shared builders, stubs, helpers, and test data. Tests use NSubstitute for mocking.
 
 Run the narrowest relevant test project first. Database, integration, and E2E tests may require local configuration or external services.
 

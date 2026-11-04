@@ -1,4 +1,5 @@
-using Moq;
+using NSubstitute;
+using NSubstitute.ExceptionExtensions;
 using SeiyuuMoe.Infrastructure.Tenrai;
 using System.Collections.Generic;
 using Tenrai;
@@ -8,86 +9,89 @@ namespace SeiyuuMoe.Tests.Common.Builders.Tenrai
 {
 	public class TenraiServiceBuilder
 	{
-		public readonly Mock<ITenrai> TenraiClient = new Mock<ITenrai>();
+		public readonly ITenrai TenraiClient = Substitute.For<ITenrai>();
 
-		public TenraiService Build() => new TenraiService(TenraiClient.Object);
+		public TenraiService Build() => new TenraiService(TenraiClient);
 
 		public TenraiServiceBuilder WithAnimeReturned(Anime anime)
 		{
-			TenraiClient.Setup(x => x.GetAnimeAsync(It.IsAny<long>()))
-				.ReturnsAsync(new BaseTenraiResponse<Anime>() { Data = anime });
+			TenraiClient.GetAnimeAsync(Arg.Any<long>())
+				.Returns(new BaseTenraiResponse<Anime>() { Data = anime });
 			return this;
 		}
 
 		public TenraiServiceBuilder WithTwoAnimeReturned(Anime firstAnime, Anime secondAnime)
 		{
-			TenraiClient.SetupSequence(x => x.GetAnimeAsync(It.IsAny<long>()))
-				.ReturnsAsync(new BaseTenraiResponse<Anime>() { Data = firstAnime })
-				.ReturnsAsync(new BaseTenraiResponse<Anime>() { Data = secondAnime });
+			TenraiClient.GetAnimeAsync(Arg.Any<long>())
+				.Returns(
+					new BaseTenraiResponse<Anime>() { Data = firstAnime },
+					new BaseTenraiResponse<Anime>() { Data = secondAnime });
 			return this;
 		}
 
 		public TenraiServiceBuilder WithGetAnimeThrowing()
 		{
-			TenraiClient.Setup(x => x.GetAnimeAsync(It.IsAny<long>()))
+			TenraiClient.GetAnimeAsync(Arg.Any<long>())
 				.ThrowsAsync(new TenraiRequestException());
 			return this;
 		}
 
 		public TenraiServiceBuilder WithCharacterReturned(Character character)
 		{
-			TenraiClient.Setup(x => x.GetCharacterAsync(It.IsAny<long>()))
-				.ReturnsAsync(new BaseTenraiResponse<Character>() { Data = character });
+			TenraiClient.GetCharacterAsync(Arg.Any<long>())
+				.Returns(new BaseTenraiResponse<Character>() { Data = character });
 			return this;
 		}
 
 		public TenraiServiceBuilder WithTwoCharactersReturned(Character firstCharacter, Character secondCharacter)
 		{
-			TenraiClient.SetupSequence(x => x.GetCharacterAsync(It.IsAny<long>()))
-				.ReturnsAsync(new BaseTenraiResponse<Character>() { Data = firstCharacter })
-				.ReturnsAsync(new BaseTenraiResponse<Character>() { Data = secondCharacter });
+			TenraiClient.GetCharacterAsync(Arg.Any<long>())
+				.Returns(
+					new BaseTenraiResponse<Character>() { Data = firstCharacter },
+					new BaseTenraiResponse<Character>() { Data = secondCharacter });
 			return this;
 		}
 
 		public TenraiServiceBuilder WithGetCharacterThrowing()
 		{
-			TenraiClient.Setup(x => x.GetCharacterAsync(It.IsAny<long>()))
+			TenraiClient.GetCharacterAsync(Arg.Any<long>())
 				.ThrowsAsync(new TenraiRequestException());
 			return this;
 		}
 
 		public TenraiServiceBuilder WithPersonReturned(Person person, ICollection<VoiceActingRole> voiceActingRoles)
 		{
-			TenraiClient.Setup(x => x.GetPersonFullDataAsync(It.IsAny<long>()))
-				.ReturnsAsync(new BaseTenraiResponse<PersonFull>() { Data = CreatePersonFull(person, voiceActingRoles) });
+			TenraiClient.GetPersonFullDataAsync(Arg.Any<long>())
+				.Returns(new BaseTenraiResponse<PersonFull>() { Data = CreatePersonFull(person, voiceActingRoles) });
 			return this;
 		}
 
 		public TenraiServiceBuilder WithGetPersonThrowing()
 		{
-			TenraiClient.Setup(x => x.GetPersonFullDataAsync(It.IsAny<long>()))
+			TenraiClient.GetPersonFullDataAsync(Arg.Any<long>())
 				.ThrowsAsync(new TenraiRequestException());
 			return this;
 		}
 
 		public TenraiServiceBuilder WithTwoPersonsReturned(Person firstPerson, Person secondPerson)
 		{
-			TenraiClient.SetupSequence(x => x.GetPersonFullDataAsync(It.IsAny<long>()))
-				.ReturnsAsync(new BaseTenraiResponse<PersonFull>() { Data = CreatePersonFull(firstPerson, null) })
-				.ReturnsAsync(new BaseTenraiResponse<PersonFull>() { Data = CreatePersonFull(secondPerson, null) });
+			TenraiClient.GetPersonFullDataAsync(Arg.Any<long>())
+				.Returns(
+					new BaseTenraiResponse<PersonFull>() { Data = CreatePersonFull(firstPerson, null) },
+					new BaseTenraiResponse<PersonFull>() { Data = CreatePersonFull(secondPerson, null) });
 			return this;
 		}
 
 		public TenraiServiceBuilder WithLastSeasonArchiveReturned(SeasonArchive seasonArchive)
 		{
-			TenraiClient.Setup(x => x.GetSeasonArchiveAsync())
-				.ReturnsAsync(new PaginatedTenraiResponse<ICollection<SeasonArchive>>() { Data = new List<SeasonArchive> { seasonArchive } });
+			TenraiClient.GetSeasonArchiveAsync()
+				.Returns(new PaginatedTenraiResponse<ICollection<SeasonArchive>>() { Data = new List<SeasonArchive> { seasonArchive } });
 			return this;
 		}
 
 		public TenraiServiceBuilder WithGetSeasonArchiveThrowing()
 		{
-			TenraiClient.Setup(x => x.GetSeasonArchiveAsync())
+			TenraiClient.GetSeasonArchiveAsync()
 				.ThrowsAsync(new TenraiRequestException());
 			return this;
 		}

@@ -3,7 +3,7 @@ using FluentAssertions.Execution;
 using Tenrai;
 using Tenrai.Exceptions;
 using Microsoft.EntityFrameworkCore;
-using Moq;
+using NSubstitute;
 using SeiyuuMoe.Domain.Services;
 using SeiyuuMoe.Domain.SqsMessages;
 using SeiyuuMoe.Infrastructure.Database.Animes;
@@ -44,7 +44,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			using (new AssertionScope())
 			{
 				await action.Should().NotThrowAsync();
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetAnimeAsync(It.IsAny<long>()), Times.Never);
+				await tenraiServiceBuilder.TenraiClient.DidNotReceive().GetAnimeAsync(Arg.Any<long>());
 			}
 		}
 
@@ -78,7 +78,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			using (new AssertionScope())
 			{
 				await action.Should().NotThrowAsync();
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetAnimeAsync(malId), Times.Once);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetAnimeAsync(malId);
 			}
 		}
 
@@ -112,7 +112,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			using (new AssertionScope())
 			{
 				await action.Should().ThrowExactlyAsync<TenraiRequestException>();
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetAnimeAsync(malId), Times.Once);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetAnimeAsync(malId);
 			}
 		}
 
@@ -178,7 +178,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				updatedAnime.ImageUrl.Should().Be(returnedImageUrl);
 				updatedAnime.Popularity.Should().Be(returnedPopularity);
 
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetAnimeAsync(malId), Times.Once);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetAnimeAsync(malId);
 			}
 		}
 
@@ -234,7 +234,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			{
 				updatedAnime.ImageUrl.Should().BeEmpty();
 
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetAnimeAsync(malId), Times.Once);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetAnimeAsync(malId);
 			}
 		}
 
@@ -284,7 +284,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			{
 				updatedAnime.TitleSynonyms.Should().Be("Synonym 1;Synonym 2;Synonym 3");
 
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetAnimeAsync(malId), Times.Once);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetAnimeAsync(malId);
 			}
 		}
 
@@ -336,7 +336,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				updatedAnime.TypeId.Should().Be(Domain.Entities.AnimeTypeId.TV);
 				updatedAnime.StatusId.Should().Be(Domain.Entities.AnimeStatusId.CurrentlyAiring);
 
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetAnimeAsync(malId), Times.Once);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetAnimeAsync(malId);
 			}
 		}
 
@@ -388,7 +388,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				updatedAnime.TypeId.Should().Be(Domain.Entities.AnimeTypeId.Movie);
 				updatedAnime.StatusId.Should().Be(Domain.Entities.AnimeStatusId.Notyetaired);
 
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetAnimeAsync(malId), Times.Once);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetAnimeAsync(malId);
 			}
 		}
 
@@ -446,7 +446,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			{
 				updatedAnime.SeasonId.Should().BeNull();
 
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetAnimeAsync(malId), Times.Once);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetAnimeAsync(malId);
 			}
 		}
 
@@ -504,7 +504,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			{
 				updatedAnime.SeasonId.Should().Be(10);
 
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetAnimeAsync(malId), Times.Once);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetAnimeAsync(malId);
 			}
 		}
 
@@ -567,7 +567,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			{
 				updatedAnime.SeasonId.Should().Be(10);
 
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetAnimeAsync(malId), Times.Once);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetAnimeAsync(malId);
 			}
 		}
 
@@ -629,7 +629,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			{
 				updatedAnime.SeasonId.Should().Be(12);
 
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetAnimeAsync(malId), Times.Once);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetAnimeAsync(malId);
 			}
 		}
 
@@ -713,7 +713,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			{
 				updatedAnime.SeasonId.Should().Be(expectedSeasonId);
 
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetAnimeAsync(malId), Times.Once);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetAnimeAsync(malId);
 			}
 		}
 

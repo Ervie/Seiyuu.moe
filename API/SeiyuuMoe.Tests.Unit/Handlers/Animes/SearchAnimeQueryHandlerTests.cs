@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
-using Moq;
+using NSubstitute;
 using SeiyuuMoe.Application.Animes;
 using SeiyuuMoe.Application.Animes.SearchAnime;
 using SeiyuuMoe.Domain.Entities;
@@ -22,18 +22,18 @@ namespace SeiyuuMoe.Tests.Application.Animes
 		{
 			// Given
 			var query = new SearchAnimeQuery();
-			var mockRepository = new Mock<IAnimeRepository>();
-			mockRepository.Setup(x => x.GetOrderedPageByPopularityAsync(It.IsAny<Expression<Func<Anime, bool>>>(), 0, 10))
-				.ReturnsAsync(new PagedResult<Anime> { Results = new List<Anime>() });
-			var mockAnimeSearchCriteriaService = new Mock<IAnimeSearchCriteriaService>();
-			mockAnimeSearchCriteriaService.Setup(x => x.BuildExpression(query)).Returns(f => true);
-			var handler = new SearchAnimeQueryHandler(mockRepository.Object, mockAnimeSearchCriteriaService.Object);
+			var mockRepository = Substitute.For<IAnimeRepository>();
+			mockRepository.GetOrderedPageByPopularityAsync(Arg.Any<Expression<Func<Anime, bool>>>(), 0, 10)
+				.Returns(new PagedResult<Anime> { Results = new List<Anime>() });
+			var mockAnimeSearchCriteriaService = Substitute.For<IAnimeSearchCriteriaService>();
+			mockAnimeSearchCriteriaService.BuildExpression(query).Returns(f => true);
+			var handler = new SearchAnimeQueryHandler(mockRepository, mockAnimeSearchCriteriaService);
 
 			// When
 			var result = await handler.HandleAsync(query);
 
 			// Then
-			mockRepository.Verify(x => x.GetOrderedPageByPopularityAsync(It.IsAny<Expression<Func<Anime, bool>>>(), 0, 10), Times.Once);
+			await mockRepository.Received(1).GetOrderedPageByPopularityAsync(Arg.Any<Expression<Func<Anime, bool>>>(), 0, 10);
 			result.Results.Should().BeEmpty();
 		}
 
@@ -42,24 +42,24 @@ namespace SeiyuuMoe.Tests.Application.Animes
 		{
 			// Given
 			var query = new SearchAnimeQuery();
-			var mockRepository = new Mock<IAnimeRepository>();
-			mockRepository.Setup(x => x.GetOrderedPageByPopularityAsync(It.IsAny<Expression<Func<Anime, bool>>>(), 0, 10))
-				.ReturnsAsync(new PagedResult<Anime>
+			var mockRepository = Substitute.For<IAnimeRepository>();
+			mockRepository.GetOrderedPageByPopularityAsync(Arg.Any<Expression<Func<Anime, bool>>>(), 0, 10)
+				.Returns(new PagedResult<Anime>
 				{
 					Results = new List<Anime>
 					{
 						new AnimeBuilder().WithMalId(default).Build()
 					}
 				});
-			var mockAnimeSearchCriteriaService = new Mock<IAnimeSearchCriteriaService>();
-			mockAnimeSearchCriteriaService.Setup(x => x.BuildExpression(query)).Returns(f => true);
-			var handler = new SearchAnimeQueryHandler(mockRepository.Object, mockAnimeSearchCriteriaService.Object);
+			var mockAnimeSearchCriteriaService = Substitute.For<IAnimeSearchCriteriaService>();
+			mockAnimeSearchCriteriaService.BuildExpression(query).Returns(f => true);
+			var handler = new SearchAnimeQueryHandler(mockRepository, mockAnimeSearchCriteriaService);
 
 			// When
 			var result = await handler.HandleAsync(query);
 
 			// Then
-			mockRepository.Verify(x => x.GetOrderedPageByPopularityAsync(It.IsAny<Expression<Func<Anime, bool>>>(), 0, 10), Times.Once);
+			await mockRepository.Received(1).GetOrderedPageByPopularityAsync(Arg.Any<Expression<Func<Anime, bool>>>(), 0, 10);
 			using (new AssertionScope())
 			{
 				result.Should().NotBeNull();

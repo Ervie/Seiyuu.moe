@@ -2,7 +2,7 @@ using FluentAssertions;
 using FluentAssertions.Execution;
 using Tenrai;
 using Microsoft.EntityFrameworkCore;
-using Moq;
+using NSubstitute;
 using SeiyuuMoe.Domain.Entities;
 using SeiyuuMoe.Domain.SqsMessages;
 using SeiyuuMoe.Infrastructure.Database.Animes;
@@ -48,9 +48,9 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			using (new AssertionScope())
 			{
 				await action.Should().NotThrowAsync();
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonFullDataAsync(It.IsAny<long>()), Times.Never);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetAnimeAsync(It.IsAny<long>()), Times.Never);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetCharacterAsync(It.IsAny<long>()), Times.Never);
+				await tenraiServiceBuilder.TenraiClient.DidNotReceive().GetPersonFullDataAsync(Arg.Any<long>());
+				await tenraiServiceBuilder.TenraiClient.DidNotReceive().GetAnimeAsync(Arg.Any<long>());
+				await tenraiServiceBuilder.TenraiClient.DidNotReceive().GetCharacterAsync(Arg.Any<long>());
 			}
 		}
 
@@ -84,9 +84,9 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			using (new AssertionScope())
 			{
 				await action.Should().NotThrowAsync();
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonFullDataAsync(malId), Times.Once);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetAnimeAsync(It.IsAny<long>()), Times.Never);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetCharacterAsync(It.IsAny<long>()), Times.Never);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetPersonFullDataAsync(malId);
+				await tenraiServiceBuilder.TenraiClient.DidNotReceive().GetAnimeAsync(Arg.Any<long>());
+				await tenraiServiceBuilder.TenraiClient.DidNotReceive().GetCharacterAsync(Arg.Any<long>());
 			}
 		}
 
@@ -155,9 +155,9 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				updatedSeiyuu.KanjiName.Should().Be($"{returnedSeiyuuFamilyNameName} {returnedSeiyuuGivenName}");
 				updatedSeiyuu.Birthday.Should().Be(returnedBirthdate);
 
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonFullDataAsync(malId), Times.Once);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetAnimeAsync(It.IsAny<long>()), Times.Never);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetCharacterAsync(It.IsAny<long>()), Times.Never);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetPersonFullDataAsync(malId);
+				await tenraiServiceBuilder.TenraiClient.DidNotReceive().GetAnimeAsync(Arg.Any<long>());
+				await tenraiServiceBuilder.TenraiClient.DidNotReceive().GetCharacterAsync(Arg.Any<long>());
 			}
 		}
 
@@ -212,9 +212,9 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			{
 				updatedSeiyuu.ImageUrl.Should().BeEmpty();
 
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonFullDataAsync(malId), Times.Once);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetAnimeAsync(It.IsAny<long>()), Times.Never);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetCharacterAsync(It.IsAny<long>()), Times.Never);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetPersonFullDataAsync(malId);
+				await tenraiServiceBuilder.TenraiClient.DidNotReceive().GetAnimeAsync(Arg.Any<long>());
+				await tenraiServiceBuilder.TenraiClient.DidNotReceive().GetCharacterAsync(Arg.Any<long>());
 			}
 		}
 
@@ -294,9 +294,9 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			{
 				dbContext.AnimeRoles.Should().ContainSingle();
 
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonFullDataAsync(seiyuuMalId), Times.Once);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetAnimeAsync(It.IsAny<long>()), Times.Never);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetCharacterAsync(It.IsAny<long>()), Times.Never);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetPersonFullDataAsync(seiyuuMalId);
+				await tenraiServiceBuilder.TenraiClient.DidNotReceive().GetAnimeAsync(Arg.Any<long>());
+				await tenraiServiceBuilder.TenraiClient.DidNotReceive().GetCharacterAsync(Arg.Any<long>());
 			}
 		}
 
@@ -407,9 +407,9 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			{
 				dbContext.AnimeRoles.Should().HaveCount(2);
 
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonFullDataAsync(seiyuuMalId), Times.Once);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetAnimeAsync(It.IsAny<long>()), Times.Never);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetCharacterAsync(It.IsAny<long>()), Times.Never);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetPersonFullDataAsync(seiyuuMalId);
+				await tenraiServiceBuilder.TenraiClient.DidNotReceive().GetAnimeAsync(Arg.Any<long>());
+				await tenraiServiceBuilder.TenraiClient.DidNotReceive().GetCharacterAsync(Arg.Any<long>());
 			}
 		}
 
@@ -503,9 +503,9 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				updatedSeiyuu.Role.First().CharacterId.Should().Be(character.Id);
 				updatedSeiyuu.Role.First().SeiyuuId.Should().Be(seiyuu.Id);
 
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonFullDataAsync(seiyuuMalId), Times.Once);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetAnimeAsync(It.IsAny<long>()), Times.Never);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetCharacterAsync(It.IsAny<long>()), Times.Never);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetPersonFullDataAsync(seiyuuMalId);
+				await tenraiServiceBuilder.TenraiClient.DidNotReceive().GetAnimeAsync(Arg.Any<long>());
+				await tenraiServiceBuilder.TenraiClient.DidNotReceive().GetCharacterAsync(Arg.Any<long>());
 			}
 		}
 
@@ -656,9 +656,9 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				updatedSeiyuu.Role.First().SeiyuuId.Should().Be(seiyuu.Id);
 				updatedSeiyuu.Role.Skip(1).First().SeiyuuId.Should().Be(seiyuu.Id);
 
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonFullDataAsync(seiyuuMalId), Times.Once);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetAnimeAsync(It.IsAny<long>()), Times.Never);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetCharacterAsync(It.IsAny<long>()), Times.Never);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetPersonFullDataAsync(seiyuuMalId);
+				await tenraiServiceBuilder.TenraiClient.DidNotReceive().GetAnimeAsync(Arg.Any<long>());
+				await tenraiServiceBuilder.TenraiClient.DidNotReceive().GetCharacterAsync(Arg.Any<long>());
 			}
 		}
 
@@ -806,9 +806,9 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				updatedSeiyuu.Role.First().SeiyuuId.Should().Be(seiyuu.Id);
 				updatedSeiyuu.Role.Skip(1).First().SeiyuuId.Should().Be(seiyuu.Id);
 
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonFullDataAsync(seiyuuMalId), Times.Once);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetAnimeAsync(It.IsAny<long>()), Times.Never);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetCharacterAsync(It.IsAny<long>()), Times.Never);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetPersonFullDataAsync(seiyuuMalId);
+				await tenraiServiceBuilder.TenraiClient.DidNotReceive().GetAnimeAsync(Arg.Any<long>());
+				await tenraiServiceBuilder.TenraiClient.DidNotReceive().GetCharacterAsync(Arg.Any<long>());
 			}
 		}
 
@@ -920,9 +920,9 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				insertedCharacter.Popularity.Should().Be(returnedCharacterPopularity);
 				insertedCharacter.ImageUrl.Should().Be(returnedCharacterImageUrl);
 
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonFullDataAsync(seiyuuMalId), Times.Once);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetAnimeAsync(It.IsAny<long>()), Times.Never);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetCharacterAsync(characterMalId), Times.Once);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetPersonFullDataAsync(seiyuuMalId);
+				await tenraiServiceBuilder.TenraiClient.DidNotReceive().GetAnimeAsync(Arg.Any<long>());
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetCharacterAsync(characterMalId);
 			}
 		}
 
@@ -1001,9 +1001,9 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				dbContext.AnimeRoles.Should().BeEmpty();
 				dbContext.AnimeCharacters.Should().BeEmpty();
 
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonFullDataAsync(seiyuuMalId), Times.Once);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetAnimeAsync(It.IsAny<long>()), Times.Never);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetCharacterAsync(characterMalId), Times.Once);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetPersonFullDataAsync(seiyuuMalId);
+				await tenraiServiceBuilder.TenraiClient.DidNotReceive().GetAnimeAsync(Arg.Any<long>());
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetCharacterAsync(characterMalId);
 			}
 		}
 
@@ -1105,9 +1105,9 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				insertedCharacter.MalId.Should().Be(characterMalId);
 				insertedCharacter.ImageUrl.Should().BeEmpty();
 
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonFullDataAsync(seiyuuMalId), Times.Once);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetAnimeAsync(It.IsAny<long>()), Times.Never);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetCharacterAsync(characterMalId), Times.Once);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetPersonFullDataAsync(seiyuuMalId);
+				await tenraiServiceBuilder.TenraiClient.DidNotReceive().GetAnimeAsync(Arg.Any<long>());
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetCharacterAsync(characterMalId);
 			}
 		}
 
@@ -1219,9 +1219,9 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				insertedCharacter.ImageUrl.Should().Be(returnedCharacterImageUrl);
 				insertedCharacter.Nicknames.Should().Be("Nickname 1;Nickname 2;Nickname 3");
 
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonFullDataAsync(seiyuuMalId), Times.Once);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetAnimeAsync(It.IsAny<long>()), Times.Never);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetCharacterAsync(characterMalId), Times.Once);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetPersonFullDataAsync(seiyuuMalId);
+				await tenraiServiceBuilder.TenraiClient.DidNotReceive().GetAnimeAsync(Arg.Any<long>());
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetCharacterAsync(characterMalId);
 			}
 		}
 
@@ -1329,9 +1329,9 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				insertedAnime.Popularity.Should().Be(returnedAnimePopularity);
 				insertedAnime.ImageUrl.Should().Be(returnedAnimeImageUrl);
 
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonFullDataAsync(seiyuuMalId), Times.Once);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetAnimeAsync(animeMalId), Times.Once);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetCharacterAsync(It.IsAny<long>()), Times.Never);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetPersonFullDataAsync(seiyuuMalId);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetAnimeAsync(animeMalId);
+				await tenraiServiceBuilder.TenraiClient.DidNotReceive().GetCharacterAsync(Arg.Any<long>());
 			}
 		}
 
@@ -1407,9 +1407,9 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				dbContext.AnimeRoles.Should().BeEmpty();
 				dbContext.Animes.Should().BeEmpty();
 
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonFullDataAsync(seiyuuMalId), Times.Once);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetAnimeAsync(animeMalId), Times.Once);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetCharacterAsync(It.IsAny<long>()), Times.Never);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetPersonFullDataAsync(seiyuuMalId);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetAnimeAsync(animeMalId);
+				await tenraiServiceBuilder.TenraiClient.DidNotReceive().GetCharacterAsync(Arg.Any<long>());
 			}
 		}
 
@@ -1507,9 +1507,9 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				insertedAnime.MalId.Should().Be(animeMalId);
 				insertedAnime.ImageUrl.Should().BeEmpty();
 
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonFullDataAsync(seiyuuMalId), Times.Once);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetAnimeAsync(animeMalId), Times.Once);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetCharacterAsync(It.IsAny<long>()), Times.Never);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetPersonFullDataAsync(seiyuuMalId);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetAnimeAsync(animeMalId);
+				await tenraiServiceBuilder.TenraiClient.DidNotReceive().GetCharacterAsync(Arg.Any<long>());
 			}
 		}
 
@@ -1599,9 +1599,9 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				insertedAnime.MalId.Should().Be(animeMalId);
 				insertedAnime.TitleSynonyms.Should().Be("Synonym 1;Synonym 2;Synonym 3");
 
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonFullDataAsync(seiyuuMalId), Times.Once);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetAnimeAsync(animeMalId), Times.Once);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetCharacterAsync(It.IsAny<long>()), Times.Never);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetPersonFullDataAsync(seiyuuMalId);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetAnimeAsync(animeMalId);
+				await tenraiServiceBuilder.TenraiClient.DidNotReceive().GetCharacterAsync(Arg.Any<long>());
 			}
 		}
 
@@ -1693,9 +1693,9 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				insertedAnime.StatusId.Should().BeNull();
 				insertedAnime.TypeId.Should().BeNull();
 
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonFullDataAsync(seiyuuMalId), Times.Once);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetAnimeAsync(animeMalId), Times.Once);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetCharacterAsync(It.IsAny<long>()), Times.Never);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetPersonFullDataAsync(seiyuuMalId);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetAnimeAsync(animeMalId);
+				await tenraiServiceBuilder.TenraiClient.DidNotReceive().GetCharacterAsync(Arg.Any<long>());
 			}
 		}
 
@@ -1793,9 +1793,9 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				insertedAnime.MalId.Should().Be(animeMalId);
 				insertedAnime.SeasonId.Should().BeNull();
 
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonFullDataAsync(seiyuuMalId), Times.Once);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetAnimeAsync(animeMalId), Times.Once);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetCharacterAsync(It.IsAny<long>()), Times.Never);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetPersonFullDataAsync(seiyuuMalId);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetAnimeAsync(animeMalId);
+				await tenraiServiceBuilder.TenraiClient.DidNotReceive().GetCharacterAsync(Arg.Any<long>());
 			}
 		}
 
@@ -1925,9 +1925,9 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				insertedAnime.Popularity.Should().Be(returnedAnimePopularity);
 				insertedAnime.ImageUrl.Should().Be(returnedAnimeImageUrl);
 
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonFullDataAsync(seiyuuMalId), Times.Once);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetAnimeAsync(animeMalId), Times.Once);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetCharacterAsync(characterMalId), Times.Once);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetPersonFullDataAsync(seiyuuMalId);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetAnimeAsync(animeMalId);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetCharacterAsync(characterMalId);
 			}
 		}
 
@@ -2027,9 +2027,9 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				insertedCharacter.Popularity.Should().Be(returnedCharacterPopularity);
 				insertedCharacter.ImageUrl.Should().Be(returnedCharacterImageUrl);
 
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonFullDataAsync(seiyuuMalId), Times.Once);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetAnimeAsync(animeMalId), Times.Once);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetCharacterAsync(characterMalId), Times.Once);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetPersonFullDataAsync(seiyuuMalId);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetAnimeAsync(animeMalId);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetCharacterAsync(characterMalId);
 			}
 		}
 
@@ -2129,9 +2129,9 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				insertedAnime.Popularity.Should().Be(returnedAnimePopularity);
 				insertedAnime.ImageUrl.Should().Be(returnedAnimeImageUrl);
 
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonFullDataAsync(seiyuuMalId), Times.Once);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetAnimeAsync(animeMalId), Times.Once);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetCharacterAsync(characterMalId), Times.Once);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetPersonFullDataAsync(seiyuuMalId);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetAnimeAsync(animeMalId);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetCharacterAsync(characterMalId);
 			}
 		}
 
@@ -2299,9 +2299,9 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				updatedSeiyuu.Role.First().SeiyuuId.Should().Be(seiyuu.Id);
 				updatedSeiyuu.Role.Skip(1).First().SeiyuuId.Should().Be(seiyuu.Id);
 
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonFullDataAsync(seiyuuMalId), Times.Once);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetAnimeAsync(It.IsAny<long>()), Times.Never);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetCharacterAsync(It.IsAny<long>()), Times.Exactly(2));
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetPersonFullDataAsync(seiyuuMalId);
+				await tenraiServiceBuilder.TenraiClient.DidNotReceive().GetAnimeAsync(Arg.Any<long>());
+				await tenraiServiceBuilder.TenraiClient.Received(2).GetCharacterAsync(Arg.Any<long>());
 			}
 		}
 
@@ -2461,9 +2461,9 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				updatedSeiyuu.Role.First().SeiyuuId.Should().Be(seiyuu.Id);
 				updatedSeiyuu.Role.Skip(1).First().SeiyuuId.Should().Be(seiyuu.Id);
 
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonFullDataAsync(seiyuuMalId), Times.Once);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetAnimeAsync(It.IsAny<long>()), Times.Exactly(2));
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetCharacterAsync(It.IsAny<long>()), Times.Never);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetPersonFullDataAsync(seiyuuMalId);
+				await tenraiServiceBuilder.TenraiClient.Received(2).GetAnimeAsync(Arg.Any<long>());
+				await tenraiServiceBuilder.TenraiClient.DidNotReceive().GetCharacterAsync(Arg.Any<long>());
 			}
 		}
 
@@ -2662,9 +2662,9 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				updatedSeiyuu.Role.First().SeiyuuId.Should().Be(seiyuu.Id);
 				updatedSeiyuu.Role.Skip(1).First().SeiyuuId.Should().Be(seiyuu.Id);
 
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonFullDataAsync(seiyuuMalId), Times.Once);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetAnimeAsync(It.IsAny<long>()), Times.Exactly(2));
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetCharacterAsync(It.IsAny<long>()), Times.Never);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetPersonFullDataAsync(seiyuuMalId);
+				await tenraiServiceBuilder.TenraiClient.Received(2).GetAnimeAsync(Arg.Any<long>());
+				await tenraiServiceBuilder.TenraiClient.DidNotReceive().GetCharacterAsync(Arg.Any<long>());
 			}
 		}
 

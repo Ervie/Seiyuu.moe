@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using Moq;
+using NSubstitute;
 using SeiyuuMoe.Application.Seiyuus;
 using SeiyuuMoe.Application.Seiyuus.SearchSeiyuu;
 using SeiyuuMoe.Domain.Entities;
@@ -21,18 +21,18 @@ namespace SeiyuuMoe.Tests.Application.Seiyuus
 		{
 			// Given
 			var query = new SearchSeiyuuQuery();
-			var mockRepository = new Mock<ISeiyuuRepository>();
-			mockRepository.Setup(x => x.GetOrderedPageByPopularityAsync(It.IsAny<Expression<Func<Seiyuu, bool>>>(), 0, 10))
-				.ReturnsAsync(new PagedResult<Seiyuu> { Results = new List<Seiyuu>() });
-			var mockAnimeSearchCriteriaService = new Mock<ISeiyuuSearchCriteriaService>();
-			mockAnimeSearchCriteriaService.Setup(x => x.BuildExpression(query)).Returns(f => true);
-			var handler = new SearchSeiyuuQueryHandler(mockRepository.Object, mockAnimeSearchCriteriaService.Object);
+			var mockRepository = Substitute.For<ISeiyuuRepository>();
+			mockRepository.GetOrderedPageByPopularityAsync(Arg.Any<Expression<Func<Seiyuu, bool>>>(), 0, 10)
+				.Returns(new PagedResult<Seiyuu> { Results = new List<Seiyuu>() });
+			var mockAnimeSearchCriteriaService = Substitute.For<ISeiyuuSearchCriteriaService>();
+			mockAnimeSearchCriteriaService.BuildExpression(query).Returns(f => true);
+			var handler = new SearchSeiyuuQueryHandler(mockRepository, mockAnimeSearchCriteriaService);
 
 			// When
 			var result = await handler.HandleAsync(query);
 
 			// Then
-			mockRepository.Verify(x => x.GetOrderedPageByPopularityAsync(It.IsAny<Expression<Func<Seiyuu, bool>>>(), 0, 10), Times.Once);
+			await mockRepository.Received(1).GetOrderedPageByPopularityAsync(Arg.Any<Expression<Func<Seiyuu, bool>>>(), 0, 10);
 			result.Results.Should().BeEmpty();
 		}
 
@@ -41,24 +41,24 @@ namespace SeiyuuMoe.Tests.Application.Seiyuus
 		{
 			// Given
 			var query = new SearchSeiyuuQuery();
-			var mockRepository = new Mock<ISeiyuuRepository>();
-			mockRepository.Setup(x => x.GetOrderedPageByPopularityAsync(It.IsAny<Expression<Func<Seiyuu, bool>>>(), 0, 10))
-				.ReturnsAsync(new PagedResult<Seiyuu>
+			var mockRepository = Substitute.For<ISeiyuuRepository>();
+			mockRepository.GetOrderedPageByPopularityAsync(Arg.Any<Expression<Func<Seiyuu, bool>>>(), 0, 10)
+				.Returns(new PagedResult<Seiyuu>
 				{
 					Results = new List<Seiyuu>
 					{
 						new SeiyuuBuilder().WithMalId(default).Build()
 					}
 				});
-			var mockAnimeSearchCriteriaService = new Mock<ISeiyuuSearchCriteriaService>();
-			mockAnimeSearchCriteriaService.Setup(x => x.BuildExpression(query)).Returns(f => true);
-			var handler = new SearchSeiyuuQueryHandler(mockRepository.Object, mockAnimeSearchCriteriaService.Object);
+			var mockAnimeSearchCriteriaService = Substitute.For<ISeiyuuSearchCriteriaService>();
+			mockAnimeSearchCriteriaService.BuildExpression(query).Returns(f => true);
+			var handler = new SearchSeiyuuQueryHandler(mockRepository, mockAnimeSearchCriteriaService);
 
 			// When
 			var result = await handler.HandleAsync(query);
 
 			// Then
-			mockRepository.Verify(x => x.GetOrderedPageByPopularityAsync(It.IsAny<Expression<Func<Seiyuu, bool>>>(), 0, 10), Times.Once);
+			await mockRepository.Received(1).GetOrderedPageByPopularityAsync(Arg.Any<Expression<Func<Seiyuu, bool>>>(), 0, 10);
 			result.Results.Should().NotBeNull();
 		}
 	}

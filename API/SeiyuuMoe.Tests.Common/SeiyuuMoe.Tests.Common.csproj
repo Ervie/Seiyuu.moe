@@ -5,7 +5,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" />
-    <PackageReference Include="Moq" />
+    <PackageReference Include="NSubstitute" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,6 +1,6 @@
 using FluentAssertions;
 using FluentAssertions.Execution;
-using Moq;
+using NSubstitute;
 using SeiyuuMoe.Tests.Common.Builders.Tenrai;
 using System;
 using System.Collections.Generic;
@@ -129,9 +129,9 @@ namespace SeiyuuMoe.Tests.Unit.Tenrai
 			await tenraiService.GetSeiyuuFullDataAsync(malId);
 
 			// Then
-			tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonFullDataAsync(malId), Times.Once);
-			tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonAsync(It.IsAny<long>()), Times.Never);
-			tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonVoiceActingRolesAsync(It.IsAny<long>()), Times.Never);
+			await tenraiServiceBuilder.TenraiClient.Received(1).GetPersonFullDataAsync(malId);
+			await tenraiServiceBuilder.TenraiClient.DidNotReceive().GetPersonAsync(Arg.Any<long>());
+			await tenraiServiceBuilder.TenraiClient.DidNotReceive().GetPersonVoiceActingRolesAsync(Arg.Any<long>());
 		}
 	}
 }

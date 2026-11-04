@@ -2,7 +2,7 @@ using FluentAssertions;
 using FluentAssertions.Execution;
 using Tenrai;
 using Tenrai.Exceptions;
-using Moq;
+using NSubstitute;
 using SeiyuuMoe.Domain.S3;
 using SeiyuuMoe.Infrastructure.Database.Animes;
 using SeiyuuMoe.Infrastructure.Database.Characters;
@@ -37,7 +37,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			await handler.HandleAsync();
 
 			// Then
-			tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonFullDataAsync(2), Times.Once);
+			await tenraiServiceBuilder.TenraiClient.Received(1).GetPersonFullDataAsync(2);
 		}
 
 		[Fact]
@@ -54,7 +54,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			await handler.HandleAsync();
 
 			// Then
-			tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonFullDataAsync(lastId + 1), Times.Once);
+			await tenraiServiceBuilder.TenraiClient.Received(1).GetPersonFullDataAsync(lastId + 1);
 		}
 
 		[Fact]
@@ -72,11 +72,11 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			// Then
 			using (new AssertionScope())
 			{
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonFullDataAsync(2), Times.Once);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonFullDataAsync(3), Times.Once);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonFullDataAsync(4), Times.Once);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonFullDataAsync(5), Times.Once);
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonFullDataAsync(6), Times.Once);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetPersonFullDataAsync(2);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetPersonFullDataAsync(3);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetPersonFullDataAsync(4);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetPersonFullDataAsync(5);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetPersonFullDataAsync(6);
 			}
 		}
 
@@ -94,7 +94,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			await handler.HandleAsync();
 
 			// Then
-			var state = await s3Service.GetBgJobsStateAsync(It.IsAny<string>());
+			var state = await s3Service.GetBgJobsStateAsync(null);
 			state.LastCheckedSeiyuuMalId.Should().Be(2);
 		}
 
@@ -112,7 +112,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			await handler.HandleAsync();
 
 			// Then
-			var state = await s3Service.GetBgJobsStateAsync(It.IsAny<string>());
+			var state = await s3Service.GetBgJobsStateAsync(null);
 			state.LastCheckedSeiyuuMalId.Should().Be(6);
 		}
 
@@ -138,7 +138,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			await handler.HandleAsync();
 
 			// Then
-			tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonFullDataAsync(It.IsAny<int>()), Times.Never);
+			await tenraiServiceBuilder.TenraiClient.DidNotReceive().GetPersonFullDataAsync(startingMalId + 1);
 			dbContext.Seiyuus.Should().ContainSingle();
 		}
 
@@ -169,7 +169,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				await action.Should().ThrowExactlyAsync<TenraiRequestException>();
 				dbContext.Seiyuus.Should().ContainSingle();
 			}
-			tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonFullDataAsync(startingMalId + 1), Times.Once);
+			await tenraiServiceBuilder.TenraiClient.Received(1).GetPersonFullDataAsync(startingMalId + 1);
 		}
 
 		[Fact]
@@ -194,7 +194,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			await handler.HandleAsync();
 
 			// Then
-			tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonFullDataAsync(startingMalId + 1), Times.Once);
+			await tenraiServiceBuilder.TenraiClient.Received(1).GetPersonFullDataAsync(startingMalId + 1);
 			dbContext.Seiyuus.Should().ContainSingle();
 		}
 
@@ -243,7 +243,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			await handler.HandleAsync();
 
 			// Then
-			tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonFullDataAsync(startingMalId + 1), Times.Once);
+			await tenraiServiceBuilder.TenraiClient.Received(1).GetPersonFullDataAsync(startingMalId + 1);
 			dbContext.Seiyuus.Should().ContainSingle();
 		}
 
@@ -292,7 +292,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			await handler.HandleAsync();
 
 			// Then
-			tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonFullDataAsync(startingMalId + 1), Times.Once);
+			await tenraiServiceBuilder.TenraiClient.Received(1).GetPersonFullDataAsync(startingMalId + 1);
 			dbContext.Seiyuus.Should().ContainSingle();
 		}
 
@@ -358,7 +358,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			await handler.HandleAsync();
 
 			// Then
-			tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonFullDataAsync(startingSeiyuuMalId + 1), Times.Once);
+			await tenraiServiceBuilder.TenraiClient.Received(1).GetPersonFullDataAsync(startingSeiyuuMalId + 1);
 			dbContext.Seiyuus.Should().ContainSingle();
 		}
 
@@ -427,9 +427,9 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			await handler.HandleAsync();
 
 			// Then
-			tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonFullDataAsync(startingSeiyuuMalId + 1), Times.Once);
-			tenraiServiceBuilder.TenraiClient.Verify(x => x.GetAnimeAsync(animeMalId), Times.Once);
-			tenraiServiceBuilder.TenraiClient.Verify(x => x.GetCharacterAsync(characterMalId), Times.Once);
+			await tenraiServiceBuilder.TenraiClient.Received(1).GetPersonFullDataAsync(startingSeiyuuMalId + 1);
+			await tenraiServiceBuilder.TenraiClient.Received(1).GetAnimeAsync(animeMalId);
+			await tenraiServiceBuilder.TenraiClient.Received(1).GetCharacterAsync(characterMalId);
 			dbContext.Seiyuus.Should().HaveCount(2);
 			dbContext.AnimeRoles.Should().BeEmpty();
 		}
@@ -518,9 +518,9 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			await handler.HandleAsync();
 
 			// Then
-			tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonFullDataAsync(startingSeiyuuMalId + 1), Times.Once);
-			tenraiServiceBuilder.TenraiClient.Verify(x => x.GetAnimeAsync(animeMalId), Times.Once);
-			tenraiServiceBuilder.TenraiClient.Verify(x => x.GetCharacterAsync(characterMalId), Times.Once);
+			await tenraiServiceBuilder.TenraiClient.Received(1).GetPersonFullDataAsync(startingSeiyuuMalId + 1);
+			await tenraiServiceBuilder.TenraiClient.Received(1).GetAnimeAsync(animeMalId);
+			await tenraiServiceBuilder.TenraiClient.Received(1).GetCharacterAsync(characterMalId);
 			dbContext.Seiyuus.Should().HaveCount(2);
 			dbContext.Animes.Should().ContainSingle();
 			dbContext.AnimeCharacters.Should().BeEmpty();
@@ -612,9 +612,9 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			await handler.HandleAsync();
 
 			// Then
-			tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonFullDataAsync(startingSeiyuuMalId + 1), Times.Once);
-			tenraiServiceBuilder.TenraiClient.Verify(x => x.GetAnimeAsync(animeMalId), Times.Once);
-			tenraiServiceBuilder.TenraiClient.Verify(x => x.GetCharacterAsync(characterMalId), Times.Once);
+			await tenraiServiceBuilder.TenraiClient.Received(1).GetPersonFullDataAsync(startingSeiyuuMalId + 1);
+			await tenraiServiceBuilder.TenraiClient.Received(1).GetAnimeAsync(animeMalId);
+			await tenraiServiceBuilder.TenraiClient.Received(1).GetCharacterAsync(characterMalId);
 			dbContext.Seiyuus.Should().HaveCount(2);
 			dbContext.Animes.Should().BeEmpty();
 			dbContext.AnimeCharacters.Should().ContainSingle();
@@ -725,9 +725,9 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			await handler.HandleAsync();
 
 			// Then
-			tenraiServiceBuilder.TenraiClient.Verify(x => x.GetPersonFullDataAsync(startingSeiyuuMalId + 1), Times.Once);
-			tenraiServiceBuilder.TenraiClient.Verify(x => x.GetAnimeAsync(animeMalId), Times.Once);
-			tenraiServiceBuilder.TenraiClient.Verify(x => x.GetCharacterAsync(characterMalId), Times.Once);
+			await tenraiServiceBuilder.TenraiClient.Received(1).GetPersonFullDataAsync(startingSeiyuuMalId + 1);
+			await tenraiServiceBuilder.TenraiClient.Received(1).GetAnimeAsync(animeMalId);
+			await tenraiServiceBuilder.TenraiClient.Received(1).GetCharacterAsync(characterMalId);
 			using (new AssertionScope())
 			{
 				dbContext.Seiyuus.Should().HaveCount(2);

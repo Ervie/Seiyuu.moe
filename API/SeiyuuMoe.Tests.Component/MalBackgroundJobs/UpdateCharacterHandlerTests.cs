@@ -3,7 +3,7 @@ using FluentAssertions.Execution;
 using Tenrai;
 using Tenrai.Exceptions;
 using Microsoft.EntityFrameworkCore;
-using Moq;
+using NSubstitute;
 using SeiyuuMoe.Domain.Services;
 using SeiyuuMoe.Domain.SqsMessages;
 using SeiyuuMoe.Infrastructure.Database.Characters;
@@ -43,7 +43,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			using (new AssertionScope())
 			{
 				await action.Should().NotThrowAsync();
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetCharacterAsync(It.IsAny<long>()), Times.Never);
+				await tenraiServiceBuilder.TenraiClient.DidNotReceive().GetCharacterAsync(Arg.Any<long>());
 			}
 		}
 
@@ -77,7 +77,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			using (new AssertionScope())
 			{
 				await action.Should().NotThrowAsync();
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetCharacterAsync(malId), Times.Once);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetCharacterAsync(malId);
 			}
 		}
 
@@ -111,7 +111,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			using (new AssertionScope())
 			{
 				await action.Should().ThrowExactlyAsync<TenraiRequestException>();
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetCharacterAsync(malId), Times.Once);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetCharacterAsync(malId);
 			}
 		}
 
@@ -176,7 +176,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 				updatedCharacter.ImageUrl.Should().Be(returnedImageUrl);
 				updatedCharacter.Popularity.Should().Be(returnedPopularity);
 
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetCharacterAsync(malId), Times.Once);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetCharacterAsync(malId);
 			}
 		}
 
@@ -228,7 +228,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			{
 				updatedCharacter.ImageUrl.Should().BeEmpty();
 
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetCharacterAsync(malId), Times.Once);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetCharacterAsync(malId);
 			}
 		}
 
@@ -277,7 +277,7 @@ namespace SeiyuuMoe.Tests.Component.MalBackgroundJobs
 			{
 				updatedCharacter.Nicknames.Should().Be("Nickname 1;Nickname 2;Nickname 3");
 
-				tenraiServiceBuilder.TenraiClient.Verify(x => x.GetCharacterAsync(malId), Times.Once);
+				await tenraiServiceBuilder.TenraiClient.Received(1).GetCharacterAsync(malId);
 			}
 		}
 
