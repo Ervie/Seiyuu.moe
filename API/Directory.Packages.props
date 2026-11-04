@@ -1,35 +1,37 @@
 <Project>
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageVersion Include="Amazon.Extensions.Configuration.SystemsManager" Version="7.1.0" />
-    <PackageVersion Include="Amazon.Lambda.Core" Version="2.8.1" />
-    <PackageVersion Include="Amazon.Lambda.Serialization.Json" Version="2.2.5" />
-    <PackageVersion Include="Amazon.Lambda.SQSEvents" Version="2.2.1" />
-    <PackageVersion Include="AWSSDK.S3" Version="4.0.18.8" />
-    <PackageVersion Include="AWSSDK.SQS" Version="4.0.2.16" />
-    <PackageVersion Include="Autofac" Version="8.1.0" />
-    <PackageVersion Include="Autofac.Extensions.DependencyInjection" Version="10.0.0" />
-    <PackageVersion Include="coverlet.collector" Version="8.0.0" />
+    <PackageVersion Include="Amazon.Extensions.Configuration.SystemsManager" Version="7.1.1" />
+    <PackageVersion Include="Amazon.Lambda.Core" Version="3.4.0" />
+    <PackageVersion Include="Amazon.Lambda.Serialization.Json" Version="3.0.0" />
+    <PackageVersion Include="Amazon.Lambda.SQSEvents" Version="3.0.1" />
+    <PackageVersion Include="AWSSDK.S3" Version="4.0.104.9" />
+    <PackageVersion Include="AWSSDK.SQS" Version="4.0.100.23" />
+    <PackageVersion Include="Autofac" Version="9.3.4" />
+    <PackageVersion Include="Autofac.Extensions.DependencyInjection" Version="11.0.2" />
+    <PackageVersion Include="coverlet.collector" Version="10.1.0" />
     <PackageVersion Include="FluentAssertions" Version="7.2.0" />
     <PackageVersion Include="Tenrai.Net" Version="3.1.0" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="9.0.14" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.14" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.14" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.14" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration" Version="10.0.3" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="10.0.3" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.3" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />
-    <PackageVersion Include="NLog" Version="6.1.1" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="9.0.22" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.22" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.22" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.22" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration" Version="10.0.14" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="10.0.14" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.14" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.11.0" />
+    <PackageVersion Include="MySqlConnector" Version="2.6.2" />
+    <PackageVersion Include="NLog" Version="6.2.2" />
     <PackageVersion Include="NSubstitute" Version="6.2.0" />
     <PackageVersion Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
     <PackageVersion Include="RestEase" Version="1.6.4" />
     <PackageVersion Include="xunit" Version="2.9.3" />
     <PackageVersion Include="xunit.extensibility.core" Version="2.9.3" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="4.0.1" />
   </ItemGroup>
 </Project>
 
