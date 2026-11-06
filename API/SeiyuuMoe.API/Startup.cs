@@ -1,13 +1,10 @@
-﻿using Autofac;
-using Autofac.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SeiyuuMoe.API.DI;
-using SeiyuuMoe.Application;
 using SeiyuuMoe.Infrastructure.Configuration;
 using System;
 
@@ -16,8 +13,6 @@ namespace SeiyuuMoe.API
 	public class Startup
 	{
 		private IConfigurationRoot Configuration { get; }
-
-		public ILifetimeScope AutofacContainer { get; private set; }
 
 		public Startup()
 		{
@@ -35,17 +30,14 @@ namespace SeiyuuMoe.API
 			services.AddOptions();
 			services.AddControllers();
 			services.AddSingleton<IConfiguration>(Configuration);
-		}
 
-		public void ConfigureContainer(ContainerBuilder builder)
-		{
 			var seiyuuMoeConfig = Configuration.GetSection("Config").Get<SeiyuuMoeConfiguration>();
-			builder.RegisterInstance(seiyuuMoeConfig).As<SeiyuuMoeConfiguration>();
-			builder.RegisterInstance(seiyuuMoeConfig.DatabaseConfiguration).As<DatabaseConfiguration>();
+			services.AddSingleton(seiyuuMoeConfig);
+			services.AddSingleton(seiyuuMoeConfig.DatabaseConfiguration);
 
-			builder.RegisterModule(new InfrastructureModule());
-			builder.RegisterModule(new DatabaseModule());
-			builder.RegisterModule(new ApplicationModule());
+			services.AddInfrastructureServices();
+			services.AddDatabaseServices();
+			services.AddApplicationServices();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -64,8 +56,6 @@ namespace SeiyuuMoe.API
 			{
 				ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
 			});
-
-			AutofacContainer = app.ApplicationServices.GetAutofacRoot();
 
 			app.UseCors(builder => builder
 				.AllowAnyOrigin()

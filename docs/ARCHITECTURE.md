@@ -17,7 +17,7 @@ Seiyuu.moe is split into a Nuxt frontend under `App/` and a .NET backend under `
 `API/Directory.Build.props` sets the shared target framework to `net10.0`, and `API/Directory.Packages.props` centrally manages package versions.
 
 - `SeiyuuMoe.Domain` contains entities, comparison entities, repository interfaces, schedule items, publisher contracts, and MAL update data contracts.
-- `SeiyuuMoe.Application` contains query handlers, DTOs, extension methods, and application-level Autofac registrations.
+- `SeiyuuMoe.Application` contains query handlers, DTOs, and extension methods.
 - `SeiyuuMoe.Infrastructure` contains external-service implementations for Tenrai, AWS S3/SQS, configuration, and logging.
 - `SeiyuuMoe.Infrastructure.Database` contains Entity Framework Core repositories, configuration, and migrations.
 - `SeiyuuMoe.API` contains ASP.NET Core controllers, startup, hosting, and dependency-injection wiring.
@@ -27,7 +27,7 @@ Seiyuu.moe is split into a Nuxt frontend under `App/` and a .NET backend under `
 
 ## Backend Flow
 
-HTTP requests enter through controllers in `SeiyuuMoe.API`. Startup configures ASP.NET Core, CORS, forwarded headers, Autofac, application services, infrastructure services, and database services. Application handlers perform query and comparison work using domain models and infrastructure/database services. Background jobs use a similar domain and infrastructure base to update MAL-derived data outside the request path.
+HTTP requests enter through controllers in `SeiyuuMoe.API`. Startup configures ASP.NET Core, CORS, forwarded headers, Microsoft dependency injection (registered through the `IServiceCollection` extensions in `SeiyuuMoe.API/DI`), application services, infrastructure services, and database services. Application handlers perform query and comparison work using domain models and infrastructure/database services. Background jobs use a similar domain and infrastructure base to update MAL-derived data outside the request path.
 
 ## Tests
 
